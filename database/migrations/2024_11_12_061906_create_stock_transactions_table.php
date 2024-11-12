@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('stock_transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->enum('transaction_type', ['Purchase', 'Return', 'Adjustment']);
             $table->integer('quantity');
             $table->date('transaction_date');
