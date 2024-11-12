@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suppliers', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('contact')->nullable();
-            $table->string('email')->unique();
-            $table->text('address')->nullable();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('role_type', ['Admin', 'Cashier', 'Manager'])->default('Cashier')->after('password');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suppliers');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role_type');
+        });
     }
 };

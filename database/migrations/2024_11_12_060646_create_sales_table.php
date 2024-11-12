@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->integer('customer_id');
+            $table->integer('user_id');
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('discount', 5, 2)->default(0);
+            $table->enum('payment_method', ['Cash', 'Card', 'Online']);
+            $table->date('sale_date');
             $table->timestamps();
         });
     }
