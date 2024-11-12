@@ -8,6 +8,7 @@
         <tr>
           <th>Name</th>
           <th>Description</th>
+          <th>Parent Category</th> <!-- Add a column for Parent Category -->
           <th>Actions</th>
         </tr>
       </thead>
@@ -15,6 +16,7 @@
         <tr v-for="category in categories" :key="category.id">
           <td>{{ category.name }}</td>
           <td>{{ category.description }}</td>
+          <td>{{ category.parent ? category.parent.name : 'None' }}</td> <!-- Display parent category name if it exists -->
           <td>
             <Link :href="`/categories/${category.id}/edit`">Edit</Link>
             <button @click="deleteCategory(category.id)">Delete</button>

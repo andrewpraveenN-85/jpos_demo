@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::with('parent')->get();
 
         return Inertia::render('Categories/Index', [
             'categories' => $categories,
@@ -19,7 +19,11 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return Inertia::render('Categories/Create');
+        $categories = Category::all();
+
+        return Inertia::render('Categories/Create', [
+            'categories' => $categories,
+        ]);
     }
 
     public function store(Request $request)
