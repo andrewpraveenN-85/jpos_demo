@@ -5,3 +5,15 @@
 [x-cloak] {
     display: none;
 }
+
+html {
+    font-size: 11px;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #e4e4e7;
+    color: #3f3f46;
+}
