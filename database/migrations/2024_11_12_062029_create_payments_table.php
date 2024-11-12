@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->integer('sale_id');
+            $table->foreignId('sale_id');
             $table->decimal('amount', 10, 2);
             $table->enum('method', ['Cash', 'Credit Card', 'Online']);
             $table->date('payment_date');

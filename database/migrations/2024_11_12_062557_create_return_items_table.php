@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('return_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('sale_id');
-            $table->integer('customer_id');
-            $table->integer('product_id');
+            $table->foreignId('sale_id');
+            $table->foreignId('customer_id');
+            $table->foreignId('product_id');
             $table->integer('quantity');
             $table->text('reason');
             $table->date('return_date');
