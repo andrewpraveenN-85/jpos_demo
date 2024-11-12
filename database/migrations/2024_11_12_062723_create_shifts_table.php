@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
             $table->decimal('total_sales', 10, 2)->nullable();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->enum('type', ['Daily Sales', 'Inventory', 'Customer']);
-            $table->foreignId('generated_by');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->date('generated_at');
             $table->text('details');
             $table->timestamps();

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('return_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_id');
-            $table->foreignId('customer_id');
-            $table->foreignId('product_id');
+            $table->foreignId('sale_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('quantity');
             $table->text('reason');
             $table->date('return_date');
