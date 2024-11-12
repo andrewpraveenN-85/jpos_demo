@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->date('start_time');
-            $table->date('end_time')->nullable();
+            $table->foreignId('user_id');
+            $table->timestamp('start_time');
+            $table->timestamp('end_time')->nullable();
             $table->decimal('total_sales', 10, 2)->nullable();
             $table->decimal('cash_in_drawer', 10, 2)->nullable();
             $table->timestamps();
