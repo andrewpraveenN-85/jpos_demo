@@ -19,6 +19,7 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "@headlessui/vue": "^1.7.23",
         "vue-barcode-reader": "^1.0.3"
     }
 }

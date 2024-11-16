@@ -10,10 +10,12 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('parent')->latest()->get();
+        $paginatedcategories = Category::with('parent')->latest()->paginate(2); 
+        $allcategories = Category::with('parent')->latest()->get();
 
         return Inertia::render('Categories/Index', [
-            'categories' => $categories,
+            'paginatedcategories' => $paginatedcategories,
+            'allcategories' => $allcategories
         ]);
     }
 
@@ -31,11 +33,15 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
+
 
         Category::create($validated);
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        return redirect()->route('categories.index')->banner('Category created successfully.');
+
+        // return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
     public function edit(Category $category)
