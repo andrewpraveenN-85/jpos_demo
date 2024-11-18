@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id(); 
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
-            $table->string('name'); 
-            $table->timestamps(); 
+            $table->id();
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
