@@ -32,7 +32,6 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
@@ -55,7 +54,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         $category->update($validated);

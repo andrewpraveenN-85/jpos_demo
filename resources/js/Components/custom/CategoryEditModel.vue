@@ -88,23 +88,7 @@
                   >
                 </div>
 
-                <!-- Description Textarea -->
-                <div class="mt-4">
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Description:</label
-                  >
-                  <textarea
-                    v-model="form.description"
-                    id="description"
-                    rows="3"
-                    class="w-full px-4 py-2 mt-2 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  ></textarea>
-                  <span
-                    v-if="form.errors.description"
-                    class="mt-4 text-red-500"
-                    >{{ form.errors.description }}</span
-                  >
-                </div>
+                
               </div>
 
               <!-- Modal Buttons -->
@@ -160,7 +144,6 @@ const { open, categories, selectedCategory } = defineProps({
 
 const form = useForm({
   name: "",
-  description: "",
   parent_id: "",
 });
 
@@ -169,7 +152,6 @@ watch(
   (newValue) => {
     if (newValue) {
       form.name = newValue.name || ""; // Populate name
-      form.description = newValue.description || ""; // Populate description
       form.parent_id = newValue.parent_id || ""; // Populate parent_id
     }
   },

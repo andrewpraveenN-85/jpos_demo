@@ -12,11 +12,6 @@ class SizeSeeder extends Seeder
         $sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
         foreach ($sizes as $size) {
-            // DB::table('sizes')->insert([
-            //     'name' => $size,
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ]);
             Size::updateOrCreate(
                 ['name' => $size],
             );

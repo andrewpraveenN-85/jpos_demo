@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
-            $table->text('description')->nullable();
             $table->foreignId('size_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('color_id')->nullable()->constrained()->onDelete('set null');
             $table->decimal('cost_price', 8, 2);
             $table->decimal('selling_price', 8, 2);
             $table->integer('stock_quantity');
             $table->string('barcode')->unique();
-            $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
             $table->string('image')->nullable();
             $table->timestamps();
         });
