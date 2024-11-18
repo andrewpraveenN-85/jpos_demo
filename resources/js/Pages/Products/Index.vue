@@ -20,7 +20,7 @@
     >
       <tr>
         <th class="px-6 py-3 text-left">Name</th>
-        <th class="px-6 py-3 text-left">Supplier</th>
+        <!-- <th class="px-6 py-3 text-left">Supplier</th> -->
         <th class="px-6 py-3 text-left">Size</th>
         <th class="px-6 py-3 text-left">Color</th>
         <th class="px-6 py-3 text-left">Cost Price</th>
@@ -35,7 +35,7 @@
         class="border-b hover:bg-gray-100"
       >
         <td class="px-6 py-3">{{ product.name || "N/A" }}</td>
-        <td class="px-6 py-3">{{ product.supplier?.name || "N/A" }}</td>
+        <!-- <td class="px-6 py-3">{{ product.supplier?.name || "N/A" }}</td> -->
         <td class="px-6 py-3">{{ product.size?.name || "N/A" }}</td>
         <td class="px-6 py-3">{{ product.color?.name || "N/A" }}</td>
         <td class="px-6 py-3">{{ product.cost_price || "N/A" }}</td>
@@ -78,7 +78,7 @@ const props = defineProps({
   products: Array,
   categories: Array,
   colors: Array,
-  suppliers: Array,
+//   suppliers: Array,
   sizes: Array,
 });
 

@@ -30,7 +30,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $products = Product::all();
-        $suppliers = Supplier::all();
+        // $suppliers = Supplier::all();
         $colors = Color::all();
         $sizes = Size::all();
 
@@ -38,7 +38,7 @@ class ProductController extends Controller
         return Inertia::render('Products/Create', [
             'products' => $products,
             'categories' => $categories,
-            'suppliers' => $suppliers,
+            // 'suppliers' => $suppliers,
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
@@ -55,14 +55,14 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            // 'description' => 'nullable|string',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
             'selling_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
             'barcode' => 'nullable|string|max:100|unique:products,barcode',
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            // 'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -97,7 +97,7 @@ class ProductController extends Controller
 
         $categories = Category::all();
         $sizes = Size::all();
-        $suppliers = Supplier::all();
+        // $suppliers = Supplier::all();
         $colors = Color::all();
 
 
@@ -111,7 +111,7 @@ class ProductController extends Controller
 
             'categories' => $categories,
             'product' => $product,
-            'suppliers' => $suppliers,
+            // 'suppliers' => $suppliers,
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
@@ -124,7 +124,7 @@ class ProductController extends Controller
     {
         $sizes = Size::all();
         $categories = Category::all();
-        $suppliers = Supplier::all();
+        // $suppliers = Supplier::all();
         $colors = Color::all();
 
         // dd($product);
@@ -132,7 +132,7 @@ class ProductController extends Controller
         return inertia('Products/Edit', [
             'product' => $product,
             'categories' => $categories,
-            'suppliers' => $suppliers,
+            // 'suppliers' => $suppliers,
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
@@ -149,17 +149,17 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
-            'description' => 'nullable|string',
+            // 'description' => 'nullable|string',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'numeric|min:0',
             'selling_price' => 'numeric|min:0',
             'stock_quantity' => 'integer|min:0',
             'barcode' => 'nullable|string|max:255',
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            // 'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|max:2048',
         ]);
-        
+
 
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
@@ -176,7 +176,7 @@ class ProductController extends Controller
         } else {
             // Retain the old image if no new image is uploaded
             $validated['image'] = $product->image;
-           
+
         }
 
         // if ($request->hasFile('image')) {

@@ -49,7 +49,7 @@
           </div>
 
           <!-- Description Input -->
-          <div>
+          <!-- <div>
             <label
               for="description"
               class="block text-sm font-medium text-gray-700"
@@ -64,7 +64,7 @@
             <span v-if="form.errors.description" class="text-sm text-red-500">{{
               form.errors.description
             }}</span>
-          </div>
+          </div> -->
 
           <!-- Size Input -->
 
@@ -192,7 +192,7 @@
 
           <!-- Supplier Select -->
 
-          <div>
+          <!-- <div>
             <label
               for="supplier_id"
               class="block text-sm font-medium text-gray-700"
@@ -216,7 +216,7 @@
             <span v-if="form.errors.supplier_id" class="text-sm text-red-500">{{
               form.errors.supplier_id
             }}</span>
-          </div>
+          </div> -->
 
           <!-- Image Upload -->
           <div>
@@ -260,7 +260,7 @@ const props = defineProps({
   products: Array,
   categories: Array,
   colors: Array,
-  suppliers: Array,
+//   suppliers: Array,
   sizes: Array,
 });
 
@@ -272,14 +272,14 @@ const props = defineProps({
 const form = useForm({
   category_id: null,
   name: "",
-  description: "",
+//   description: "",
   size_id: "",
   color_id: "",
   cost_price: null,
   selling_price: null,
   stock_quantity: null,
   barcode: "",
-  supplier_id: null,
+//   supplier_id: null,
   image: null, // For file upload
 });
 

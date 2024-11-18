@@ -17,16 +17,16 @@
       </div>
 
       <!-- Supplier -->
-      <div>
+      <!-- <div>
         <span class="font-medium text-gray-600">Supplier:</span>
         <p class="text-gray-800">{{ product.supplier?.name || 'N/A' }}</p>
-      </div>
+      </div> -->
 
       <!-- Description -->
-      <div>
+      <!-- <div>
         <span class="font-medium text-gray-600">Description:</span>
         <p class="text-gray-800">{{ product.description || 'No description available' }}</p>
-      </div>
+      </div> -->
 
       <!-- Size -->
       <div>

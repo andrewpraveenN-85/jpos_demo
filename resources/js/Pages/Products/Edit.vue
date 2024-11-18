@@ -40,7 +40,7 @@
 
 
  <!-- Description Input -->
-  <div>
+  <!-- <div>
     <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
     <textarea
       v-model="form.description"
@@ -49,7 +49,7 @@
       class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
     ></textarea>
     <span v-if="form.errors.description" class="text-sm text-red-500">{{ form.errors.description }}</span>
-  </div>
+  </div> -->
 
 <!-- Size Select -->
           <div>
@@ -151,7 +151,7 @@
   <!-- Supplier Select -->
 
 
-<div>
+<!-- <div>
   <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
   <select
     v-model="form.supplier_id"
@@ -169,7 +169,7 @@
     </option>
   </select>
   <span v-if="form.errors.supplier_id" class="text-sm text-red-500">{{ form.errors.supplier_id }}</span>
-</div>
+</div> -->
 
 
 
@@ -241,7 +241,7 @@ const props = defineProps({
   product: Object,
    categories: Array,
   colors: Array,
-  suppliers: Array,
+//   suppliers: Array,
   sizes: Array,
 });
 
@@ -249,15 +249,15 @@ const props = defineProps({
 const form = useForm({
   category_id: props.product.category_id || null,
   name: props.product.name || '',
-  description: props.product.description || '',
+//   description: props.product.description || '',
   size_id: props.product.size_id || '',
   color_id: props.product.color_id || '',
   cost_price: props.product.cost_price || null,
   selling_price: props.product.selling_price || null,
   stock_quantity: props.product.stock_quantity || null,
   barcode: props.product.barcode || '',
-  supplier_id: props.product.supplier_id || null,
-  image: null,  
+//   supplier_id: props.product.supplier_id || null,
+  image: null,
 });
 
 const handleImageUpload = (event) => {
