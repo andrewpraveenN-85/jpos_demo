@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category', 'supplier','color','size')->latest()->get();
+        $products = Product::with('category','color','size')->latest()->get();
 
         return Inertia::render('Products/Index', [
             'products' => $products,
@@ -104,7 +104,7 @@ class ProductController extends Controller
 
 
 
-        $product->load('category', 'supplier','color','size');
+        $product->load('category','color','size');
 
 
         return Inertia::render('Products/Show', [
