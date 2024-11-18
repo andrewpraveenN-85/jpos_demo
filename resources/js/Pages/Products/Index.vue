@@ -72,7 +72,7 @@
           :key="product.id"
           class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
         >
-          <div>
+          <div @click="openViewModal(product)" class="cursor-pointer">
             <img
               :src="`/${product.image}`"
               alt="Product Image"
@@ -160,6 +160,14 @@
     :selected-product="selectedProduct"
   />
 
+  <ProductViewModel
+    :categories="allcategories"
+    :colors="colors"
+    :sizes="sizes"
+    v-model:open="isViewModalOpen"
+    :selected-product="selectedProduct"
+  />
+
   <Footer />
 </template>
 
@@ -172,13 +180,20 @@ import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
 import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
+import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
+const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 
 const openEditModal = (product) => {
   selectedProduct.value = product; // Set the selected product
   isEditModalOpen.value = true; // Open the edit modal
+};
+
+const openViewModal = (product) => {
+  selectedProduct.value = product; // Set the selected product
+  isViewModalOpen.value = true; // Open the view modal
 };
 
 const props = defineProps({
@@ -201,15 +216,12 @@ const openModal = (id) => {
   showModal.value = true;
 };
 
-const deleteProduct = () => {
-  if (productToDelete.value) {
-    form.delete(`/products/${productToDelete.value}`, {
-      onSuccess: () => {
-        showModal.value = false; // Close modal after deletion
-      },
-    });
+const deleteProduct = (id) => {
+  if (confirm("Are you sure you want to delete this product?")) {
+    form.delete(`/products/${id}`);
   }
 };
+
 </script>
 
 

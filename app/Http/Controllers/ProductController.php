@@ -87,7 +87,8 @@ class ProductController extends Controller
 
             Product::create($validated);
 
-            return redirect()->route('products.index')->with('success', 'Product created successfully.');
+            // return redirect()->route('products.index')->with('success', 'Product created successfully.');
+            return redirect()->route('products.index')->banner('Product created successfully');
         } catch (\Exception $e) {
 
             \Log::error('Error creating product: ' . $e->getMessage());
@@ -203,7 +204,8 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+        // return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+        return redirect()->route('products.index')->banner('Product updated successfully');
     }
 
     /**
@@ -213,6 +215,6 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
+        return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
 }
