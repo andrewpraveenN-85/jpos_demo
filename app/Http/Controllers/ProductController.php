@@ -17,8 +17,16 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category','color','size')->latest()->paginate(2);
+        $allcategories = Category::with('parent')->latest()->get();
+        $colors = Color::all();
+        $sizes = Size::all();
+
+        
         return Inertia::render('Products/Index', [
             'products' => $products,
+            'allcategories' => $allcategories,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
     }
 

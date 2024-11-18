@@ -1,44 +1,43 @@
 
 <style lang="css">
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
 }
 
 .pagination a {
-    display: inline-block;
-    padding: 8px 12px;
-    color: #007bff;
-    text-decoration: none;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
+  display: inline-block;
+  padding: 8px 12px;
+  color: #007bff;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .pagination a:hover {
-    background-color: #007bff;
-    color: white;
+  background-color: #007bff;
+  color: white;
 }
 
 .pagination a.is-active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-    font-weight: bold;
-    pointer-events: none;
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .pagination a[disabled] {
-    pointer-events: none;
-    color: #aaa;
-    border-color: #ddd;
+  pointer-events: none;
+  color: #aaa;
+  border-color: #ddd;
 }
-
 </style>
 <template>
   <Banner />
@@ -118,6 +117,7 @@
 
               <div class="flex space-x-4">
                 <button
+                  @click="openEditModal(product)"
                   class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
                 >
                   <i class="ri-pencil-line"></i>
@@ -139,14 +139,26 @@
           v-for="link in products.links"
           :key="link.label"
           :href="link.url"
-          :class="{ 'is-active': link.active, disabled: !link.url } "
+          :class="{ 'is-active': link.active, disabled: !link.url }"
           v-html="link.label"
         ></Link>
       </div>
     </div>
   </div>
 
-  <ProductCreateModel v-model:open="isCreateModalOpen" />
+  <ProductCreateModel
+    :categories="allcategories"
+    :colors="colors"
+    :sizes="sizes"
+    v-model:open="isCreateModalOpen"
+  />
+  <ProductUpdateModel
+    :categories="allcategories"
+    :colors="colors"
+    :sizes="sizes"
+    v-model:open="isEditModalOpen"
+    :selected-product="selectedProduct"
+  />
 
   <Footer />
 </template>
@@ -159,14 +171,22 @@ import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
 import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
+import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
+const selectedProduct = ref(null);
+
+const openEditModal = (product) => {
+  selectedProduct.value = product; // Set the selected product
+  isEditModalOpen.value = true; // Open the edit modal
+};
 
 const props = defineProps({
   products: Array,
   categories: Array,
   colors: Array,
   sizes: Array,
+  allcategories: Array,
 });
 
 onMounted(() => {

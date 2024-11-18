@@ -288,13 +288,13 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const emit = defineEmits(["update:open"]);
 
 // The `open` prop controls the visibility of the modal
-defineProps({
+const { selectedProduct } = defineProps({
   open: {
     type: Boolean,
     required: true,
@@ -310,6 +310,10 @@ defineProps({
   sizes: {
     type: Array,
     required: true,
+  },
+  selectedProduct: {
+    type: Object,
+    default: null, // Ensure it defaults to null
   },
 });
 
@@ -329,11 +333,28 @@ const handleImageUpload = (event) => {
   form.image = event.target.files[0]; // Set the file to the form object
 };
 
+watch(
+  () => selectedProduct,
+  (newValue) => {
+    if (newValue) {
+      form.category_id = newValue.category_id || "";
+      form.name = newValue.name || "";
+      form.size_id = newValue.size_id || "";
+      form.color_id = newValue.color_id || "";
+      form.cost_price = newValue.cost_price || null;
+      form.selling_price = newValue.selling_price || null;
+      form.stock_quantity = newValue.stock_quantity || null;
+      form.barcode = newValue.barcode || "";
+    }
+  },
+  { immediate: true } // Run immediately when the component is mounted
+);
+
 const submit = () => {
-  form.post("/products", {
+  form.post(`/products/${selectedProduct.id}`, {
     preserveScroll: true,
     onSuccess: () => {
-      console.log("Product created successfully!");
+      console.log("Product updated successfully!");
       form.reset(); // Reset form fields after successful submission
       emit("update:open", false);
     },
@@ -342,5 +363,6 @@ const submit = () => {
     },
   });
 };
+
 
 </script>
