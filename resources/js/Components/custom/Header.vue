@@ -15,7 +15,7 @@
       </p>
 
       <!-- Logout Button -->
-      <form @submit.prevent="logout" class="inline">
+      <!-- <form @submit.prevent="logout" class="inline">
         <button type="submit" class="flex items-center font-bold text-red-500 hover:underline">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,14 +33,14 @@
           </svg>
           <span class="ml-2">Logout</span>
         </button>
-      </form>
+      </form> -->
     </div>
 
     <!-- Profile Picture -->
     <a :href="route('profile.show')" class="block">
       <img
         src="/images/dashboard/cashier.png"
-        class="w-16 h-16"
+        class="w-16 h-16 rounded-full"
         alt="Profile"
       />
     </a>

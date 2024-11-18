@@ -19,7 +19,8 @@
           </p>
         </div>
         <p
-          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
+          @click="isCreateModalOpen = true"
+          class="cursor-pointer px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
         </p>
@@ -79,7 +80,8 @@
                 >
                   <i class="ri-pencil-line"></i>
                 </button>
-                <button   @click="deleteProduct(product.id)"
+                <button
+                  @click="deleteProduct(product.id)"
                   class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
                 >
                   <i class="ri-delete-bin-line"></i>
@@ -102,6 +104,8 @@
     </div>
   </div>
 
+  <ProductCreateModel v-model:open="isCreateModalOpen" />
+
   <Footer />
 </template>
 
@@ -112,7 +116,9 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
-
+import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
+const isCreateModalOpen = ref(false);
+const isEditModalOpen = ref(false);
 
 const props = defineProps({
   products: Array,
