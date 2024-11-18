@@ -14,7 +14,7 @@
 
         <!-- Button to open modal -->
         <p
-          @click="isModalOpen = true"
+          @click="isCreateModalOpen = true"
           class="bg-blue-600 text-white font-bold uppercase tracking-wider px-12 rounded py-4 rounded-xl text-2xl cursor-pointer hover:bg-blue-700"
         >
           <i class="ri-add-circle-fill pr-4"></i> Add Categories
@@ -46,12 +46,18 @@
                 {{ category.parent ? category.parent.name : "None" }}
               </td>
               <td class="flex px-6 py-3 space-x-4">
-                <Link
+                <button
+                  @click="openEditModal(category)"
+                  class="text-blue-500 hover:underline"
+                >
+                  Edit
+                </button>
+                <!-- <Link
                   :href="`/categories/${category.id}/edit`"
                   class="text-blue-500 hover:underline"
                 >
                   Edit
-                </Link>
+                </Link> -->
                 <button
                   @click="deleteCategory(category.id)"
                   class="text-red-500 hover:underline"
@@ -65,8 +71,6 @@
       </div>
     </div>
 
- 
-
     <div class="pagination">
       <Link
         v-for="link in paginatedcategories.links"
@@ -79,7 +83,16 @@
   </div>
 
   <!-- Modal -->
-  <CategoryCreateModel :categories="allcategories" v-model:open="isModalOpen" />
+  <!-- <CategoryCreateModel :categories="allcategories" v-model:open="isModalOpen" /> -->
+  <CategoryCreateModel
+    :categories="allcategories"
+    v-model:open="isCreateModalOpen"
+  />
+  <CategoryEditModel
+    :categories="allcategories"
+    :selected-category="selectedCategory"
+    v-model:open="isEditModalOpen"
+  />
 
   <!-- Include the Footer -->
   <Footer />
@@ -91,12 +104,18 @@ import { Link } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import CategoryCreateModel from "@/Components/custom/CategoryCreateModel.vue";
+import CategoryEditModel from "@/Components/custom/CategoryEditModel.vue";
 import Banner from "@/Components/Banner.vue";
 
 defineProps({
   paginatedcategories: Object, // This comes from Inertia
   allcategories: Array,
 });
+
+const openEditModal = (category) => {
+  selectedCategory.value = category; // Set the selected category
+  isEditModalOpen.value = true; // Open the edit modal
+};
 
 const deleteCategory = (id) => {
   if (confirm("Are you sure you want to delete this category?")) {
@@ -105,5 +124,8 @@ const deleteCategory = (id) => {
 };
 
 // Manage modal state
-const isModalOpen = ref(false);
+// const isModalOpen = ref(false);
+const isCreateModalOpen = ref(false); // For CategoryCreateModel
+const isEditModalOpen = ref(false); // For CategoryEditModel
+const selectedCategory = ref(null); // Store the selected category for editing
 </script>
