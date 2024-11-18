@@ -245,6 +245,23 @@
                     class="block text-sm font-medium text-gray-300"
                     >Image:</label
                   >
+                  <div class="w-full md:w-6/12">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Current Image</label
+                    >
+                    <div class="mt-2">
+                      <img
+                        v-if="selectedProduct.image"
+                        :src="`/${selectedProduct.image}`"
+                        alt="Product Image"
+                        class="rounded-lg h-50 w-50"
+                      />
+
+                      <p v-else class="text-sm text-gray-500">
+                        No image available
+                      </p>
+                    </div>
+                  </div>
                   <input
                     type="file"
                     id="image"
@@ -345,6 +362,7 @@ watch(
       form.selling_price = newValue.selling_price || null;
       form.stock_quantity = newValue.stock_quantity || null;
       form.barcode = newValue.barcode || "";
+      form.image = newValue.image || null;
     }
   },
   { immediate: true } // Run immediately when the component is mounted
@@ -363,6 +381,4 @@ const submit = () => {
     },
   });
 };
-
-
 </script>
