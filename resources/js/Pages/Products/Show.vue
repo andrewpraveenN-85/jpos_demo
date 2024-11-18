@@ -1,18 +1,19 @@
+
 <template>
   <div class="p-6 bg-white rounded-lg shadow-md">
     <h1 class="mb-4 text-2xl font-bold text-gray-700">Product Details</h1>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <!-- Name -->
       <div>
         <span class="font-medium text-gray-600">Name:</span>
-        <p class="text-gray-800">{{ product.name }}</p>
+        <p class="text-gray-800">{{ product.name || 'N/A' }}</p>
       </div>
 
       <!-- Category -->
       <div>
         <span class="font-medium text-gray-600">Category:</span>
-        <p class="text-gray-800">{{ product.category }}</p>
+        <p class="text-gray-800">{{ product.category?.name || 'N/A' }}</p>
       </div>
 
       <!-- Supplier -->
@@ -30,13 +31,13 @@
       <!-- Size -->
       <div>
         <span class="font-medium text-gray-600">Size:</span>
-        <p class="text-gray-800">{{ product.size || 'N/A' }}</p>
+        <p class="text-gray-800">{{ product.size?.name || 'N/A' }}</p>
       </div>
 
       <!-- Color -->
       <div>
         <span class="font-medium text-gray-600">Color:</span>
-        <p class="text-gray-800">{{ product.color || 'N/A' }}</p>
+        <p class="text-gray-800">{{ product.color?.name  || 'N/A' }}</p>
       </div>
 
       <!-- Cost Price -->
@@ -64,21 +65,29 @@
       </div>
 
       <!-- Product Image -->
-      <div v-if="product.image">
+      <div>
         <span class="font-medium text-gray-600">Image:</span>
-
-
-      <img
-  :src="`/${product.image}`"
-  alt="Product Image"
-  class="mt-2 rounded-lg h-50 w-50"
-/>
+        <div v-if="product.image">
+          <img
+            :src="`/${product.image}`"
+            alt="Product Image"
+            class="w-full max-w-sm mt-2 rounded-lg"
+          />
+        </div>
+        <p v-else class="text-gray-800">No image available</p>
       </div>
     </div>
-
-
   </div>
 </template>
+
+
+
+
+
+
+
+
+
 
 <script setup>
 import { defineProps, onMounted } from "vue";

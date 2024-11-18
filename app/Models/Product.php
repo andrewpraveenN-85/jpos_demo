@@ -12,8 +12,8 @@ class Product extends Model
         'category_id',
         'name',
         'description',
-        'size',
-        'color',
+        'size_id',
+        'color_id',
         'cost_price',
         'selling_price',
         'stock_quantity',
@@ -25,11 +25,23 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id'.'id');
+        return $this->belongsTo(Category::class, 'category_id','id');
     }
 
     public function supplier()
     {
         return $this->belongsTo(Supplier::class, 'supplier_id','id');
     }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'color_id','id');
+    }
+
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id','id');
+    }
+
 }

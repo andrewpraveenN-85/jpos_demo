@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Size;
+use App\Models\Color;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -15,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category', 'supplier')->latest()->get();
+        $products = Product::with('category', 'supplier','color','size')->latest()->get();
 
         return Inertia::render('Products/Index', [
             'products' => $products,
@@ -30,11 +31,16 @@ class ProductController extends Controller
         $categories = Category::all();
         $products = Product::all();
         $suppliers = Supplier::all();
+        $colors = Color::all();
+        $sizes = Size::all();
+
 
         return Inertia::render('Products/Create', [
             'products' => $products,
             'categories' => $categories,
             'suppliers' => $suppliers,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
 
     }
@@ -44,12 +50,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'size' => 'nullable|string|max:50',
-            'color' => 'nullable|string|max:50',
+            'size_id' => 'nullable|exists:sizes,id',
+            'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
             'selling_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
@@ -68,6 +76,8 @@ class ProductController extends Controller
                 $validated['image'] = $destinationPath . $fileName;
             }
 
+
+
             Product::create($validated);
 
             return redirect()->route('products.index')->with('success', 'Product created successfully.');
@@ -84,9 +94,26 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load('category', 'supplier');
+
+        $categories = Category::all();
+        $sizes = Size::all();
+        $suppliers = Supplier::all();
+        $colors = Color::all();
+
+
+
+
+
+        $product->load('category', 'supplier','color','size');
+
+
         return Inertia::render('Products/Show', [
+
+            'categories' => $categories,
             'product' => $product,
+            'suppliers' => $suppliers,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
     }
 
@@ -95,14 +122,19 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-
+        $sizes = Size::all();
         $categories = Category::all();
         $suppliers = Supplier::all();
+        $colors = Color::all();
+
+        // dd($product);
 
         return inertia('Products/Edit', [
             'product' => $product,
             'categories' => $categories,
             'suppliers' => $suppliers,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
 
     }
@@ -112,29 +144,60 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+
+
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:categories,id',
+            'name' => 'string|max:255',
             'description' => 'nullable|string',
-            'size' => 'nullable|string|max:255',
-            'color' => 'nullable|string|max:255',
-            'cost_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
-            'stock_quantity' => 'required|integer|min:0',
+            'size_id' => 'nullable|exists:sizes,id',
+            'color_id' => 'nullable|exists:colors,id',
+            'cost_price' => 'numeric|min:0',
+            'selling_price' => 'numeric|min:0',
+            'stock_quantity' => 'integer|min:0',
             'barcode' => 'nullable|string|max:255',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|image|max:2048', // Image validation
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        // Handle file upload
+
+
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
+
+            // Delete the old image if it exists
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            // Save the new image
+            $fileExtension = $request->file('image')->getClientOriginalExtension();
+            $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+            $destinationPath = "images/uploads/products/";
+            $request->file('image')->move(public_path($destinationPath), $fileName);
+            $validated['image'] = $destinationPath . $fileName;
+        } else {
+            // Retain the old image if no new image is uploaded
+            $validated['image'] = $product->image;
         }
 
-        // Update product
+        // if ($request->hasFile('image')) {
+
+        //     if ($product->image && Storage::exists($product->image)) {
+        //         Storage::delete($product->image);
+        //     }
+
+        //     $fileName = $request->file('image')->store('images/uploads/products', 'public');
+
+
+        //     $validated['image'] = $fileName;
+        // } else {
+
+        //     $validated['image'] = $product->image;
+        // }
+
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     /**
