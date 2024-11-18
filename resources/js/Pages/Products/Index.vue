@@ -1,84 +1,123 @@
 <template>
-  <AdminLayout>
-    <div class="min-h-screen p-6 bg-gray-100">
-      <div class="flex items-center justify-between mb-4">
-        <h1 class="text-2xl font-bold text-gray-800">Products</h1>
-        <Link
-          href="/products/create"
-          class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+  <Banner />
+  <div
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+  >
+    <!-- Include the Header -->
+    <Header />
+    <div class="w-5/6 py-12 space-y-16">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-center space-x-4">
+          <a
+            href="./includes/dash_page.php"
+            class="p-1 text-3xl text-black border-2 border-black rounded-full"
+          >
+            <p><i class="ri-arrow-left-line"></i></p>
+          </a>
+          <p class="text-4xl font-bold tracking-wide text-black uppercase">
+            Products
+          </p>
+        </div>
+        <p
+          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
         >
-          Add New Product
-        </Link>
+          <i class="pr-4 ri-add-circle-fill"></i> Add More Products
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-8">
+        <div
+          v-for="product in products.data"
+          :key="product.id"
+          class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
+        >
+          <div>
+            <img
+              :src="`/${product.image}`"
+              alt="Product Image"
+              class="object-cover w-full h-64"
+            />
+          </div>
+          <div class="px-4 py-4 space-y-4">
+            <div
+              class="flex justify-between text-[11px] font-bold tracking-wide uppercase"
+            >
+              <p>{{ product.name || "N/A" }}</p>
+              <p class="px-4 text-white bg-green-700 rounded-full">
+                {{ product.selling_price || "N/A" }} LKR
+              </p>
+            </div>
+            <div class="flex items-center justify-center w-full space-x-4">
+              <p class="flex items-center space-x-2 text-justify text-gray-400">
+                <span>Color :</span>
+                <span
+                  class="inline-block w-6 h-6 border border-black rounded-full"
+                  :style="{
+                    backgroundColor: product.color?.hex_code || '#FFFFFF',
+                  }"
+                ></span>
+              </p>
+
+              <p class="text-justify text-gray-400">
+                Size :
+                {{ product.size?.name || "N/A" }}
+              </p>
+            </div>
+            <div class="flex items-center justify-between">
+              <p
+                v-if="product.stock_quantity > 0"
+                class="text-xl font-bold tracking-wider text-green-500"
+              >
+                <i class="ri-checkbox-blank-circle-fill"></i> In Stock
+              </p>
+              <p v-else class="text-xl font-bold tracking-wider text-red-500">
+                <i class="ri-checkbox-blank-circle-fill"></i> Out of Stock
+              </p>
+
+              <div class="flex space-x-4">
+                <button
+                  class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
+                >
+                  <i class="ri-pencil-line"></i>
+                </button>
+                <button   @click="deleteProduct(product.id)"
+                  class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
+                >
+                  <i class="ri-delete-bin-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="overflow-x-auto">
-         <table
-    class="w-full overflow-hidden bg-white border-collapse rounded-lg shadow-lg"
-  >
-    <thead
-      class="text-sm leading-normal text-gray-600 uppercase bg-gray-200"
-    >
-      <tr>
-        <th class="px-6 py-3 text-left">Name</th>
-        <!-- <th class="px-6 py-3 text-left">Supplier</th> -->
-        <th class="px-6 py-3 text-left">Size</th>
-        <th class="px-6 py-3 text-left">Color</th>
-        <th class="px-6 py-3 text-left">Cost Price</th>
-        <th class="px-6 py-3 text-left">Selling Price</th>
-        <th class="px-6 py-3 text-left">Actions</th>
-      </tr>
-    </thead>
-    <tbody class="text-sm text-gray-800">
-      <tr
-        v-for="product in products"
-        :key="product.id"
-        class="border-b hover:bg-gray-100"
-      >
-        <td class="px-6 py-3">{{ product.name || "N/A" }}</td>
-        <!-- <td class="px-6 py-3">{{ product.supplier?.name || "N/A" }}</td> -->
-        <td class="px-6 py-3">{{ product.size?.name || "N/A" }}</td>
-        <td class="px-6 py-3">{{ product.color?.name || "N/A" }}</td>
-        <td class="px-6 py-3">{{ product.cost_price || "N/A" }}</td>
-        <td class="px-6 py-3">{{ product.selling_price || "N/A" }}</td>
-        <td class="flex px-6 py-3 space-x-4">
-          <Link
-            :href="`/products/${product.id}`"
-            class="text-green-500 hover:underline"
-          >
-            View
-          </Link>
-          <Link
-            :href="`/products/${product.id}/edit`"
-            class="text-blue-500 hover:underline"
-          >
-            Edit
-          </Link>
-          <button
-            @click="deleteProduct(product.id)"
-            class="text-red-500 hover:underline"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <div class="pagination">
+        <Link
+          v-for="link in products.links"
+          :key="link.label"
+          :href="link.url"
+          :class="{ 'is-active': link.active, disabled: !link.url }"
+          v-html="link.label"
+        ></Link>
       </div>
     </div>
-  </AdminLayout>
+  </div>
+
+  <Footer />
 </template>
 
-
 <script setup>
+import { ref } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
+import Header from "@/Components/custom/Header.vue";
+import Footer from "@/Components/custom/Footer.vue";
+import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
-import AdminLayout from "@/Layouts/AdminLayout.vue";
+
 
 const props = defineProps({
   products: Array,
   categories: Array,
   colors: Array,
-//   suppliers: Array,
   sizes: Array,
 });
 
@@ -86,12 +125,21 @@ onMounted(() => {
   console.log("Products:", props.products);
   console.table(props.products);
 });
-
+const showModal = ref(false);
 const form = useForm({});
 
-const deleteProduct = (id) => {
-  if (confirm("Are you sure you want to delete this Products?")) {
-    form.delete(`/products/${id}`);
+const openModal = (id) => {
+  productToDelete.value = id;
+  showModal.value = true;
+};
+
+const deleteProduct = () => {
+  if (productToDelete.value) {
+    form.delete(`/products/${productToDelete.value}`, {
+      onSuccess: () => {
+        showModal.value = false; // Close modal after deletion
+      },
+    });
   }
 };
 </script>
