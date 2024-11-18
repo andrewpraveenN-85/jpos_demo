@@ -28,7 +28,7 @@
           leave-to="opacity-0 scale-95"
         >
           <DialogPanel
-            class="bg-black border-4 border-blue-600 rounded-[20px] shadow-xl max-w-md w-full p-6 text-center"
+            class="bg-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-3/6 p-10 text-center"
           >
             <!-- Close Button -->
             <!-- <button
@@ -40,7 +40,7 @@
 
             <!-- Modal Title -->
             <DialogTitle class="text-xl font-bold text-white"
-              >Add Category</DialogTitle
+              >Add Product</DialogTitle
             >
             <form @submit.prevent="submit">
               <!-- Modal Form -->
@@ -50,13 +50,21 @@
                   <label class="block text-sm font-medium text-gray-300"
                     >Category Name:</label
                   >
-                  <input
-                    v-model="form.name"
-                    type="text"
-                    id="name"
+                 <select
                     required
-                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
+                    v-model="form.parent_id"
+                    id="parent_id"
+                    class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  >
+                    <option value="">Select a Category</option>
+                    <option
+                      v-for="category in categories"
+                      :key="category.id"
+                      :value="category.id"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
                   <span v-if="form.errors.name" class="mt-4 text-red-500">{{
                     form.errors.name
                   }}</span>
