@@ -139,7 +139,7 @@
           v-for="link in products.links"
           :key="link.label"
           :href="link.url"
-          :class="{ 'is-active': link.active, disabled: !link.url } px-3 py-1 text-3xl text-black border-2 border-black"
+          :class="{ 'is-active': link.active, disabled: !link.url } "
           v-html="link.label"
         ></Link>
       </div>
