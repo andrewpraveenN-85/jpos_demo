@@ -15,7 +15,8 @@ class CategoryController extends Controller
 
         return Inertia::render('Categories/Index', [
             'paginatedcategories' => $paginatedcategories,
-            'allcategories' => $allcategories
+            'allcategories' => $allcategories,
+            'totalCategories' => $allcategories->count()
         ]);
     }
 
