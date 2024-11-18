@@ -265,7 +265,7 @@ const handleImageUpload = (event) => {
 };
 
 const submit = () => {
-  form.put(`/products/${props.product.id}`, {
+  form.post(`/products/${props.product.id}`, {
     preserveScroll: true,
     onSuccess: () => {
       console.log("Product updated successfully!");

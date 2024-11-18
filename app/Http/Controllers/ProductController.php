@@ -159,11 +159,9 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|max:2048',
         ]);
-
-
+        
 
         if ($request->hasFile('image')) {
-
             // Delete the old image if it exists
             if ($product->image && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));
@@ -178,6 +176,7 @@ class ProductController extends Controller
         } else {
             // Retain the old image if no new image is uploaded
             $validated['image'] = $product->image;
+           
         }
 
         // if ($request->hasFile('image')) {
