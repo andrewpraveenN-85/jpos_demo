@@ -1,3 +1,45 @@
+
+<style lang="css">
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 12px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination a.is-active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.pagination a[disabled] {
+    pointer-events: none;
+    color: #aaa;
+    border-color: #ddd;
+}
+
+</style>
 <template>
   <Banner />
   <div
@@ -20,7 +62,7 @@
         </div>
         <p
           @click="isCreateModalOpen = true"
-          class="cursor-pointer px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
+          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded cursor-pointer rounded-xl"
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
         </p>
@@ -97,7 +139,7 @@
           v-for="link in products.links"
           :key="link.label"
           :href="link.url"
-          :class="{ 'is-active': link.active, disabled: !link.url }"
+          :class="{ 'is-active': link.active, disabled: !link.url } px-3 py-1 text-3xl text-black border-2 border-black"
           v-html="link.label"
         ></Link>
       </div>
@@ -149,3 +191,5 @@ const deleteProduct = () => {
   }
 };
 </script>
+
+
