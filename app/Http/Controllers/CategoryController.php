@@ -10,8 +10,9 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $paginatedcategories = Category::with('parent')->latest()->paginate(8);
+        $paginatedcategories = Category::with('parent')->latest()->paginate(10);
         $allcategories = Category::with('parent')->latest()->get();
+
 
         return Inertia::render('Categories/Index', [
             'paginatedcategories' => $paginatedcategories,
@@ -70,6 +71,6 @@ class CategoryController extends Controller
 
         $category->delete();
         return redirect()->route('categories.index')->banner('Category Deleted successfully.');
-        // return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+
     }
 }
