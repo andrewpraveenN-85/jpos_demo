@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@headlessui/vue": "^1.7.23",
+        "dayjs": "^1.11.13",
         "vue-barcode-reader": "^1.0.3"
     }
 }

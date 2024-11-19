@@ -153,19 +153,16 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
 
-
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
-            // 'description' => 'nullable|string',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'numeric|min:0',
             'selling_price' => 'numeric|min:0',
             'stock_quantity' => 'integer|min:0',
             'barcode' => 'nullable|string|max:255',
-            // 'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|max:2048',
         ]);
 
 
@@ -187,20 +184,7 @@ class ProductController extends Controller
 
         }
 
-        // if ($request->hasFile('image')) {
-
-        //     if ($product->image && Storage::exists($product->image)) {
-        //         Storage::delete($product->image);
-        //     }
-
-        //     $fileName = $request->file('image')->store('images/uploads/products', 'public');
-
-
-        //     $validated['image'] = $fileName;
-        // } else {
-
-        //     $validated['image'] = $product->image;
-        // }
+      
 
         $product->update($validated);
 

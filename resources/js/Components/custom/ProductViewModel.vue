@@ -30,59 +30,74 @@
           <DialogPanel
             class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-3/6 p-6"
           >
-            <div class="flex items-start gap-4">
-              <!-- Product Image -->
-              <div class="w-1/3">
-                <img
-                  :src="`/${selectedProduct.image}`"
-                  alt="Product Image"
-                  class="rounded-lg"
-                />
+            <div
+              class="w-full h-full flex flex-col justify-start items-start pt-4 px-4"
+            >
+              <div class="w-full flex justify-between items-center">
+                <p class="text-black text-3xl font-bold">{{ selectedProduct.name }}</p>
+                <p class="text-xl text-[#00000099] font-bold tracking-wide">
+                   {{ selectedProduct.category.name }}
+                </p>
               </div>
-
-              <!-- Product Details -->
-              <div class="w-2/3 text-left space-y-2">
-                <h3 class="text-xl font-bold">{{ selectedProduct.name }}</h3>
-                <p class="text-sm text-gray-500">{{ selectedProduct.category.name }}</p>
-
-                <div class="text-sm">
-                  <p>
-                    <span class="font-bold">Bar Code:</span>
-                    <span class="text-gray-700">{{ selectedProduct.barcode }}</span>
+              <div class="w-full h-full flex justify-center items-center p-8">
+                <div class="w-1/2 h-[300px] flex flex-col pr-8">
+                  <img
+                    :src="`/${selectedProduct.image}`"
+                    alt="Product Image"
+                    class="rounded-lg"
+                  />
+                </div>
+                <div class="w-1/2 h-full flex flex-col space-y-8">
+                  <p class="text-2xl text-black font-bold">
+                    <span class="text-[#00000099] font-normal">Bar Code : </span
+                    >{{ selectedProduct.barcode }}
                   </p>
-                  <p>
-                    <span class="font-bold">Colors:</span>
-                    <span>{{ selectedProduct.color.name }}</span>
+                  <p
+                    class="text-justify text-[#00000099] text-2xl flex items-center space-x-2"
+                  >
+                    <span>Color :</span
+                    ><span
+                      class="w-6 h-6 border border-black rounded-full inline-block"
+                      :style="{ backgroundColor: selectedProduct.color?.hex_code }"
+                    ></span>
                   </p>
-                  <p>
-                    <span class="font-bold">Size:</span>
+                  <p class="text-[#00000099] text-2xl">
+                    Size :
                     <span
-                      class="px-2 py-1 bg-gray-200 rounded-md border text-gray-700"
+                      class="text-black border-2 border-black px-2 py-2 rounded-2xl font-bold"
                       >{{ selectedProduct.size.name }}</span
                     >
                   </p>
-                </div>
+                  <div
+                    class="w-full flex jystify-between items-center text-2xl"
+                  >
+                    <div class="w-full flex flex-col">
+                      <p class="text-[#00000099]">Selling Price :</p>
+                      <p class="text-black font-bold">{{ selectedProduct.selling_price }} LKR</p>
+                    </div>
+                    <div class="w-full flex flex-col">
+                      <p class="text-[#00000099]">Cost Price :</p>
+                      <p class="text-black font-bold">{{ selectedProduct.cost_price }} LKR</p>
+                    </div>
+                  </div>
+                  <p class="text-2xl text-black font-bold">
+                    <span class="text-[#00000099] font-normal"
+                      >Stock Quantity :</span
+                    >
+                    {{ selectedProduct.stock_quantity }}
+                  </p>
+                  <p class="text-2xl text-black font-bold">
+                    <span class="text-[#00000099] font-normal"
+                      >Created On :</span
+                    >
 
-                <div class="text-sm mt-4">
-                  <p>
-                    <span class="font-bold">Selling Price:</span>
-                    <span class="text-gray-700">4500.00 LKR</span>
-                  </p>
-                  <p>
-                    <span class="font-bold">Cost Price:</span>
-                    <span class="text-gray-700">4500.00 LKR</span>
-                  </p>
-                  <p>
-                    <span class="font-bold">Stock Quantity:</span>
-                    <span class="text-gray-700">240</span>
-                  </p>
-                  <p>
-                    <span class="font-bold">Created On:</span>
-                    <span class="text-gray-700">20th November 2024</span>
+                    {{ formattedDate }}
+                    <!-- 20th November 2024 -->
                   </p>
                 </div>
               </div>
             </div>
+           
           </DialogPanel>
         </TransitionChild>
       </div>
@@ -99,8 +114,13 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
+import dayjs from "dayjs";
+
+// Extend Day.js for ordinal formatting
+import advancedFormat from "dayjs/plugin/advancedFormat";
+dayjs.extend(advancedFormat);
 
 const emit = defineEmits(["update:open"]);
 
@@ -127,4 +147,12 @@ const { selectedProduct } = defineProps({
     default: null, // Ensure it defaults to null
   },
 });
+
+// Computed property to format the date
+const formattedDate = computed(() =>
+  selectedProduct && selectedProduct.created_at
+    ? dayjs(selectedProduct.created_at).format("Do MMMM YYYY")
+    : ""
+);
 </script>
+
