@@ -182,10 +182,12 @@
           {{ category.name || "N/A" }}
         </td>
 
+        
 
-        <!-- <td class="p-4 border-t border-gray-700">
+
+          <td class="p-4 border-t border-gray-700">
           {{ category.parent?.name || "N/A" }}
-        </td> -->
+        </td>
         <td class="p-4 border-t border-gray-700">
           <div class="flex items-center space-x-3">
             <button
