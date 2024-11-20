@@ -32,14 +32,11 @@ class CategoryController extends Controller
                 ];
             });
 
-            return response()->json($allcategories);
-
-            // dd('here');
-        // return Inertia::render('Categories/Index', [
-        //     // 'paginatedcategories' => $paginatedcategories,
-        //     'allcategories' => $allcategories,
-        //     'totalCategories' => $allcategories->count()
-        // ]);
+        return Inertia::render('Categories/Index', [
+            // 'paginatedcategories' => $paginatedcategories,
+            'allcategories' => $allcategories,
+            'totalCategories' => $allcategories->count()
+        ]);
     }
 
     public function create()
