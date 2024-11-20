@@ -1,70 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Print Barcode</title>
-    <style>
-        #printArea {
-            text-align: center;
-            margin: 20px;
-        }
-
-        canvas {
-            margin-bottom: -10px; /* Adjust text alignment with the barcode */
-        }
-
-        .barcode-text {
-            font-size: 16px; /* Adjust font size */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate and Print Barcode</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    .print-container {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div id="printArea">
-        <h1>Product Barcode</h1>
+  <h1>Generate and Print Barcode</h1>
+  <input type="text" id="barcodeInput" placeholder="Enter text for barcode" />
+  <button onclick="generateAndPrintBarcode()">Generate & Print</button>
 
-        <!-- Barcode will be rendered on this canvas -->
-        <canvas id="barcodeCanvas"></canvas>
+  <!-- Hidden container for printing -->
+  <div class="print-container" id="printContainer">
+    <svg id="barcodePrint"></svg>
+  </div>
 
-        <!-- Text below the barcode -->
-        <p id="barcodeText" class="barcode-text">{{ $product->barcode }}</p>
-    </div>
+  <script>
+    function generateAndPrintBarcode() {
+      const input = document.getElementById('barcodeInput').value;
+      const barcodePrintElement = document.getElementById('barcodePrint');
 
-    <!-- Print Button -->
-    <div style="text-align: center; margin-top: 20px;">
-        <button onclick="printBarcode()">
-            Print
-        </button>
-    </div>
+      if (input.trim() === "") {
+        alert("Please enter text to generate and print a barcode.");
+        return;
+      }
 
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script>
-        // Generate the barcode dynamically
-        window.onload = function () {
-            const barcodeValue = "{{ $product->barcode }}"; // Get the barcode value from PHP
+      // Generate barcode in the hidden container
+      JsBarcode(barcodePrintElement, input, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: 100,
+        displayValue: true
+      });
 
-            // Generate the barcode using JsBarcode
-            JsBarcode("#barcodeCanvas", barcodeValue, {
-                format: "CODE128", // Barcode format
-                lineColor: "#000", // Color of the barcode lines
-                width: 2,          // Width of each bar
-                height: 50,        // Height of the barcode
-                displayValue: false // Do not show the value inside the barcode
-            });
-        };
+      // Trigger print for the hidden container
+      const printContents = document.getElementById('printContainer').innerHTML;
+      const originalContents = document.body.innerHTML;
 
-        // Function to print the barcode
-        function printBarcode() {
-            const printContents = document.getElementById('printArea').innerHTML;
-            const originalContents = document.body.innerHTML;
+      // Replace the body content with the hidden barcode and print
+      document.body.innerHTML = printContents;
+      window.print();
 
-            // Replace the current content with print area
-            document.body.innerHTML = printContents;
+      // Restore the original content
+      document.body.innerHTML = originalContents;
 
-            // Trigger the print dialog
-            window.print();
-
-            // Restore the original content
-            document.body.innerHTML = originalContents;
-        }
-    </script>
+      // Reload scripts to restore functionality
+      location.reload();
+    }
+  </script>
 </body>
 </html>
