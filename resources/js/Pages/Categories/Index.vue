@@ -172,9 +172,9 @@
       <!-- If categories exist -->
       <tr
         v-if="
-          paginatedcategories.data && paginatedcategories.data.length > 0
+          allcategories && allcategories.length > 0
         "
-        v-for="category in paginatedcategories.data"
+        v-for="category in allcategories"
         :key="category.id"
         class="transition duration-200 ease-in-out hover:bg-gray-700"
       >
@@ -254,7 +254,7 @@ import CategoryDeleteModel from "@/Components/custom/CategoryDeleteModel.vue";
 import Banner from "@/Components/Banner.vue";
 
 defineProps({
-  paginatedcategories: Object, // This comes from Inertia
+  // paginatedcategories: Object, // This comes from Inertia
   allcategories: Array,
   totalCategories: Number,
 });
@@ -281,6 +281,7 @@ const selectedCategory = ref(null);
 $(document).ready(function () {
   $("#CategoryTable").DataTable({
     dom: "Bfrtip",
+    pageLength: 10,
     buttons: [],
      columnDefs: [
       {
