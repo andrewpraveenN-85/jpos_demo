@@ -12,7 +12,7 @@
         leave-to="opacity-0"
       >
         <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
         />
       </TransitionChild>
 
@@ -31,79 +31,119 @@
             class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-3/6 p-6"
           >
             <div
-              class="w-full h-full flex flex-col justify-start items-start pt-4 px-4"
+              class="flex flex-col items-start justify-start w-full h-full px-2 pt-4"
             >
-              <div class="w-full flex justify-between items-center">
-                <p class="text-black text-3xl font-bold">{{ selectedProduct.name }}</p>
-                <p class="text-xl text-[#00000099] font-bold tracking-wide">
-                   {{ selectedProduct.category.name }}
-                </p>
-              </div>
-              <div class="w-full h-full flex justify-center items-center p-8">
-                <div class="w-1/2 h-[300px] flex flex-col pr-8">
-                  <img
-                    :src="`/${selectedProduct.image}`"
-                    alt="Product Image"
-                    class="rounded-lg"
-                  />
-                </div>
-                <div class="w-1/2 h-full flex flex-col space-y-8">
-                  <p class="text-2xl text-black font-bold">
-                    <span class="text-[#00000099] font-normal">Bar Code : </span
-                    >{{ selectedProduct.barcode }}
-                  </p>
-                  <p
-                    class="text-justify text-[#00000099] text-2xl flex items-center space-x-2"
-                  >
-                    <span>Color :</span
-                    ><span
-                      class="w-6 h-6 border border-black rounded-full inline-block"
-                      :style="{ backgroundColor: selectedProduct.color?.hex_code }"
-                    ></span>
-                  </p>
-                  <p class="text-[#00000099] text-2xl">
-                    Size :
-                    <span
-                      class="text-black border-2 border-black px-2 py-2 rounded-2xl font-bold"
-                      >{{ selectedProduct.size.name }}</span
-                    >
-                  </p>
-                  <div
-                    class="w-full flex jystify-between items-center text-2xl"
-                  >
-                    <div class="w-full flex flex-col">
-                      <p class="text-[#00000099]">Selling Price :</p>
-                      <p class="text-black font-bold">{{ selectedProduct.selling_price }} LKR</p>
-                    </div>
-                    <div class="w-full flex flex-col">
-                      <p class="text-[#00000099]">Cost Price :</p>
-                      <p class="text-black font-bold">{{ selectedProduct.cost_price }} LKR</p>
-                    </div>
-                  </div>
-                  <p class="text-2xl text-black font-bold">
-                    <span class="text-[#00000099] font-normal"
-                      >Stock Quantity :</span
-                    >
-                    {{ selectedProduct.stock_quantity }}
-                  </p>
-                  <p class="text-2xl text-black font-bold">
-                    <span class="text-[#00000099] font-normal"
-                      >Created On :</span
-                    >
+       <div class="flex justify-center w-full h-full p-4 space-x-8 items-start-center">
+  <!-- Left Side: Image -->
+  <div class="w-1/2">
+    <img
+      :src="`/${selectedProduct.image}`"
+      alt="Product Image"
+      class="object-cover h-full rounded-2xl"
+    />
+  </div>
 
-                    {{ formattedDate }}
-                    <!-- 20th November 2024 -->
-                  </p>
+  <!-- Right Side: Text Content -->
+  <div class="flex flex-col justify-between w-1/2 h-full">
+    <div class="ps-6">
+      <p class="text-4xl font-bold text-black">
+        {{ selectedProduct.name }}
+      </p>
+      <p
+        class="pb-6 mt-2 text-2xl font-semibold leading-none text-black"
+      >
+        {{ selectedProduct.category.name }}
+      </p>
+
+      <p class="pb-6 text-2xl font-bold text-black">
+        <span class="text-[#00000099] font-normal">Bar Code: </span
+        >{{ selectedProduct.barcode }}
+      </p>
+      <p
+        class="text-justify text-[#00000099] text-2xl flex items-center pb-6"
+      >
+        <span>Color:</span>
+        <span
+          class="inline-block w-6 h-6 border border-black rounded-full ms-4"
+          :style="{
+            backgroundColor: selectedProduct.color?.hex_code,
+          }"
+        ></span>
+      </p>
+      <p class="text-[#00000099] text-2xl pb-6">
+        Size:
+        <span
+          class="px-2 py-2 font-bold text-black border-2 border-black rounded-xl"
+        >
+          {{ selectedProduct.size.name }}
+        </span>
+      </p>
+      <div
+        class="flex items-center justify-between w-full pb-6 text-2xl"
+      >
+        <div class="flex flex-col w-full">
+          <p class="text-[#00000099]">Selling Price:</p>
+          <p class="font-bold text-black">
+            {{ selectedProduct.selling_price }} LKR
+          </p>
+        </div>
+        <div class="flex flex-col w-full">
+          <p class="text-[#00000099]">Cost Price:</p>
+          <p class="font-bold text-black">
+            {{ selectedProduct.cost_price }} LKR
+          </p>
+        </div>
+      </div>
+      <p class="pb-6 text-2xl font-bold text-black">
+        <span class="text-[#00000099] font-normal">Stock Quantity:</span>
+        {{ selectedProduct.stock_quantity }}
+      </p>
+      <p class="pb-8 text-2xl font-bold text-black">
+        <span class="text-[#00000099] font-normal">Created On:</span>
+        {{ formattedDate }}
+      </p>
+
+
+    <div class="mt-2">
+      <input
+        hidden
+        type="text"
+        id="barcodeInput"
+        v-model="selectedProduct.barcode"
+        class="w-full px-4 py-2 placeholder-gray-400 border-gray-300 rounded order f focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+      />
+     <button
+  class="w-full px-4 py-3 text-2xl font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+  @click="generateAndPrintBarcode"
+>
+  Print BarCode
+</button>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+
+              <div class="w-full">
+                <!-- Hidden container for printing -->
+                <div
+                  :class="{ hidden: !isVisible }"
+                  class="print-container"
+                  id="printContainer"
+                >
+                  <svg id="barcodePrint"></svg>
                 </div>
               </div>
             </div>
-           
           </DialogPanel>
         </TransitionChild>
       </div>
     </Dialog>
   </TransitionRoot>
 </template>
+
+
 
 
 <script setup>
@@ -154,5 +194,32 @@ const formattedDate = computed(() =>
     ? dayjs(selectedProduct.created_at).format("Do MMMM YYYY")
     : ""
 );
+
+function generateAndPrintBarcode() {
+  const input = document.getElementById("barcodeInput").value;
+  const barcodePrintElement = document.getElementById("barcodePrint");
+
+  if (input.trim() === "") {
+    alert("Please enter text to generate and print a barcode.");
+    return;
+  }
+
+  JsBarcode(barcodePrintElement, input, {
+    format: "CODE128",
+    lineColor: "#000",
+    width: 2,
+    height: 100,
+    displayValue: true,
+  });
+
+  const printContents = document.getElementById("printContainer").innerHTML;
+  const originalContents = document.body.innerHTML;
+
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+
+  location.reload();
+}
 </script>
 

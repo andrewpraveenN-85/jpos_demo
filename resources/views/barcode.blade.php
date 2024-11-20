@@ -27,8 +27,8 @@
   <button onclick="generateAndPrintBarcode()">Generate & Print</button>
 
   <!-- Hidden container for printing -->
-  <div class="print-container" id="printContainer">
-    <svg id="barcodePrint"></svg>
+  <div class="print-container" id="printContainer" hidden>
+    <svg id="barcodePrint" ></svg>
   </div>
 
   <script>
@@ -40,8 +40,7 @@
         alert("Please enter text to generate and print a barcode.");
         return;
       }
-
-      // Generate barcode in the hidden container
+ 
       JsBarcode(barcodePrintElement, input, {
         format: "CODE128",
         lineColor: "#000",
@@ -50,18 +49,15 @@
         displayValue: true
       });
 
-      // Trigger print for the hidden container
+
       const printContents = document.getElementById('printContainer').innerHTML;
       const originalContents = document.body.innerHTML;
 
-      // Replace the body content with the hidden barcode and print
       document.body.innerHTML = printContents;
       window.print();
-
-      // Restore the original content
       document.body.innerHTML = originalContents;
 
-      // Reload scripts to restore functionality
+
       location.reload();
     }
   </script>
