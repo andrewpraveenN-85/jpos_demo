@@ -66,6 +66,19 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
+        // Check for circular relationship
+        if ($validated['parent_id']) {
+            $parent = Category::find($validated['parent_id']);
+
+            // Traverse up the hierarchy to check for circular references
+            while ($parent) {
+                if ($parent->id === $category->id) {
+                    return back()->withErrors(['parent_id' => 'A category cannot be its own parent or ancestor.']);
+                }
+                $parent = $parent->parent; // Assuming a `parent` relationship exists in your Category model
+            }
+        }
+
         $category->update($validated);
 
         return redirect()->route('categories.index')->banner('Category updated successfully.');
