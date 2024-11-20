@@ -275,7 +275,7 @@ const openDeleteModal = (product) => {
 
 
 const props = defineProps({
-  products: Array,
+  products: Object,
   categories: Array,
   colors: Array,
   sizes: Array,
