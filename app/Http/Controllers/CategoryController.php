@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
+    public function showBarcode($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return view('barcode', compact('product'));
+    }
     public function index()
     {
         $paginatedcategories = Category::with('parent')->latest()->paginate(10);
@@ -71,6 +78,5 @@ class CategoryController extends Controller
 
         $category->delete();
         return redirect()->route('categories.index')->banner('Category Deleted successfully.');
-
     }
 }

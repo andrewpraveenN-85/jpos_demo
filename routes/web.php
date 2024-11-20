@@ -41,3 +41,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::post('products/{product}', [ProductController::class, 'update']);
 });
+
+Route::get('/barcode/{id}', [CategoryController::class, 'showBarcode']);
