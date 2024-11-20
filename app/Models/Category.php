@@ -18,4 +18,18 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'parent_id','id');
     }
+
+    public function getHierarchyStringAttribute(): string
+    {
+        $hierarchy = [];
+        $category = $this;
+
+        // Traverse the hierarchy without additional queries
+        while ($category) {
+            $hierarchy[] = $category->name;
+            $category = $category->parent; // Uses Eloquent's cached relationship
+        }
+
+        return implode(' > ', array_reverse($hierarchy));
+    }
 }

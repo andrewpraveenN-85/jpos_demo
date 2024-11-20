@@ -18,14 +18,28 @@ class CategoryController extends Controller
     public function index()
     {
         // $paginatedcategories = Category::with('parent')->latest()->paginate(10);
-        $allcategories = Category::with('parent')->latest()->get();
+        // $allcategories = Category::with('parent')->latest()->get();
+        $allcategories = Category::with('parent')->latest()->get()
+            ->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'parent' => $category->parent ? [
+                        'id' => $category->parent->id,
+                        'name' => $category->parent->name,
+                    ] : null,
+                    'hierarchy_string' => $category->hierarchy_string, // Add this
+                ];
+            });
 
+            return response()->json($allcategories);
 
-        return Inertia::render('Categories/Index', [
-            // 'paginatedcategories' => $paginatedcategories,
-            'allcategories' => $allcategories,
-            'totalCategories' => $allcategories->count()
-        ]);
+            // dd('here');
+        // return Inertia::render('Categories/Index', [
+        //     // 'paginatedcategories' => $paginatedcategories,
+        //     'allcategories' => $allcategories,
+        //     'totalCategories' => $allcategories->count()
+        // ]);
     }
 
     public function create()

@@ -156,7 +156,7 @@
               >
                 <th class="p-4 font-semibold tracking-wide uppercase">Name</th>
                 <th class="p-4 font-semibold tracking-wide uppercase">
-                  Parent Category
+                  Parent Hierarchy
                 </th>
                 <th class="p-4 font-semibold tracking-wide uppercase">
                   Actions
@@ -176,7 +176,8 @@
                 </td>
 
                 <td class="p-4 border-t border-gray-700">
-                  {{ category.parent?.name || "N/A" }}
+                  <!-- {{ category.parent?.name || "N/A" }} -->
+                  {{ category.hierarchy_string || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-700">
                   <div class="flex items-center space-x-3">
