@@ -21,7 +21,7 @@ class ProductController extends Controller
         $colors = Color::all();
         $sizes = Size::all();
 
-        
+
         return Inertia::render('Products/Index', [
             'products' => $products,
             'allcategories' => $allcategories,
@@ -68,7 +68,7 @@ class ProductController extends Controller
             'cost_price' => 'nullable|numeric|min:0',
             'selling_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
-            'barcode' => 'nullable|string|max:100|unique:products,barcode',
+
             // 'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -161,7 +161,7 @@ class ProductController extends Controller
             'cost_price' => 'numeric|min:0',
             'selling_price' => 'numeric|min:0',
             'stock_quantity' => 'integer|min:0',
-            'barcode' => 'nullable|string|max:255',
+
             'image' => 'nullable|max:2048',
         ]);
 
@@ -184,7 +184,7 @@ class ProductController extends Controller
 
         }
 
-      
+
 
         $product->update($validated);
 

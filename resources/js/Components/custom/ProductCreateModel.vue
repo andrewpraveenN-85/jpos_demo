@@ -12,7 +12,7 @@
         leave-to="opacity-0"
       >
         <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
         />
       </TransitionChild>
 
@@ -33,7 +33,7 @@
             <!-- Close Button -->
             <!-- <button
               @click="$emit('update:open', false)"
-              class="absolute top-4 right-4 text-white text-xl hover:text-gray-300"
+              class="absolute text-xl text-white top-4 right-4 hover:text-gray-300"
             >
               &times;
             </button> -->
@@ -54,7 +54,7 @@
                     required
                     v-model="form.category_id"
                     id="parent_id"
-                    class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                   >
                     <option value="">Select a Category</option>
                     <option
@@ -99,7 +99,7 @@
                         required
                         v-model="form.size_id"
                         id="parent_id"
-                        class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                        class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
                         <option value="">Select a Size</option>
                         <option
@@ -129,7 +129,7 @@
                         required
                         v-model="form.color_id"
                         id="sub_id"
-                        class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                        class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
                         <option value="">Select a Color</option>
                         <option
@@ -160,7 +160,7 @@
                       step="0.01"
                       id="cost_price"
                       v-model="form.cost_price"
-                      class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       placeholder="Enter cost price"
                       required
                     />
@@ -184,7 +184,7 @@
                       step="0.01"
                       id="selling_price"
                       v-model="form.selling_price"
-                      class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       placeholder="Enter selling price"
                       required
                     />
@@ -208,7 +208,7 @@
                       type="number"
                       id="stock_quantity"
                       v-model="form.stock_quantity"
-                      class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       placeholder="Enter stock quantity"
                       required
                     />
@@ -220,27 +220,8 @@
                     </span>
                   </div>
                   <div class="w-full">
-                    <label
-                      for="barcode"
-                      class="block text-sm font-medium text-gray-300"
-                      >Barcode:</label
-                    >
-                    <input
-                      type="text"
-                      id="barcode"
-                      v-model="form.barcode"
-                      class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Enter barcode"
-                      required
-                    />
-                    <span v-if="form.errors.barcode" class="mt-2 text-red-500">
-                      {{ form.errors.barcode }}
-                    </span>
-                  </div>
-                </div>
 
-                <div class="mt-6">
-                  <label
+                      <label
                     for="image"
                     class="block text-sm font-medium text-gray-300"
                     >Image:</label
@@ -249,24 +230,44 @@
                     type="file"
                     id="image"
                     @change="handleImageUpload"
-                    class="w-full px-4 py-2 mt-2 bg-gray-800 text-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                   />
                   <span v-if="form.errors.image" class="mt-2 text-red-500">
                     {{ form.errors.image }}
                   </span>
+                    <!-- <label
+                      for="barcode"
+                      class="block text-sm font-medium text-gray-300"
+                      >   Barcode (Auto-generated) :</label
+                    >
+                    <input
+                    readonly
+                      type="text"
+                      id="barcode"
+                      v-model="form.barcode"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-black "
+                      placeholder="Enter barcode"
+                      required
+                    />
+                    <span v-if="form.errors.barcode" class="mt-2 text-red-500">
+                      {{ form.errors.barcode }}
+                    </span> -->
+                  </div>
                 </div>
+
+
               </div>
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
                 <button
-                  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                   type="submit"
                 >
                   Save
                 </button>
                 <button
-                  class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                  class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
                   @click="$emit('update:open', false)"
                 >
                   Cancel
