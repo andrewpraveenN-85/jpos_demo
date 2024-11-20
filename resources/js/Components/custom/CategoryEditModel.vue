@@ -12,7 +12,7 @@
         leave-to="opacity-0"
       >
         <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
         />
       </TransitionChild>
 
@@ -30,26 +30,18 @@
           <DialogPanel
             class="bg-black border-4 border-blue-600 rounded-[20px] shadow-xl max-w-md w-full p-6 text-center"
           >
-            <!-- Close Button -->
-            <!-- <button
-              @click="$emit('update:open', false)"
-              class="absolute top-4 right-4 text-white text-xl hover:text-gray-300"
-            >
-              &times;
-            </button> -->
-
             <!-- Modal Title -->
-            <DialogTitle class="text-xl font-bold text-white"
-              >Edit Category</DialogTitle
-            >
+            <DialogTitle class="text-xl font-bold text-white">
+              Edit Category
+            </DialogTitle>
             <form @submit.prevent="submit">
               <!-- Modal Form -->
               <div class="mt-6 space-y-4 text-left">
                 <!-- Category Name -->
                 <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Category Name:</label
-                  >
+                  <label class="block text-sm font-medium text-gray-300">
+                    Category Name:
+                  </label>
                   <input
                     v-model="form.name"
                     type="text"
@@ -57,51 +49,48 @@
                     required
                     class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                   />
-                  <span v-if="form.errors.name" class="mt-4 text-red-500">{{
-                    form.errors.name
-                  }}</span>
+                  <span v-if="form.errors.name" class="mt-4 text-red-500">
+                    {{ form.errors.name }}
+                  </span>
                 </div>
 
+                <!-- Parent Category Dropdown -->
                 <div>
-                  <!-- Parent Category Dropdown -->
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Parent Category:</label
-                  >
+                  <label class="block text-sm font-medium text-gray-300">
+                    Parent Category:
+                  </label>
                   <select
                     v-model="form.parent_id"
                     id="parent_id"
-                    class="w-full px-4 py-2 mt-2 bg-gray-800 bg-white text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                   >
                     <option value="">No Parent</option>
                     <option
-                      v-for="category in categories"
+                      v-for="category in filteredCategories"
                       :key="category.id"
                       :value="category.id"
                     >
                       {{ category.name }}
                     </option>
                   </select>
-                  <span
-                    v-if="form.errors.parent_id"
-                    class="mt-4 text-red-500"
-                    >{{ form.errors.parent_id }}</span
-                  >
+                  <span v-if="form.errors.parent_id" class="mt-4 text-red-500">
+                    {{ form.errors.parent_id }}
+                  </span>
                 </div>
-
-                
               </div>
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
                 <button
-                  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                   type="submit"
                 >
                   Save
                 </button>
                 <button
-                  class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                  class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
                   @click="$emit('update:open', false)"
+                  type="button"
                 >
                   Cancel
                 </button>
@@ -122,7 +111,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const emit = defineEmits(["update:open"]);
@@ -147,6 +136,12 @@ const form = useForm({
   parent_id: "",
 });
 
+// Computed property to filter categories
+const filteredCategories = computed(() =>
+  categories.filter((category) => category.id !== selectedCategory?.id)
+);
+
+// Watch for selectedCategory changes
 watch(
   () => selectedCategory,
   (newValue) => {
@@ -158,7 +153,7 @@ watch(
   { immediate: true } // Run immediately when the component is mounted
 );
 
-
+// Submit form
 const submit = () => {
   form.put(`/categories/${selectedCategory.id}`, {
     onSuccess: () => {
