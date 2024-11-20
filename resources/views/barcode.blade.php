@@ -3,37 +3,58 @@
 <head>
     <title>Print Barcode</title>
     <style>
-        /* Center-align barcode and text */
         #printArea {
             text-align: center;
             margin: 20px;
         }
 
-        /* Adjust the position of the barcode text */
+        canvas {
+            margin-bottom: -10px; /* Adjust text alignment with the barcode */
+        }
+
         .barcode-text {
-            margin-top: -0px; /* Move the text higher */
-            font-size: 16px; /* Optional: Adjust font size */
+            font-size: 16px; /* Adjust font size */
         }
     </style>
 </head>
 <body>
     <div id="printArea">
         <h1>Product Barcode</h1>
-        <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($product->barcode, 'C128') }}" alt="barcode" />
-        <p class="barcode-text">{{ $product->barcode }}</p> <!-- Add a class to style the text -->
+
+        <!-- Barcode will be rendered on this canvas -->
+        <canvas id="barcodeCanvas"></canvas>
+
+        <!-- Text below the barcode -->
+        <p id="barcodeText" class="barcode-text">{{ $product->barcode }}</p>
     </div>
 
     <!-- Print Button -->
     <div style="text-align: center; margin-top: 20px;">
         <button onclick="printBarcode()">
-            <img src="{{ asset('images/print-icon.png') }}" alt="Print" style="width: 50px; height: 50px;">
+            Print
         </button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script>
+        // Generate the barcode dynamically
+        window.onload = function () {
+            const barcodeValue = "{{ $product->barcode }}"; // Get the barcode value from PHP
+
+            // Generate the barcode using JsBarcode
+            JsBarcode("#barcodeCanvas", barcodeValue, {
+                format: "CODE128", // Barcode format
+                lineColor: "#000", // Color of the barcode lines
+                width: 2,          // Width of each bar
+                height: 50,        // Height of the barcode
+                displayValue: false // Do not show the value inside the barcode
+            });
+        };
+
+        // Function to print the barcode
         function printBarcode() {
-            var printContents = document.getElementById('printArea').innerHTML;
-            var originalContents = document.body.innerHTML;
+            const printContents = document.getElementById('printArea').innerHTML;
+            const originalContents = document.body.innerHTML;
 
             // Replace the current content with print area
             document.body.innerHTML = printContents;
