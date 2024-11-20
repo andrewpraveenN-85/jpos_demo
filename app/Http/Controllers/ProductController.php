@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category','color','size')->latest()->paginate(2);
+        $products = Product::with('category','color','size')->latest()->paginate(8);
         $allcategories = Category::with('parent')->latest()->get();
         $colors = Color::all();
         $sizes = Size::all();
