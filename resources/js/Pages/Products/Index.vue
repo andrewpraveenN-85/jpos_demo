@@ -1,42 +1,95 @@
 
 <style lang="css">
+/* Pagination Container */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  list-style: none;
-  padding: 0;
-  margin: 20px 0;
+  margin-top: 20px;
+  font-size: 14px;
+  float: right;
 }
 
+/* Individual Pagination Links */
 .pagination a {
   display: inline-block;
   padding: 8px 12px;
-  color: #007bff;
-  text-decoration: none;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination a:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-.pagination a.is-active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  margin: 0 4px;
+  font-size: 14px;
   font-weight: bold;
-  pointer-events: none;
+  text-decoration: none;
+  color: #ffffff; /* Matches table text color */
+  background-color: #1e293b; /* Matches bg-gray-800 */
+  border: 1px solid #0a0a0a; /* Matches border-gray-700 */
+  border-radius: 5px;
+  transition: all 0.3s ease;
 }
 
-.pagination a[disabled] {
-  pointer-events: none;
-  color: #aaa;
-  border-color: #ddd;
+/* Hover Effect for Links */
+.pagination a:hover {
+  background-color: #2563eb; /* Matches hover bg-blue-600 */
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Active Pagination Link */
+.pagination a.is-active {
+  background-color: #2563eb; /* Matches active state bg-blue-600 */
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* Disabled Pagination Links */
+.pagination a.disabled {
+  background-color: #1e293b; /* Matches bg-gray-800 */
+  color: #9ca3af;
+  border-color: #4b5563; /* Matches border-gray-700 */
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.pagination a:hover {
+  color: #fff;
+}
+.pagination a.is-active {
+  color: inherit !important;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: rgba(230, 230, 230, 0.1);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, rgba(230, 230, 230, 0.1)),
+    color-stop(100%, rgba(0, 0, 0, 0.1))
+  );
+  background: -webkit-linear-gradient(
+    top,
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  background: -moz-linear-gradient(
+    top,
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  background: -ms-linear-gradient(
+    top,
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  background: -o-linear-gradient(
+    top,
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+}
+.pagination a:first-child,
+.pagination a:last-child {
+  padding: 8px 16px;
 }
 </style>
 <template>
@@ -66,72 +119,84 @@
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
         </p>
       </div>
+
       <div class="grid grid-cols-4 gap-8">
-        <div
-          v-for="product in products.data"
-          :key="product.id"
-          class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
-        >
-          <div @click="openViewModal(product)" class="cursor-pointer">
-            <img
-              :src="`/${product.image}`"
-              alt="Product Image"
-              class="object-cover w-full h-64"
-            />
-          </div>
-          <div class="px-4 py-4 space-y-4">
-            <div
-              class="flex justify-between text-[11px] font-bold tracking-wide uppercase"
-            >
-              <p>{{ product.name || "N/A" }}</p>
-              <p class="px-4 text-white bg-green-700 rounded-full">
-                {{ product.selling_price || "N/A" }} LKR
-              </p>
+        <template v-if="products.data.length > 0">
+          <div
+            v-for="product in products.data"
+            :key="product.id"
+            class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
+          >
+            <div @click="openViewModal(product)" class="cursor-pointer">
+              <img
+                :src="`/${product.image}`"
+                alt="Product Image"
+                class="object-cover w-full h-64"
+              />
             </div>
-            <div class="flex items-center justify-center w-full space-x-4">
-              <p class="flex items-center space-x-2 text-justify text-gray-400">
-                <span>Color :</span>
-                <span
-                  class="inline-block w-6 h-6 border border-black rounded-full"
-                  :style="{
-                    backgroundColor: product.color?.hex_code || '#FFFFFF',
-                  }"
-                ></span>
-              </p>
-
-              <p class="text-justify text-gray-400">
-                Size :
-                {{ product.size?.name || "N/A" }}
-              </p>
-            </div>
-            <div class="flex items-center justify-between">
-              <p
-                v-if="product.stock_quantity > 0"
-                class="text-xl font-bold tracking-wider text-green-500"
+            <div class="px-4 py-4 space-y-4">
+              <div
+                class="flex justify-between text-[11px] font-bold tracking-wide uppercase"
               >
-                <i class="ri-checkbox-blank-circle-fill"></i> In Stock
-              </p>
-              <p v-else class="text-xl font-bold tracking-wider text-red-500">
-                <i class="ri-checkbox-blank-circle-fill"></i> Out of Stock
-              </p>
+                <p>{{ product.name || "N/A" }}</p>
+                <p class="px-4 text-white bg-green-700 rounded-full">
+                  {{ product.selling_price || "N/A" }} LKR
+                </p>
+              </div>
+              <div class="flex items-center justify-center w-full space-x-4">
+                <p
+                  class="flex items-center space-x-2 text-justify text-gray-400"
+                >
+                  <span>Color :</span>
+                  <span
+                    class="inline-block w-6 h-6 border border-black rounded-full"
+                    :style="{
+                      backgroundColor: product.color?.hex_code || '#FFFFFF',
+                    }"
+                  ></span>
+                </p>
 
-              <div class="flex space-x-4">
-                <button
-                  @click="openEditModal(product)"
-                  class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
+                <p class="text-justify text-gray-400">
+                  Size :
+                  {{ product.size?.name || "N/A" }}
+                </p>
+              </div>
+              <div class="flex items-center justify-between">
+                <p
+                  v-if="product.stock_quantity > 0"
+                  class="text-xl font-bold tracking-wider text-green-500"
                 >
-                  <i class="ri-pencil-line"></i>
-                </button>
-                <button
-                  @click="deleteProduct(product.id)"
-                  class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
-                >
-                  <i class="ri-delete-bin-line"></i>
-                </button>
+                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock
+                </p>
+                <p v-else class="text-xl font-bold tracking-wider text-red-500">
+                  <i class="ri-checkbox-blank-circle-fill"></i> Out of Stock
+                </p>
+
+                <div class="flex space-x-4">
+                  <button
+                    @click="openEditModal(product)"
+                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
+                  >
+                    <i class="ri-pencil-line"></i>
+                  </button>
+                   <button
+                    @click="openDeleteModal(product)"
+                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
+                  >
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
+        <template v-else>
+          <div class="col-span-4 text-center text-gray-500">
+            <p class="text-center text-red-500 text-[17px]">
+              No products available
+            </p>
+          </div>
+        </template>
       </div>
 
       <div class="pagination">
@@ -167,7 +232,11 @@
     v-model:open="isViewModalOpen"
     :selected-product="selectedProduct"
   />
-
+  <ProductDeleteModel
+    v-model:open="isDeleteModalOpen"
+    :selected-product="selectedProduct"
+    @delete="deleteProduct"
+  />
   <Footer />
 </template>
 
@@ -181,10 +250,12 @@ import { defineProps, onMounted } from "vue";
 import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
+import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
+const isDeleteModalOpen = ref(false);
 
 const openEditModal = (product) => {
   selectedProduct.value = product; // Set the selected product
@@ -195,6 +266,13 @@ const openViewModal = (product) => {
   selectedProduct.value = product; // Set the selected product
   isViewModalOpen.value = true; // Open the view modal
 };
+
+
+const openDeleteModal = (product) => {
+  selectedProduct.value = product;
+  isDeleteModalOpen.value = true;
+};
+
 
 const props = defineProps({
   products: Array,
@@ -215,13 +293,22 @@ const openModal = (id) => {
   productToDelete.value = id;
   showModal.value = true;
 };
-
 const deleteProduct = (id) => {
-  if (confirm("Are you sure you want to delete this product?")) {
-    form.delete(`/products/${id}`);
-  }
+  const form = useForm({});
+  form.delete(`/products/${id}`, {
+    onSuccess: () => {
+      isDeleteModalOpen.value = false; // Close the modal on success
+    },
+    onError: (errors) => {
+      console.error("Delete failed:", errors);
+    },
+  });
 };
-
+// const deleteProduct = (id) => {
+//   if (confirm("Are you sure you want to delete this product?")) {
+//     form.delete(`/products/${id}`);
+//   }
+// };
 </script>
 
 

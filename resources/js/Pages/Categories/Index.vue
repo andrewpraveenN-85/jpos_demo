@@ -27,6 +27,7 @@
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
   background-color: #2563eb; /* Matches bg-blue-600 */
   border-color: #2563eb;
+
 }
 
 /* Active Page Button */
@@ -41,7 +42,7 @@
   color: #9ca3af !important; /* Matches text-gray-400 */
   background-color: #1e293b; /* Matches bg-gray-800 */
   border-color: #4b5563; /* Matches border-gray-700 */
-  cursor: not-allowed;
+  cursor: not-allowed !important;
   opacity: 0.5;
 }
 
@@ -57,6 +58,7 @@
   border-radius: 5px;
   padding: 8px 12px;
   transition: all 0.3s ease;
+   cursor: pointer;
 }
 
 /* Previous/Next Hover */
@@ -182,7 +184,7 @@
           {{ category.name || "N/A" }}
         </td>
 
-        
+
 
 
           <td class="p-4 border-t border-gray-700">
