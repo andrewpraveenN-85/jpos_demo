@@ -282,7 +282,7 @@
                 >
                   Save
                 </button>
-                <button
+                <button  type="button"
                   class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
                   @click="$emit('update:open', false)"
                 >
