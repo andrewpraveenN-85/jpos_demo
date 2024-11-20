@@ -113,7 +113,7 @@
         class="w-full px-4 py-2 placeholder-gray-400 border-gray-300 rounded order f focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
       />
      <button
-  class="w-full px-4 py-3 text-2xl font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+  class="w-full px-4 py-3 text-2xl font-semibold tracking-wide text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
   @click="generateAndPrintBarcode"
 >
   Print BarCode
