@@ -3,63 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generate and Print Barcode</title>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <title>Sortable Categories</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       padding: 20px;
     }
-    input, button {
+    #categories {
+      border: 1px solid #ddd;
       padding: 10px;
-      margin: 10px;
-      font-size: 16px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
     }
-    .print-container {
-      display: none;
+    .category, .child-category {
+      padding: 8px 12px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background-color: #fff;
+      cursor: grab;
+    }
+    .child-categories {
+      margin-left: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Generate and Print Barcode</h1>
-  <input type="text" id="barcodeInput" placeholder="Enter text for barcode" />
-  <button onclick="generateAndPrintBarcode()">Generate & Print</button>
-
-  <!-- Hidden container for printing -->
-  <div class="print-container" id="printContainer" hidden>
-    <svg id="barcodePrint" ></svg>
+  <h1>Sortable Categories</h1>
+  <div id="categories">
+    <div class="category" data-id="1">
+      Category 1
+      <div class="child-categories">
+        <div class="child-category" data-id="1.1">Child Category 1</div>
+      </div>
+    </div>
+    <div class="category" data-id="2">
+      Category 2
+      <div class="child-categories">
+        <div class="child-category" data-id="2.1">Child Category 2</div>
+        <div class="child-category" data-id="2.2">Child Category 3</div>
+      </div>
+    </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script>
-    function generateAndPrintBarcode() {
-      const input = document.getElementById('barcodeInput').value;
-      const barcodePrintElement = document.getElementById('barcodePrint');
+    // Enable sorting for main categories
+    new Sortable(document.getElementById('categories'), {
+      animation: 150,
+      handle: '.category',
+      draggable: '.category',
+    });
 
-      if (input.trim() === "") {
-        alert("Please enter text to generate and print a barcode.");
-        return;
-      }
- 
-      JsBarcode(barcodePrintElement, input, {
-        format: "CODE128",
-        lineColor: "#000",
-        width: 2,
-        height: 100,
-        displayValue: true
+    // Enable sorting for child categories within each category
+    document.querySelectorAll('.child-categories').forEach(container => {
+      new Sortable(container, {
+        animation: 150,
+        draggable: '.child-category',
       });
-
-
-      const printContents = document.getElementById('printContainer').innerHTML;
-      const originalContents = document.body.innerHTML;
-
-      document.body.innerHTML = printContents;
-      window.print();
-      document.body.innerHTML = originalContents;
-
-
-      location.reload();
-    }
+    });
   </script>
 </body>
 </html>
