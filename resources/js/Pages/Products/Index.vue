@@ -101,6 +101,15 @@
     <Header />
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between">
+        <div class="flex items-center justify-center space-x-4"></div>
+        <p class="text-3xl italic font-bold text-black">
+          <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
+            totalProducts
+          }}</span>
+          <span class="text-xl">/ Total Products</span>
+        </p>
+      </div>
+      <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4">
           <Link
             :href="route('dashboard')"
@@ -118,6 +127,47 @@
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
         </p>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <!-- Search Input -->
+        <input
+          type="text"
+          placeholder="Search Product Here"
+          class="w-1/3 px-4 py-2 border rounded-lg focus:outline-none border-gray-500"
+        />
+
+        <!-- Filter Button -->
+        <button
+          class="flex items-center px-3 py-2 border rounded-lg focus:outline-none border-gray-500"
+        >
+          <!-- Filter Icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-500"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-.293.707L13 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 019 17v-5.586L3.293 7.707A1 1 0 013 7V5z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <!-- Dropdown Arrow -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-500 ml-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
       </div>
 
       <div class="grid grid-cols-4 gap-8">
@@ -179,7 +229,7 @@
                   >
                     <i class="ri-pencil-line"></i>
                   </button>
-                   <button
+                  <button
                     @click="openDeleteModal(product)"
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
                   >
@@ -267,12 +317,10 @@ const openViewModal = (product) => {
   isViewModalOpen.value = true; // Open the view modal
 };
 
-
 const openDeleteModal = (product) => {
   selectedProduct.value = product;
   isDeleteModalOpen.value = true;
 };
-
 
 const props = defineProps({
   products: Object,
@@ -280,6 +328,7 @@ const props = defineProps({
   colors: Array,
   sizes: Array,
   allcategories: Array,
+  totalProducts: Number,
 });
 
 onMounted(() => {
