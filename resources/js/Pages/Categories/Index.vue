@@ -1,7 +1,5 @@
 <style  >
-table.dataTable.no-footer {
 
-}
 
 /* General DataTables Pagination Container Style */
 .dataTables_wrapper .dataTables_paginate {
@@ -11,67 +9,8 @@ table.dataTable.no-footer {
   margin-top: 20px;
 }
 
-/* Individual Pagination Buttons */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-  display: inline-block;
-  padding: 8px 12px;
-  margin: 0 4px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff !important; /* Matches table text color */
-  background-color: #1e293b; /* Matches bg-blue-800 */
-  border: 1px solid #4b5563; /* Matches border-blue-700 */
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
 
-/* Hover Effect for Buttons */
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  background-color: #ffffff; /* Matches active state bg-blue-600 */
-  color: #000000 !important;
-  border-color: #000000;
-}
 
-/* Active Page Button */
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  background-color: #ffffff; /* Matches active state bg-blue-600 */
-  color: #000000 !important;
-  border-color: #000000;
-}
-
-/* Disabled Buttons */
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-  color: #9ca3af !important; /* Matches text-blue-400 */
-  background-color: #1e293b; /* Matches bg-blue-800 */
-  border-color: #4b5563; /* Matches border-blue-700 */
-  cursor: not-allowed !important;
-  opacity: 0.5;
-}
-
-/* Previous and Next Buttons */
-.dataTables_wrapper .dataTables_paginate .paginate_button.previous,
-.dataTables_wrapper .dataTables_paginate .paginate_button.next {
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #ffffff;
-  background-color: #1e293b;
-  border: 1px solid #4b5563;
-  border-radius: 5px;
-  padding: 8px 12px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-/* Previous/Next Hover */
-.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
-.dataTables_wrapper .dataTables_paginate .paginate_button.next:hover {
-  background-color: #1e293b;
-  border-color: #1e293b;
-  color: #ffffff !important;
-}
 /* Style the filter container */
 #CategoryTable_filter {
   display: flex;
@@ -90,15 +29,20 @@ table.dataTable.no-footer {
 
 /* Style the input field */
 #CategoryTable_filter input[type="search"] {
-  margin-left: 8px; /* Space between label and input */
-  padding: 7px 15px;
-  font-size: 15px;
-  color: #000000; /* Input text color */
-
-  border: 1px solid #4b5563; /* Matches table border */
-  border-radius: 0px;
-  outline: none;
-  transition: all 0.3s ease;
+font-weight: 400;
+    padding: 9px 15px;
+    font-size: 14px;
+    color: #000000cc;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 5px;
+    background:#fff;
+    outline: none;
+  transition: all 0.5s ease;
+}
+#CategoryTable_filter input[type="search"]:focus {
+    outline: none; /* Removes the default outline */
+     border: 1px solid #4b5563;
+    box-shadow: none; /* Removes any focus box-shadow */
 }
 
 #CategoryTable_filter {
@@ -106,7 +50,7 @@ table.dataTable.no-footer {
 }
 
 .dataTables_wrapper {
-  margin-bottom: 10px; /* Additional spacing for the entire table wrapper */
+  margin-bottom: 10px;
 }
 </style>
 
@@ -288,7 +232,7 @@ const isDeleteModalOpen = ref(false);
 const selectedCategory = ref(null);
 
 $(document).ready(function () {
-  $("#CategoryTable").DataTable({
+  let table = $("#CategoryTable").DataTable({
     dom: "Bfrtip",
     pageLength: 10,
     buttons: [],
@@ -298,9 +242,25 @@ $(document).ready(function () {
         targets: 2, // Index of the "Actions" column
         searchable: false, // Disable filtering for this column
         orderable: false, // Optional: Disable sorting for this column
-
       },
     ],
+    initComplete: function () {
+      // Customize the search input
+      let searchInput = $('div.dataTables_filter input');
+      searchInput.attr("placeholder", "Search");
+      searchInput.off('keyup'); // Remove the default keyup event listener
+
+      // Add custom search on "Enter"
+      searchInput.on('keypress', function (e) {
+        if (e.which == 13) { // Check if the Enter key is pressed
+          table.search(this.value).draw();
+        }
+      });
+    },
+    language: {
+      search: "", // Remove the default "Search:" label
+    },
   });
 });
+
 </script>

@@ -17,3 +17,26 @@ body {
     background-color: #e4e4e7;
     color: #3f3f46;
 }
+/* Individual Pagination Buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 4px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff !important;
+    background-color: rgb(37 99 235) !important;
+    border: 1px solid rgb(37 99 235) !important;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    opacity: unset;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button:hover ,.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active
+  {
+    color: rgb(37 99 235) !important;
+    transition: all 0.5s ease;
+    background: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
+
+  }
