@@ -10,46 +10,7 @@
   float: right;
 }
 
-/* Individual Pagination Links */
-.pagination a {
-  display: inline-block;
-  padding: 8px 12px;
-  margin: 0 4px;
-  font-size: 14px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #ffffff; /* Matches table text color */
-  background-color: #1e293b; /* Matches bg-gray-800 */
-  border: 1px solid #0a0a0a; /* Matches border-gray-700 */
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
 
-/* Hover Effect for Links */
-.pagination a:hover {
-  background-color: #2563eb; /* Matches hover bg-blue-600 */
-  border-color: #2563eb;
-  color: #ffffff;
-}
-
-/* Active Pagination Link */
-.pagination a.is-active {
-  background-color: #ffffff; /* Matches active state bg-blue-600 */
-  color: #000000 !important;
-  border-color: #000000;
-}
-
-/* Disabled Pagination Links */
-.pagination a.disabled {
-  background-color: #1e293b; /* Matches bg-gray-800 */
-  color: #9ca3af;
-  border-color: #4b5563; /* Matches border-gray-700 */
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-.pagination a:hover {
-  color: #fff;
-}
 
 .pagination a:first-child,
 .pagination a:last-child {
@@ -272,15 +233,44 @@
         </template>
       </div>
 
-      <div class="pagination">
-        <Link
-          v-for="link in products.links"
-          :key="link.label"
-          :href="link.url"
-          :class="{ 'is-active': link.active, disabled: !link.url }"
-          v-html="link.label"
-        ></Link>
-      </div>
+     <div class="flex space-x-2 pagination">
+  <!-- Prev Button -->
+  <Link
+    v-if="products.links[0]"
+    :href="products.links[0].url"
+    :class="[
+      'pagination-btn',
+      { 'pagination-disabled': !products.links[0].url }
+    ]"
+  >
+    Previous
+  </Link>
+
+  <!-- Pagination Links -->
+  <Link
+    v-for="(link, index) in products.links.slice(1, products.links.length - 1)"
+    :key="link.label"
+    :href="link.url"
+    :class="[
+      'pagination-btn',
+      { 'pagination-active': link.active }
+    ]"
+    v-html="link.label"
+  ></Link>
+
+  <!-- Next Button -->
+  <Link
+    v-if="products.links[products.links.length - 1]"
+    :href="products.links[products.links.length - 1].url"
+    :class="[
+      'pagination-btn',
+      { 'pagination-disabled': !products.links[products.links.length - 1].url }
+    ]"
+  >
+    Next
+  </Link>
+</div>
+
     </div>
   </div>
 

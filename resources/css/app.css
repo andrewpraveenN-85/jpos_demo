@@ -71,3 +71,30 @@ body {
      border: 1px solid #4b5563;
     box-shadow: none; /* Removes any focus box-shadow */
   }
+  .pagination-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 4px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgb(37 99 235);
+    border: 1px solid rgb(37 99 235);
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    opacity: unset;
+  }
+
+  .pagination-btn:hover {
+    color:rgb(37 99 235);
+    background-color:#ffffff;
+  }
+
+  .pagination-active {
+    color:rgb(37 99 235);
+    background-color:#ffffff;
+  }
+
+
