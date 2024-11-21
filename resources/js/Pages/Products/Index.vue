@@ -87,29 +87,29 @@
         </div>
         <p
           @click="isCreateModalOpen = true"
-          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded cursor-pointer rounded-xl"
+          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
         </p>
       </div>
 
-      <div class="flex items-center space-x-2">
-        <!-- Search Input -->
+      <!-- <div class="flex items-center space-x-2">
+
         <input
           v-model="search"
           @input="performSearch"
           type="text"
           placeholder="Search Product Here"
-          class="w-1/3 px-4 py-2 border rounded-lg focus:outline-none border-gray-500"
+          class="w-1/3 px-4 py-2 border border-gray-500 rounded-lg focus:outline-none"
         />
-        <!-- Filter Button -->
+
         <button
-          class="flex items-center px-3 py-2 border rounded-lg focus:outline-none border-gray-500"
+          class="flex items-center px-3 py-2 border border-gray-500 rounded-lg focus:outline-none"
         >
-          <!-- Filter Icon -->
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500"
+            class="w-5 h-5 text-gray-500"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -119,10 +119,10 @@
               clip-rule="evenodd"
             />
           </svg>
-          <!-- Dropdown Arrow -->
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500 ml-1"
+            class="w-5 h-5 ml-1 text-gray-500"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -133,7 +133,65 @@
             />
           </svg>
         </button>
-      </div>
+      </div> -->
+
+
+
+
+ <div class="flex items-center space-x-4">
+  <!-- Search Input on the Left -->
+  <div class="w-1/3">
+    <input
+      v-model="search"
+      @input="performSearch"
+      type="text"
+      placeholder="Search ..."
+      class="w-full custom-input"
+    />
+  </div>
+
+  <!-- Filter Dropdowns on the Right -->
+  <div class="flex justify-end w-2/3 space-x-2">
+    <!-- Price Filter -->
+    <select
+      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+    >
+      <option   value="">Price</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <!-- Color Filter -->
+    <select
+      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+    >
+      <option value="">Color</option>
+      <option value="red">Red</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+    </select>
+
+    <!-- Size Filter -->
+    <select
+      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+    >
+      <option value="">Size</option>
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+    </select>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 
       <div class="grid grid-cols-4 gap-8">
         <template v-if="products.data.length > 0">
@@ -308,7 +366,7 @@ const search = ref(props.search || "");
 
 const performSearch = debounce(() => {
   router.get(route("products.index"), { search: search.value }, { preserveState: true });
-}, 500); 
+}, 500);
 
 onMounted(() => {
   // console.log("Products:", props.products);

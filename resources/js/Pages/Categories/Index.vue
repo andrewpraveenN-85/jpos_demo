@@ -247,7 +247,7 @@ $(document).ready(function () {
     initComplete: function () {
       // Customize the search input
       let searchInput = $('div.dataTables_filter input');
-      searchInput.attr("placeholder", "Search");
+      searchInput.attr("placeholder", "Search ...");
       searchInput.off('keyup'); // Remove the default keyup event listener
 
       // Add custom search on "Enter"
