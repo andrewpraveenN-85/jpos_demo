@@ -17,19 +17,32 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->input('search'); // Retrieve the search query
+        $query = $request->input('search');
+        $sortOrder = $request->input('sort');
+        $selectedColor = $request->input('color');
+        $selectedSize = $request->input('size');
+
         $productsQuery = Product::with('category', 'color', 'size')
             ->when($query, function ($queryBuilder) use ($query) {
                 $queryBuilder->where('name', 'like', "%{$query}%");
+            })
+            ->when($selectedColor, function ($queryBuilder) use ($selectedColor) {
+                $queryBuilder->whereHas('color', function ($colorQuery) use ($selectedColor) {
+                    $colorQuery->where('name', $selectedColor);
+                });
+            })
+            ->when($selectedSize, function ($queryBuilder) use ($selectedSize) {
+                $queryBuilder->whereHas('size', function ($sizeQuery) use ($selectedSize) {
+                    $sizeQuery->where('name', $selectedSize);
+                });
+            })
+            ->when(in_array($sortOrder, ['asc', 'desc']), function ($queryBuilder) use ($sortOrder) {
+                $queryBuilder->orderBy('selling_price', $sortOrder);
             });
 
-        // Get paginated products based on the query
-        $products = $productsQuery->latest()->paginate(2);
+        $products = $productsQuery->paginate(2);
 
-        // Get the count of filtered products
-        $totalProducts = $productsQuery->count();
-
-        $allcategories = Category::with('parent')->latest()->get();
+        $allcategories = Category::with('parent')->get();
         $colors = Color::all();
         $sizes = Size::all();
 
@@ -38,10 +51,14 @@ class ProductController extends Controller
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
-            'totalProducts' => $totalProducts,
-            'search' => $query
+            'totalProducts' => $productsQuery->count(),
+            'search' => $query,
+            'sort' => $sortOrder,
+            'color' => $selectedColor,
+            'size' => $selectedSize,
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

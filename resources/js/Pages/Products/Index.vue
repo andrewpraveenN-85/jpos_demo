@@ -135,63 +135,64 @@
         </button>
       </div> -->
 
+      <div class="flex items-center space-x-4">
+        <!-- Search Input on the Left -->
+        <div class="w-1/3">
+          <input
+            v-model="search"
+            @input="performSearch"
+            type="text"
+            placeholder="Search ..."
+            class="w-full custom-input"
+          />
+        </div>
 
+        <!-- Filter Dropdowns on the Right -->
+        <div class="flex justify-end w-full space-x-2">
+          <!-- Price Filter -->
+          <select
+            v-model="sort"
+            @change="applyFilters"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select cursor-pointer"
+          >
+            <option value="">Filter by Price</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
 
+          <!-- Color Filter -->
+          <select
+            v-model="color"
+            @change="applyFilters"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+          >
+            <option value="">Select Color</option>
+            <option
+              v-for="colorOption in props.colors"
+              :key="colorOption.id"
+              :value="colorOption.name"
+            >
+              {{ colorOption.name }}
+            </option>
+          </select>
 
- <div class="flex items-center space-x-4">
-  <!-- Search Input on the Left -->
-  <div class="w-1/3">
-    <input
-      v-model="search"
-      @input="performSearch"
-      type="text"
-      placeholder="Search ..."
-      class="w-full custom-input"
-    />
-  </div>
-
-  <!-- Filter Dropdowns on the Right -->
-  <div class="flex justify-end w-2/3 space-x-2">
-    <!-- Price Filter -->
-    <select
-      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
-    >
-      <option   value="">Price</option>
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-
-    <!-- Color Filter -->
-    <select
-      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
-    >
-      <option value="">Color</option>
-      <option value="red">Red</option>
-      <option value="blue">Blue</option>
-      <option value="green">Green</option>
-    </select>
-
-    <!-- Size Filter -->
-    <select
-      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
-    >
-      <option value="">Size</option>
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large">Large</option>
-    </select>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
+          <!-- Size Filter -->
+          <select
+            v-model="size"
+            @change="applyFilters"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+          >
+            <option value="">Select Size</option>
+            <option
+              v-for="sizeOption in props.sizes"
+              :key="sizeOption.id"
+              :value="sizeOption.name"
+            >
+              {{ sizeOption.name }}
+            </option>
+          </select>
+        </div>
+      </div>
 
       <div class="grid grid-cols-4 gap-8">
         <template v-if="products.data.length > 0">
@@ -332,7 +333,6 @@ const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
 
-
 const openEditModal = (product) => {
   selectedProduct.value = product; // Set the selected product
   isEditModalOpen.value = true; // Open the edit modal
@@ -356,17 +356,36 @@ const props = defineProps({
   allcategories: Array,
   totalProducts: Number,
   search: String,
+  sort: String,
+  color: String,
+  size: String,
 });
 
 const search = ref(props.search || "");
+const sort = ref(props.sort || "");
+const color = ref(props.color || "");
+const size = ref(props.size || "");
 
 // const performSearch = () => {
 //   router.get(route("products.index"), { search: search.value }, { preserveState: true });
 // };
 
 const performSearch = debounce(() => {
-  router.get(route("products.index"), { search: search.value }, { preserveState: true });
+  applyFilters();
 }, 500);
+
+const applyFilters = () => {
+  router.get(
+    route("products.index"),
+    {
+      search: search.value,
+      sort: sort.value,
+      color: color.value, 
+      size: size.value
+    },
+    { preserveState: true }
+  );
+};
 
 onMounted(() => {
   // console.log("Products:", props.products);
