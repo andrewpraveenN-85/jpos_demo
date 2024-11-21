@@ -42,7 +42,7 @@ class ProductController extends Controller
 
         $count = $productsQuery->count();    
 
-        $products = $productsQuery->paginate(2);
+        $products = $productsQuery->paginate(8);
 
         $allcategories = Category::with('parent')->get();
         $colors = Color::all();
