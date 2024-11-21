@@ -266,6 +266,7 @@ import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
+import { debounce } from "lodash";
 
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -301,9 +302,13 @@ const props = defineProps({
 
 const search = ref(props.search || "");
 
-const performSearch = () => {
+// const performSearch = () => {
+//   router.get(route("products.index"), { search: search.value }, { preserveState: true });
+// };
+
+const performSearch = debounce(() => {
   router.get(route("products.index"), { search: search.value }, { preserveState: true });
-};
+}, 500); 
 
 onMounted(() => {
   // console.log("Products:", props.products);

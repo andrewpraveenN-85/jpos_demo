@@ -21,6 +21,7 @@
     "dependencies": {
         "@headlessui/vue": "^1.7.23",
         "dayjs": "^1.11.13",
+        "lodash": "^4.17.21",
         "vue-barcode-reader": "^1.0.3"
     }
 }
