@@ -40,6 +40,8 @@ class ProductController extends Controller
                 $queryBuilder->orderBy('selling_price', $sortOrder);
             });
 
+        $count = $productsQuery->count();    
+
         $products = $productsQuery->paginate(2);
 
         $allcategories = Category::with('parent')->get();
@@ -51,7 +53,7 @@ class ProductController extends Controller
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
-            'totalProducts' => $productsQuery->count(),
+            'totalProducts' => $count,
             'search' => $query,
             'sort' => $sortOrder,
             'color' => $selectedColor,
