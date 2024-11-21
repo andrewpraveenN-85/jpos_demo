@@ -34,9 +34,9 @@
 
 /* Active Pagination Link */
 .pagination a.is-active {
-  background-color: #2563eb; /* Matches active state bg-blue-600 */
-  color: #ffffff;
-  border-color: #2563eb;
+   background-color: #ffffff; /* Matches active state bg-blue-600 */
+  color: #000000 !important;
+  border-color: #000000;
 }
 
 /* Disabled Pagination Links */
@@ -50,43 +50,7 @@
 .pagination a:hover {
   color: #fff;
 }
-.pagination a.is-active {
-  color: inherit !important;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: rgba(230, 230, 230, 0.1);
-  background: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    color-stop(0%, rgba(230, 230, 230, 0.1)),
-    color-stop(100%, rgba(0, 0, 0, 0.1))
-  );
-  background: -webkit-linear-gradient(
-    top,
-    rgba(230, 230, 230, 0.1) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  background: -moz-linear-gradient(
-    top,
-    rgba(230, 230, 230, 0.1) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  background: -ms-linear-gradient(
-    top,
-    rgba(230, 230, 230, 0.1) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  background: -o-linear-gradient(
-    top,
-    rgba(230, 230, 230, 0.1) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  background: linear-gradient(
-    to bottom,
-    rgba(230, 230, 230, 0.1) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-}
+ 
 .pagination a:first-child,
 .pagination a:last-child {
   padding: 8px 16px;

@@ -38,11 +38,13 @@
 
     <!-- Profile Picture -->
     <a :href="route('profile.show')" class="block">
-      <img
-        src="/images/dashboard/cashier.png"
-        class="w-16 h-16 rounded-full"
-        alt="Profile"
-      />
+    <img
+  src="/images/dashboard/cashier.png"
+  class="w-16 h-16 rounded-full"
+  style="border: 1px solid #000; padding: 2px;"
+  alt="Profile"
+/>
+
     </a>
   </div>
 </template>

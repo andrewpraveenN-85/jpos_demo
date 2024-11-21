@@ -45,7 +45,12 @@
             <form @submit.prevent="submit">
               <!-- Modal Form -->
               <div class="mt-6 space-y-4 text-left">
-                <!-- Category Name -->
+
+
+  <div class="flex items-center gap-8 mt-6">
+                  <!-- Cost Price input -->
+                  <div class="w-full">
+                  <!-- Category Name -->
                 <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Category Name:</label
@@ -69,8 +74,11 @@
                     form.errors.name
                   }}</span>
                 </div>
+                  </div>
 
-                <div>
+                  <!-- Selling Price input -->
+                  <div class="w-full">
+                    <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Product Name:</label
                   >
@@ -85,6 +93,18 @@
                     form.errors.name
                   }}</span>
                 </div>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
 
                 <div>
                   <div class="flex items-center gap-8">
@@ -220,27 +240,7 @@
                     </span>
                   </div>
                   <div class="w-full">
-                    <!-- <label
-                      for="barcode"
-                      class="block text-sm font-medium text-gray-300"
-                      >Barcode:</label
-                    >
-                    <input
-                      type="text"
-                      id="barcode"
-                      v-model="form.barcode"
-                      class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Enter barcode"
-                      required
-                    />
-                    <span v-if="form.errors.barcode" class="mt-2 text-red-500">
-                      {{ form.errors.barcode }}
-                    </span> -->
-                  </div>
-                </div>
-
-                <div class="mt-6">
-                  <label
+                   <label
                     for="image"
                     class="block text-sm font-medium text-gray-300"
                     >Image:</label
@@ -254,7 +254,7 @@
                         v-if="selectedProduct.image"
                         :src="`/${selectedProduct.image}`"
                         alt="Product Image"
-                        class="rounded-lg h-50 w-50"
+                        class="rounded-lg "
                       />
 
                       <p v-else class="text-sm text-gray-500">
@@ -271,7 +271,10 @@
                   <span v-if="form.errors.image" class="mt-2 text-red-500">
                     {{ form.errors.image }}
                   </span>
+                  </div>
                 </div>
+
+
               </div>
 
               <!-- Modal Buttons -->

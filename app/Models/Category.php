@@ -22,7 +22,9 @@ class Category extends Model
     public function getHierarchyStringAttribute(): string
     {
         $hierarchy = [];
-        $category = $this;
+        $category = $this->parent;
+
+
 
         // Traverse the hierarchy without additional queries
         while ($category) {
@@ -30,6 +32,6 @@ class Category extends Model
             $category = $category->parent; // Uses Eloquent's cached relationship
         }
 
-        return implode(' > ', array_reverse($hierarchy));
+        return implode(' ----> ', array_reverse($hierarchy));
     }
 }

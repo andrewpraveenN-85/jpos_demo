@@ -1,4 +1,8 @@
 <style  >
+table.dataTable.no-footer {
+
+}
+
 /* General DataTables Pagination Container Style */
 .dataTables_wrapper .dataTables_paginate {
   display: flex;
@@ -15,8 +19,8 @@
   font-size: 14px;
   font-weight: bold;
   color: #fff !important; /* Matches table text color */
-  background-color: #1e293b; /* Matches bg-gray-800 */
-  border: 1px solid #4b5563; /* Matches border-gray-700 */
+  background-color: #1e293b; /* Matches bg-blue-800 */
+  border: 1px solid #4b5563; /* Matches border-blue-700 */
   border-radius: 5px;
   text-align: center;
   cursor: pointer;
@@ -25,22 +29,23 @@
 
 /* Hover Effect for Buttons */
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  background-color: #2563eb; /* Matches bg-blue-600 */
-  border-color: #2563eb;
+  background-color: #ffffff; /* Matches active state bg-blue-600 */
+  color: #000000 !important;
+  border-color: #000000;
 }
 
 /* Active Page Button */
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  background-color: #2563eb; /* Matches active state bg-blue-600 */
-  color: #fff !important;
-  border-color: #2563eb;
+  background-color: #ffffff; /* Matches active state bg-blue-600 */
+  color: #000000 !important;
+  border-color: #000000;
 }
 
 /* Disabled Buttons */
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-  color: #9ca3af !important; /* Matches text-gray-400 */
-  background-color: #1e293b; /* Matches bg-gray-800 */
-  border-color: #4b5563; /* Matches border-gray-700 */
+  color: #9ca3af !important; /* Matches text-blue-400 */
+  background-color: #1e293b; /* Matches bg-blue-800 */
+  border-color: #4b5563; /* Matches border-blue-700 */
   cursor: not-allowed !important;
   opacity: 0.5;
 }
@@ -108,7 +113,7 @@
 <template>
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-blue-100 px-36"
   >
     <!-- Include the Header -->
     <Header />
@@ -146,72 +151,79 @@
       </div>
       <template v-if="allcategories && allcategories.length > 0">
         <div class="overflow-x-auto">
-          <table
-            id="CategoryTable"
-            class="w-full text-left text-gray-300 bg-gray-800 border border-gray-700 rounded-lg shadow-lg table-auto"
-          >
-            <thead>
-              <tr
-                class="bg-gray-900 border-b border-gray-700 text-[16px] text-white"
-              >
-                <th class="p-4 font-semibold tracking-wide uppercase">Name</th>
-                <th class="p-4 font-semibold tracking-wide uppercase">
-                  Parent Hierarchy
-                </th>
-                <th class="p-4 font-semibold tracking-wide uppercase">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody class="text-[13px] font-normal">
-              <!-- If categories exist -->
-              <tr
-                v-if="allcategories && allcategories.length > 0"
-                v-for="category in allcategories"
-                :key="category.id"
-                class="transition duration-200 ease-in-out hover:bg-gray-700"
-              >
-                <td class="p-4 border-t border-gray-700">
-                  {{ category.name || "N/A" }}
-                </td>
+  <table
+  id="CategoryTable"
+  class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
+>
+  <thead>
+    <tr
+      class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
+    >
+      <th class="p-4 font-semibold tracking-wide text-left uppercase">Name</th>
+      <th class="p-4 font-semibold tracking-wide text-left uppercase">
+        Parent Hierarchy
+      </th>
+      <th class="p-4 font-semibold tracking-wide text-center uppercase">
+    Actions
+</th>
+    </tr>
+  </thead>
+  <tbody class="text-[13px] font-normal">
+    <!-- If categories exist -->
+    <tr
+      v-if="allcategories && allcategories.length > 0"
+      v-for="category in allcategories"
+      :key="category.id"
+      class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
+    >
+     <td class="p-4 font-bold border-t border-gray-200">
+        {{ category.name || "N/A" }}
+      </td>
+      <td class="p-4 italic border-t border-gray-200">
+        {{ category.hierarchy_string || "N/A" }}
+      </td>
 
-                <td class="p-4 border-t border-gray-700">
-                  <!-- {{ category.parent?.name || "N/A" }} -->
-                  {{ category.hierarchy_string || "N/A" }}
-                </td>
-                <td class="p-4 border-t border-gray-700">
-                  <div class="flex items-center space-x-3">
-                    <button
-                      @click="openEditModal(category)"
-                      class="px-4 py-2 font-medium text-[12px] text-white transition duration-150 ease-in-out bg-blue-600 rounded-md hover:bg-blue-500"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      @click="openDeleteModal(category)"
-                      class="px-4 py-2 font-medium text-[12px] text-white transition duration-150 ease-in-out bg-red-600 rounded-md hover:bg-red-500"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
 
-              <!-- Fallback for no categories -->
-              <tr
-                v-else
-                class="font-medium text-center text-red-500 bg-gray-900"
-              >
-                <td colspan="3" class="p-4 border-t border-gray-700">
-                  No categories available.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+<td class="p-4 text-center border-t border-gray-200">
+  <div class="inline-flex items-center w-full space-x-3">
+    <button
+      @click="openEditModal(category)"
+      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
+    >
+      Edit
+    </button>
+    <button
+      @click="openDeleteModal(category)"
+      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
+    >
+      Delete
+    </button>
+  </div>
+</td>
+
+
+
+
+
+
+    </tr>
+
+    <!-- Fallback for no categories -->
+    <tr
+      v-else
+      class="font-medium text-center text-white text-red-500 bg-gradient-to-r from-gray-800 to-gray-900"
+    >
+      <td colspan="3" class="p-4 border-t border-gray-700">
+        No categories available.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
         </div>
       </template>
       <template v-else>
-        <div class="col-span-4 text-center text-gray-500">
+        <div class="col-span-4 text-center text-blue-500">
           <p class="text-center text-red-500 text-[17px]">
             No categories available
           </p>
@@ -280,11 +292,13 @@ $(document).ready(function () {
     dom: "Bfrtip",
     pageLength: 10,
     buttons: [],
+
     columnDefs: [
       {
         targets: 2, // Index of the "Actions" column
         searchable: false, // Disable filtering for this column
         orderable: false, // Optional: Disable sorting for this column
+
       },
     ],
   });
