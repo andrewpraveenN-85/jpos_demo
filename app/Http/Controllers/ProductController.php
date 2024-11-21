@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Category;
@@ -14,22 +15,31 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category','color','size')->latest()->paginate(2);
+        $query = $request->input('search'); // Retrieve the search query
+        $productsQuery = Product::with('category', 'color', 'size')
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where('name', 'like', "%{$query}%");
+            });
+
+        // Get paginated products based on the query
+        $products = $productsQuery->latest()->paginate(2);
+
+        // Get the count of filtered products
+        $totalProducts = $productsQuery->count();
+
         $allcategories = Category::with('parent')->latest()->get();
         $colors = Color::all();
         $sizes = Size::all();
-        $totalProducts = Product::count();
-
-
 
         return Inertia::render('Products/Index', [
             'products' => $products,
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
-            'totalProducts' => $totalProducts
+            'totalProducts' => $totalProducts,
+            'search' => $query
         ]);
     }
 
@@ -52,7 +62,6 @@ class ProductController extends Controller
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
-
     }
 
     /**
@@ -115,7 +124,7 @@ class ProductController extends Controller
 
 
 
-        $product->load('category','color','size');
+        $product->load('category', 'color', 'size');
 
 
         return Inertia::render('Products/Show', [
@@ -147,7 +156,6 @@ class ProductController extends Controller
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
-
     }
 
     /**
@@ -184,7 +192,6 @@ class ProductController extends Controller
         } else {
             // Retain the old image if no new image is uploaded
             $validated['image'] = $product->image;
-
         }
 
 

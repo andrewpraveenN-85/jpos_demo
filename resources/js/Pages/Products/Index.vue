@@ -34,7 +34,7 @@
 
 /* Active Pagination Link */
 .pagination a.is-active {
-   background-color: #ffffff; /* Matches active state bg-blue-600 */
+  background-color: #ffffff; /* Matches active state bg-blue-600 */
   color: #000000 !important;
   border-color: #000000;
 }
@@ -50,7 +50,7 @@
 .pagination a:hover {
   color: #fff;
 }
- 
+
 .pagination a:first-child,
 .pagination a:last-child {
   padding: 8px 16px;
@@ -96,11 +96,12 @@
       <div class="flex items-center space-x-2">
         <!-- Search Input -->
         <input
+          v-model="search"
+          @input="performSearch"
           type="text"
           placeholder="Search Product Here"
           class="w-1/3 px-4 py-2 border rounded-lg focus:outline-none border-gray-500"
         />
-
         <!-- Filter Button -->
         <button
           class="flex items-center px-3 py-2 border rounded-lg focus:outline-none border-gray-500"
@@ -256,7 +257,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, router } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
@@ -265,11 +266,13 @@ import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
+
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
+
 
 const openEditModal = (product) => {
   selectedProduct.value = product; // Set the selected product
@@ -293,11 +296,18 @@ const props = defineProps({
   sizes: Array,
   allcategories: Array,
   totalProducts: Number,
+  search: String,
 });
 
+const search = ref(props.search || "");
+
+const performSearch = () => {
+  router.get(route("products.index"), { search: search.value }, { preserveState: true });
+};
+
 onMounted(() => {
-  console.log("Products:", props.products);
-  console.table(props.products);
+  // console.log("Products:", props.products);
+  // console.table(props.products);
 });
 const showModal = ref(false);
 const form = useForm({});
