@@ -70,7 +70,7 @@
                       :key="category.id"
                       :value="category.id"
                     >
-                      {{ category.name }}
+                      {{  (category.hierarchy_string ?   category.hierarchy_string + " ----> " + category.name : category.name) }}
                     </option>
                   </select>
                   <span v-if="form.errors.parent_id" class="mt-4 text-red-500">
@@ -147,7 +147,7 @@ watch(
   (newValue) => {
     if (newValue) {
       form.name = newValue.name || ""; // Populate name
-      form.parent_id = newValue.parent_id || ""; // Populate parent_id
+      form.parent_id = newValue.parent?.id || "" // Populate parent_id
     }
   },
   { immediate: true } // Run immediately when the component is mounted
