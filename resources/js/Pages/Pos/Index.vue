@@ -166,13 +166,25 @@
               >
                 <p class="text-black text-xl">Payment Method :</p>
                 <div
-                  class="w-[80px] h-[50px] border border-black rounded-xl flex flex-col justify-center items-center text-center"
+                  @click="selectedPaymentMethod = 'cash'"
+                  :class="[
+                    'cursor-pointer w-[80px] h-[50px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
+                    selectedPaymentMethod === 'cash'
+                      ? 'bg-yellow-500 font-bold'
+                      : 'text-black',
+                  ]"
                 >
                   <p><i class="ri-cash-line"></i></p>
                   <p>Cash</p>
                 </div>
                 <div
-                  class="w-[80px] h-[50px] border border-black font-bold tracking-wider rounded-xl text-black flex flex-col bg-yellow-500 justify-center items-center text-center"
+                  @click="selectedPaymentMethod = 'credit-card'"
+                  :class="[
+                    'cursor-pointer w-[80px] h-[50px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
+                    selectedPaymentMethod === 'credit-card'
+                      ? 'bg-yellow-500 font-bold'
+                      : 'text-black',
+                  ]"
                 >
                   <p><i class="ri-bank-card-line"></i></p>
                   <p>Credit Card</p>
@@ -206,6 +218,8 @@ const error = ref(null);
 const products = ref([]);
 
 const discount = ref(0);
+
+const selectedPaymentMethod = ref("cash");
 
 const removeProduct = (id) => {
   products.value = products.value.filter((item) => item.id !== id);
