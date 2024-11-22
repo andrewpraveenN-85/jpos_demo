@@ -78,7 +78,13 @@
                       :key="category.id"
                       :value="category.id"
                     >
-                      {{ category.name }}
+                      {{
+                        category.hierarchy_string
+                          ? category.hierarchy_string +
+                            " ----> " +
+                            category.name
+                          : category.name
+                      }}
                     </option>
                   </select>
                   <span
@@ -87,8 +93,6 @@
                     >{{ form.errors.parent_id }}</span
                   >
                 </div>
-
-                
               </div>
 
               <!-- Modal Buttons -->
@@ -141,7 +145,7 @@ defineProps({
 
 const form = useForm({
   name: "",
-  parent_id: "", 
+  parent_id: "",
 });
 
 const submit = () => {
@@ -152,5 +156,4 @@ const submit = () => {
     },
   });
 };
-
 </script>
