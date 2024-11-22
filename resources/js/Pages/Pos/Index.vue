@@ -87,12 +87,41 @@
             </p>
           </div>
         </div>
-        <div class="flex flex-col w-1/2 p-8 border-4 border-black rounded-3xl">
+        <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
             <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-            <p v-if="products.length === 0" class="text-2xl text-red">
-              No Products to show
-            </p>
+            <div
+              class="w-full flex rounded-2xl justify-between items-end border-2 border-black my-5"
+            >
+              <div class="w-3/4 flex justify-center items-center">
+                <label
+                  for="search"
+                  class="text-xl text-gray-800 font-medium"
+                ></label>
+                <input
+                  v-model="form.barcode"
+                  id="search"
+                  type="text"
+                  placeholder="Enter BarCode Here!"
+                  class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div class="w-1/4 flex justify-end items-end">
+                <button
+                  @click="submitBarcode"
+                  class="bg-blue-600 text-white font-bold uppercase tracking-wider px-12 py-4 rounded-r-xl text-2xl"
+                >
+                  Enter
+                </button>
+              </div>
+            </div>
+
+            <div class="w-full text-center">
+              <p v-if="products.length === 0" class="text-2xl text-red-500">
+                No Products to show
+              </p>
+            </div>
+
             <div
               class="flex items-center w-full py-4 border-b border-black"
               v-for="item in products"
@@ -111,7 +140,7 @@
                   {{ item.name }}
                 </p>
                 <div class="flex items-center justify-between w-full">
-                  <div class="flex items-center justify-start w-full space-x-4">
+                  <div class="flex items-center justify-start space-x-4">
                     <p
                       @click="incrementQuantity(item.id)"
                       class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer"
@@ -131,7 +160,9 @@
                     </p>
                   </div>
                   <div class="flex items-center justify-center">
-                    <p class="text-black">{{ item.selling_price }} LKR</p>
+                    <p class="text-black font-bold text-2xl">
+                      {{ item.selling_price }} LKR
+                    </p>
                   </div>
                 </div>
               </div>
@@ -168,26 +199,24 @@
                 <div
                   @click="selectedPaymentMethod = 'cash'"
                   :class="[
-                    'cursor-pointer w-[80px] h-[50px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
+                    'cursor-pointer w-[100px]  border border-black rounded-xl flex flex-col justify-center items-center text-center',
                     selectedPaymentMethod === 'cash'
                       ? 'bg-yellow-500 font-bold'
                       : 'text-black',
                   ]"
                 >
-                  <p><i class="ri-cash-line"></i></p>
-                  <p>Cash</p>
+                  <img src="/images/money-stack.png" alt="" class="w-24" />
                 </div>
                 <div
                   @click="selectedPaymentMethod = 'credit-card'"
                   :class="[
-                    'cursor-pointer w-[80px] h-[50px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
+                    'cursor-pointer w-[100px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
                     selectedPaymentMethod === 'credit-card'
                       ? 'bg-yellow-500 font-bold'
                       : 'text-black',
                   ]"
                 >
-                  <p><i class="ri-bank-card-line"></i></p>
-                  <p>Credit Card</p>
+                  <img src="/images/bank-card.png" alt="" class="w-24" />
                 </div>
               </div>
               <div class="flex items-center justify-center w-full">
@@ -244,7 +273,7 @@ const decrementQuantity = (id) => {
 };
 
 const submitOrder = () => {
-   isSuccessModalOpen.value = true
+  isSuccessModalOpen.value = true;
 };
 
 const subtotal = computed(() => {
