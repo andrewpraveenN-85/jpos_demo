@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PosController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,6 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
     Route::post('products/{product}', [ProductController::class, 'update']);
+    // Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+    Route::post('/pos', [PosController::class, 'getProduct'])->name('pos.getProduct');
 });
 
 Route::get('/barcode/{id}', [CategoryController::class, 'showBarcode']);
