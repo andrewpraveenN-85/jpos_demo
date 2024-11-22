@@ -6,21 +6,6 @@
     <!-- Include the Header -->
     <Header />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
@@ -93,13 +78,13 @@
                 Scan Barcode
               </button>
             </div> -->
-            <!-- <img
+            <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
             />
             <p class="text-3xl text-black">
               Bar Code Scanner is in Progress...
-            </p> -->
+            </p>
           </div>
         </div>
         <div class="flex flex-col w-1/2 p-8 border-4 border-black rounded-3xl">
@@ -207,6 +192,7 @@
               </div>
               <div class="flex items-center justify-center w-full">
                 <p
+                  @click="submitOrder"
                   class="w-full py-4 text-2xl font-bold tracking-wider text-center text-white uppercase bg-black cursor-pointer rounded-xl"
                 >
                   <i class="pr-4 ri-add-circle-fill"></i> Confirm Order
@@ -218,12 +204,14 @@
       </div>
     </div>
   </div>
+  <PosSuccessModel v-model:open="isSuccessModalOpen" />
   <Footer />
 </template>
 <script setup>
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
+import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import { useForm } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
@@ -231,6 +219,7 @@ import axios from "axios";
 const product = ref(null);
 const error = ref(null);
 const products = ref([]);
+const isSuccessModalOpen = ref(false);
 
 const discount = ref(0);
 
@@ -252,6 +241,10 @@ const decrementQuantity = (id) => {
   if (product && product.quantity > 1) {
     product.quantity -= 1;
   }
+};
+
+const submitOrder = () => {
+   isSuccessModalOpen.value = true
 };
 
 const subtotal = computed(() => {
