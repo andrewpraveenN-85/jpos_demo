@@ -13,6 +13,7 @@ class Supplier extends Model
         'contact',
         'email',
         'address',
-     
+        'image',
+
     ];
 }

@@ -11,6 +11,7 @@ class Product extends Model
     use HasFactory, GeneratesUniqueCode;
     protected $fillable = [
         'category_id',
+        'supplier_id',
         'name',
         'size_id',
         'color_id',
@@ -46,5 +47,11 @@ class Product extends Model
     {
         return $this->belongsTo(Size::class, 'size_id','id');
     }
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id','id');
+    }
+
+
 
 }

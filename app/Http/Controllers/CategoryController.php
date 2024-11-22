@@ -19,7 +19,9 @@ class CategoryController extends Controller
     {
         // $paginatedcategories = Category::with('parent')->latest()->paginate(10);
         // $allcategories = Category::with('parent')->latest()->get();
-        $allcategories = Category::with('parent')->latest()->get()
+        // $allcategories = Category::with('parent')->latest()->get()
+        $allcategories = Category::with('parent')->orderBy('id', 'desc')  
+        ->paginate(10)
             ->map(function ($category) {
                 return [
                     'id' => $category->id,

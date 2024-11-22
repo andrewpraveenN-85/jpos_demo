@@ -114,7 +114,7 @@
           <select
             v-model="sort"
             @change="applyFilters"
-            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select cursor-pointer"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
           >
             <option value="">Filter by Price</option>
             <option value="asc">Ascending</option>
@@ -195,6 +195,19 @@
                   Size :
                   {{ product.size?.name || "N/A" }}
                 </p>
+              </div>
+
+
+                  <div class="flex items-center justify-center w-full space-x-4">
+                <p
+                  class="flex items-center space-x-2 text-justify text-gray-400"
+                >
+                  Supplier :
+
+               {{ product.supplier?.name || "N/A" }}
+                </p>
+
+
               </div>
               <div class="flex items-center justify-between">
                 <p
@@ -279,7 +292,9 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    :suppliers="suppliers"
     v-model:open="isCreateModalOpen"
+
   />
   <ProductUpdateModel
     :categories="allcategories"
@@ -341,6 +356,7 @@ const openDeleteModal = (product) => {
 const props = defineProps({
   products: Object,
   categories: Array,
+  suppliers: Array,
   colors: Array,
   sizes: Array,
   allcategories: Array,
@@ -355,6 +371,7 @@ const search = ref(props.search || "");
 const sort = ref(props.sort || "");
 const color = ref(props.color || "");
 const size = ref(props.size || "");
+const suppliers = ref(props.suppliers || "");
 
 // const performSearch = () => {
 //   router.get(route("products.index"), { search: search.value }, { preserveState: true });
@@ -370,7 +387,7 @@ const applyFilters = () => {
     {
       search: search.value,
       sort: sort.value,
-      color: color.value, 
+      color: color.value,
       size: size.value
     },
     { preserveState: true }

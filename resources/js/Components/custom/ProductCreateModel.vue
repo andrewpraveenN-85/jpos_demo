@@ -70,6 +70,41 @@
                   }}</span>
                 </div>
 
+
+
+
+
+  <div>
+
+
+                  <label class="block text-sm font-medium text-gray-300"
+                    >Supplier Name:</label
+                  >
+                  <select
+
+                    v-model="form.supplier_id"
+                    id="parent_id"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  >
+                    <option value="">Select a Supplier</option>
+                    <option
+                      v-for="supplier in suppliers"
+                      :key="supplier.id"
+                      :value="supplier.id"
+                    >
+                      {{ supplier.name }}
+                    </option>
+                  </select>
+                  <span v-if="form.errors.name" class="mt-4 text-red-500">{{
+                    form.errors.name
+                  }}</span>
+                </div>
+
+
+
+
+
+
                 <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Product Name:</label
@@ -304,6 +339,10 @@ defineProps({
     type: Array,
     required: true,
   },
+   suppliers: {
+    type: Array,
+    required: true,
+  },
   colors: {
     type: Array,
     required: true,
@@ -316,6 +355,7 @@ defineProps({
 
 const form = useForm({
   category_id: "",
+  supplier_id: "",
   name: "",
   size_id: "",
   color_id: "",
