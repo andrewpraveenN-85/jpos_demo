@@ -176,6 +176,12 @@ font-weight: 400;
    />
 
 
+ <SupplierUpdateModel
+    :suppliers="allsuppliers"
+      v-model:open="isEditModalOpen"
+    :selected-product="selectedProduct"
+  />
+
 
 
 
@@ -191,6 +197,7 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import SupplierCreateModel from "@/Components/custom/SupplierCreateModel.vue";
 import SupplierDeleteModel from "@/Components/custom/SupplierDeleteModel.vue";
+import SupplierUpdateModel from "@/Components/custom/SupplierUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
 
 defineProps({
@@ -207,10 +214,9 @@ const openDeleteModal = (supplier) => {
    selectedSupplier.value = supplier;
    isDeleteModalOpen.value = true;
 };
-const openImagePopup = (imageUrl) => {
-  selectedImage.value = imageUrl;
-  isImagePopupOpen.value = true;
-};
+
+const form = useForm({});
+
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);

@@ -36,15 +36,17 @@
       </div>
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4">
-          <Link
-            :href="route('dashboard')"
-            class="p-1 text-3xl text-black border-2 border-black rounded-full"
-          >
-            <p><i class="ri-arrow-left-line"></i></p>
-          </Link>
-          <p class="text-4xl font-bold tracking-wide text-black uppercase">
-            Products
-          </p>
+
+
+
+ <a href="/dashboard">
+                  <img src="/images/back-arrow.png" class="w-14 h-14" />
+               </a>
+               <p class="text-4xl font-bold tracking-wide text-black uppercase">
+                  Products
+               </p>
+
+
         </div>
         <p
           @click="isCreateModalOpen = true"

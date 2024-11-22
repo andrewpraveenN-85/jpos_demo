@@ -155,7 +155,7 @@ font-weight: 400;
     <!-- Fallback for no categories -->
     <tr
       v-else
-      class="font-medium text-center text-white text-red-500 bg-gradient-to-r from-gray-800 to-gray-900"
+      class="font-medium text-center ext-red-500 y bg-gradient-to-r from-gray-800 to-gray-900"
     >
       <td colspan="3" class="p-4 border-t border-gray-700">
         No categories available.

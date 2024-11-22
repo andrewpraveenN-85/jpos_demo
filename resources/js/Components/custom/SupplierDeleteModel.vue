@@ -30,11 +30,8 @@
           >
             <!-- Confirmation Message -->
             <p class="text-[15px] text-center text-gray-700">
-              Are you sure you want to delete the supplier
-              <span class="font-bold text-gray-900">{{
-                supplier?.name || "this item"
-              }}</span>
-              ? This action cannot be undone.
+             Are you sure you want to delete this Supplier? This action cannot
+              be undone.
             </p>
 
             <!-- Modal Buttons -->
@@ -62,6 +59,14 @@
   </TransitionRoot>
 </template>
 
+
+
+
+
+
+
+
+
 <script setup>
 import {
   Dialog,
@@ -69,43 +74,47 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
+import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
-// Emit event to parent to close the modal
+// Emits to parent to close modal
 const emit = defineEmits(["update:open"]);
 
-// Props for modal behavior
-defineProps({
+// Props for the modal
+const { open, selectedSupplier } = defineProps({
   open: {
     type: Boolean,
     required: true,
   },
-  supplier: {
+  selectedSupplier: {
     type: Object,
-    default: null,
+    default: null, // Ensure it defaults to null
   },
 });
 
-// Form for deletion
+// Form for handling deletion
 const form = useForm({});
 
-// Delete action
+// Delete the selected category
 const deleteItem = () => {
-  // Ensure the supplier is selected and has an ID
-  if (!supplier?.id) {
-    console.warn("No supplier selected for deletion");
-    return;
-  }
+  if (!selectedSupplier?.id) return;
 
-  // Send delete request using Inertia.js form handling
-  form.delete(`/suppliers/${supplier.id}`, {
+  form.delete(`/suppliers/${selectedSupplier.id}`, {
     onSuccess: () => {
-      emit("update:open", false); // Close the modal on successful deletion
-      console.log("Supplier deleted successfully");
+      emit("update:open", false); // Close the modal on success
     },
     onError: (errors) => {
-      console.error("Delete failed:", errors); // Log errors for debugging
+      console.error("Delete failed:", errors);
     },
   });
 };
 </script>
+
+
+
+
+
+
+
+
+
