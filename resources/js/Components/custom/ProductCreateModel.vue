@@ -81,7 +81,7 @@
                     >Supplier Name:</label
                   >
                   <select
-                    required
+
                     v-model="form.supplier_id"
                     id="parent_id"
                     class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"

@@ -196,6 +196,19 @@
                   {{ product.size?.name || "N/A" }}
                 </p>
               </div>
+
+
+                  <div class="flex items-center justify-center w-full space-x-4">
+                <p
+                  class="flex items-center space-x-2 text-justify text-gray-400"
+                >
+                  Supplier :
+
+               {{ product.supplier?.name || "N/A" }}
+                </p>
+
+
+              </div>
               <div class="flex items-center justify-between">
                 <p
                   v-if="product.stock_quantity > 0"

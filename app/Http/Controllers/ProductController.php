@@ -22,7 +22,7 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
 
-        $productsQuery = Product::with('category', 'color', 'size')
+        $productsQuery = Product::with('category', 'color', 'size','supplier')
             ->when($query, function ($queryBuilder) use ($query) {
                 $queryBuilder->where('name', 'like', "%{$query}%");
             })
@@ -43,11 +43,12 @@ class ProductController extends Controller
         $count = $productsQuery->count();
 
         $products = $productsQuery->paginate(8);
+       
 
         $allcategories = Category::with('parent')->get();
-        $colors = Color::all();
-        $sizes = Size::all();
-        $suppliers = Supplier::all();
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
+        $suppliers = Supplier::orderBy('created_at', 'desc')->get();
 
 
         return Inertia::render('Products/Index', [
@@ -138,10 +139,15 @@ class ProductController extends Controller
     public function show(Product $product)
     {
 
-        $categories = Category::all();
-        $sizes = Size::all();
-        $suppliers = Supplier::all();
-        $colors = Color::all();
+        // $categories = Category::all();
+        // $sizes = Size::all();
+        // $suppliers = Supplier::all();
+        // $colors = Color::all();
+        $categories = Category::orderBy('created_at', 'desc')->get();
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
+        $suppliers = Supplier::orderBy('created_at', 'desc')->get();
+
 
 
 
@@ -165,10 +171,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $sizes = Size::all();
-        $categories = Category::all();
-        $suppliers = Supplier::all();
-        $colors = Color::all();
+        $categories = Category::orderBy('created_at', 'desc')->get();
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
+        $suppliers = Supplier::orderBy('created_at', 'desc')->get();
+
 
         // dd($product);
 
