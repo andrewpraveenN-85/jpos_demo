@@ -40,19 +40,22 @@ class ProductController extends Controller
                 $queryBuilder->orderBy('selling_price', $sortOrder);
             });
 
-        $count = $productsQuery->count();    
+        $count = $productsQuery->count();
 
         $products = $productsQuery->paginate(8);
 
         $allcategories = Category::with('parent')->get();
         $colors = Color::all();
         $sizes = Size::all();
+        $suppliers = Supplier::all();
+
 
         return Inertia::render('Products/Index', [
             'products' => $products,
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
+            'suppliers' => $suppliers,
             'totalProducts' => $count,
             'search' => $query,
             'sort' => $sortOrder,
@@ -65,23 +68,24 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        $categories = Category::all();
-        $products = Product::all();
-        // $suppliers = Supplier::all();
-        $colors = Color::all();
-        $sizes = Size::all();
+    // public function create()
+    // {
+    //     $categories = Category::all();
+    //     $products = Product::all();
+    //     $suppliers = Supplier::all();
+    //     $colors = Color::all();
+    //     $sizes = Size::all();
 
 
-        return Inertia::render('Products/Create', [
-            'products' => $products,
-            'categories' => $categories,
-            // 'suppliers' => $suppliers,
-            'colors' => $colors,
-            'sizes' => $sizes,
-        ]);
-    }
+
+    //     return Inertia::render('Products/Create', [
+    //         'products' => $products,
+    //         'categories' => $categories,
+    //         'suppliers' => $suppliers,
+    //         'colors' => $colors,
+    //         'sizes' => $sizes,
+    //     ]);
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -100,7 +104,7 @@ class ProductController extends Controller
             'selling_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
 
-            // 'supplier_id' => 'nullable|exists:suppliers,id',
+            'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -136,21 +140,21 @@ class ProductController extends Controller
 
         $categories = Category::all();
         $sizes = Size::all();
-        // $suppliers = Supplier::all();
+        $suppliers = Supplier::all();
         $colors = Color::all();
 
 
 
 
 
-        $product->load('category', 'color', 'size');
+        $product->load('category', 'color', 'size','suppliers');
 
 
         return Inertia::render('Products/Show', [
 
             'categories' => $categories,
             'product' => $product,
-            // 'suppliers' => $suppliers,
+            'suppliers' => $suppliers,
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
@@ -163,7 +167,7 @@ class ProductController extends Controller
     {
         $sizes = Size::all();
         $categories = Category::all();
-        // $suppliers = Supplier::all();
+        $suppliers = Supplier::all();
         $colors = Color::all();
 
         // dd($product);
@@ -171,7 +175,7 @@ class ProductController extends Controller
         return inertia('Products/Edit', [
             'product' => $product,
             'categories' => $categories,
-            // 'suppliers' => $suppliers,
+            'suppliers' => $suppliers,
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
@@ -191,7 +195,7 @@ class ProductController extends Controller
             'cost_price' => 'numeric|min:0',
             'selling_price' => 'numeric|min:0',
             'stock_quantity' => 'integer|min:0',
-
+            'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
         ]);
 
@@ -226,6 +230,13 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if ($product->image && file_exists(public_path($product->image))) {
+
+            unlink(public_path($product->image));
+        }
+
+
+
         $product->delete();
 
         return redirect()->route('products.index')->banner('Product Deleted successfully.');

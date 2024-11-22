@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PaymentController extends Controller
 {
@@ -12,7 +14,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+
+        return Inertia::render('Pos/Index');
     }
 
     /**
