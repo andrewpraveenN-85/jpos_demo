@@ -115,16 +115,17 @@
         </div>
 
         <!-- Chart 2 and Chart 3 -->
-        <div class="flex flex-col items-center justify-center w-1/3 h-[490px] space-y-4">
+        <div class="flex flex-col items-center justify-center w-1/3 h-[375px] space-y-4">
           <div
             class="flex items-center justify-center w-full bg-white border-4 border-black h-1/2 rounded-xl"
           >
-          <img src="/images/chart-2.png" alt="Chart 3" />
+          <img src="/images/chart-2.png" class="h-[150px] w-full object-contain rounded-md" alt="Chart 3" />
         </div>
           <div
             class="flex items-center justify-center w-full bg-white border-4 border-black h-1/2 rounded-xl"
           >
-            <img src="/images/chart-2.png" alt="Chart 3" />
+          <img src="/images/chart-2.png" class="h-[150px] w-full object-contain rounded-md" alt="Chart 3" />
+
           </div>
         </div>
 
