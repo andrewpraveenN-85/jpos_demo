@@ -55,7 +55,7 @@ font-weight: 400;
 <template>
    <Banner />
    <div
-      class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-blue-100 px-36"
+      class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
    >
       <!-- Include the Header -->
       <Header />

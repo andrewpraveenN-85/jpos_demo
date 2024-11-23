@@ -96,8 +96,42 @@
 </a>
 
 
+
+
+
+<a href="/suppliers">
+<div class="py-8 text-center bg-[#914F1E] hover:bg-[#9b643a] transition-colors duration-500 border rounded-xl">
+        <div
+          class="flex flex-col items-center justify-center w-full h-full space-y-8"
+        >
+          <div
+            class="flex flex-col items-center justify-center p-8 bg-white rounded-full"
+          >
+            <img
+              src="/images/dashboard/team-building.png"
+              class="w-48 h-48"
+              alt="dresshub.lk"
+            />
+          </div>
+          <div
+            class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3"
+          >
+            <p class="text-3xl font-bold text-white uppercase">Suppliers</p>
+            <p class="text-xl text-white">
+              Lorem ipsum is a dummy or placeholder text commonly used in
+              graphic design
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+    </a>
+
+
+
    <a href="/reports">
-      <div class="py-8 text-center bg-[#FF8000] border rounded-xl">
+      <div class="py-8 text-center bg-[#FF8000] hover:bg-[#b37d48] transition-colors duration-500 border rounded-xl">
         <div
           class="flex flex-col items-center justify-center w-full h-full space-y-8"
         >
