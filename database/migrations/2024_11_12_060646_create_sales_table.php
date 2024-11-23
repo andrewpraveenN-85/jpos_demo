@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('order_id')->nullable();
             $table->decimal('total_amount', 10, 2);
             $table->decimal('discount', 5, 2)->default(0);
             $table->enum('payment_method', ['Cash', 'Card', 'Online']);

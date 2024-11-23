@@ -48,6 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('products/{product}', [ProductController::class, 'update']);
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::post('/pos', [PosController::class, 'getProduct'])->name('pos.getProduct');
+    Route::post('/pos/submit', [PosController::class, 'submit'])->name('pos.checkout');
     Route::resource('payment', PaymentController::class);
     Route::resource('reports', ReportController::class);
 

@@ -1,7 +1,7 @@
 <template>
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-blue-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36"
   >
     <!-- Include the Header -->
     <Header />
@@ -21,7 +21,7 @@
         </div>
         <div class="flex items-center justify-between w-full space-x-4">
           <p class="text-3xl font-bold tracking-wide text-black">
-            Order ID : 202234344
+            Order ID : {{ orderId }}
           </p>
           <p class="text-3xl text-black"><i class="ri-restart-line"></i></p>
         </div>
@@ -33,6 +33,7 @@
               <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
               <div class="mb-3">
                 <input
+                  v-model="customer.name"
                   type="text"
                   placeholder="Enter Customer Name"
                   class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -40,13 +41,15 @@
               </div>
               <div class="flex gap-2 mb-3 text-black">
                 <select
+                  v-model="customer.countryCode"
                   class="w-[60px] px-2 py-2 bg-white placeholder-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option>+94</option>
-                  <option>+1</option>
-                  <option>+44</option>
+                  <option value="+94">+94</option>
+                  <option value="+1">+1</option>
+                  <option value="+44">+44</option>
                 </select>
                 <input
+                  v-model="customer.contactNumber"
                   type="text"
                   placeholder="Enter Customer Contact Number"
                   class="flex-grow px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -54,6 +57,7 @@
               </div>
               <div class="text-black">
                 <input
+                  v-model="customer.email"
                   type="email"
                   placeholder="Enter Customer Email"
                   class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -233,7 +237,12 @@
       </div>
     </div>
   </div>
-  <PosSuccessModel v-model:open="isSuccessModalOpen" />
+  <PosSuccessModel
+    v-model:open="isSuccessModalOpen"
+    :products="products"
+    :cashier="loggedInUser"
+    :customer="customer"
+  />
   <Footer />
 </template>
 <script setup>
@@ -250,7 +259,18 @@ const error = ref(null);
 const products = ref([]);
 const isSuccessModalOpen = ref(false);
 
+const props = defineProps({
+  loggedInUser: Object,
+});
+
 const discount = ref(0);
+
+const customer = ref({
+  name: "",
+  countryCode: "+94",
+  contactNumber: "",
+  email: "",
+});
 
 const selectedPaymentMethod = ref("cash");
 
@@ -272,8 +292,35 @@ const decrementQuantity = (id) => {
   }
 };
 
-const submitOrder = () => {
-  isSuccessModalOpen.value = true;
+const orderId = computed(() => {
+  const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to a base-36 string
+  const randomString = Math.random().toString(36).substr(2, 5).toUpperCase(); // Generate a shorter random string
+  return `ORD-${timestamp}-${randomString}`; // Combine to create unique order ID
+});
+
+const submitOrder = async () => {
+  if (window.confirm("Are you sure you want to confirm the order?")) {
+    console.log(products.value);
+    // const response = await axios.post("/api/customers", customer.value);
+    try {
+      // const response = await axios.post("/pos/submit", customer.value);
+      const response = await axios.post("/pos/submit", {
+        customer: customer.value,
+        products: products.value,
+        paymentMethod: selectedPaymentMethod.value,
+        userId: props.loggedInUser.id,
+        orderId: orderId.value,
+      });
+      isSuccessModalOpen.value = true;
+      console.log(response.data); // Handle success
+    } catch (error) {
+      console.error(
+        "Error submitting customer details:",
+        error.response?.data || error.message
+      );
+      alert("Failed to submit customer details. Please try again.");
+    }
+  }
 };
 
 const subtotal = computed(() => {
