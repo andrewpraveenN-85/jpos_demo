@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Product;
+use App\Models\Sale;
+use App\Models\Customer;
 use App\Models\Report;
+
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,9 +14,25 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Reports/Index');
+
+        $products = Product::orderBy('created_at', 'desc')->get();
+        $sales = Sale::orderBy('created_at', 'desc')->get();
+        $totalSaleAmount = Sale::sum('total_amount');
+        $totalCustomer = Customer::count();
+        $totalProduct = Product::count();
+        //dd($totalSaleAmount);
+
+
+        return Inertia::render('Reports/Index', [
+            'products' => $products,
+            'sales' => $sales,
+            'totalSaleAmount' => $totalSaleAmount,
+            'totalCustomer' => $totalCustomer,
+            'totalProduct' => $totalProduct,
+
+        ]);
     }
 
     /**

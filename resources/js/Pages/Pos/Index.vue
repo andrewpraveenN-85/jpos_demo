@@ -9,15 +9,24 @@
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
-          <a
-            href="./includes/dash_page.php"
+          <!-- <a
+           href="/dashboard"
             class="p-1 text-3xl text-black border-2 border-black rounded-full"
           >
             <p><i class="ri-arrow-left-line"></i></p>
+
+
           </a>
           <p class="text-4xl font-bold tracking-wide text-black uppercase">
-            PoS
-          </p>
+
+          </p> -->
+
+
+   <a href="/dashboard">
+            <img src="/images/back-arrow.png" class="w-14 h-14" />
+          </a>
+          <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">PoS</p>
+
         </div>
         <div class="flex items-center justify-between w-full space-x-4">
           <p class="text-3xl font-bold tracking-wide text-black">
@@ -91,12 +100,12 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <h2 class="text-5xl font-bold text-black">Billing Details</h2>
             <div
-              class="w-full flex rounded-2xl justify-between items-end border-2 border-black my-5"
+              class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl"
             >
-              <div class="w-3/4 flex justify-center items-center">
+              <div class="flex items-center justify-center w-3/4">
                 <label
                   for="search"
-                  class="text-xl text-gray-800 font-medium"
+                  class="text-xl font-medium text-gray-800"
                 ></label>
                 <input
                   v-model="form.barcode"
@@ -106,10 +115,10 @@
                   class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div class="w-1/4 flex justify-end items-end">
+              <div class="flex items-end justify-end w-1/4">
                 <button
                   @click="submitBarcode"
-                  class="bg-blue-600 text-white font-bold uppercase tracking-wider px-12 py-4 rounded-r-xl text-2xl"
+                  class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-r-xl"
                 >
                   Enter
                 </button>
@@ -160,7 +169,7 @@
                     </p>
                   </div>
                   <div class="flex items-center justify-center">
-                    <p class="text-black font-bold text-2xl">
+                    <p class="text-2xl font-bold text-black">
                       {{ item.selling_price }} LKR
                     </p>
                   </div>
