@@ -51,15 +51,15 @@ class PosController extends Controller
             $customer = Customer::where('email', $request->input('customer.email'))->first();
 
             if (!$customer) {
-            $customer = Customer::create([
-                'name' => $request->input('customer.name'),
-                'email' => $request->input('customer.email'),
-                'phone' => $phone,
-                'address' => $request->input('customer.address', ''), // Optional address
-                'member_since' => now()->toDateString(), // Current date
-                'loyalty_points' => 0, // Default value
-            ]);
-        }
+                $customer = Customer::create([
+                    'name' => $request->input('customer.name'),
+                    'email' => $request->input('customer.email'),
+                    'phone' => $phone,
+                    'address' => $request->input('customer.address', ''), // Optional address
+                    'member_since' => now()->toDateString(), // Current date
+                    'loyalty_points' => 0, // Default value
+                ]);
+            }
         }
 
         $products = $request->input('products');
@@ -85,6 +85,22 @@ class PosController extends Controller
                 'unit_price' => $product['selling_price'],
                 'total_price' => $product['quantity'] * $product['selling_price'],
             ]);
+
+            $productModel = Product::find($product['id']);
+            if ($productModel) {
+                $newStockQuantity = $productModel->stock_quantity - $product['quantity'];
+
+                // Prevent stock from going negative
+                if ($newStockQuantity < 0) {
+                    return response()->json([
+                        'message' => "Insufficient stock for product: {$productModel->name}",
+                    ], 400);
+                }
+
+                $productModel->update([
+                    'stock_quantity' => $newStockQuantity,
+                ]);
+            }
         }
 
 
