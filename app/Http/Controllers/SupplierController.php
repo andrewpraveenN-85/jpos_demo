@@ -62,17 +62,8 @@ class SupplierController extends Controller
 
         Supplier::create($validated);
 
-
-        return redirect()->route('suppliers.index')->banner('Supplier created successfully.');
-
-        
+        return redirect()->route('suppliers.index')->banner('Supplier created successfully.');        
     }
-
-
-
-
-
-
 
 
     public function update(Request $request, Supplier $supplier)
@@ -130,10 +121,7 @@ class SupplierController extends Controller
 
          $supplier->delete();
 
-
          return redirect()->route('suppliers.index')->banner('Supplier deleted successfully.');
-
-
      }
 
 }
