@@ -35,84 +35,82 @@
               Edit Supplier
             </DialogTitle>
 
- <form @submit.prevent="submit" enctype="multipart/form-data">
-  <!-- Modal Form -->
-  <div class="grid grid-cols-2 gap-6 mt-6 text-left">
-    <!-- Supplier Name -->
-    <div>
-      <label class="block text-sm font-medium text-gray-300">
-        Supplier Name:
-      </label>
-      <input
-        v-model="form.name"
-        type="text"
-        id="name"
-        required
-        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-      />
-      <span v-if="form.errors.name" class="mt-4 text-red-500">
-        {{ form.errors.name }}
-      </span>
-    </div>
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+              <!-- Modal Form -->
+              <div class="grid grid-cols-2 gap-6 mt-6 text-left">
+                <!-- Supplier Name -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-300">
+                    Supplier Name:
+                  </label>
+                  <input
+                    v-model="form.name"
+                    type="text"
+                    id="name"
+                    required
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <span v-if="form.errors.name" class="mt-4 text-red-500">
+                    {{ form.errors.name }}
+                  </span>
+                </div>
 
-    <!-- Contact -->
-    <div>
-      <label class="block text-sm font-medium text-gray-300">
-        Contact:
-      </label>
-      <input
-        v-model="form.contact"
-        type="text"
-        id="contact"
-        required
-        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-      />
-      <span v-if="form.errors.contact" class="mt-4 text-red-500">
-        {{ form.errors.contact }}
-      </span>
-    </div>
+                <!-- Contact -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-300">
+                    Contact:
+                  </label>
+                  <input
+                    v-model="form.contact"
+                    type="text"
+                    id="contact"
+                    required
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <span v-if="form.errors.contact" class="mt-4 text-red-500">
+                    {{ form.errors.contact }}
+                  </span>
+                </div>
 
-    <!-- Email -->
-    <div>
-      <label class="block text-sm font-medium text-gray-300">
-        Email:
-      </label>
-      <input
-        v-model="form.email"
-        type="email"
-        id="email"
-        required
-        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-      />
-      <span v-if="form.errors.email" class="mt-4 text-red-500">
-        {{ form.errors.email }}
-      </span>
-    </div>
+                <!-- Email -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-300">
+                    Email:
+                  </label>
+                  <input
+                    v-model="form.email"
+                    type="email"
+                    id="email"
+                    required
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <span v-if="form.errors.email" class="mt-4 text-red-500">
+                    {{ form.errors.email }}
+                  </span>
+                </div>
 
-    <!-- Address -->
-    <div>
-      <label class="block text-sm font-medium text-gray-300">
-        Address:
-      </label>
-      <input
+                <!-- Address -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-300">
+                    Address:
+                  </label>
+                  <input
+                    v-model="form.address"
+                    type="text"
+                    id="address"
+                    required
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <span v-if="form.errors.address" class="mt-4 text-red-500">
+                    {{ form.errors.address }}
+                  </span>
+                </div>
 
-
-         v-model="form.address"
-        type="text"
-        id="address"
-        required
-        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-      />
-      <span v-if="form.errors.address" class="mt-4 text-red-500">
-        {{ form.errors.address }}
-      </span>
-    </div>
-
-    <!-- Image -->
-    <div class="col-span-2">
-      <label class="block text-sm font-medium text-gray-300">
-        Supplier Image:
-      </label>
+                <!-- Image -->
+                <div class="col-span-2">
+                  <label class="block text-sm font-medium text-gray-300">
+                    Supplier Image:
+                  </label>
 
                   <input
                     type="file"
@@ -123,29 +121,25 @@
                   <span v-if="form.errors.image" class="mt-2 text-red-500">
                     {{ form.errors.image }}
                   </span>
-    </div>
-  </div>
+                </div>
+              </div>
 
-  <!-- Modal Buttons -->
-  <div class="mt-6 space-x-4 text-center">
-    <button
-      class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-      type="submit"
-    >
-      Save
-    </button>
-    <button
-      class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-      @click="$emit('update:open', false)"
-    >
-      Cancel
-    </button>
-  </div>
-</form>
-
-
-
-
+              <!-- Modal Buttons -->
+              <div class="mt-6 space-x-4 text-center">
+                <button
+                  class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                  type="submit"
+                >
+                  Save
+                </button>
+                <button
+                  class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
+                  @click="$emit('update:open', false)"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </DialogPanel>
         </TransitionChild>
       </div>
@@ -192,6 +186,8 @@ const form = useForm({
 const handleImageUpload = (event) => {
   form.image = event.target.files[0];
 };
+
+
 
 // Watch for changes in `selectedSupplier` and pre-fill the form
 watch(

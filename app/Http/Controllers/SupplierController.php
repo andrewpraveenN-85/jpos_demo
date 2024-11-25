@@ -16,7 +16,6 @@ class SupplierController extends Controller
     {
         $allsuppliers = Supplier::orderBy('created_at', 'desc')->get();
         return Inertia::render('Suppliers/Index', [
-
             'allsuppliers' => $allsuppliers,
             'totalSuppliers' => $allsuppliers->count()
         ]);
