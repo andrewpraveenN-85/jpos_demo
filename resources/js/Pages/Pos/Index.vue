@@ -208,10 +208,10 @@
                   <img src="/images/money-stack.png" alt="" class="w-24" />
                 </div>
                 <div
-                  @click="selectedPaymentMethod = 'credit-card'"
+                  @click="selectedPaymentMethod = 'card'"
                   :class="[
                     'cursor-pointer w-[100px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
-                    selectedPaymentMethod === 'credit-card'
+                    selectedPaymentMethod === 'card'
                       ? 'bg-yellow-500 font-bold'
                       : 'text-black',
                   ]"
