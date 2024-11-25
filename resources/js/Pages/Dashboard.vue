@@ -63,7 +63,7 @@
             <Link href="/suppliers">
 
             <div
-                class="py-8 text-center bg-[#914F1E] hover:bg-[#9b643a] transition-colors duration-500 border rounded-xl">
+                class="py-8 text-center bg-[#914F1E]  shadow-lg transform transition-transform duration-300 border rounded-xl hover:-translate-y-4">
                 <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
                     <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
                         <img src="/images/dashboard/team-building.png" class="w-48 h-48" alt="dresshub.lk" />

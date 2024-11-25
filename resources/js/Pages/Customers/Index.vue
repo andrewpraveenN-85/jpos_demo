@@ -102,7 +102,7 @@
           <th class="p-4 font-semibold tracking-wide text-left uppercase">Contact</th>
           <th class="p-4 font-semibold tracking-wide text-left uppercase">Email</th>
           <th class="p-4 font-semibold tracking-wide text-left uppercase">Address</th>
-          <th class="p-4 font-semibold tracking-wide text-center uppercase">Actions</th>
+          <!-- <th class="p-4 font-semibold tracking-wide text-center uppercase">Actions</th> -->
         </tr>
       </thead>
       <tbody class="text-[13px] font-normal">
@@ -123,14 +123,14 @@
           <td class="p-4 border-t border-gray-200">
             {{ customer.address || "N/A" }}
           </td>
-          <td class="p-4 text-center border-t border-gray-200">
+          <!-- <td class="p-4 text-center border-t border-gray-200">
             <div class="inline-flex items-center w-full space-x-3">
-              <!-- <button
+              <button
                 @click="openEditModal(customer)"
                 class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
               >
                 Edit
-              </button> -->
+              </button>
               <button
                 @click="openDeleteModal(customer)"
                 class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
@@ -138,7 +138,7 @@
                 Delete
               </button>
             </div>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
@@ -161,13 +161,20 @@
 
 
 
-
+    <!-- <CategoryEditModel
+    :customer="allcustomers"
+    :selected-customer="selectedCustomer"
+    v-model:open="isEditModalOpen"
+  />
 
 <CustomerDeleteModel
 :customer="allcustomers"
 :selected-customer="selectedCustomer"
 v-model:open="isDeleteModalOpen"
 />
+
+ -->
+
 
 </template>
 
@@ -180,7 +187,7 @@ import { Link, useForm, router } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import CustomerDeleteModel from "@/Components/custom/CustomerDeleteModel.vue";
-// import SupplierUpdateModel from "@/Components/custom/SupplierUpdateModel.vue";
+import CustomerUpdateModel from "@/Components/custom/CustomerUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
 
 defineProps({
@@ -191,22 +198,20 @@ defineProps({
 const form = useForm({});
 
 
-// const openEditModal = (supplier) => {
-//   console.log("Opening edit modal for supplier:", supplier);
-//   selectedSupplier.value = supplier;
-//   isEditModalOpen.value = true;
-// };
+const openEditModal = (customer) => {
+  console.log("Opening edit modal for customer:", customer);
+  selectedCustomer.value = customer;
+  isEditModalOpen.value = true;
+};
 
 const openDeleteModal = (customer) => {
-    console.log("Opening edit modal for customer:", customer);
+
   selectedCustomer.value = customer;
   isDeleteModalOpen.value = true;
 };
 
 
-
-// const isCreateModalOpen = ref(false);
-// const isEditModalOpen = ref(false);
+const isEditModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedCustomer = ref(null);
 
@@ -216,9 +221,9 @@ $(document).ready(function () {
     pageLength: 10,
     buttons: [],
     columnDefs: [
-      // Adjust targets if needed, e.g., skip "Actions" column
+
       {
-        targets: [4], // Adjust this based on the current column index of "Image" or other columns
+        targets: [3],
         searchable: false,
         orderable: false,
       },

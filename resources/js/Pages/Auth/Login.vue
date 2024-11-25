@@ -15,7 +15,7 @@ defineProps({
 });
 
 const form = useForm({
-  email: "",
+  identity: "",
   password: "",
   remember: false,
 });
@@ -35,16 +35,16 @@ const submit = () => {
 <template>
   <Head title="Log in" />
   <section
-    class="flex flex-col items-center justify-start w-full pt-16 space-y-12 min-h-screen"
+    class="flex flex-col items-center justify-start w-full min-h-screen pt-16 space-y-12"
   >
     <div
-      class="w-full flex flex-col justify-center items-center pt-16 space-y-12"
+      class="flex flex-col items-center justify-center w-full pt-16 space-y-12"
     >
-      <div class="w-full flex justify-center items-center">
+      <div class="flex items-center justify-center w-full">
         <!-- <img src="./assetes/images/logo.png" class="w-[180px] h-[100px]" /> -->
         <img :src="logo" alt="Logo" class="w-[180px] h-[100px]" />
       </div>
-      <div class="w-full max-w-md p-8 space-y-8 bg-black tracking-wider">
+      <div class="w-full max-w-md p-8 space-y-8 tracking-wider bg-black">
         <h2 class="text-3xl font-bold text-center text-white roboto-regular">
           TERMINAL LOGIN
         </h2>
@@ -52,12 +52,13 @@ const submit = () => {
         <form @submit.prevent="submit" class="space-y-4">
           <div>
             <TextInput
-              id="email"
-              v-model="form.email"
-              type="email"
-              class="rounded-none w-full text-2xl px-3 py-2 mt-1 border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              id="identity"
+              v-model="form.identity"
+              type="text"
+              class="w-full px-3 py-2 mt-1 text-2xl border rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
               autofocus
+              placeholder="Enter Name"
               autocomplete="username"
             />
           </div>
@@ -67,8 +68,10 @@ const submit = () => {
               id="password"
               v-model="form.password"
               type="password"
-              class="rounded-none w-full text-2xl px-3 py-2 mt-1 border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              class="w-full px-3 py-2 mt-1 text-2xl border rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
+              placeholder="Enter password"
+
               autocomplete="current-password"
             />
             <InputError class="mt-2 font-bold text-center" :message="form.errors.email" />
@@ -76,7 +79,7 @@ const submit = () => {
           <div class="w-full py-4">
             <button
               type="submit"
-              class="w-full text-2xl py-4 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 roboto-regular"
+              class="w-full py-4 text-2xl font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 roboto-regular"
             >
               Login
             </button>
@@ -85,7 +88,7 @@ const submit = () => {
       </div>
     </div>
     <div
-      class="w-full flex justify-center items-center roboto-regular space-x-4 tracking-wider"
+      class="flex items-center justify-center w-full space-x-4 tracking-wider roboto-regular"
     >
       <p class="text-2xl font-bold">
         <i class="ri-global-line"></i> dressshub.lk
@@ -96,9 +99,9 @@ const submit = () => {
       </p>
     </div>
     <div
-      class="fixed bottom-0 w-full justify-end items-center roboto-regular bg-black py-6 tracking-wider"
+      class="fixed bottom-0 items-center justify-end w-full py-6 tracking-wider bg-black roboto-regular"
     >
-      <p class="text-2xl text-white text-center">
+      <p class="text-2xl text-center text-white">
         Powered by
         <span class="font-bold text-red-500">JAAN Network (Pvt) Ltd</span> @2024
       </p>
@@ -110,7 +113,7 @@ const submit = () => {
             <AuthenticationCardLogo />
         </template>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
         </div>
 
@@ -121,7 +124,7 @@ const submit = () => {
                     id="email"
                     v-model="form.email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="block w-full mt-1"
                     required
                     autofocus
                     autocomplete="username"
@@ -135,7 +138,7 @@ const submit = () => {
                     id="password"
                     v-model="form.password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="block w-full mt-1"
                     required
                     autocomplete="current-password"
                 />
@@ -145,12 +148,12 @@ const submit = () => {
             <div class="block mt-4">
                 <label class="flex items-center">
                     <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
+                    <span class="text-sm text-gray-600 ms-2">Remember me</span>
                 </label>
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Forgot your password?
                 </Link>
 
