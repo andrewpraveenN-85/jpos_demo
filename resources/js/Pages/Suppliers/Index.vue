@@ -70,7 +70,7 @@
          <div class="flex w-full">
             <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
 
-                <Link href="/dashboard">
+                <Link href="/">
                   <img src="/images/back-arrow.png" class="w-14 h-14" />
                 </Link>
                <p class="text-4xl font-bold tracking-wide text-black uppercase">

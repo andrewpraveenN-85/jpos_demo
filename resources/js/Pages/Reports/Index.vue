@@ -8,7 +8,7 @@
       <div class="w-5/6 py-12 space-y-16">
         <div class="flex items-center justify-between">
           <div class="flex items-center justify-center space-x-4">
-            <Link href="/dashboard">
+            <Link href="/">
               <img src="/images/back-arrow.png" class="w-14 h-14" />
             </Link>
 

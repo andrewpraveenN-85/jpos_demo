@@ -37,7 +37,7 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4">
 
-            <Link href="/dashboard">
+            <Link href="/">
                   <img src="/images/back-arrow.png" class="w-14 h-14" />
                 </Link>
                <p class="text-4xl font-bold tracking-wide text-black uppercase">

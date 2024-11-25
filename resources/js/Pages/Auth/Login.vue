@@ -74,8 +74,10 @@ const submit = () => {
 
               autocomplete="current-password"
             />
-            <InputError class="mt-2 font-bold text-center" :message="form.errors.email" />
+            <!-- <InputError class="mt-2 font-bold text-center" :message="form.errors.email" /> -->
+            <InputError class="mt-2 font-bold text-center" :message="form.errors.identity" />
           </div>
+          
           <div class="w-full py-4">
             <button
               type="submit"

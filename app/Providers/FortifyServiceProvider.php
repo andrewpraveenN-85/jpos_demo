@@ -15,6 +15,7 @@ use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -46,24 +47,25 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
+
+
         Fortify::authenticateUsing(function (LoginRequest $request) {
-
+            $request->validate([
+                'identity' => 'required|string', // Can be email or name
+                'password' => 'required|string',
+            ]);
             $user = User::where('email', $request->identity)
-
                 ->orWhere('name', $request->identity)->first();
-
             if (
-
                 $user &&
-
                 Hash::check($request->password, $user->password)
-
             ) {
-
                 return $user;
-
             }
 
+            throw ValidationException::withMessages([
+                'identity' => [__('The provided credentials are incorrect.')],
+            ]);
         });
     }
 }
