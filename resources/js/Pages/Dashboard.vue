@@ -1,173 +1,148 @@
-
 <template>
-  <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
-  >
-    <!-- Include the Header -->
-    <Header />
+    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36">
+        <!-- Include the Header -->
+        <Header />
 
-    <div class="grid w-full h-full grid-cols-4 gap-8">
+        <div class="grid w-full h-full grid-cols-4 gap-8">
+            <Link href="/pos">
 
-   <a href="/pos">
-      <div class="py-8 text-center bg-[#4d7c0f]  hover:bg-[#5a861f] transition-colors duration-500 border rounded-xl">
-        <div
-          class="flex flex-col items-center justify-center w-full h-full space-y-8"
-        >
-          <div
-            class="flex flex-col items-center justify-center p-8 bg-white rounded-full"
-          >
-            <img
-              src="/images/dashboard/checkout.png"
-              class="w-48 h-48"
-              alt="dresshub.lk"
-            />
-          </div>
-          <div
-            class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3"
-          >
-            <p class="text-3xl font-bold text-white uppercase">Pos</p>
-            <p class="text-xl text-white">
-              Lorem ipsum is a dummy or placeholder text commonly used in
-              graphic design
-            </p>
-          </div>
+            <div
+                class="py-8 text-center bg-[#4d7c0f] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+                    <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+                        <img src="/images/dashboard/checkout.png" class="w-48 h-48" alt="dresshub.lk" />
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+                        <p class="text-3xl font-bold text-white uppercase">Pos</p>
+                        <p class="text-xl text-white">
+                            Simplify sales with an intuitive interface for quick billing and payment processing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </Link>
+
+            <Link href="/categories">
+
+            <div
+                class="py-8 text-center bg-[#003161] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+                    <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+                        <img src="/images/dashboard/app.png" class="w-48 h-48" alt="dresshub.lk" />
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+                        <p class="text-3xl font-bold text-white uppercase">Categories</p>
+                        <p class="text-xl text-white">
+                            Group products into categories for better organization and easy navigation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </Link>
+            <Link href="/products">
+
+            <div
+                class="py-8 text-center bg-[#C62E2E] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+                    <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+                        <img src="/images/dashboard/products.png" class="w-48 h-48" alt="dresshub.lk" />
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+                        <p class="text-3xl font-bold text-white uppercase">Products</p>
+                        <p class="text-xl text-white">
+                            Add, update, and manage product details, including pricing and stock levels.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </Link>
+
+
+
+
+            <Link href="/suppliers">
+
+            <div
+                class="py-8 text-center bg-[#914F1E] hover:bg-[#9b643a] transition-colors duration-500 border rounded-xl">
+                <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+                    <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+                        <img src="/images/dashboard/team-building.png" class="w-48 h-48" alt="dresshub.lk" />
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+                        <p class="text-3xl font-bold text-white uppercase">Suppliers</p>
+                        <p class="text-xl text-white">
+                            Lorem ipsum is a dummy or placeholder text commonly used in
+                            graphic design
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            </Link>
+
+
+
+
+
+
+
+
+            <Link href="/customers">
+
+            <div
+                class="py-8 text-center  bg-[#CB9DF0] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+                    <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+                        <img src="/images/dashboard/customers.png" class="w-48 h-48" alt="dresshub.lk" />
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+                        <p class="text-3xl font-bold text-white uppercase">Customers</p>
+                        <p class="text-xl text-white">
+                            Lorem ipsum is a dummy or placeholder text commonly used in
+                            graphic design
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            </Link>
+
+
+
+
+
+
+            <Link href="/reports">
+
+            <div
+                class="py-8 text-center bg-[#FF8000] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+                    <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+                        <img src="/images/dashboard/report.png" class="w-48 h-48" alt="dresshub.lk" />
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+                        <p class="text-3xl font-bold text-white uppercase">Report</p>
+                        <p class="text-xl text-white">
+                            Generate insights on sales, inventory, and performance to aid decision-making.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            </Link>
+
+
+
+
         </div>
-        </div>
-</a>
-
-
-
-
-   <a href="/categories">
-      <div class="py-8 text-center bg-[#003161] hover:bg-[#004080] transition-colors duration-500 border rounded-xl">
-        <div
-          class="flex flex-col items-center justify-center w-full h-full space-y-8"
-        >
-          <div
-            class="flex flex-col items-center justify-center p-8 bg-white rounded-full"
-          >
-            <img
-              src="/images/dashboard/app.png"
-              class="w-48 h-48"
-              alt="dresshub.lk"
-            />
-          </div>
-          <div
-            class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3"
-          >
-            <p class="text-3xl font-bold text-white uppercase">Categories</p>
-            <p class="text-xl text-white">
-              Lorem ipsum is a dummy or placeholder text commonly used in
-              graphic design
-            </p>
-          </div>
-        </div>
-      </div>
-
-
-
-</a>
-
-   <a href="/products">
-      <div class="py-8 text-center bg-[#C62E2E] hover:bg-[#c25454] transition-colors duration-500 border rounded-xl">
-        <div
-          class="flex flex-col items-center justify-center w-full h-full space-y-8"
-        >
-          <div
-            class="flex flex-col items-center justify-center p-8 bg-white rounded-full"
-          >
-            <img
-              src="/images/dashboard/products.png"
-              class="w-48 h-48"
-              alt="dresshub.lk"
-            />
-          </div>
-          <div
-            class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3"
-          >
-            <p class="text-3xl font-bold text-white uppercase">Products</p>
-            <p class="text-xl text-white">
-              Lorem ipsum is a dummy or placeholder text commonly used in
-              graphic design
-            </p>
-          </div>
-        </div>
-      </div>
-</a>
-
-
-
-
-
-<a href="/suppliers">
-<div class="py-8 text-center bg-[#914F1E] hover:bg-[#9b643a] transition-colors duration-500 border rounded-xl">
-        <div
-          class="flex flex-col items-center justify-center w-full h-full space-y-8"
-        >
-          <div
-            class="flex flex-col items-center justify-center p-8 bg-white rounded-full"
-          >
-            <img
-              src="/images/dashboard/team-building.png"
-              class="w-48 h-48"
-              alt="dresshub.lk"
-            />
-          </div>
-          <div
-            class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3"
-          >
-            <p class="text-3xl font-bold text-white uppercase">Suppliers</p>
-            <p class="text-xl text-white">
-              Lorem ipsum is a dummy or placeholder text commonly used in
-              graphic design
-            </p>
-          </div>
-        </div>
-      </div>
-
-
-    </a>
-
-
-
-   <a href="/reports">
-      <div class="py-8 text-center bg-[#FF8000] hover:bg-[#b37d48] transition-colors duration-500 border rounded-xl">
-        <div
-          class="flex flex-col items-center justify-center w-full h-full space-y-8"
-        >
-          <div
-            class="flex flex-col items-center justify-center p-8 bg-white rounded-full"
-          >
-            <img
-              src="/images/dashboard/report.png"
-              class="w-48 h-48"
-              alt="dresshub.lk"
-            />
-          </div>
-          <div
-            class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3"
-          >
-            <p class="text-3xl font-bold text-white uppercase">Report</p>
-            <p class="text-xl text-white">
-              Lorem ipsum is a dummy or placeholder text commonly used in
-              graphic design
-            </p>
-          </div>
-        </div>
-      </div>
-
-      </a>
-
-
     </div>
-  </div>
 
-  <!-- Include the Footer -->
-  <Footer />
+    <!-- Include the Footer -->
+    <Footer />
 </template>
 <script setup>
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
+import { Link } from "@inertiajs/vue3";
 </script>
-
-

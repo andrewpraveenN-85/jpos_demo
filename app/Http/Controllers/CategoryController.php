@@ -20,19 +20,21 @@ class CategoryController extends Controller
         // $paginatedcategories = Category::with('parent')->latest()->paginate(10);
         // $allcategories = Category::with('parent')->latest()->get();
         // $allcategories = Category::with('parent')->latest()->get()
-        $allcategories = Category::with('parent')->orderBy('id', 'desc')  
-        ->paginate(10)
-            ->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                    'parent' => $category->parent ? [
-                        'id' => $category->parent->id,
-                        'name' => $category->parent->name,
-                    ] : null,
-                    'hierarchy_string' => $category->hierarchy_string, // Add this
-                ];
-            });
+        $allcategories = Category::with('parent')
+        ->orderBy('created_at', 'desc')
+        ->get() // Get the collection
+        ->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'name' => $category->name,
+                'parent' => $category->parent ? [
+                    'id' => $category->parent->id,
+                    'name' => $category->parent->name,
+                ] : null,
+                'hierarchy_string' => $category->hierarchy_string, // Add this
+            ];
+        });
+
 
         return Inertia::render('Categories/Index', [
             // 'paginatedcategories' => $paginatedcategories,

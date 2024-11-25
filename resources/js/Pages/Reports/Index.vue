@@ -8,16 +8,40 @@
       <div class="w-5/6 py-12 space-y-16">
         <div class="flex items-center justify-between">
           <div class="flex items-center justify-center space-x-4">
-            <a href="/dashboard">
+            <Link href="/dashboard">
               <img src="/images/back-arrow.png" class="w-14 h-14" />
-            </a>
+            </Link>
+
+
             <p class="text-4xl font-bold tracking-wide text-black uppercase">
               Reports
             </p>
           </div>
-          <button class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl">
+          <!-- <button class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl">
             <i class="pr-4 ri-add-circle-fill"></i> Date
-          </button>
+          </button> -->
+          <div class="relative max-w-sm">
+    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+      <svg
+        class="w-4 h-4 text-gray-500 dark:text-gray-400"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+        />
+      </svg>
+    </div>
+    <input
+      id="default-datepicker"
+      type="date"
+      v-model="selectedDate"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      placeholder="Select date"
+    />
+  </div>33
         </div>
       </div>
 
@@ -149,6 +173,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { Doughnut } from "vue-chartjs";
+import { Link } from "@inertiajs/vue3";
 
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";

@@ -6,6 +6,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -51,6 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/pos/submit', [PosController::class, 'submit'])->name('pos.checkout');
     Route::resource('payment', PaymentController::class);
     Route::resource('reports', ReportController::class);
+    Route::resource('customers', CustomerController::class);
 
 });
 

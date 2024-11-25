@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
@@ -12,7 +13,14 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $allcustomers = Customer::orderBy('created_at', 'desc')
+        ->get();
+        $totalCustomers = $allcustomers->count();
+
+        return Inertia::render('Customers/Index', [
+            'allcustomers' => $allcustomers,
+            'totalCustomers' => $allcustomers,
+        ]);
     }
 
     /**
@@ -60,6 +68,9 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+
+        $customer->delete();
+        return redirect()->route('customers.index')->banner('Customer Deleted successfully.');
+
     }
 }

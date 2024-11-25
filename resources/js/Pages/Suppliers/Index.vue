@@ -51,140 +51,128 @@
 </style>
 
 <template>
-  <Banner />
-  <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
-  >
-    <!-- Include the Header -->
-    <Header />
-    <div class="w-5/6 py-12 space-y-24">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center justify-center space-x-4"></div>
-        <p class="text-3xl italic font-bold text-black">
-          <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">
-            {{ allsuppliers.length }}
-          </span>
-          <span class="text-xl">/ Total Suppliers</span>
-        </p>
-      </div>
-      <div class="flex w-full">
-        <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
-          <a href="/dashboard">
-            <img src="/images/back-arrow.png" class="w-14 h-14" />
-          </a>
-          <p class="text-4xl font-bold tracking-wide text-black uppercase">
-            Suppliers
-          </p>
-        </div>
-        <div class="flex justify-end w-full">
-          <p
-            @click="isCreateModalOpen = true"
-            class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
-          >
-            <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
-          </p>
-        </div>
-      </div>
-      <template v-if="allsuppliers && allsuppliers.length > 0">
-        <div class="overflow-x-auto">
-          <table
-            id="SupplierTable"
-            class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
-          >
-            <thead>
-              <tr
-                class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
-              >
-                <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Name
-                </th>
-                <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Contact
-                </th>
-                <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Image
-                </th>
-                <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Email
-                </th>
+   <Banner />
+   <div
+      class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+   >
+      <!-- Include the Header -->
+      <Header />
+      <div class="w-5/6 py-12 space-y-24">
+         <div class="flex items-center justify-between">
+            <div class="flex items-center justify-center space-x-4"></div>
+            <p class="text-3xl italic font-bold text-black">
+               <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">
+                  {{ allsuppliers.length }}
+               </span>
+               <span class="text-xl">/ Total Suppliers</span>
+            </p>
+         </div>
+         <div class="flex w-full">
+            <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
 
-                <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Address
-                </th>
-                <th
-                  class="p-4 font-semibold tracking-wide text-center uppercase"
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody class="text-[13px] font-normal">
-              <tr
-                v-for="supplier in allsuppliers"
-                :key="supplier.id"
-                class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
-              >
-                <td class="p-4 font-bold border-t border-gray-200">
-                  {{ supplier.name || "N/A" }}
-                </td>
-                <td class="p-4 border-t border-gray-200">
-                  {{ supplier.contact || "N/A" }}
-                </td>
-                <td class="p-4 border-t border-gray-200">
-                  <img
-                    v-if="supplier.image"
-                    :src="supplier.image"
-                    alt="Supplier Image"
-                    class="object-cover rounded-md shadow h-15 w-15"
-                  />
-                  <span v-else class="text-gray-500">N/A</span>
-                </td>
-                <td class="p-4 border-t border-gray-200">
-                  {{ supplier.email || "N/A" }}
-                </td>
-                <td class="p-4 border-t border-gray-200">
-                  {{ supplier.address || "N/A" }}
-                </td>
-                <td class="p-4 text-center border-t border-gray-200">
-                  <div class="inline-flex items-center w-full space-x-3">
-                    <button
-                      @click="openEditModal(supplier)"
-                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      @click="openDeleteModal(supplier)"
-                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </template>
-      <template v-else>
-        <div class="col-span-4 text-center text-blue-500">
-          <p class="text-center text-red-500 text-[17px]">
-            No suppliers available
-          </p>
-        </div>
-      </template>
-    </div>
-  </div>
-  <!-- Modal Components -->
-  <SupplierCreateModel
-    :suppliers="allsuppliers"
-    v-model:open="isCreateModalOpen"
-  />
-  <SupplierDeleteModel
-    :suppliers="allsuppliers"
-    :selected-supplier="selectedSupplier"
-    v-model:open="isDeleteModalOpen"
-  />
+                <Link href="/dashboard">
+                  <img src="/images/back-arrow.png" class="w-14 h-14" />
+                </Link>
+               <p class="text-4xl font-bold tracking-wide text-black uppercase">
+                  Suppliers
+               </p>
+            </div>
+            <div class="flex justify-end w-full">
+               <p
+                  @click="isCreateModalOpen = true"
+                  class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
+               >
+                  <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
+               </p>
+            </div>
+         </div>
+         <template v-if="allsuppliers && allsuppliers.length > 0">
+            <div class="overflow-x-auto">
+               <table
+                  id="SupplierTable"
+                  class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
+               >
+                  <thead>
+                     <tr
+                        class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
+                     >
+                        <th class="p-4 font-semibold tracking-wide text-left uppercase">Name</th>
+                        <th class="p-4 font-semibold tracking-wide text-left uppercase">Contact</th>
+                        <th class="p-4 font-semibold tracking-wide text-left uppercase">Image</th>
+                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Email</th>
+
+                        <th class="p-4 font-semibold tracking-wide text-left uppercase">Address</th>
+                        <th class="p-4 font-semibold tracking-wide text-center uppercase">Actions</th>
+                     </tr>
+                  </thead>
+                  <tbody class="text-[13px] font-normal">
+                     <tr
+                        v-for="supplier in allsuppliers"
+                        :key="supplier.id"
+                        class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
+                     >
+                        <td class="p-4 font-bold border-t border-gray-200">
+                           {{ supplier.name || "N/A" }}
+                        </td>
+                        <td class="p-4 border-t border-gray-200">
+                           {{ supplier.contact || "N/A" }}
+                        </td>
+                           <td class="p-4 border-t border-gray-200">
+                            <img
+      v-if="supplier.image"
+      :src="supplier.image"
+      alt="Supplier Image"
+      class="object-cover rounded-md shadow h-15 w-15"
+    />
+    <span v-else class="text-gray-500">N/A</span>
+                        </td>
+                        <td class="p-4 border-t border-gray-200">
+                           {{ supplier.email || "N/A" }}
+                        </td>
+                        <td class="p-4 border-t border-gray-200">
+                           {{ supplier.address || "N/A" }}
+                        </td>
+                        <td class="p-4 text-center border-t border-gray-200">
+                           <div class="inline-flex items-center w-full space-x-3">
+                              <button
+                                 @click="openEditModal(supplier)"
+                                 class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
+                              >
+                                 Edit
+                              </button>
+                              <button
+                                 @click="openDeleteModal(supplier)"
+                                 class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
+                              >
+                                 Delete
+                              </button>
+
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </template>
+         <template v-else>
+            <div class="col-span-4 text-center text-blue-500">
+               <p class="text-center text-red-500 text-[17px]">
+                  No suppliers available
+               </p>
+            </div>
+         </template>
+      </div>
+   </div>
+   <!-- Modal Components -->
+   <SupplierCreateModel
+      :suppliers="allsuppliers"
+      v-model:open="isCreateModalOpen"
+   />
+   <SupplierDeleteModel
+      :suppliers="allsuppliers"
+      :selected-supplier="selectedSupplier"
+      v-model:open="isDeleteModalOpen"
+   />
 
   <SupplierUpdateModel
     :suppliers="allsuppliers"
@@ -198,6 +186,7 @@
 <script setup>
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import SupplierCreateModel from "@/Components/custom/SupplierCreateModel.vue";
@@ -234,8 +223,9 @@ $(document).ready(function () {
     pageLength: 10,
     buttons: [],
     columnDefs: [
+      // Adjust targets if needed, e.g., skip "Actions" column
       {
-        targets: 4,
+        targets: [1,2,3,5], // Adjust this based on the current column index of "Image" or other columns
         searchable: false,
         orderable: false,
       },
@@ -245,9 +235,7 @@ $(document).ready(function () {
       searchInput.attr("placeholder", "Search ...");
       searchInput.off("keyup");
       searchInput.on("keypress", function (e) {
-        if (e.which == 13) {
-          table.search(this.value).draw();
-        }
+
       });
     },
     language: {
@@ -255,5 +243,6 @@ $(document).ready(function () {
     },
   });
 });
+
 </script>
 

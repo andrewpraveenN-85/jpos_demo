@@ -106,8 +106,51 @@
                   </span>
                 </div>
 
+
+
+                <div class="w-full">
+                   <label
+                    for="image"
+                    class="block text-sm font-medium text-gray-300"
+                    >Image:</label
+                  >
+                  <div class="w-full md:w-6/12">
+                    <label class="block text-sm font-medium text-white"
+                      >          Supplier Image:</label
+                    >
+                    <div class="mt-2">
+                      <img
+                        v-if="selectedSupplier.image"
+                        :src="`/${selectedSupplier.image}`"
+                        alt="Product Image"
+                        class="rounded-lg "
+                      />
+
+                      <p v-else class="text-sm text-gray-500">
+                        No image available
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    type="file"
+                    id="image"
+                    @change="handleImageUpload"
+                    class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <span v-if="form.errors.image" class="mt-2 text-red-500">
+                    {{ form.errors.image }}
+                  </span>
+                  </div>
+
+
+
+
+
+
+
+
                 <!-- Image -->
-                <div class="col-span-2">
+                <!-- <div class="col-span-2">
                   <label class="block text-sm font-medium text-gray-300">
                     Supplier Image:
                   </label>
@@ -121,7 +164,7 @@
                   <span v-if="form.errors.image" class="mt-2 text-red-500">
                     {{ form.errors.image }}
                   </span>
-                </div>
+                </div> -->
               </div>
 
               <!-- Modal Buttons -->
@@ -197,8 +240,8 @@ watch(
       form.name = newValue.name || "";
       form.contact = newValue.contact || "";
       form.email = newValue.email || "";
-      form.address = newValue.address || ""; // Pre-fill address
-      form.image = null; // Reset image for new uploads
+      form.address = newValue.address || "";
+      form.image = null;
     } else {
       form.reset(); // Reset form if no supplier selected
     }
@@ -210,7 +253,7 @@ watch(
 const submit = () => {
   if (selectedSupplier && selectedSupplier.id) {
     // Update existing supplier
-    form.put(`/suppliers/${selectedSupplier.id}`, {
+    form.post(`/suppliers/${selectedSupplier.id}`, {
       onSuccess: () => {
         form.reset();
         emit("update:open", false); // Close modal on success

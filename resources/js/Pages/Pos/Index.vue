@@ -9,22 +9,9 @@
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
-          <!-- <a
-           href="/dashboard"
-            class="p-1 text-3xl text-black border-2 border-black rounded-full"
-          >
-            <p><i class="ri-arrow-left-line"></i></p>
-
-
-          </a>
-          <p class="text-4xl font-bold tracking-wide text-black uppercase">
-
-          </p> -->
-
-
-   <a href="/dashboard">
+            <Link href="/dashboard">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
-          </a>
+          </Link>
           <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">PoS</p>
 
         </div>
@@ -261,6 +248,7 @@ import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import { useForm } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
+import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 
 const product = ref(null);

@@ -32,6 +32,8 @@ class SupplierController extends Controller
 
     public function store(Request $request)
     {
+
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'contact' => 'required|string|max:20',
@@ -54,14 +56,11 @@ class SupplierController extends Controller
 
 
         return redirect()->route('suppliers.index')->banner('Supplier created successfully.');
+
+        
     }
 
-    // public function edit(Category $category)
-    // {
-    //     return Inertia::render('Categories/Edit', [
-    //         'category' => $category,
-    //     ]);
-    // }
+
 
 
 
@@ -71,16 +70,16 @@ class SupplierController extends Controller
     public function update(Request $request, Supplier $supplier)
     {
 
-     
 
+        // Validate incoming data
         $validated = $request->validate([
-
-            'name' => 'required|string|max:255',
-            'contact' => 'required|string|max:20',
-            'email' => 'required|email|max:255|unique:supplier,email',
-            'address' => 'required|string|max:500',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048'
+            'name' => 'nullable|string|max:255',
+            'contact' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255|unique:suppliers,email,' . $supplier->id,
+            'address' => 'nullable|string|max:500',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
 
 
         if ($request->hasFile('image')) {
@@ -89,14 +88,14 @@ class SupplierController extends Controller
                 unlink(public_path($supplier->image));
             }
 
+            // Save the new image
             $fileExtension = $request->file('image')->getClientOriginalExtension();
-            $fileName = 'supplier' . date("YmdHis") . '.' . $fileExtension;
+            $fileName = 'supplier_' . date("YmdHis") . '.' . $fileExtension;
             $destinationPath = "images/uploads/supplier/";
             $request->file('image')->move(public_path($destinationPath), $fileName);
             $validated['image'] = $destinationPath . $fileName;
-
         } else {
-
+            // Retain the old image if no new image is uploaded
             $validated['image'] = $supplier->image;
         }
 
@@ -104,9 +103,13 @@ class SupplierController extends Controller
 
         $supplier->update($validated);
 
-        return redirect()->route('suppliers.index')->banner('Supplier updated successfully');
-    }
 
+        // Redirect back with success message
+        return redirect()->route('suppliers.index')->banner('Supplier updated successfully.');
+
+
+
+    }
 
 
 
@@ -123,7 +126,9 @@ class SupplierController extends Controller
          $supplier->delete();
 
 
-         return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully.');
+         return redirect()->route('suppliers.index')->banner('Supplier deleted successfully.');
+
+
      }
 
 }
