@@ -33,104 +33,105 @@
             <div
               class="flex flex-col items-start justify-start w-full h-full px-2 pt-4"
             >
-       <div class="flex justify-center w-full h-full p-4 space-x-8 items-start-center">
-  <!-- Left Side: Image -->
-  <div class="w-1/2">
-    <img
-      :src="`/${selectedProduct.image}`"
-      alt="Product Image"
-      class="object-cover h-full rounded-2xl"
-    />
-  </div>
+              <div
+                class="flex justify-center w-full h-full p-4 space-x-8 items-start-center"
+              >
+                <!-- Left Side: Image -->
+                <div class="w-1/2">
+                  <img
+                    :src="`/${selectedProduct.image}`"
+                    alt="Product Image"
+                    class="object-cover h-full rounded-2xl"
+                  />
+                </div>
 
-  <!-- Right Side: Text Content -->
-  <div class="flex flex-col justify-between w-1/2 h-full">
-    <div class="ps-6">
-      <p class="text-4xl font-bold text-black">
-        {{ selectedProduct.name }}
-      </p>
-      <p
-        class="pb-6 mt-2 text-[#00000099]   text-xl font-normal"
-      >
-        {{ selectedProduct.category.name }}
-      </p>
+                <!-- Right Side: Text Content -->
+                <div class="flex flex-col justify-between w-1/2 h-full">
+                  <div class="ps-6">
+                    <p class="text-4xl font-bold text-black">
+                      {{ selectedProduct.name }}
+                    </p>
+                    <p class="pb-6 mt-2 text-[#00000099] text-xl font-normal">
+                      {{ selectedProduct.category.name }}
+                    </p>
 
-       <p class="pb-6 text-2xl font-bold text-black">
-        <span class="text-[#00000099] font-normal">Supplier : </span
-        >{{ selectedProduct.supplier?.name || "N/A" }}
+                    <p class="pb-6 text-2xl font-bold text-black">
+                      <span class="text-[#00000099] font-normal"
+                        >Supplier : </span
+                      >{{ selectedProduct.supplier?.name || "N/A" }}
+                    </p>
 
+                    <p class="pb-6 text-2xl font-bold text-black">
+                      <span class="text-[#00000099] font-normal"
+                        >Bar Code: </span
+                      >{{ selectedProduct.barcode }}
+                    </p>
+                    <p
+                      class="text-justify text-[#00000099] text-2xl flex items-center pb-6"
+                    >
+                      <span>Color:</span>
+                      <span
+                        class="inline-block w-6 h-6 border border-black rounded-full ms-4"
+                        :style="{
+                          backgroundColor: selectedProduct.color?.hex_code,
+                        }"
+                      ></span>
+                    </p>
+                    <p class="text-[#00000099] text-2xl pb-6">
+                      Size:
+                      <span
+                        class="px-2 py-2 font-bold text-black border-2 border-black rounded-xl"
+                      >
+                        {{ selectedProduct.size.name }}
+                      </span>
+                    </p>
+                    <div
+                      class="flex items-center justify-between w-full pb-6 text-2xl"
+                    >
+                      <div class="flex flex-col w-full">
+                        <p class="text-[#00000099]">Selling Price:</p>
+                        <p class="font-bold text-black">
+                          {{ selectedProduct.selling_price }} LKR
+                        </p>
+                      </div>
+                      <div class="flex flex-col w-full">
+                        <p class="text-[#00000099]">Cost Price:</p>
+                        <p class="font-bold text-black">
+                          {{ selectedProduct.cost_price }} LKR
+                        </p>
+                      </div>
+                    </div>
+                    <p class="pb-6 text-2xl font-bold text-black">
+                      <span class="text-[#00000099] font-normal"
+                        >Stock Quantity:</span
+                      >
+                      {{ selectedProduct.stock_quantity }}
+                    </p>
+                    <p class="pb-8 text-2xl font-bold text-black">
+                      <span class="text-[#00000099] font-normal"
+                        >Created On:</span
+                      >
+                      {{ formattedDate }}
+                    </p>
 
-      </p>
-
-      <p class="pb-6 text-2xl font-bold text-black">
-        <span class="text-[#00000099] font-normal">Bar Code: </span
-        >{{ selectedProduct.barcode }}
-      </p>
-      <p
-        class="text-justify text-[#00000099] text-2xl flex items-center pb-6"
-      >
-        <span>Color:</span>
-        <span
-          class="inline-block w-6 h-6 border border-black rounded-full ms-4"
-          :style="{
-            backgroundColor: selectedProduct.color?.hex_code,
-          }"
-        ></span>
-      </p>
-      <p class="text-[#00000099] text-2xl pb-6">
-        Size:
-        <span
-          class="px-2 py-2 font-bold text-black border-2 border-black rounded-xl"
-        >
-          {{ selectedProduct.size.name }}
-        </span>
-      </p>
-      <div
-        class="flex items-center justify-between w-full pb-6 text-2xl"
-      >
-        <div class="flex flex-col w-full">
-          <p class="text-[#00000099]">Selling Price:</p>
-          <p class="font-bold text-black">
-            {{ selectedProduct.selling_price }} LKR
-          </p>
-        </div>
-        <div class="flex flex-col w-full">
-          <p class="text-[#00000099]">Cost Price:</p>
-          <p class="font-bold text-black">
-            {{ selectedProduct.cost_price }} LKR
-          </p>
-        </div>
-      </div>
-      <p class="pb-6 text-2xl font-bold text-black">
-        <span class="text-[#00000099] font-normal">Stock Quantity:</span>
-        {{ selectedProduct.stock_quantity }}
-      </p>
-      <p class="pb-8 text-2xl font-bold text-black">
-        <span class="text-[#00000099] font-normal">Created On:</span>
-        {{ formattedDate }}
-      </p>
-
-
-    <div class="mt-2">
-      <input
-        hidden
-        type="text"
-        id="barcodeInput"
-        v-model="selectedProduct.barcode"
-        class="w-full px-4 py-2 placeholder-gray-400 border-gray-300 rounded order f focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-      />
-     <button
-  class="w-full px-4 py-3 text-2xl font-semibold tracking-widest text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-  @click="generateAndPrintBarcode"
->
-  Print Bar Code
-</button>
-    </div>
-
-    </div>
-  </div>
-</div>
-
+                    <div class="mt-2">
+                      <input
+                        hidden
+                        type="text"
+                        id="barcodeInput"
+                        v-model="selectedProduct.barcode"
+                        class="w-full px-4 py-2 placeholder-gray-400 border-gray-300 rounded order f focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+                      />
+                      <button
+                        class="w-full px-4 py-3 text-2xl font-semibold tracking-widest text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                        @click="generateAndPrintBarcode"
+                      >
+                        Print Bar Code
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div class="w-full">
                 <!-- Hidden container for printing -->
@@ -212,7 +213,8 @@ function generateAndPrintBarcode() {
   }
 
   JsBarcode(barcodePrintElement, input, {
-    format: "CODE128",
+    // format: "CODE128",
+    format: "EAN13",
     lineColor: "#000",
     width: 2,
     height: 100,

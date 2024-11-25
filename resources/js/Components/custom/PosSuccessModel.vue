@@ -102,7 +102,7 @@ const handlePrintReceipt = () => {
       sum + parseFloat(product.selling_price) * product.quantity,
     0
   );
-  const discount = 1500; // Example discount (can be dynamic)
+  const discount = 0; // Example discount (can be dynamic)
   const total = subTotal - discount;
 
   // Generate table rows dynamically using props.products
@@ -139,27 +139,19 @@ const handlePrintReceipt = () => {
             body {
                 background-color: white;
                 color: black;
-                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-family: sans-serif;
                 margin: 0;
                 padding: 0;
-                font-size: 14px;
             }
             .container {
-                max-width: 420px;
+                max-width: 400px;
                 margin: 20px auto;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 20px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border: 1px solid #d1d5db;
+                padding: 16px;
             }
             .text-center {
                 text-align: center;
-            }
-            .text-right {
-                text-align: right;
-            }
-            .text-left {
-                text-align: left;
             }
             .font-bold {
                 font-weight: bold;
@@ -170,81 +162,53 @@ const handlePrintReceipt = () => {
             .text-xs {
                 font-size: 12px;
             }
-            .text-sm {
-                font-size: 14px;
-            }
-            .text-lg {
-                font-size: 16px;
-            }
-            .mt-1 {
-                margin-top: 4px;
-            }
             .mt-2 {
                 margin-top: 8px;
             }
-            .mt-4 {
-                margin-top: 16px;
-            }
             .border-top {
-                border-top: 1px solid #ddd;
-                padding-top: 8px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 8px;
-            }
-            table th, table td {
-                padding: 8px;
-                font-size: 12px;
-                border-bottom: 1px solid #ddd;
-            }
-            table th {
-                background-color: #f9f9f9;
-                text-align: left;
-            }
-            .total-row {
-                font-size: 14px;
-                font-weight: bold;
+                border-top: 1px solid #d1d5db;
             }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="text-center mb-4">
-                <h1 style="font-size: 20px; font-weight: bold;">DRESS HUB</h1>
-                <p class="text-xs">123, Fashion Avenue, Colombo, Sri Lanka</p>
-                <p class="text-xs">Contact: 077-3446-2436 | info@dresshub.lk</p>
+                <h1 style="font-size: 20px; font-weight: bold; letter-spacing: 1px;">DRESS HUB</h1>
             </div>
             <div class="mb-4 border-top">
-                <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                    <span>Date: <span class="font-bold">${new Date().toLocaleDateString()}</span></span>
-                    <span>Order No: <span class="font-bold">234454559</span></span>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px;">
+                    <span>Date: <span style="font-weight: 500;">${new Date().toLocaleDateString()}</span></span>
+                    <span>Order No: <span style="font-weight: 500;">234454559</span></span>
+                </div>
+                <br/>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px;">
+                    <span>Customer: <span style="font-weight: 500;">${props.customer.name}</span></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px;">
-                    <span>Customer: <span class="font-bold">${props.customer.name}</span></span>
-                    <span>Cashier: <span class="font-bold">${props.cashier.name}</span></span>
+                    <span>Cashier: <span style="font-weight: 500;">${props.cashier.name}</span></span>
                 </div>
+                <br/>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${productRows}
-                </tbody>
-            </table>
-            <div class="border-top">
-                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+            <div class="mb-4">
+                <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #d1d5db;">
+                            <th style="text-align: left; padding: 4px;">Description</th>
+                            <th style="text-align: center; padding: 4px;">Qty</th>
+                            <th style="text-align: right; padding: 4px;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${productRows}
+                    </tbody>
+                </table>
+            </div>
+            <div class="border-top" style="padding-top: 16px; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between;">
                     <span>Sub Total</span>
                     <span>${subTotal.toFixed(2)} LKR</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between;">
                     <span>Discount</span>
                     <span>${discount.toFixed(2)} LKR</span>
                 </div>
@@ -254,15 +218,20 @@ const handlePrintReceipt = () => {
                 </div>
             </div>
             <div class="text-center text-xs mt-4">
-                <p>THANK YOU FOR SHOPPING WITH US!</p>
-                <p class="italic">You're not just buying clothes; you're adding charm to your wardrobe. See you next time!</p>
-                <p class="mt-2">Powered by JAAN Network (Pvt) Ltd.</p>
-                <p>077 - 3446-2436</p>
+                <p>THANK YOU FOR SHOPPING WITH US</p>
+                <p class="mt-2 italic">You're not just buying clothes; you're adding charm to your wardrobe. See you next time!</p>
+                <div style="display: flex; justify-content: center; align-items: center; margin-top: 16px;">
+                    <div style="border-top: 1px solid #d1d5db; width: 80px; margin-right: 8px;"></div>
+                    <div style="border-top: 1px solid #d1d5db; width: 80px;"></div>
+                </div>
+                <p style="margin-top: 8px;">Powered by JAAN Network (Pvt) Ltd.</p>
+                <p>077 - 3446 2436</p>
             </div>
         </div>
     </body>
     </html>
 `;
+
 
   // Open a new window
   const printWindow = window.open("", "_blank");
