@@ -71,8 +71,7 @@
                     <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
                         <p class="text-3xl font-bold text-white uppercase">Suppliers</p>
                         <p class="text-xl text-white">
-                            Lorem ipsum is a dummy or placeholder text commonly used in
-                            graphic design
+                            Manage supplier information, purchase orders, and inventory updates seamlessly.
                         </p>
                     </div>
                 </div>
@@ -99,8 +98,7 @@
                     <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
                         <p class="text-3xl font-bold text-white uppercase">Customers</p>
                         <p class="text-xl text-white">
-                            Lorem ipsum is a dummy or placeholder text commonly used in
-                            graphic design
+                            Maintain customer profiles, track purchases, and enhance loyalty programs effectively
                         </p>
                     </div>
                 </div>
