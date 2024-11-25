@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 
@@ -44,12 +45,19 @@ class SupplierController extends Controller
 
 
 
+        // if ($request->hasFile('image')) {
+        //     $fileExtension = $request->file('image')->getClientOriginalExtension();
+        //     $fileName = 'supplier' . date("YmdHis") . '.' . $fileExtension;
+        //     $destinationPath = "images/uploads/supplier/";
+        //     $request->file('image')->move(public_path($destinationPath), $fileName);
+        //     $validated['image'] = $destinationPath . $fileName;
+        // }
+
         if ($request->hasFile('image')) {
             $fileExtension = $request->file('image')->getClientOriginalExtension();
-            $fileName = 'supplier' . date("YmdHis") . '.' . $fileExtension;
-            $destinationPath = "images/uploads/supplier/";
-            $request->file('image')->move(public_path($destinationPath), $fileName);
-            $validated['image'] = $destinationPath . $fileName;
+            $fileName = 'supplier_' . date("YmdHis") . '.' . $fileExtension;
+            $path = $request->file('image')->storeAs('suppliers', $fileName, 'public');
+            $validated['image'] = 'storage/'.$path;
         }
 
         Supplier::create($validated);
@@ -84,16 +92,15 @@ class SupplierController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
-            if ($supplier->image && file_exists(public_path($supplier->image))) {
-                unlink(public_path($supplier->image));
+            if ($supplier->image && Storage::disk('public')->exists(str_replace('storage/', '', $supplier->image))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $supplier->image));
             }
-
+        
             // Save the new image
             $fileExtension = $request->file('image')->getClientOriginalExtension();
             $fileName = 'supplier_' . date("YmdHis") . '.' . $fileExtension;
-            $destinationPath = "images/uploads/supplier/";
-            $request->file('image')->move(public_path($destinationPath), $fileName);
-            $validated['image'] = $destinationPath . $fileName;
+            $path = $request->file('image')->storeAs('suppliers', $fileName, 'public');
+            $validated['image'] = 'storage/' . $path;
         } else {
             // Retain the old image if no new image is uploaded
             $validated['image'] = $supplier->image;
@@ -117,11 +124,9 @@ class SupplierController extends Controller
 
     public function destroy(Supplier $supplier)
     {
-
-
-         if ($supplier->image && file_exists(public_path($supplier->image))) {
-             unlink(public_path($supplier->image));
-         }
+        if ($supplier->image && Storage::disk('public')->exists(str_replace('storage/', '', $supplier->image))) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $supplier->image));
+        }
 
          $supplier->delete();
 

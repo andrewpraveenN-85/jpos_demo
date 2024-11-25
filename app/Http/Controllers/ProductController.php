@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -111,12 +112,18 @@ class ProductController extends Controller
 
         try {
 
+            // if ($request->hasFile('image')) {
+            //     $fileExtension = $request->file('image')->getClientOriginalExtension();
+            //     $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+            //     $destinationPath = "images/uploads/products/";
+            //     $request->file('image')->move(public_path($destinationPath), $fileName);
+            //     $validated['image'] = $destinationPath . $fileName;
+            // }
             if ($request->hasFile('image')) {
                 $fileExtension = $request->file('image')->getClientOriginalExtension();
                 $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
-                $destinationPath = "images/uploads/products/";
-                $request->file('image')->move(public_path($destinationPath), $fileName);
-                $validated['image'] = $destinationPath . $fileName;
+                $path = $request->file('image')->storeAs('products', $fileName, 'public');
+                $validated['image'] = 'storage/'.$path;
             }
 
 
@@ -209,16 +216,15 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
-            if ($product->image && file_exists(public_path($product->image))) {
-                unlink(public_path($product->image));
+            if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
             }
-
+        
             // Save the new image
             $fileExtension = $request->file('image')->getClientOriginalExtension();
             $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
-            $destinationPath = "images/uploads/products/";
-            $request->file('image')->move(public_path($destinationPath), $fileName);
-            $validated['image'] = $destinationPath . $fileName;
+            $path = $request->file('image')->storeAs('products', $fileName, 'public');
+            $validated['image'] = 'storage/' . $path;
         } else {
             // Retain the old image if no new image is uploaded
             $validated['image'] = $product->image;
@@ -237,12 +243,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if ($product->image && file_exists(public_path($product->image))) {
-
-            unlink(public_path($product->image));
+        if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
         }
-
-
 
         $product->delete();
 
