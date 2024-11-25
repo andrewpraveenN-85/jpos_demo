@@ -128,7 +128,6 @@ const handlePrintReceipt = () => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Receipt</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <style>
             @media print {
                 body {
@@ -137,65 +136,133 @@ const handlePrintReceipt = () => {
                     -webkit-print-color-adjust: exact;
                 }
             }
+            body {
+                background-color: white;
+                color: black;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+            }
+            .container {
+                max-width: 420px;
+                margin: 20px auto;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .text-center {
+                text-align: center;
+            }
+            .text-right {
+                text-align: right;
+            }
+            .text-left {
+                text-align: left;
+            }
+            .font-bold {
+                font-weight: bold;
+            }
+            .italic {
+                font-style: italic;
+            }
+            .text-xs {
+                font-size: 12px;
+            }
+            .text-sm {
+                font-size: 14px;
+            }
+            .text-lg {
+                font-size: 16px;
+            }
+            .mt-1 {
+                margin-top: 4px;
+            }
+            .mt-2 {
+                margin-top: 8px;
+            }
+            .mt-4 {
+                margin-top: 16px;
+            }
+            .border-top {
+                border-top: 1px solid #ddd;
+                padding-top: 8px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 8px;
+            }
+            table th, table td {
+                padding: 8px;
+                font-size: 12px;
+                border-bottom: 1px solid #ddd;
+            }
+            table th {
+                background-color: #f9f9f9;
+                text-align: left;
+            }
+            .total-row {
+                font-size: 14px;
+                font-weight: bold;
+            }
         </style>
     </head>
-    <body class="bg-white text-black text-sm font-sans">
-        <div class="max-w-md mx-auto border border-gray-300 p-4">
+    <body>
+        <div class="container">
             <div class="text-center mb-4">
-                <h1 class="text-xl font-bold tracking-wide">DRESS HUB</h1>
+                <h1 style="font-size: 20px; font-weight: bold;">DRESS HUB</h1>
+                <p class="text-xs">123, Fashion Avenue, Colombo, Sri Lanka</p>
+                <p class="text-xs">Contact: 077-3446-2436 | info@dresshub.lk</p>
             </div>
-            <div class="mb-4 border-t border-gray-300">
-                <div class="flex justify-between text-xs mt-2">
-                    <span>Date: <span class="font-medium">${new Date().toLocaleDateString()}</span></span>
-                    <span>Order No: <span class="font-medium">234454559</span></span>
+            <div class="mb-4 border-top">
+                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Date: <span class="font-bold">${new Date().toLocaleDateString()}</span></span>
+                    <span>Order No: <span class="font-bold">234454559</span></span>
                 </div>
-                <div class="flex justify-between text-xs mt-2">
-                    <span>Customer: <span class="font-medium">${props.customer.name}</span></span>
-                    <span>Cashier: <span class="font-medium">${props.cashier.name}</span></span>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px;">
+                    <span>Customer: <span class="font-bold">${props.customer.name}</span></span>
+                    <span>Cashier: <span class="font-bold">${props.cashier.name}</span></span>
                 </div>
             </div>
-            <div class="mb-4">
-                <table class="w-full text-xs border-collapse">
-                    <thead>
-                        <tr class="border-b border-gray-300">
-                            <th class="text-left py-1">Description</th>
-                            <th class="text-center py-1">Qty</th>
-                            <th class="text-right py-1">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${productRows}
-                    </tbody>
-                </table>
-            </div>
-            <div class="border-t border-gray-300 pt-4 text-xs">
-                <div class="flex justify-between">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productRows}
+                </tbody>
+            </table>
+            <div class="border-top">
+                <div style="display: flex; justify-content: space-between; font-size: 12px;">
                     <span>Sub Total</span>
                     <span>${subTotal.toFixed(2)} LKR</span>
                 </div>
-                <div class="flex justify-between">
+                <div style="display: flex; justify-content: space-between; font-size: 12px;">
                     <span>Discount</span>
                     <span>${discount.toFixed(2)} LKR</span>
                 </div>
-                <div class="flex justify-between text-base font-bold mt-2">
+                <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin-top: 8px;">
                     <span>Total</span>
                     <span>${total.toFixed(2)} LKR</span>
                 </div>
             </div>
             <div class="text-center text-xs mt-4">
-                <p>THANK YOU FOR SHOPPING WITH US</p>
-                <p class="mt-2 italic">You're not just buying clothes; you're adding charm to your wardrobe. See you next time!</p>
-                <div class="flex justify-center items-center mt-4">
-                    <div class="border-t border-gray-300 w-20"></div>
-                    <div class="border-t border-gray-300 w-20"></div>
-                </div>
+                <p>THANK YOU FOR SHOPPING WITH US!</p>
+                <p class="italic">You're not just buying clothes; you're adding charm to your wardrobe. See you next time!</p>
                 <p class="mt-2">Powered by JAAN Network (Pvt) Ltd.</p>
-                <p>077 - 3446 2436</p>
+                <p>077 - 3446-2436</p>
             </div>
         </div>
     </body>
     </html>
-  `;
+`;
 
   // Open a new window
   const printWindow = window.open("", "_blank");
