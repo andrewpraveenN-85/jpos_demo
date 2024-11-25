@@ -112,6 +112,19 @@
                     Supplier Image:
                   </label>
 
+                  <div class="mt-2">
+                    <img
+                      v-if="selectedSupplier.image"
+                      :src="`/${selectedSupplier.image}`"
+                      alt="Product Image"
+                      class="rounded-lg"
+                    />
+
+                    <p v-else class="text-sm text-gray-500">
+                      No image available
+                    </p>
+                  </div>
+
                   <input
                     type="file"
                     id="image"
@@ -186,8 +199,6 @@ const form = useForm({
 const handleImageUpload = (event) => {
   form.image = event.target.files[0];
 };
-
-
 
 // Watch for changes in `selectedSupplier` and pre-fill the form
 watch(
