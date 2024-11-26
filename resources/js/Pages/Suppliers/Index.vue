@@ -51,6 +51,7 @@
 </style>
 
 <template>
+    <Head title="Suppliers"/>
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -211,6 +212,7 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
+import { Head } from '@inertiajs/vue3';
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import SupplierCreateModel from "@/Components/custom/SupplierCreateModel.vue";

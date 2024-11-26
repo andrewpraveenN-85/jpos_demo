@@ -1,4 +1,5 @@
 <template>
+     <Head title="Dashboard"/>
     <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36">
         <!-- Include the Header -->
         <Header />
@@ -120,7 +121,7 @@
                         <img src="/images/dashboard/report.png" class="w-48 h-48" alt="dresshub.lk" />
                     </div>
                     <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
-                        <p class="text-3xl font-bold text-white uppercase">Report</p>
+                        <p class="text-3xl font-bold text-white uppercase">Reports</p>
                         <p class="text-xl text-white">
                             Generate insights on sales, inventory, and performance to aid decision-making.
                         </p>
@@ -143,4 +144,5 @@
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import { Link } from "@inertiajs/vue3";
+import { Head } from '@inertiajs/vue3';
 </script>

@@ -51,6 +51,7 @@
 </style>
 
 <template>
+     <Head title="Categories"/>
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -189,6 +190,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { Head } from '@inertiajs/vue3';
 import { Link, useForm } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
