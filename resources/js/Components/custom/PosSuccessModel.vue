@@ -225,7 +225,7 @@ const receiptHTML = `
 <body>
     <div class="receipt-container">
         <div class="header">
-            <h1>DRESS HUB</h1>
+            <h1 style="margin-bottom: 0;">DRESS HUB</h1>
             <p style="font-size: 9px;">3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
             <p>0771119200 | dresshub.lk</p>
         </div>
@@ -281,8 +281,8 @@ const receiptHTML = `
         </div>
         <div class="footer">
             <p>THANK YOU FOR SHOPPING WITH US</p>
-            <p class="italic">You're not just buying clothes; you're adding charm to your wardrobe. See you next time!</p>
-            <p>Powered by JAAN Network (Pvt) Ltd.</p>
+            <p class="italic" sttyle="margin-top: 10px;">Let the quality define its own Standards</p>
+            <p style="font-size: 10px; margin-top: 12px; font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
         </div>
     </div>
 </body>

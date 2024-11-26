@@ -238,7 +238,8 @@
     </div>
   </div>
   <PosSuccessModel
-    v-model:open="isSuccessModalOpen"
+    :open="isSuccessModalOpen"
+    @update:open="handleModalOpenUpdate"
     :products="products"
     :cashier="loggedInUser"
     :customer="customer"
@@ -261,6 +262,13 @@ const product = ref(null);
 const error = ref(null);
 const products = ref([]);
 const isSuccessModalOpen = ref(false);
+
+const handleModalOpenUpdate = (newValue) => {
+  isSuccessModalOpen.value = newValue; 
+  if(!newValue){
+    refreshData();
+  }
+};
 
 const props = defineProps({
   loggedInUser: Object,
