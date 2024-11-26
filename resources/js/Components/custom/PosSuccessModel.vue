@@ -138,7 +138,6 @@ const receiptHTML = `
         }
         body {
             background-color: #ffffff;
-            color: #111827;
             font-size: 14px;
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -157,12 +156,10 @@ const receiptHTML = `
             font-size: 24px;
             font-weight: bold;
             letter-spacing: 1px;
-            color: #1f2937;
         }
         .header p {
             font-size: 12px;
             margin: 4px 0;
-            color: #4b5563;
         }
         .section {
             margin-bottom: 16px;
@@ -178,11 +175,9 @@ const receiptHTML = `
         .info-row p {
             margin: 0;
             font-weight: bold;
-            color: #374151;
         }
         .info-row small {
             font-weight: normal;
-            color: #6b7280;
         }
         table {
             width: 100%;
@@ -195,10 +190,8 @@ const receiptHTML = `
         }
         table th {
             text-align: left;
-            color: #374151;
         }
         table td {
-            color: #4b5563;
         }
         .totals {
             border-top: 1px solid #d1d5db;
@@ -213,7 +206,6 @@ const receiptHTML = `
         .totals div:last-child {
             font-size: 16px;
             font-weight: bold;
-            color: #1f2937;
         }
         .footer {
             text-align: center;
@@ -222,11 +214,9 @@ const receiptHTML = `
         }
         .footer p {
             margin: 8px 0;
-            color: #4b5563;
         }
         .footer .italic {
             font-style: italic;
-            color: #6b7280;
         }
     </style>
 </head>
