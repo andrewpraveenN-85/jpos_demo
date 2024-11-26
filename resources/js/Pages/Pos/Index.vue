@@ -249,7 +249,7 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, router } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
@@ -273,6 +273,13 @@ const customer = ref({
 });
 
 const selectedPaymentMethod = ref("cash");
+
+const refreshData = () => {
+  router.visit(route("pos.index"), {
+    preserveScroll: false, // Reset scroll
+    preserveState: false, // Reset component state
+  });
+};
 
 const removeProduct = (id) => {
   products.value = products.value.filter((item) => item.id !== id);
