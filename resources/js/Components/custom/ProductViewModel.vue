@@ -145,24 +145,37 @@
                   id="printContainer"
                 >
                   <div
+                    class="w-full flex justify-center items-center space-x-4"
+                  >
+                    <p class="font-bold text-lg text-black">{{ selectedProduct.category.name }}</p>
+                    <p class="font-bold text-lg text-black">{{ selectedProduct.selling_price }} LKR</p>
+                  </div>
+                  <!-- <div
                     class="absolute top-0 left-0 font-bold z-10"
-                    style="padding: 5px; color:#000; font-size: 12px;"
+                    style="padding: 5px; color: #000; font-size: 12px"
                   >
                     {{ selectedProduct.category.name }}
                   </div>
 
                   <div
                     class="absolute top-0 right-0 font-bold z-10"
-                    style="padding: 5px; color:#000; font-size: 12px; margin-right: 25px;"
+                    style="
+                      padding: 5px;
+                      color: #000;
+                      font-size: 12px;
+                      margin-right: 25px;
+                    "
                   >
                     {{ selectedProduct.selling_price }} LKR
-                  </div>
+                  </div> -->
+
+                  <svg id="barcodePrint"></svg>
 
                   <!-- Barcode -->
-                  <svg id="barcodePrint" class="mt-10"></svg>
 
                   <p style="color: #000; text-align: center; width: 100%">
-                    [{{ selectedProduct.size.name }}] - {{ selectedProduct.color.name }}
+                    [{{ selectedProduct.size.name }}] -
+                    {{ selectedProduct.color.name }}
                   </p>
                   <p style="color: #000; text-align: center; width: 100%">
                     {{ selectedProduct.name }}
@@ -260,3 +273,20 @@ function generateAndPrintBarcode() {
 
 
 
+<style>
+@media print {
+  #barcodePrint {
+    display: block; /* Ensure the SVG behaves like a block-level element */
+    margin: 0 auto; /* Horizontally center using auto margins */
+    /* margin-top: 10px; */
+  }
+
+  .print-container {
+    display: flex;
+    justify-content: center; /* Horizontally center content inside the container */
+    align-items: center; /* Vertically center content inside the container */
+    height: 100%; /* Ensure container takes full height for vertical centering */
+    text-align: center; /* Center text within the container */
+  }
+}
+</style>
