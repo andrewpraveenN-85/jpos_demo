@@ -20,7 +20,9 @@
           <p class="text-3xl font-bold tracking-wide text-black">
             Order ID : {{ orderId }}
           </p>
-          <p class="text-3xl text-black"><i class="ri-restart-line"></i></p>
+          <p class="text-3xl text-black cursor-pointer">
+            <i @click="refreshData" class="ri-restart-line"></i>
+          </p>
         </div>
       </div>
       <div class="flex w-full gap-4">
@@ -239,7 +241,6 @@
     :products="products"
     :cashier="loggedInUser"
     :customer="customer"
-    :orderId="orderId"
   />
   <Footer />
 </template>
@@ -291,14 +292,17 @@ const decrementQuantity = (id) => {
   }
 };
 
+// const orderId = computed(() => {
+//   const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to a base-36 string
+//   const randomString = Math.random().toString(36).substr(2, 5).toUpperCase(); // Generate a shorter random string
+//   return `ORD-${timestamp}-${randomString}`; // Combine to create unique order ID
+// });
 const orderId = computed(() => {
-  const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to a base-36 string
-  const randomString = Math.random()
-    .toString(36) // Convert to base-36 (includes numbers and letters)
-    .replace(/[^a-z]/g, "") // Remove non-alphabetic characters
-    .substr(0, 1) // Take the first two letters
-    .toUpperCase();
-  return `${timestamp}${randomString}`; // Combine to create unique order ID
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  return Array.from({ length: 6 }, () =>
+    characters.charAt(Math.floor(Math.random() * characters.length))
+  ).join("");
 });
 
 const submitOrder = async () => {
