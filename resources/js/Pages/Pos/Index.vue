@@ -10,7 +10,14 @@
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
-              <Link href="/"   @click="() => { playClickSound();}">
+          <Link
+            href="/"
+            @click="
+              () => {
+                playClickSound();
+              }
+            "
+          >
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
@@ -225,7 +232,12 @@
               </div>
               <div class="flex items-center justify-center w-full">
                 <button
-                  @click="() => { playClickSound(); submitOrder }"
+                  @click="
+                    () => {
+                      playClickSound();
+                      submitOrder();
+                    }
+                  "
                   type="button"
                   :disabled="products.length === 0"
                   :class="[
@@ -277,14 +289,10 @@ const handleModalOpenUpdate = (newValue) => {
   }
 };
 
-
-
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
   clickSound.play();
 };
-
-
 
 const props = defineProps({
   loggedInUser: Object,
@@ -341,27 +349,27 @@ const orderId = computed(() => {
 
 const submitOrder = async () => {
   // if (window.confirm("Are you sure you want to confirm the order?")) {
-    console.log(products.value);
-    // const response = await axios.post("/api/customers", customer.value);
-    try {
-      // const response = await axios.post("/pos/submit", customer.value);
-      const response = await axios.post("/pos/submit", {
-        customer: customer.value,
-        products: products.value,
-        paymentMethod: selectedPaymentMethod.value,
-        userId: props.loggedInUser.id,
-        orderId: orderId.value,
-      });
-      isSuccessModalOpen.value = true;
-      console.log(response.data); // Handle success
-    } catch (error) {
-      console.error(
-        "Error submitting customer details:",
-        error.response?.data || error.message
-      );
-      alert("Failed to submit customer details. Please try again.");
-    }
+  console.log(products.value);
+  // const response = await axios.post("/api/customers", customer.value);
+  try {
+    // const response = await axios.post("/pos/submit", customer.value);
+    const response = await axios.post("/pos/submit", {
+      customer: customer.value,
+      products: products.value,
+      paymentMethod: selectedPaymentMethod.value,
+      userId: props.loggedInUser.id,
+      orderId: orderId.value,
+    });
+    isSuccessModalOpen.value = true;
+    console.log(response.data); // Handle success
+  } catch (error) {
+    console.error(
+      "Error submitting customer details:",
+      error.response?.data || error.message
+    );
+    alert("Failed to submit customer details. Please try again.");
   }
+};
 // };
 
 const subtotal = computed(() => {
@@ -388,6 +396,7 @@ let timeout; // Timeout to detect the end of the scan
 
 // Automatically submit the barcode to the backend
 const submitBarcode = async () => {
+  playClickSound();
   try {
     // Send POST request to the backend
     const response = await axios.post(route("pos.getProduct"), {
