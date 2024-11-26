@@ -30,6 +30,9 @@ use Inertia\Inertia;
 //         'phpVersion' => PHP_VERSION,
 //     ]);
 // });
+Route::get('/dashboard', function () {
+    return Inertia::location(route('dashboard'));
+});
 
 Route::middleware([
     'auth:sanctum',

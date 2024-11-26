@@ -9,11 +9,12 @@
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
-            <Link href="/">
+          <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
-          <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">PoS</p>
-
+          <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
+            PoS
+          </p>
         </div>
         <div class="flex items-center justify-between w-full space-x-4">
           <p class="text-3xl font-bold tracking-wide text-black">
@@ -238,6 +239,7 @@
     :products="products"
     :cashier="loggedInUser"
     :customer="customer"
+    :orderId="orderId"
   />
   <Footer />
 </template>
@@ -291,8 +293,12 @@ const decrementQuantity = (id) => {
 
 const orderId = computed(() => {
   const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to a base-36 string
-  const randomString = Math.random().toString(36).substr(2, 5).toUpperCase(); // Generate a shorter random string
-  return `ORD-${timestamp}-${randomString}`; // Combine to create unique order ID
+  const randomString = Math.random()
+    .toString(36) // Convert to base-36 (includes numbers and letters)
+    .replace(/[^a-z]/g, "") // Remove non-alphabetic characters
+    .substr(0, 1) // Take the first two letters
+    .toUpperCase();
+  return `${timestamp}${randomString}`; // Combine to create unique order ID
 });
 
 const submitOrder = async () => {
