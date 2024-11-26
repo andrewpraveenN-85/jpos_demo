@@ -1,5 +1,5 @@
 <template>
-        <Head title="POS"/>
+  <Head title="POS" />
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36"
@@ -19,7 +19,7 @@
         </div>
         <div class="flex items-center justify-between w-full space-x-4">
           <p class="text-3xl font-bold tracking-wide text-black">
-            Order ID : {{ orderId }}
+            Order ID : #{{ orderId }}
           </p>
           <p class="text-3xl text-black cursor-pointer">
             <i @click="refreshData" class="ri-restart-line"></i>
@@ -224,12 +224,19 @@
                 </div>
               </div>
               <div class="flex items-center justify-center w-full">
-                <p
+                <button
                   @click="submitOrder"
-                  class="w-full py-4 text-2xl font-bold tracking-wider text-center text-white uppercase bg-black cursor-pointer rounded-xl"
+                  type="button"
+                  :disabled="products.length === 0"
+                  :class="[
+                    'w-full bg-black py-4 text-2xl font-bold tracking-wider text-center text-white uppercase rounded-xl',
+                    products.length === 0
+                      ? ' cursor-not-allowed'
+                      : ' cursor-pointer',
+                  ]"
                 >
                   <i class="pr-4 ri-add-circle-fill"></i> Confirm Order
-                </p>
+                </button>
               </div>
             </div>
           </div>
@@ -254,7 +261,7 @@ import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import { useForm, router } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
-import { Head } from '@inertiajs/vue3';
+import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 
@@ -264,8 +271,8 @@ const products = ref([]);
 const isSuccessModalOpen = ref(false);
 
 const handleModalOpenUpdate = (newValue) => {
-  isSuccessModalOpen.value = newValue; 
-  if(!newValue){
+  isSuccessModalOpen.value = newValue;
+  if (!newValue) {
     refreshData();
   }
 };
@@ -324,7 +331,7 @@ const orderId = computed(() => {
 });
 
 const submitOrder = async () => {
-  if (window.confirm("Are you sure you want to confirm the order?")) {
+  // if (window.confirm("Are you sure you want to confirm the order?")) {
     console.log(products.value);
     // const response = await axios.post("/api/customers", customer.value);
     try {
@@ -346,7 +353,7 @@ const submitOrder = async () => {
       alert("Failed to submit customer details. Please try again.");
     }
   }
-};
+// };
 
 const subtotal = computed(() => {
   return products.value
