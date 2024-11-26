@@ -163,11 +163,18 @@
             class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
           >
             <div @click="openViewModal(product)" class="cursor-pointer">
-              <img
+              <!-- <img
                 :src="`/${product.image}`"
                 alt="Product Image"
                 class="object-cover w-full h-64"
-              />
+              /> -->
+
+              <img
+  :src="product.image ? `/${product.image}` : '/images/placeholder.jpg'"
+  alt="Product Image"
+  class="object-cover w-full h-64"
+/>
+
             </div>
             <div class="px-4 py-4 space-y-4">
               <div

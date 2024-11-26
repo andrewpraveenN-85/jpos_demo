@@ -43,7 +43,8 @@ class ProductController extends Controller
 
         $count = $productsQuery->count();
 
-        $products = $productsQuery->paginate(8);
+        $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
+
 
 
         $allcategories = Category::with('parent')->get();
@@ -219,7 +220,7 @@ class ProductController extends Controller
             if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
             }
-        
+
             // Save the new image
             $fileExtension = $request->file('image')->getClientOriginalExtension();
             $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;

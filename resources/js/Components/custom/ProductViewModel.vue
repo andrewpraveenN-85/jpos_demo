@@ -38,11 +38,12 @@
               >
                 <!-- Left Side: Image -->
                 <div class="w-1/2">
+
                   <img
-                    :src="`/${selectedProduct.image}`"
-                    alt="Product Image"
-                    class="object-cover h-full rounded-2xl"
-                  />
+  :src="selectedProduct.image ? `/${selectedProduct.image}` : '/images/placeholder.jpg'"
+  alt="Product Image"
+  class="object-cover h-full rounded-2xl"
+/>
                 </div>
 
                 <!-- Right Side: Text Content -->

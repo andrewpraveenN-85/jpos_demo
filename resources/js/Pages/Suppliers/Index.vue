@@ -131,13 +131,25 @@
                   {{ supplier.contact || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-200">
-                  <img
+                  <!-- <img
                     v-if="supplier.image"
                     :src="supplier.image"
                     alt="Supplier Image"
                     class="object-cover rounded-md shadow h-15 w-15"
                   />
-                  <span v-else class="text-gray-500">N/A</span>
+                  <span v-else class="text-gray-500">N/A</span> -->
+
+
+
+
+                  <img
+  :src="supplier.image ? `/${supplier.image}` : '/images/placeholder.jpg'"
+   alt="Supplier Image"
+  class="object-cover rounded-md shadow h-15 w-15"
+/>
+
+
+
                 </td>
                 <td class="p-4 border-t border-gray-200">
                   {{ supplier.email || "N/A" }}
