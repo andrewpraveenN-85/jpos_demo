@@ -295,7 +295,7 @@
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
-                <button
+                <button  @click="() => { playClickSound();}"
                   class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                   type="submit"
                 >
@@ -303,7 +303,7 @@
                 </button>
                 <button
                   class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-                  @click="$emit('update:open', false)"
+                  @click="() => { playClickSound(); emit('update:open', false); }"
                 >
                   Cancel
                 </button>
@@ -326,6 +326,11 @@ import {
 } from "@headlessui/vue";
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
 
 const emit = defineEmits(["update:open"]);
 

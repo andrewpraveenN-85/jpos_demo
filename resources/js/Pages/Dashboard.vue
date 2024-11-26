@@ -5,7 +5,7 @@
         <Header />
 
         <div class="grid w-full h-full grid-cols-4 gap-8">
-            <Link href="/pos">
+            <Link href="/pos" @click="() => { playClickSound();}">
 
             <div
                 class="py-8 text-center bg-[#4d7c0f] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -23,7 +23,7 @@
             </div>
             </Link>
 
-            <Link href="/categories">
+            <Link href="/categories" @click="() => { playClickSound();}">
 
             <div
                 class="py-8 text-center bg-[#003161] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -40,7 +40,7 @@
                 </div>
             </div>
             </Link>
-            <Link href="/products">
+            <Link href="/products" @click="() => { playClickSound();}">
 
             <div
                 class="py-8 text-center bg-[#C62E2E] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -61,7 +61,7 @@
 
 
 
-            <Link href="/suppliers">
+            <Link href="/suppliers" @click="() => { playClickSound();}">
 
             <div
                 class="py-8 text-center bg-[#914F1E]  shadow-lg transform transition-transform duration-300 border rounded-xl hover:-translate-y-4">
@@ -88,7 +88,7 @@
 
 
 
-            <Link href="/customers">
+            <Link href="/customers"  @click="() => { playClickSound();}">
 
             <div
                 class="py-8 text-center  bg-[#CB9DF0] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -112,7 +112,7 @@
 
 
 
-            <Link href="/reports">
+            <Link href="/reports"   @click="() => { playClickSound();}">
 
             <div
                 class="py-8 text-center bg-[#FF8000] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -145,4 +145,11 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import { Link } from "@inertiajs/vue3";
 import { Head } from '@inertiajs/vue3';
+
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
+
 </script>

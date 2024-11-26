@@ -34,7 +34,7 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
 
-
+ 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'contact' => 'required|string|max:20',
@@ -62,7 +62,7 @@ class SupplierController extends Controller
 
         Supplier::create($validated);
 
-        return redirect()->route('suppliers.index')->banner('Supplier created successfully.');        
+        return redirect()->route('suppliers.index')->banner('Supplier created successfully.');
     }
 
 
@@ -86,7 +86,7 @@ class SupplierController extends Controller
             if ($supplier->image && Storage::disk('public')->exists(str_replace('storage/', '', $supplier->image))) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $supplier->image));
             }
-        
+
             // Save the new image
             $fileExtension = $request->file('image')->getClientOriginalExtension();
             $fileName = 'supplier_' . date("YmdHis") . '.' . $fileExtension;

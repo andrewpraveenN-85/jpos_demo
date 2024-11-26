@@ -38,14 +38,15 @@
               <div class="mt-6 space-x-4">
                 <button
                   class="px-6 py-2 text-[15px] text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-                  @click="$emit('update:open', false)"
+                        @click="() => { playClickSound(); emit('update:open', false); }"
                 >
                   Cancel
                 </button>
 
                 <button
                   class="px-6 py-2 text-[15px] text-white bg-red-600 rounded hover:bg-red-700"
-                  @click.prevent="deleteItem"
+               @click.prevent="() => { playClickSound(); deleteItem(); }"
+
                 >
                   Delete
                 </button>
@@ -66,7 +67,14 @@
   import { ref } from "vue";
   import { useForm } from "@inertiajs/vue3";
 
-  // Emits to parent to close modal
+
+  const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
+
+
+
   const emit = defineEmits(["update:open"]);
 
   // Props for the modal
