@@ -143,6 +143,7 @@ const receiptHTML = `
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            color: black !important;
         }
         .receipt-container {
             max-width: 400px;
@@ -225,8 +226,8 @@ const receiptHTML = `
     <div class="receipt-container">
         <div class="header">
             <h1>DRESS HUB</h1>
-            <p>3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
-            <p>Phone: +94 771119200 | Website: www.dresshub.lk</p>
+            <p style="font-size: 9px;">3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
+            <p>0771119200 | dresshub.lk</p>
         </div>
         <div class="section">
             <div class="info-row">

@@ -241,6 +241,7 @@
     :products="products"
     :cashier="loggedInUser"
     :customer="customer"
+    :orderId="orderId"
   />
   <Footer />
 </template>

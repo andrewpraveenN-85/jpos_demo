@@ -38,12 +38,15 @@
               >
                 <!-- Left Side: Image -->
                 <div class="w-1/2">
-
                   <img
-  :src="selectedProduct.image ? `/${selectedProduct.image}` : '/images/placeholder.jpg'"
-  alt="Product Image"
-  class="object-cover h-full rounded-2xl"
-/>
+                    :src="
+                      selectedProduct.image
+                        ? `/${selectedProduct.image}`
+                        : '/images/placeholder.jpg'
+                    "
+                    alt="Product Image"
+                    class="object-cover h-full rounded-2xl"
+                  />
                 </div>
 
                 <!-- Right Side: Text Content -->
@@ -138,10 +141,32 @@
                 <!-- Hidden container for printing -->
                 <div
                   :class="{ hidden: !isVisible }"
-                  class="print-container"
+                  class="print-container relative"
                   id="printContainer"
                 >
-                  <svg id="barcodePrint"></svg>
+                  <div
+                    class="absolute top-0 left-0 font-bold z-10"
+                    style="padding: 5px; color:#000; font-size: 12px;"
+                  >
+                    {{ selectedProduct.category.name }}
+                  </div>
+
+                  <div
+                    class="absolute top-0 right-0 font-bold z-10"
+                    style="padding: 5px; color:#000; font-size: 12px; margin-right: 25px;"
+                  >
+                    {{ selectedProduct.selling_price }} LKR
+                  </div>
+
+                  <!-- Barcode -->
+                  <svg id="barcodePrint" class="mt-10"></svg>
+
+                  <p style="color: #000; text-align: center; width: 100%">
+                    [{{ selectedProduct.size.name }}] - {{ selectedProduct.color.name }}
+                  </p>
+                  <p style="color: #000; text-align: center; width: 100%">
+                    {{ selectedProduct.name }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -214,12 +239,12 @@ function generateAndPrintBarcode() {
   }
 
   JsBarcode(barcodePrintElement, input, {
-    // format: "CODE128",
-    format: "EAN13",
+    format: "CODE128",
+    // format: "EAN13",
     lineColor: "#000",
-    width: 2,
+    width: 1.1,
     height: 100,
-    displayValue: true,
+    displayValue: false,
   });
 
   const printContents = document.getElementById("printContainer").innerHTML;
@@ -232,4 +257,6 @@ function generateAndPrintBarcode() {
   location.reload();
 }
 </script>
+
+
 
