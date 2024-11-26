@@ -10,7 +10,7 @@
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
-          <Link href="/">
+              <Link href="/"   @click="() => { playClickSound();}">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">

@@ -68,7 +68,7 @@
         <div class="flex items-center justify-between">
           <!-- Back Button and Title -->
           <div class="flex items-center space-x-4">
-            <Link href="/">
+                <Link href="/"   @click="() => { playClickSound();}">
               <img src="/images/back-arrow.png" class="w-14 h-14" alt="Back" />
             </Link>
             <p class="text-4xl font-bold tracking-wide text-black uppercase">
