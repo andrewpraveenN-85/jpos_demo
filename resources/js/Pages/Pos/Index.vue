@@ -293,6 +293,10 @@ const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
   clickSound.play();
 };
+const playClickSound2 = () => {
+  const clickSound = new Audio("/sounds/click-sound2.mp3");
+  clickSound.play();
+};
 
 const props = defineProps({
   loggedInUser: Object,
@@ -396,7 +400,7 @@ let timeout; // Timeout to detect the end of the scan
 
 // Automatically submit the barcode to the backend
 const submitBarcode = async () => {
-  playClickSound();
+  playClickSound2();
   try {
     // Send POST request to the backend
     const response = await axios.post(route("pos.getProduct"), {
