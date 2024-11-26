@@ -1,6 +1,11 @@
 
 <style lang="css">
-/* Pagination Container */
+.pagination-disabled
+{
+    color: rgb(37 99 235);
+    transition: all 0.5s ease;
+    background: rgb(229 231 235 / var(--tw-bg-opacity));
+}
 .pagination {
   display: flex;
   justify-content: center;
@@ -16,6 +21,9 @@
 .pagination a:last-child {
   padding: 8px 16px;
 }
+
+
+
 </style>
 <template>
   <Banner />
