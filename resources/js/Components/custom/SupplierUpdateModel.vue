@@ -65,6 +65,7 @@
                     type="text"
                     id="contact"
                     required
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                     class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                   />
                   <span v-if="form.errors.contact" class="mt-4 text-red-500">
@@ -184,13 +185,13 @@
               <div class="mt-6 space-x-4 text-center">
                 <button
                   class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-                  type="submit"
+                  type="submit" @click="() => { playClickSound();}"
                 >
                   Save
                 </button>
                 <button
                   class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-                  @click="$emit('update:open', false)"
+                 @click="() => { playClickSound(); emit('update:open', false); }"
                 >
                   Cancel
                 </button>
@@ -216,6 +217,11 @@ import { useForm } from "@inertiajs/vue3";
 
 // Emit events for parent communication
 const emit = defineEmits(["update:open"]);
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
 
 // Props for modal visibility and selected supplier data
 const { open, selectedSupplier } = defineProps({

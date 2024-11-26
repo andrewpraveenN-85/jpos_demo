@@ -79,7 +79,8 @@
         </div>
         <div class="flex justify-end w-full">
           <p
-            @click="isCreateModalOpen = true"
+
+              @click="() => { playClickSound(); isCreateModalOpen = true; }"
             class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
           >
             <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
@@ -161,13 +162,16 @@
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
                     <button
-                      @click="openEditModal(supplier)"
+
+                       @click="() => { playClickSound(); openEditModal(supplier); }"
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
                     >
                       Edit
                     </button>
                     <button
-                      @click="openDeleteModal(supplier)"
+
+                     @click="() => { playClickSound(); openDeleteModal(supplier); }"
+
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
                     >
                       Delete
@@ -224,6 +228,11 @@ defineProps({
   allsuppliers: Array, // Array of suppliers
   totalSuppliers: Number, // Total count of suppliers
 });
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
 
 const openEditModal = (supplier) => {
   console.log("Opening edit modal for supplier:", supplier);

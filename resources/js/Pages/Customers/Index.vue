@@ -103,7 +103,7 @@
           <th class="p-4 font-semibold tracking-wide text-left uppercase">Contact</th>
           <th class="p-4 font-semibold tracking-wide text-left uppercase">Email</th>
           <th class="p-4 font-semibold tracking-wide text-left uppercase">Address</th>
-          <!-- <th class="p-4 font-semibold tracking-wide text-center uppercase">Actions</th> -->
+          <th class="p-4 font-semibold tracking-wide text-center uppercase">Actions</th>
         </tr>
       </thead>
       <tbody class="text-[13px] font-normal">
@@ -124,22 +124,23 @@
           <td class="p-4 border-t border-gray-200">
             {{ customer.address || "N/A" }}
           </td>
-          <!-- <td class="p-4 text-center border-t border-gray-200">
+          <td class="p-4 text-center border-t border-gray-200">
             <div class="inline-flex items-center w-full space-x-3">
-              <button
+              <!-- <button
                 @click="openEditModal(customer)"
                 class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
               >
                 Edit
-              </button>
+              </button> -->
               <button
-                @click="openDeleteModal(customer)"
+
+                 @click="() => { playClickSound(); openDeleteModal(customer); }"
                 class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
               >
                 Delete
               </button>
             </div>
-          </td> -->
+          </td>
         </tr>
       </tbody>
     </table>
@@ -162,7 +163,7 @@
 
 
 
-    <!-- <CategoryEditModel
+    <CategoryEditModel
     :customer="allcustomers"
     :selected-customer="selectedCustomer"
     v-model:open="isEditModalOpen"
@@ -174,7 +175,7 @@
 v-model:open="isDeleteModalOpen"
 />
 
- -->
+
 
 
 </template>
@@ -196,6 +197,12 @@ defineProps({
     allcustomers: Array,
     totalCustomers: Number,
 });
+
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
 
 const form = useForm({});
 
@@ -225,7 +232,7 @@ $(document).ready(function () {
     columnDefs: [
 
       {
-        targets: [3],
+        targets: [4],
         searchable: false,
         orderable: false,
       },

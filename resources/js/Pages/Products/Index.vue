@@ -56,7 +56,8 @@
 
         </div>
         <p
-          @click="isCreateModalOpen = true"
+
+          @click="() => { playClickSound(); isCreateModalOpen = true; }"
           class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
@@ -171,7 +172,9 @@
             :key="product.id"
             class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
           >
-            <div @click="openViewModal(product)" class="cursor-pointer">
+            <div
+               @click="() => { playClickSound(); openViewModal(product); }"
+            class="cursor-pointer">
               <!-- <img
                 :src="`/${product.image}`"
                 alt="Product Image"
@@ -238,13 +241,15 @@
 
                 <div class="flex space-x-4">
                   <button
-                    @click="openEditModal(product)"
+
+                    @click="() => { playClickSound(); openEditModal(product); }"
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
                   >
                     <i class="ri-pencil-line"></i>
                   </button>
                   <button
-                    @click="openDeleteModal(product)"
+
+                      @click="() => { playClickSound(); openDeleteModal(product); }"
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
                   >
                     <i class="ri-delete-bin-line"></i>
@@ -355,6 +360,15 @@ const isEditModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
+
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
+
+
+const emit = defineEmits(["update:open"]);
 
 const openEditModal = (product) => {
   selectedProduct.value = product; // Set the selected product

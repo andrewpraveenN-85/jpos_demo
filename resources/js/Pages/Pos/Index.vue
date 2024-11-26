@@ -225,7 +225,7 @@
               </div>
               <div class="flex items-center justify-center w-full">
                 <button
-                  @click="submitOrder"
+                  @click="() => { playClickSound(); submitOrder }"
                   type="button"
                   :disabled="products.length === 0"
                   :class="[
@@ -276,6 +276,15 @@ const handleModalOpenUpdate = (newValue) => {
     refreshData();
   }
 };
+
+
+
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
+
+
 
 const props = defineProps({
   loggedInUser: Object,
