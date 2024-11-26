@@ -1,4 +1,5 @@
 <template>
+        <Head title="POS"/>
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36"
@@ -252,6 +253,7 @@ import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import { useForm, router } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
+import { Head } from '@inertiajs/vue3';
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 

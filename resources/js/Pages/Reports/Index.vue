@@ -1,4 +1,5 @@
 <template>
+         <Head title="Reports"/>
     <Banner />
     <div
       class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -174,7 +175,7 @@
 import { ref, computed } from "vue";
 import { Doughnut } from "vue-chartjs";
 import { Link } from "@inertiajs/vue3";
-
+import { Head } from '@inertiajs/vue3';
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";

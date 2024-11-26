@@ -26,6 +26,7 @@
 
 </style>
 <template>
+     <Head title="Products"/>
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -336,11 +337,13 @@
 
 <script setup>
 import { ref } from "vue";
+import { Head } from '@inertiajs/vue3';
 import { Link, useForm, router } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
+
 import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
