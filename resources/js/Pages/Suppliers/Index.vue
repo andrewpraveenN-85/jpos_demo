@@ -221,7 +221,7 @@ defineProps({
   totalSuppliers: Number, // Total count of suppliers
 });
 
-const playCplayClickSoundlickSound = () => {
+const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
   clickSound.play();
 };
