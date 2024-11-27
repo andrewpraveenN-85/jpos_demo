@@ -45,66 +45,54 @@
             <form @submit.prevent="submit">
               <!-- Modal Form -->
               <div class="mt-6 space-y-4 text-left">
-
-
-  <div class="flex items-center gap-8 mt-6">
+                <div class="flex items-center gap-8 mt-6">
                   <!-- Cost Price input -->
                   <div class="w-full">
-                  <!-- Category Name -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Category Name:</label
-                  >
-                  <select
-                    required
-                    v-model="form.category_id"
-                    id="parent_id"
-                    class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  >
-                    <option value="">Select a Category</option>
-                    <option
-                      v-for="category in categories"
-                      :key="category.id"
-                      :value="category.id"
-                    >
-                      {{ category.name }}
-                    </option>
-                  </select>
-                  <span v-if="form.errors.name" class="mt-4 text-red-500">{{
-                    form.errors.name
-                  }}</span>
-                </div>
+                    <!-- Category Name -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Category Name:</label
+                      >
+                      <select
+                        required
+                        v-model="form.category_id"
+                        id="parent_id"
+                        class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      >
+                        <option value="">Select a Category</option>
+                        <option
+                          v-for="category in categories"
+                          :key="category.id"
+                          :value="category.id"
+                        >
+                          {{ category.name }}
+                        </option>
+                      </select>
+                      <span v-if="form.errors.name" class="mt-4 text-red-500">{{
+                        form.errors.name
+                      }}</span>
+                    </div>
                   </div>
 
                   <!-- Selling Price input -->
                   <div class="w-full">
                     <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Product Name:</label
-                  >
-                  <input
-                    v-model="form.name"
-                    type="text"
-                    id="name"
-                    required
-                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
-                  <span v-if="form.errors.name" class="mt-4 text-red-500">{{
-                    form.errors.name
-                  }}</span>
-                </div>
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Product Name:</label
+                      >
+                      <input
+                        v-model="form.name"
+                        type="text"
+                        id="name"
+                        required
+                        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      />
+                      <span v-if="form.errors.name" class="mt-4 text-red-500">{{
+                        form.errors.name
+                      }}</span>
+                    </div>
                   </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
 
                 <div>
                   <div class="flex items-center gap-8">
@@ -240,56 +228,63 @@
                     </span>
                   </div>
                   <div class="w-full">
-                   <label
-                    for="image"
-                    class="block text-sm font-medium text-gray-300"
-                    >Image:</label
-                  >
-                  <div class="w-full md:w-6/12">
-                    <label class="block text-sm font-medium text-white"
-                      >Current Image</label
+                    <label
+                      for="image"
+                      class="block text-sm font-medium text-gray-300"
+                      >Image:</label
                     >
-                    <div class="mt-2">
-                      <img
-                        v-if="selectedProduct.image"
-                        :src="`/${selectedProduct.image}`"
-                        alt="Product Image"
-                        class="rounded-lg "
-                      />
+                    <div class="w-full md:w-6/12">
+                      <label class="block text-sm font-medium text-white"
+                        >Current Image</label
+                      >
+                      <div class="mt-2">
+                        <img
+                          v-if="selectedProduct.image"
+                          :src="`/${selectedProduct.image}`"
+                          alt="Product Image"
+                          class="rounded-lg"
+                        />
 
-                      <p v-else class="text-sm text-gray-500">
-                        No image available
-                      </p>
+                        <p v-else class="text-sm text-gray-500">
+                          No image available
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <input
-                    type="file"
-                    id="image"
-                    @change="handleImageUpload"
-                    class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
-                  <span v-if="form.errors.image" class="mt-2 text-red-500">
-                    {{ form.errors.image }}
-                  </span>
+                    <input
+                      type="file"
+                      id="image"
+                      @change="handleImageUpload"
+                      class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span v-if="form.errors.image" class="mt-2 text-red-500">
+                      {{ form.errors.image }}
+                    </span>
                   </div>
                 </div>
-
-
               </div>
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
                 <button
                   class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-                  type="submit" @click="() => { playClickSound();}"
-
-
+                  type="submit"
+                  @click="
+                    () => {
+                      playClickSound();
+                    }
+                  "
                 >
                   Save
                 </button>
-                <button  type="button"
+                <button
+                  type="button"
                   class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-                @click="() => { playClickSound(); emit('update:open', false); }"
+                  @click="
+                    () => {
+                      playClickSound();
+                      emit('update:open', false);
+                    }
+                  "
                 >
                   Cancel
                 </button>

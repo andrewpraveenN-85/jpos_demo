@@ -55,137 +55,156 @@
 
 
 <template>
-           <Head title="Customers"/>
-    <Banner />
-    <div
-      class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
-    >
-      <!-- Include the Header -->
-      <Header />
+  <Head title="Customers" />
+  <Banner />
+  <div
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+  >
+    <!-- Include the Header -->
+    <Header />
 
-      <!-- Main Content -->
-      <div class="w-5/6 py-12 space-y-24">
-        <div class="flex items-center justify-between">
-          <!-- Back Button and Title -->
-          <div class="flex items-center space-x-4">
-                <Link href="/"   @click="() => { playClickSound();}">
-              <img src="/images/back-arrow.png" class="w-14 h-14" alt="Back" />
-            </Link>
-            <p class="text-4xl font-bold tracking-wide text-black uppercase">
-              Customers
-            </p>
-          </div>
-
-          <!-- Total Customers -->
-          <div class="flex items-center">
-            <p class="text-3xl italic font-bold text-black">
-              <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">
-                {{ totalCustomers.length }}
-              </span>
-              <span class="text-xl">/ Total Customers</span>
-            </p>
-          </div>
+    <!-- Main Content -->
+    <div class="w-5/6 py-12 space-y-24">
+      <div class="flex items-center justify-between">
+        <!-- Back Button and Title -->
+        <div class="flex items-center space-x-4">
+          <Link
+            href="/"
+            @click="
+              () => {
+                playClickSound();
+              }
+            "
+          >
+            <img src="/images/back-arrow.png" class="w-14 h-14" alt="Back" />
+          </Link>
+          <p class="text-4xl font-bold tracking-wide text-black uppercase">
+            Customers
+          </p>
         </div>
 
-
-
-        <template v-if="allcustomers && allcustomers.length > 0">
-  <div class="overflow-x-auto">
-    <table
-      id="CustomerTable"
-      class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
-    >
-      <thead>
-        <tr
-          class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
-        >
-          <th class="p-4 font-semibold tracking-wide text-left uppercase">Name</th>
-          <th class="p-4 font-semibold tracking-wide text-left uppercase">Contact</th>
-          <th class="p-4 font-semibold tracking-wide text-left uppercase">Email</th>
-          <th class="p-4 font-semibold tracking-wide text-left uppercase">Address</th>
-          <th class="p-4 font-semibold tracking-wide text-center uppercase">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="text-[13px] font-normal">
-        <tr
-          v-for="customer in allcustomers"
-          :key="customer.id"
-          class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
-        >
-          <td class="p-4 font-bold border-t border-gray-200">
-            {{ customer.name || "N/A" }}
-          </td>
-          <td class="p-4 border-t border-gray-200">
-            {{ customer.phone || "N/A" }}
-          </td>
-          <td class="p-4 border-t border-gray-200">
-            {{ customer.email || "N/A" }}
-          </td>
-          <td class="p-4 border-t border-gray-200">
-            {{ customer.address || "N/A" }}
-          </td>
-          <td class="p-4 text-center border-t border-gray-200">
-            <div class="inline-flex items-center w-full space-x-3">
-              <!-- <button
-                @click="openEditModal(customer)"
-                class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
-              >
-                Edit
-              </button> -->
-              <button
-
-                 @click="() => { playClickSound(); openDeleteModal(customer); }"
-                class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
-              >
-                Delete
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</template>
-<template v-else>
-  <div class="col-span-4 text-center text-blue-500">
-    <p class="text-center text-red-500 text-[17px]">
-      No customers available
-    </p>
-  </div>
-</template>
-
+        <!-- Total Customers -->
+        <div class="flex items-center">
+          <p class="text-3xl italic font-bold text-black">
+            <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">
+              {{ totalCustomers.length }}
+            </span>
+            <span class="text-xl">/ Total Customers</span>
+          </p>
+        </div>
       </div>
+
+      <template v-if="allcustomers && allcustomers.length > 0">
+        <div class="overflow-x-auto">
+          <table
+            id="CustomerTable"
+            class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
+          >
+            <thead>
+              <tr
+                class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
+              >
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Name
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Contact
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Email
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Address
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  L/Points
+                </th>
+                <th
+                  class="p-4 font-semibold tracking-wide text-center uppercase"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="text-[13px] font-normal">
+              <tr
+                v-for="customer in allcustomers"
+                :key="customer.id"
+                class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
+              >
+                <td class="p-4 font-bold border-t border-gray-200">
+                  {{ customer.name || "N/A" }}
+                </td>
+                <td class="p-4 border-t border-gray-200">
+                  {{ customer.phone || "N/A" }}
+                </td>
+                <td class="p-4 border-t border-gray-200">
+                  {{ customer.email || "N/A" }}
+                </td>
+                <td class="p-4 border-t border-gray-200">
+                  {{ customer.address || "N/A" }}
+                </td>
+                <td class="p-4 border-t border-gray-200">
+                  {{ customer.loyalty_points || "N/A" }}
+                </td>
+                <td class="p-4 text-center border-t border-gray-200">
+                  <div class="inline-flex items-center w-full space-x-3">
+                    <button
+                      @click="
+                        () => {
+                          playClickSound();
+                          openEditModal(customer);
+                        }
+                      "
+                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      @click="
+                        () => {
+                          playClickSound();
+                          openDeleteModal(customer);
+                        }
+                      "
+                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+      <template v-else>
+        <div class="col-span-4 text-center text-blue-500">
+          <p class="text-center text-red-500 text-[17px]">
+            No customers available
+          </p>
+        </div>
+      </template>
     </div>
+  </div>
+  <Footer />
 
-    <Footer />
-
-
-
-
-
-    <CategoryEditModel
+  <CustomerUpdateModel
     :customer="allcustomers"
     :selected-customer="selectedCustomer"
     v-model:open="isEditModalOpen"
   />
 
-<CustomerDeleteModel
-:customer="allcustomers"
-:selected-customer="selectedCustomer"
-v-model:open="isDeleteModalOpen"
-/>
-
-
-
-
+  <CustomerDeleteModel
+    :customer="allcustomers"
+    :selected-customer="selectedCustomer"
+    v-model:open="isDeleteModalOpen"
+  />
 </template>
-
-
-
-
+  
 <script setup>
 import { ref } from "vue";
-import { Head } from '@inertiajs/vue3';
+import { Head } from "@inertiajs/vue3";
 import { Link, useForm, router } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
@@ -194,10 +213,9 @@ import CustomerUpdateModel from "@/Components/custom/CustomerUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
 
 defineProps({
-    allcustomers: Array,
-    totalCustomers: Number,
+  allcustomers: Array,
+  totalCustomers: Array,
 });
-
 
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -206,7 +224,6 @@ const playClickSound = () => {
 
 const form = useForm({});
 
-
 const openEditModal = (customer) => {
   console.log("Opening edit modal for customer:", customer);
   selectedCustomer.value = customer;
@@ -214,11 +231,9 @@ const openEditModal = (customer) => {
 };
 
 const openDeleteModal = (customer) => {
-
   selectedCustomer.value = customer;
   isDeleteModalOpen.value = true;
 };
-
 
 const isEditModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -230,7 +245,6 @@ $(document).ready(function () {
     pageLength: 10,
     buttons: [],
     columnDefs: [
-
       {
         targets: [4],
         searchable: false,
@@ -241,15 +255,12 @@ $(document).ready(function () {
       let searchInput = $("div.dataTables_filter input");
       searchInput.attr("placeholder", "Search ...");
       searchInput.off("keyup");
-      searchInput.on("keypress", function (e) {
-
-      });
+      searchInput.on("keypress", function (e) {});
     },
     language: {
       search: "",
     },
   });
 });
-
 </script>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -14,7 +15,7 @@ class CustomerController extends Controller
     public function index()
     {
         $allcustomers = Customer::orderBy('created_at', 'desc')
-        ->get();
+            ->get();
         $totalCustomers = $allcustomers->count();
 
         return Inertia::render('Customers/Index', [
@@ -60,7 +61,27 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        dd($request->all());
+        $validated = $request->validate([
+            'name' => 'nullable|string|max:255',
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('customers')->ignore($customer->id),
+            ],
+            'phone' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('customers')->ignore($customer->id),
+            ],
+            'address' => 'nullable|string|max:255',
+            'loyalty_points' => 'nullable|integer|max:255',
+        ]);
+
+        $customer->update($validated);
+
+        return redirect()->route('customers.index')->banner('Customer updated successfully.');
     }
 
     /**
@@ -71,6 +92,5 @@ class CustomerController extends Controller
 
         $customer->delete();
         return redirect()->route('customers.index')->banner('Customer Deleted successfully.');
-
     }
 }
