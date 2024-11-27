@@ -18,9 +18,15 @@
         <span class="font-bold">Logged As:</span>
         <b>{{ $page.props.auth.user.name }}</b>
       </p>
+<!--
+      <form @submit.prevent="logout">
+                                            <DropdownLink as="button">
+                                                Log Out
+                                            </DropdownLink>
+                                        </form> -->
 
       <!-- Logout Button -->
-      <!-- <form @submit.prevent="logout" class="inline">
+        <form @submit.prevent="logout" class="inline"  @click="() => { playClickSound();  }">
         <button type="submit" class="flex items-center font-bold text-red-500 hover:underline">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -38,25 +44,36 @@
           </svg>
           <span class="ml-2">Logout</span>
         </button>
-      </form> -->
+      </form>
     </div>
 
-    <!-- Profile Picture -->
-    <a :href="route('profile.show')" class="block">
-    <img
+
+        <img
   src="/images/dashboard/cashier.png"
-  class="w-16 h-16 rounded-full"
-  style="border: 1px solid #000; padding: 2px;"
+  class="p-1 border border-black"
+  style="width: 55px; height: 45px; border-radius: 50%;"
   alt="Profile"
 />
 
-    </a>
+
+ 
+
+
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
 
-import { Link  } from "@inertiajs/vue3";
+const playClickSound = () => {
+  const clickSound = new Audio("/sounds/click-sound.mp3");
+  clickSound.play();
+};
+
+const logout = () => {
+    router.post(route('logout'));
+};
 
 </script>
 

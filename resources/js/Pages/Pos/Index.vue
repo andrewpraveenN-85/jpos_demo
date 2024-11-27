@@ -139,10 +139,21 @@
               :key="item.id"
             >
               <div class="flex w-1/6">
-                <img
+                <!-- <img
                   :src="item.image"
                   class="object-cover w-16 h-16 rounded-lg"
-                />
+                /> -->
+
+
+
+                <img
+  :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'"
+  alt="Supplier Image"
+  class="object-cover w-16 h-16 border border-gray-500"
+/>
+
+
+
               </div>
               <div
                 class="flex flex-col items-start justify-start w-4/6 space-y-4"

@@ -133,14 +133,6 @@
                   {{ supplier.contact || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-200">
-                  <!-- <img
-                    v-if="supplier.image"
-                    :src="supplier.image"
-                    alt="Supplier Image"
-                    class="object-cover rounded-md shadow h-15 w-15"
-                  />
-                  <span v-else class="text-gray-500">N/A</span> -->
-
 
 
 
@@ -229,7 +221,7 @@ defineProps({
   totalSuppliers: Number, // Total count of suppliers
 });
 
-const playClickSound = () => {
+const playCplayClickSoundlickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
   clickSound.play();
 };
