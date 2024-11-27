@@ -78,13 +78,23 @@
           </p>
         </div>
         <div class="flex justify-end w-full">
-          <p
+          <!-- <p
 
               @click="() => { playClickSound(); isCreateModalOpen = true; }"
             class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
           >
             <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
-          </p>
+          </p> -->
+
+          <p
+
+@click="() => { playClickSound(); isCreateModalOpen = true; }"
+class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
+>
+<i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
+</p>
+
+
         </div>
       </div>
       <template v-if="allsuppliers && allsuppliers.length > 0">
@@ -133,6 +143,14 @@
                   {{ supplier.contact || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-200">
+                  <!-- <img
+                    v-if="supplier.image"
+                    :src="supplier.image"
+                    alt="Supplier Image"
+                    class="object-cover rounded-md shadow h-15 w-15"
+                  />
+                  <span v-else class="text-gray-500">N/A</span> -->
+
 
 
 

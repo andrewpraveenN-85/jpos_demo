@@ -164,7 +164,7 @@
                         required
                         v-model="form.color_id"
                         id="sub_id"
-                        class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                        class="w-full px-4 py-2 mt-2 text-black bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
                         <option value="">Select a Color</option>
                         <option

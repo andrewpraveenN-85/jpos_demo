@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\StockTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -185,7 +186,7 @@ class ProductController extends Controller
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
 
 
-        // dd($product);
+
 
         return inertia('Products/Edit', [
             'product' => $product,
@@ -199,45 +200,56 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
-    {
-
-        $validated = $request->validate([
-            'category_id' => 'nullable|exists:categories,id',
-            'name' => 'string|max:255',
-            'size_id' => 'nullable|exists:sizes,id',
-            'color_id' => 'nullable|exists:colors,id',
-            'cost_price' => 'numeric|min:0',
-            'selling_price' => 'numeric|min:0',
-            'stock_quantity' => 'integer|min:0',
-            'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|max:2048',
-        ]);
-
-
-        if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
-            }
-
-            // Save the new image
-            $fileExtension = $request->file('image')->getClientOriginalExtension();
-            $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
-            $path = $request->file('image')->storeAs('products', $fileName, 'public');
-            $validated['image'] = 'storage/' . $path;
-        } else {
-            // Retain the old image if no new image is uploaded
-            $validated['image'] = $product->image;
-        }
 
 
 
-        $product->update($validated);
+     public function update(Request $request, Product $product)
+     {
+dd($request->all());
+         $validated = $request->validate([
+             'category_id' => 'nullable|exists:categories,id',
+             'name' => 'string|max:255',
+             'size_id' => 'nullable|exists:sizes,id',
+             'color_id' => 'nullable|exists:colors,id',
+             'cost_price' => 'numeric|min:0',
+             'selling_price' => 'numeric|min:0',
+             'stock_quantity' => 'required|integer|min:0',
+             'quantity' => 'required|integer|min:0',
+             'supplier_id' => 'nullable|exists:suppliers,id',
+             'image' => 'nullable|max:2048',
+         ]);
 
-        // return redirect()->route('products.index')->with('success', 'Product updated successfully!');
-        return redirect()->route('products.index')->banner('Product updated successfully');
-    }
+         // Handle image update
+         if ($request->hasFile('image')) {
+             // Delete the old image if it exists
+             if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+                 Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
+             }
+
+             // Save the new image
+             $fileExtension = $request->file('image')->getClientOriginalExtension();
+             $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+             $path = $request->file('image')->storeAs('products', $fileName, 'public');
+             $validated['image'] = 'storage/' . $path;
+         } else {
+             // Retain the old image if no new image is uploaded
+             $validated['image'] = $product->image;
+         }
+
+
+         $product->update($validated);
+
+         return redirect()->route('products.index')->banner('Product updated successfully');
+     }
+
+
+
+
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

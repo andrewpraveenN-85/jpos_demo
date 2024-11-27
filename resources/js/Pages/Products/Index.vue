@@ -320,6 +320,7 @@
   <ProductUpdateModel
     :categories="allcategories"
     :colors="colors"
+    :suppliers="suppliers"
     :sizes="sizes"
     v-model:open="isEditModalOpen"
     :selected-product="selectedProduct"
@@ -328,6 +329,7 @@
   <ProductViewModel
     :categories="allcategories"
     :colors="colors"
+
     :sizes="sizes"
     v-model:open="isViewModalOpen"
     :selected-product="selectedProduct"
