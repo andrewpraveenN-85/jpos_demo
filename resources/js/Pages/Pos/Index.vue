@@ -264,6 +264,7 @@
     :customer="customer"
     :orderId="orderId"
   />
+  <AlertModel v-model:open="isAlertModalOpen" :message="message" />
   <Footer />
 </template>
 <script setup>
@@ -271,6 +272,7 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
+import AlertModel from "@/Components/custom/AlertModel.vue";
 import { useForm, router } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
 import { Head } from "@inertiajs/vue3";
@@ -281,6 +283,8 @@ const product = ref(null);
 const error = ref(null);
 const products = ref([]);
 const isSuccessModalOpen = ref(false);
+const isAlertModalOpen = ref(false);
+const message = ref("");
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
@@ -354,9 +358,7 @@ const orderId = computed(() => {
 const submitOrder = async () => {
   // if (window.confirm("Are you sure you want to confirm the order?")) {
   console.log(products.value);
-  // const response = await axios.post("/api/customers", customer.value);
   try {
-    // const response = await axios.post("/pos/submit", customer.value);
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
       products: products.value,
@@ -410,7 +412,13 @@ const submitBarcode = async () => {
     // Extract the response data
     const { product: fetchedProduct, error: fetchedError } = response.data;
 
+    
     if (fetchedProduct) {
+      if(fetchedProduct.stock_quantity < 1) {
+        isAlertModalOpen.value = true;
+        message.value = "Product is out of stock";
+        return
+      }
       // Check if the product already exists in the products array
       const existingProduct = products.value.find(
         (item) => item.id === fetchedProduct.id
@@ -431,10 +439,17 @@ const submitBarcode = async () => {
         fetchedProduct
       );
     } else {
+      isAlertModalOpen.value = true;
+      message.value = fetchedError;
       error.value = fetchedError; // Set the error message
       console.error("Error:", fetchedError);
     }
   } catch (err) {
+    if(err.response.status === 422) {
+      isAlertModalOpen.value = true;
+      message.value = err.response.data.message;
+    }
+
     console.error("An error occurred:", err.response?.data || err.message);
     error.value = "An unexpected error occurred. Please try again.";
   }
