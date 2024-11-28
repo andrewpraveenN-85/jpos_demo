@@ -22,66 +22,70 @@
               &times;
             </button> -->
 
-            <!-- Modal Title -->
-            <DialogTitle class="text-xl font-bold text-white"
-              >Add Product</DialogTitle
-            >
-            <form @submit.prevent="submit">
-              <!-- Modal Form -->
-              <div class="mt-6 space-y-4 text-left">
+                        <!-- Modal Title -->
+                        <DialogTitle class="text-xl font-bold text-white">Edit Product</DialogTitle>
+                        <form @submit.prevent="submit">
+                            <!-- Modal Form -->
+                            <div class="mt-6 space-y-4 text-left">
 
 
-  <div class="flex items-center gap-8 mt-6">
-                  <!-- Cost Price input -->
-                  <div class="w-full">
-                  <!-- Category Name -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Category Name:</label
-                  >
-                  <select
-                    required
-                    v-model="form.category_id"
-                    id="parent_id"
-                    class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  >
-                    <option value="">Select a Category</option>
-                    <option
-                      v-for="category in categories"
-                      :key="category.id"
-                      :value="category.id"
-                    >
-                      {{ category.name }}
-                    </option>
-                  </select>
-                  <span v-if="form.errors.name" class="mt-4 text-red-500">{{
-                    form.errors.name
-                  }}</span>
-                </div>
-                  </div>
+                                <div class="flex items-center gap-8 mt-6">
 
-                  <!-- Selling Price input -->
-                  <div class="w-full">
-                    <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Product Name:</label
-                  >
-                  <input
-                    v-model="form.name"
-                    type="text"
-                    id="name"
-                    required
-                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
-                  <span v-if="form.errors.name" class="mt-4 text-red-500">{{
-                    form.errors.name
-                  }}</span>
-                </div>
-                  </div>
-                </div>
+
+                                      <!-- Selling Price input -->
+                                      <div class="w-full">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Product Name:</label>
+                                            <input v-model="form.name" type="text" id="name" required
+                                                class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
+                                            <span v-if="form.errors.name" class="mt-4 text-red-500">{{
+                                                form.errors.name
+                                            }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Cost Price input -->
 
 
 
+                                </div>
+
+
+
+                                <div class="flex items-center gap-8 mt-6">
+
+
+                                    <div class="w-full">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Product Code:</label>
+                                            <input v-model="form.code" type="text" id="code" required
+                                                class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
+                                            <span v-if="form.errors.code" class="mt-4 text-red-500">{{
+                                                form.errors.code
+                                            }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Cost Price input -->
+                                    <div class="w-full">
+                                        <!-- Category Name -->
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Category
+                                                Name:</label>
+                                            <select required v-model="form.category_id" id="parent_id"
+                                                class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600">
+                                                <option value="">Select a Category</option>
+                                                <option v-for="category in categories" :key="category.id"
+                                                    :value="category.id">
+                                                    {{ category.name }}
+                                                </option>
+                                            </select>
+                                            <span v-if="form.errors.name" class="mt-4 text-red-500">{{
+                                                form.errors.name
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
 
 
 
@@ -152,93 +156,249 @@
                                             {{ form.errors.selling_price }}
                                         </span>
                                     </div>
+
+
+
+
+
                                 </div>
 
-                <div class="flex items-center gap-8 mt-6">
-                  <div class="w-full">
-                    <label
-                      for="stock_quantity"
-                      class="block text-sm font-medium text-gray-300"
-                      >Stock Quantity:</label
-                    >
-                    <input
-                      type="number"
-                      id="stock_quantity"
-                      v-model="form.stock_quantity"
-                      class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Enter stock quantity"
-                      required
-                    />
-                    <span
-                      v-if="form.errors.stock_quantity"
-                      class="mt-2 text-red-500"
-                    >
-                      {{ form.errors.stock_quantity }}
-                    </span>
-                  </div>
-                  <div class="w-full">
-                   <label
-                    for="image"
-                    class="block text-sm font-medium text-gray-300"
-                    >Image:</label
-                  >
-                  <div class="w-full md:w-6/12">
-                    <label class="block text-sm font-medium text-white"
-                      >Current Image</label
-                    >
-                    <div class="mt-2">
-                      <img
-                        v-if="selectedProduct.image"
-                        :src="`/${selectedProduct.image}`"
-                        alt="Product Image"
-                        class="rounded-lg "
-                      />
-
-                      <p v-else class="text-sm text-gray-500">
-                        No image available
-                      </p>
-                    </div>
-                  </div>
-                  <input
-                    type="file"
-                    id="image"
-                    @change="handleImageUpload"
-                    class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
-                  <span v-if="form.errors.image" class="mt-2 text-red-500">
-                    {{ form.errors.image }}
-                  </span>
-                  </div>
-                </div>
 
 
-              </div>
-
-              <!-- Modal Buttons -->
-              <div class="mt-6 space-x-4">
-                <button
-                  class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-                  type="submit" @click="() => { playClickSound();}"
 
 
-                >
-                  Save
-                </button>
-                <button  type="button"
-                  class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-                @click="() => { playClickSound(); emit('update:open', false); }"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </DialogPanel>
-        </TransitionChild>
-      </div>
-    </Dialog>
-  </TransitionRoot>
+
+
+                                <div class="flex items-center gap-8 mt-6">
+                                    <!-- Cost Price input -->
+                                    <div class="w-full">
+                                        <label for="cost_price" class="block text-sm font-medium text-gray-300">Discount (%):</label>
+                                        <input type="number" id="discount" v-model="form.discount"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                            placeholder="Enter discount percentage" min="0" max="100" step="0.01"
+                                              />
+                                        <span v-if="form.errors.discount" class="mt-2 text-red-500">
+                                            {{ form.errors.discount }}
+                                        </span>
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+                                    <!-- Selling Price input -->
+                                    <div class="w-full">
+
+
+                                        <label for="discounted_price" class="block text-sm font-medium text-gray-300">
+        Discounted Price:
+    </label>
+    <input
+        readonly
+        type="number"
+        step="0.01"
+        id="discounted_price"
+        v-model="form.discounted_price"
+        class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+        placeholder="Discounted price will be calculated"
+    />
+    <span v-if="form.errors.discounted_price" class="mt-2 text-red-500">
+        {{ form.errors.discounted_price }}
+    </span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <div class="flex items-center gap-8 mt-6">
+                                    <div class="w-full">
+                                        <label for="stock_quantity"
+                                            class="block text-sm font-medium text-gray-300">Stock Quantity:</label>
+
+
+                                        <input type="number" id="stock_quantity" v-model="form.stock_quantity"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                            placeholder="Stock quantity" required />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="w-full">
+                                        <label for="image" class="block text-sm font-medium text-gray-300">Supplier Name
+                                            :</label>
+
+                                        <select v-model="form.supplier_id" id="supplier_id"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600">
+                                            <option value="">Select a Supplier</option>
+                                            <option v-for="supplier in suppliers" :key="supplier.id"
+                                                :value="supplier.id">
+                                                {{ supplier.name }}
+                                            </option>
+                                        </select>
+                                        <span v-if="form.errors.sub_id" class="mt-4 text-red-500">
+                                            {{ form.errors.sub_id }}
+                                        </span>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="flex items-center gap-8 mt-6">
+
+
+
+                                    <!-- <div class="w-full">
+                                        <label for="image" class="block text-sm font-medium text-gray-300">Stock update
+                                            Type :</label>
+
+
+                                            <select required v-model="form.transaction_type" id="transaction_type"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600">
+                                            <option value="">Select Transaction Type</option>
+                                            <option value="0" selected>Addition</option>
+                                            <option value="1">Subtraction</option>
+                                        </select>
+
+                                        <input type="number" id="quantity" v-model="quantity"
+                                            class="w-full px-4 py-2 mt-4 text-black bg-white rounded-md m focus:outline-none focus:ring focus:ring-blue-600"
+                                            placeholder="Enter stock quantity" />
+
+
+
+
+
+
+                                    </div> -->
+
+
+
+                                    <div class="w-full">
+                                        <label for="image"
+                                            class="block text-sm font-medium text-gray-300">Image:</label>
+                                        <div class="w-full md:w-6/12">
+                                            <label class="block text-sm font-medium text-white">Current Image</label>
+                                            <div class="mt-2">
+                                                <img v-if="selectedProduct.image" :src="`/${selectedProduct.image}`"
+                                                    alt="Product Image" class="rounded-lg"
+                                                    style="width: 80px; height: 80px;" />
+
+                                                <p v-else class="text-sm text-gray-500">
+                                                    No image available
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <input type="file" id="image" @change="handleImageUpload"
+                                            class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
+                                        <span v-if="form.errors.image" class="mt-2 text-red-500">
+                                            {{ form.errors.image }}
+                                        </span>
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                            </div>
+
+                            <!-- Modal Buttons -->
+                            <div class="mt-6 space-x-4">
+                                <button class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700" type="submit"
+                                    @click="() => { playClickSound(); }">
+                                    Save
+                                </button>
+                                <button type="button"
+                                    class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
+                                    @click="() => { playClickSound(); emit('update:open', false); }">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </DialogPanel>
+                </TransitionChild>
+            </div>
+        </Dialog>
+    </TransitionRoot>
 </template>
-
 
 
 
@@ -294,14 +454,15 @@ const { open, categories, colors, suppliers, sizes, selectedProduct } = definePr
 const form = useForm({
     category_id: "",
     supplier_id: "",
-    transaction_type: "", // 0 for Addition, 1 for Subtraction
+    stock_quantity: "",
     name: "",
+    code: "",
     size_id: "",
     color_id: "",
     cost_price: null,
+    discount: 0,
     selling_price: null,
-    stock_quantity: "", // Initial stock quantity
-    quantity: "", // Initial stock quantity
+    discounted_price: null,
     barcode: "",
     image: null,
 });
@@ -311,6 +472,20 @@ const handleImageUpload = (event) => {
     form.image = event.target.files[0];
 };
 
+// Computed property for discounted price calculation
+const discountedPrice = computed(() => {
+    if (form.selling_price && form.discount) {
+        const discountAmount = (form.selling_price * form.discount) / 100;
+        return (form.selling_price - discountAmount).toFixed(2);
+    }
+    return form.selling_price || 0;
+});
+
+// Watch to update discounted_price field dynamically
+watch([() => form.selling_price, () => form.discount], () => {
+    form.discounted_price = discountedPrice.value;
+});
+
 // Watch for changes in selectedProduct and populate form
 watch(
     () => selectedProduct,
@@ -318,58 +493,21 @@ watch(
         if (newValue) {
             form.category_id = newValue.category_id || "";
             form.name = newValue.name || "";
-            form.transaction_type = newValue.transaction_type || "";
+            form.code = newValue.code || "";
             form.supplier_id = newValue.supplier_id || "";
+            form.stock_quantity = newValue.stock_quantity || null;
             form.size_id = newValue.size_id || "";
             form.color_id = newValue.color_id || "";
             form.cost_price = newValue.cost_price || null;
+            form.discount = newValue.discount || 0;
             form.selling_price = newValue.selling_price || null;
-            form.stock_quantity = newValue.stock_quantity || "";
-            form.quantity = newValue.quantity || "";
+            form.discounted_price = discountedPrice.value;
             form.barcode = newValue.barcode || "";
             form.image = newValue.image || null;
         }
     },
     { immediate: true }
 );
-
-// Transaction type and quantity for dynamic stock updates
-const transaction_type = ref("");
-const quantity = ref(0);
-const errorMessage = ref(""); // Error message state
-
-
-
-
-
-
-
-const stock_quantity = computed(() => {
-    const initialStock = Number(form.stock_quantity) || 0; // Ensure it's a number
-    const qty = Number(form.quantity) || 0; // Ensure it's a number
-    let updatedStock = initialStock;
-
-    if (form.transaction_type === "addition") {
-        updatedStock = initialStock + qty;
-    } else if (form.transaction_type === "subtraction") {
-        updatedStock = initialStock - qty;
-    }
-
-    // Set error message if stock goes below zero
-    if (updatedStock < 0) {
-        errorMessage.value = "Stock quantity cannot be negative!";
-        return initialStock; // Prevent invalid stock update
-    } else {
-        errorMessage.value = ""; // Clear error message
-    }
-
-    return updatedStock;
-});
-
-
-
-
-
 
 // Submit the form
 const submit = () => {
@@ -385,5 +523,4 @@ const submit = () => {
         },
     });
 };
-
 </script>

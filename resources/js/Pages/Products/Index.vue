@@ -194,7 +194,20 @@
               >
                 <p>{{ product.name || "N/A" }}</p>
                 <p class="px-4 text-white bg-green-700 rounded-full">
-                  {{ product.selling_price || "N/A" }} LKR
+
+
+                    {{
+    product.selling_price && product.discount !== null && product.discount !== undefined
+        ? product.discount > 0
+            ? (
+                product.selling_price -
+                (product.selling_price * product.discount) / 100
+            ).toFixed(2) + " LKR"
+            : product.selling_price + " LKR"
+        : "N/A"
+}}
+
+
                 </p>
               </div>
               <div class="flex items-center justify-center w-full space-x-4">
