@@ -139,21 +139,13 @@
               :key="item.id"
             >
               <div class="flex w-1/6">
-                <!-- <img
-                  :src="item.image"
-                  class="object-cover w-16 h-16 rounded-lg"
-                /> -->
-
-
-
                 <img
-  :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'"
-  alt="Supplier Image"
-  class="object-cover w-16 h-16 border border-gray-500"
-/>
-
-
-
+                  :src="
+                    item.image ? `/${item.image}` : '/images/placeholder.jpg'
+                  "
+                  alt="Supplier Image"
+                  class="object-cover w-16 h-16 border border-gray-500"
+                />
               </div>
               <div
                 class="flex flex-col items-start justify-start w-4/6 space-y-4"
@@ -182,9 +174,18 @@
                     </p>
                   </div>
                   <div class="flex items-center justify-center">
-                    <p class="text-2xl font-bold text-black">
-                      {{ item.selling_price }} LKR
-                    </p>
+                    <div>
+                      <p
+                        v-if="item.discount && item.discount > 0"
+                        class="py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider"
+                      >
+                        {{ item.discount }}% Off
+                      </p>
+                      <p class="text-2xl font-bold text-black">
+                        {{ item.selling_price }}
+                        LKR
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -205,8 +206,8 @@
               <div
                 class="flex items-center justify-between w-full px-16 py-2 pb-4 border-b border-black"
               >
-                <!-- <p class="text-xl">Discount</p>
-                <p class="text-xl">1500.00 LKR</p> -->
+                <p class="text-xl">Discount</p>
+                <p class="text-xl">( {{ totalDiscount }} LKR )</p>
               </div>
               <div class="flex items-center justify-between w-full px-16 pt-4">
                 <p class="text-3xl text-black">Total</p>
@@ -398,9 +399,36 @@ const subtotal = computed(() => {
     .toFixed(2); // Ensures two decimal places
 });
 
-const total = computed(() => {
-  return (parseFloat(subtotal.value) - parseFloat(discount.value)).toFixed(2); // Ensures two decimal places
+const totalDiscount = computed(() => {
+  return products.value
+    .reduce((total, item) => {
+      // Check if item has a discount
+      if (item.discount && item.discount > 0) {
+        const discountAmount = (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) * item.quantity;
+        return total + discountAmount;
+      }
+      return total; // If no discount, return total as-is
+    }, 0)
+    .toFixed(2); // Ensures two decimal places
 });
+
+const total = computed(() => {
+  return products.value
+    .reduce((total, item) => {
+      // Check if item has a discount
+      const price =
+        item.discount && item.discount > 0
+          ? parseFloat(item.discounted_price) // Use discounted price
+          : parseFloat(item.selling_price); // Use regular price
+
+      return total + price * item.quantity;
+    }, 0)
+    .toFixed(2); // Ensures two decimal places
+});
+
+// const total = computed(() => {
+//   return (parseFloat(subtotal.value) - parseFloat(discount.value)).toFixed(2); // Ensures two decimal places
+// });
 
 // Check for product or handle errors
 const form = useForm({
@@ -423,12 +451,11 @@ const submitBarcode = async () => {
     // Extract the response data
     const { product: fetchedProduct, error: fetchedError } = response.data;
 
-    
     if (fetchedProduct) {
-      if(fetchedProduct.stock_quantity < 1) {
+      if (fetchedProduct.stock_quantity < 1) {
         isAlertModalOpen.value = true;
         message.value = "Product is out of stock";
-        return
+        return;
       }
       // Check if the product already exists in the products array
       const existingProduct = products.value.find(
@@ -456,7 +483,7 @@ const submitBarcode = async () => {
       console.error("Error:", fetchedError);
     }
   } catch (err) {
-    if(err.response.status === 422) {
+    if (err.response.status === 422) {
       isAlertModalOpen.value = true;
       message.value = err.response.data.message;
     }

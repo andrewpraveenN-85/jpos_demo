@@ -103,26 +103,47 @@ const handlePrintReceipt = () => {
       sum + parseFloat(product.selling_price) * product.quantity,
     0
   );
+
+  const totalDiscount =  props.products
+      .reduce((total, item) => {
+        // Check if item has a discount
+        if (item.discount && item.discount > 0) {
+          const discountAmount =
+            (parseFloat(item.selling_price) -
+              parseFloat(item.discounted_price)) *
+            item.quantity;
+          return total + discountAmount;
+        }
+        return total; // If no discount, return total as-is
+      }, 0)
+      .toFixed(2); // Ensures two decimal places
+
   const discount = 0; // Example discount (can be dynamic)
-  const total = subTotal - discount;
+  const total = subTotal - totalDiscount;
 
   // Generate table rows dynamically using props.products
   const productRows = props.products
-    .map(
-      (product) => `
-        <tr>
-          <td class="py-1">${product.name}</td>
-          <td class="text-center py-1">${product.quantity}</td>
-          <td class="text-right py-1">${(
-            parseFloat(product.selling_price) * product.quantity
-          ).toFixed(2)}</td>
-        </tr>
-      `
-    )
+    .map((product) => {
+      return `
+      <tr>
+        <td>${product.name}</td>
+        <td>${product.quantity}</td>
+        <td>
+          ${
+            product.discount && product.discount > 0
+              ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
+              : ""
+          }
+         
+         <div>${product.selling_price}</div>
+        </td>
+      </tr>
+    `;
+    })
     .join("");
 
   // Generate the receipt HTML
-const receiptHTML = `
+  const receiptHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,34 +160,29 @@ const receiptHTML = `
         }
         body {
             background-color: #ffffff;
-            font-size: 14px;
+            font-size: 12px;
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
-            color: black !important;
-        }
-        .receipt-container {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 16px;
+            padding: 10px;
+            color: #000;
         }
         .header {
             text-align: center;
             margin-bottom: 16px;
         }
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            letter-spacing: 1px;
+            margin: 0;
         }
         .header p {
-            font-size: 12px;
+            font-size: 10px;
             margin: 4px 0;
         }
         .section {
             margin-bottom: 16px;
-            border-top: 1px solid #d1d5db;
             padding-top: 8px;
+            border-top: 1px solid #000;
         }
         .info-row {
             display: flex;
@@ -185,19 +201,24 @@ const receiptHTML = `
             width: 100%;
             font-size: 12px;
             border-collapse: collapse;
+            margin-top: 8px;
         }
         table th, table td {
-            padding: 4px 8px;
-            border-bottom: 1px solid #d1d5db;
+            padding: 6px 8px;
+            border-bottom: 1px solid #ddd;
         }
         table th {
             text-align: left;
         }
         table td {
+            text-align: right;
+        }
+        table td:first-child {
+            text-align: left;
         }
         .totals {
-            border-top: 1px solid #d1d5db;
-            padding-top: 16px;
+            border-top: 1px solid #000;
+            padding-top: 8px;
             font-size: 12px;
         }
         .totals div {
@@ -206,16 +227,16 @@ const receiptHTML = `
             margin-bottom: 8px;
         }
         .totals div:last-child {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
         }
         .footer {
             text-align: center;
-            font-size: 12px;
+            font-size: 10px;
             margin-top: 16px;
         }
         .footer p {
-            margin: 8px 0;
+            margin: 6px 0;
         }
         .footer .italic {
             font-style: italic;
@@ -225,8 +246,8 @@ const receiptHTML = `
 <body>
     <div class="receipt-container">
         <div class="header">
-            <h1 style="margin-bottom: 0;">DRESS HUB</h1>
-            <p style="font-size: 9px;">3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
+            <h1>DRESS HUB</h1>
+            <p>3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
             <p>0771119200 | dresshub.lk</p>
         </div>
         <div class="section">
@@ -257,7 +278,7 @@ const receiptHTML = `
                     <tr>
                         <th>Description</th>
                         <th style="text-align: center;">Qty</th>
-                        <th style="text-align: right;">Price</th>
+                        <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -272,7 +293,7 @@ const receiptHTML = `
             </div>
             <div>
                 <span>Discount</span>
-                <span>${discount.toFixed(2)} LKR</span>
+                <span>${totalDiscount} LKR</span>
             </div>
             <div>
                 <span>Total</span>
@@ -281,14 +302,13 @@ const receiptHTML = `
         </div>
         <div class="footer">
             <p>THANK YOU FOR SHOPPING WITH US</p>
-            <p class="italic" sttyle="margin-top: 10px;">Let the quality define its own Standards</p>
-            <p style="font-size: 10px; margin-top: 12px; font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+            <p class="italic">Let the quality define its own standards</p>
+            <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
         </div>
     </div>
 </body>
 </html>
 `;
-
 
   // Open a new window
   const printWindow = window.open("", "_blank");
