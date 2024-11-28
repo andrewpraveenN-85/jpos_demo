@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->decimal('discount', 5, 2)->default(0)->after('selling_price')->comment('Discount percentage for the product');
             $table->decimal('discounted_price', 10, 2)->nullable()->after('discount')->comment('Final price after applying discount');
-            $table->string('code', 50)->unique()->after('name')->comment('Unique code for the product');
+            $table->string('code', 50)->after('name')->comment('Unique code for the product')->nullable();
         });
     }
 
