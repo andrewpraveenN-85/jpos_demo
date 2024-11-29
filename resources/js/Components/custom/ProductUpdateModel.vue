@@ -32,15 +32,15 @@
                                 <div class="flex items-center gap-8 mt-6">
 
 
-                                      <!-- Selling Price input -->
-                                      <div class="w-full">
+                                    <!-- Selling Price input -->
+                                    <div class="w-full">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300">Product Name:</label>
                                             <input v-model="form.name" type="text" id="name" required
                                                 class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
                                             <span v-if="form.errors.name" class="mt-4 text-red-500">{{
                                                 form.errors.name
-                                            }}</span>
+                                                }}</span>
                                         </div>
                                     </div>
                                     <!-- Cost Price input -->
@@ -61,7 +61,7 @@
                                                 class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
                                             <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                                                 form.errors.code
-                                            }}</span>
+                                                }}</span>
                                         </div>
                                     </div>
                                     <!-- Cost Price input -->
@@ -71,7 +71,7 @@
                                             <label class="block text-sm font-medium text-gray-300">Category
                                                 Name:</label>
                                             <select required v-model="form.category_id" id="parent_id"
-                                                class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600">
+                                                class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600">
                                                 <option value="">Select a Category</option>
                                                 <option v-for="category in categories" :key="category.id"
                                                     :value="category.id">
@@ -80,7 +80,7 @@
                                             </select>
                                             <span v-if="form.errors.name" class="mt-4 text-red-500">{{
                                                 form.errors.name
-                                            }}</span>
+                                                }}</span>
                                         </div>
                                     </div>
 
@@ -101,7 +101,7 @@
                                             <label for="parent_id"
                                                 class="block text-sm font-medium text-gray-300">Size:</label>
                                             <select required v-model="form.size_id" id="parent_id"
-                                                class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600">
+                                                class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600">
                                                 <option value="">Select a Size</option>
                                                 <option v-for="size in sizes" :key="size.id" :value="size.id">
                                                     {{ size.name }}
@@ -119,7 +119,7 @@
                                             <label for="sub_id"
                                                 class="block text-sm font-medium text-gray-300">Color:</label>
                                             <select required v-model="form.color_id" id="sub_id"
-                                                class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600">
+                                                class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600">
                                                 <option value="">Select a Color</option>
                                                 <option v-for="color in colors" :key="color.id" :value="color.id">
                                                     {{ color.name }}
@@ -138,7 +138,7 @@
                                         <label for="cost_price" class="block text-sm font-medium text-gray-300">Cost
                                             Price:</label>
                                         <input type="number" step="0.01" id="cost_price" v-model="form.cost_price"
-                                            class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                                             placeholder="Enter cost price" required />
                                         <span v-if="form.errors.cost_price" class="mt-2 text-red-500">
                                             {{ form.errors.cost_price }}
@@ -149,8 +149,8 @@
                                     <div class="w-full">
                                         <label for="selling_price"
                                             class="block text-sm font-medium text-gray-300">Selling Price:</label>
-                                        <input type="number" step="0.01" id="selling_price" v-model="form.selling_price"
-                                            class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                        <input type="text"  id="selling_price" v-model="form.selling_price"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                                             placeholder="Enter selling price" required />
                                         <span v-if="form.errors.selling_price" class="mt-2 text-red-500">
                                             {{ form.errors.selling_price }}
@@ -172,11 +172,11 @@
                                 <div class="flex items-center gap-8 mt-6">
                                     <!-- Cost Price input -->
                                     <div class="w-full">
-                                        <label for="cost_price" class="block text-sm font-medium text-gray-300">Discount (%):</label>
-                                        <input type="number" id="discount" v-model="form.discount"
+                                        <label for="cost_price" class="block text-sm font-medium text-gray-300">Discount
+                                            (%):</label>
+                                        <input type="text" id="discount" v-model="form.discount"
                                             class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                                            placeholder="Enter discount percentage" min="0" max="100" step="0.01"
-                                              />
+                                            placeholder="Enter discount percentage" min="0" max="100"   />
                                         <span v-if="form.errors.discount" class="mt-2 text-red-500">
                                             {{ form.errors.discount }}
                                         </span>
@@ -197,20 +197,15 @@
 
 
                                         <label for="discounted_price" class="block text-sm font-medium text-gray-300">
-        Discounted Price:
-    </label>
-    <input
-        readonly
-        type="number"
-        step="0.01"
-        id="discounted_price"
-        v-model="form.discounted_price"
-        class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-        placeholder="Discounted price will be calculated"
-    />
-    <span v-if="form.errors.discounted_price" class="mt-2 text-red-500">
-        {{ form.errors.discounted_price }}
-    </span>
+                                            Discounted Price:
+                                        </label>
+                                        <input   type="text"  id="discounted_price"
+                                            v-model="form.discounted_price"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                            placeholder="Discounted price will be calculated" />
+                                        <span v-if="form.errors.discounted_price" class="mt-2 text-red-500">
+                                            {{ form.errors.discounted_price }}
+                                        </span>
 
 
 
@@ -249,7 +244,7 @@
 
 
                                         <input type="number" id="stock_quantity" v-model="form.stock_quantity"
-                                            class="w-full px-4 py-2 mt-2 text-black bg-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white  rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                                             placeholder="Stock quantity" required />
 
 
@@ -357,7 +352,7 @@
                                             </div>
                                         </div>
                                         <input type="file" id="image" @change="handleImageUpload"
-                                            class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
+                                            class="w-full px-4 py-2 mt-2 text-white  bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600" />
                                         <span v-if="form.errors.image" class="mt-2 text-red-500">
                                             {{ form.errors.image }}
                                         </span>
@@ -472,19 +467,50 @@ const handleImageUpload = (event) => {
     form.image = event.target.files[0];
 };
 
-// Computed property for discounted price calculation
+
+
+
+
+
+// Utility function to limit to 2 decimal points
+function limitToTwoDecimals(value) {
+    if (value === null || value === undefined) return value;
+    const strValue = value.toString();
+    const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
+    return match ? parseFloat(match[0]) : value;
+}
+
+// Computed property for dynamically calculating the discounted price
 const discountedPrice = computed(() => {
     if (form.selling_price && form.discount) {
         const discountAmount = (form.selling_price * form.discount) / 100;
-        return (form.selling_price - discountAmount).toFixed(2);
+        return limitToTwoDecimals(form.selling_price - discountAmount);
     }
     return form.selling_price || 0;
 });
 
-// Watch to update discounted_price field dynamically
-watch([() => form.selling_price, () => form.discount], () => {
-    form.discounted_price = discountedPrice.value;
+// Watch the computed discounted price and update the form's discounted_price field
+watch(discountedPrice, (newValue) => {
+    form.discounted_price = limitToTwoDecimals(newValue);
 });
+
+// Watch the discounted_price field to dynamically calculate the discount percentage
+watch(() => form.discounted_price, (newDiscountedPrice) => {
+    if (form.selling_price && newDiscountedPrice) {
+        const discountAmount = form.selling_price - parseFloat(newDiscountedPrice);
+        form.discount = limitToTwoDecimals((discountAmount / form.selling_price) * 100);
+    }
+});
+
+
+
+
+
+
+
+
+
+
 
 // Watch for changes in selectedProduct and populate form
 watch(

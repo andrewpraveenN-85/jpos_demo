@@ -186,7 +186,7 @@
                                     <div class="w-full">
                                         <label for="selling_price"
                                             class="block text-sm font-medium text-gray-300">Selling Price:</label>
-                                        <input type="number" step="0.01" id="selling_price" v-model="form.selling_price"
+                                        <input type="text" id="selling_price" v-model="form.selling_price"
                                             class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                                             placeholder="Enter selling price" required />
                                         <span v-if="form.errors.selling_price" class="mt-2 text-red-500">
@@ -199,22 +199,27 @@
                                         <label for="discount" class="block text-sm font-medium text-gray-300">
                                             Discount (%):
                                         </label>
-                                        <input type="number" id="discount" v-model="form.discount"
+                                        <input type="text" id="discount" v-model="form.discount"
                                             class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                                            placeholder="Enter discount percentage" min="0" max="100" step="0.01"
+                                            placeholder="Enter discount percentage"
                                               />
-                                        <span v-if="form.errors.discount" class="mt-2 text-red-500">
-                                            {{ form.errors.discount }}
-                                        </span>
+
                                     </div>
 
                                     <div class="w-full">
                                     <label for="discounted_price" class="block text-sm font-medium text-gray-300">
         Discounted Price:
     </label>
-    <input type="number" id="discounted_price" v-model="form.discounted_price"
+    <!-- <input type="number" id="discounted_price" v-model="form.discounted_price"
         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-        placeholder="Discounted price will appear here" readonly />
+        placeholder="Discounted price will appear here"  /> -->
+
+
+        <input type="text" id="discounted_price" v-model="form.discounted_price"
+                                            class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                                            placeholder="Discounted price will appear here" />
+
+
 
 
     </div>
@@ -326,19 +331,37 @@ const form = useForm({
     image: null, // For file upload
 });
 
+
+// Utility function to limit to 2 decimal points
+function limitToTwoDecimals(value) {
+    if (value === null || value === undefined) return value;
+    const strValue = value.toString();
+    const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
+    return match ? parseFloat(match[0]) : value;
+}
+
 // Computed property for dynamically calculating the discounted price
 const discountedPrice = computed(() => {
     if (form.selling_price && form.discount) {
         const discountAmount = (form.selling_price * form.discount) / 100;
-        return (form.selling_price - discountAmount).toFixed(2);
+        return limitToTwoDecimals(form.selling_price - discountAmount);
     }
     return form.selling_price || 0;
 });
 
 // Watch the computed discounted price and update the form's discounted_price field
 watch(discountedPrice, (newValue) => {
-    form.discounted_price = newValue;
+    form.discounted_price = limitToTwoDecimals(newValue);
 });
+
+// Watch the discounted_price field to dynamically calculate the discount percentage
+watch(() => form.discounted_price, (newDiscountedPrice) => {
+    if (form.selling_price && newDiscountedPrice) {
+        const discountAmount = form.selling_price - parseFloat(newDiscountedPrice);
+        form.discount = limitToTwoDecimals((discountAmount / form.selling_price) * 100);
+    }
+});
+
 
 const handleImageUpload = (event) => {
     form.image = event.target.files[0]; // Set the file to the form object
