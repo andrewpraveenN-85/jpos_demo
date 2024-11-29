@@ -131,7 +131,24 @@
 
             </Link>
 
+            <Link href="/colors"   @click="() => { playClickSound();}">
 
+<div
+    class="py-8 text-center bg-[#9a9c9c] border rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+    <div class="flex flex-col items-center justify-center w-full h-full space-y-8">
+        <div class="flex flex-col items-center justify-center p-8 bg-white rounded-full">
+            <img src="/images/dashboard/report.png" class="w-48 h-48" alt="dresshub.lk" />
+        </div>
+        <div class="flex flex-col items-center justify-center w-full px-12 space-y-2 h-1/3">
+            <p class="text-3xl font-bold text-white uppercase">Colors</p>
+            <p class="text-xl text-white">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            </p>
+        </div>
+    </div>
+</div>
+
+</Link>
 
 
         </div>

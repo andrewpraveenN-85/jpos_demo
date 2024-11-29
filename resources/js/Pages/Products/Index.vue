@@ -215,16 +215,14 @@
                   class="flex items-center space-x-2 text-justify text-gray-400"
                 >
                   <span>Color :</span>
-                  <span
-                    class="inline-block w-6 h-6 border border-black rounded-full"
-                    :style="{
-                      backgroundColor: product.color?.hex_code || '#FFFFFF',
-                    }"
-                  ></span>
+
+
+                  {{ product.color?.name || "N/A" }}
+
                 </p>
 
                 <p class="text-justify text-gray-400">
-                  Size :
+                  Size : 
                   {{ product.size?.name || "N/A" }}
                 </p>
               </div>
