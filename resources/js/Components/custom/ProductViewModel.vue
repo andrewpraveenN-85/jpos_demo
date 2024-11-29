@@ -94,12 +94,7 @@
                           class="text-justify text-[#00000099] text-2xl flex items-center pb-6"
                         >
                           <span>Color:</span>
-                          <span
-                            class="inline-block w-6 h-6 border border-black rounded-full ms-4"
-                            :style="{
-                              backgroundColor: selectedProduct.color?.hex_code,
-                            }"
-                          ></span>
+                          {{ selectedProduct.color?.name || "N/A" }}
                         </p>
                       </div>
                       <div class="flex flex-col w-full">

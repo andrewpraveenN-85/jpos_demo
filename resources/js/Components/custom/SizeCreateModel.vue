@@ -40,7 +40,7 @@
 
               <!-- Modal Title -->
               <DialogTitle class="text-xl font-bold text-white"
-                >Add Color</DialogTitle
+                >Add Size</DialogTitle
               >
               <form @submit.prevent="submit">
                 <!-- Modal Form -->
@@ -48,7 +48,7 @@
                   <!-- Category Name -->
                   <div>
                     <label class="block text-sm font-medium text-gray-300"
-                      >Color Name:</label
+                      >Size Name:</label
                     >
                     <input
                       v-model="form.name"
@@ -123,7 +123,7 @@
       type: Boolean,
       required: true,
     },
-    colors: {
+    sizes: {
       type: Array,
       required: true,
     },
@@ -135,7 +135,7 @@
   });
 
   const submit = () => {
-    form.post("/colors", {
+    form.post("/sizes", {
       onSuccess: () => {
         form.reset();
         emit("update:open", false);
