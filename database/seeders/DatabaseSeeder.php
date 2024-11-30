@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
         
-        $this->call([
-            ColorSeeder::class,
-            SizeSeeder::class,
-        ]);
+        // $this->call([
+        //     ColorSeeder::class,
+        //     SizeSeeder::class,
+        // ]);
     }
 }
