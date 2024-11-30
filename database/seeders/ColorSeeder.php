@@ -28,7 +28,7 @@ class ColorSeeder extends Seeder
         foreach ($colors as $color) {
             Color::updateOrCreate(
                 ['name' => $color['name']], // Match condition
-                ['hex_code' => $color['hex_code']]// Attributes to update or create
+                // ['hex_code' => $color['hex_code']]// Attributes to update or create
             );
         }
     }
