@@ -136,6 +136,55 @@ class ProductController extends Controller
     }
 
 
+
+    public function productVariantStore(Request $request)
+    {
+
+
+
+        $validated = $request->validate([
+            'category_id' => 'nullable|exists:categories,id',
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:50',
+            'size_id' => 'nullable|exists:sizes,id',
+            'color_id' => 'nullable|exists:colors,id',
+            'cost_price' => 'nullable|numeric|min:0',
+            'selling_price' => 'nullable|numeric|min:0',
+            'discounted_price' => 'nullable|numeric|min:0',
+            'stock_quantity' => 'nullable|integer|min:0',
+            'discount' => 'nullable|numeric|min:0|max:100', // Validation for discount
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'image' => 'nullable|max:2048',
+        ]);
+
+
+
+        try {
+
+
+            if ($request->hasFile('image')) {
+                $fileExtension = $request->file('image')->getClientOriginalExtension();
+                $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+                $path = $request->file('image')->storeAs('products', $fileName, 'public');
+                $validated['image'] = 'storage/' . $path;
+            }
+
+        
+            Product::create($validated);
+
+            // Redirect with success message
+            return redirect()->route('products.index')->banner('Product created successfully');
+        } catch (\Exception $e) {
+            // Log error and redirect back with an error message
+            \Log::error('Error creating product: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while creating the product. Please try again.');
+        }
+    }
+
+
+
+
     /**
      * Display the specified resource.
      */

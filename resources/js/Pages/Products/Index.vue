@@ -222,7 +222,7 @@
                 </p>
 
                 <p class="text-justify text-gray-400">
-                  Size : 
+                  Size :
                   {{ product.size?.name || "N/A" }}
                 </p>
               </div>
@@ -251,6 +251,15 @@
                 </p>
 
                 <div class="flex space-x-4">
+                    <button
+
+@click="() => { playClickSound(); openDuplicateModal(product); }"
+class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-green-600 hover:text-white"
+>
+<i class="ri-file-copy-2-line"></i>
+</button>
+
+
                   <button
 
                     @click="() => { playClickSound(); openEditModal(product); }"
@@ -337,6 +346,29 @@
     :selected-product="selectedProduct"
   />
 
+  <ProductUpdateModel
+    :categories="allcategories"
+    :colors="colors"
+    :suppliers="suppliers"
+    :sizes="sizes"
+    v-model:open="isEditModalOpen"
+    :selected-product="selectedProduct"
+  />
+
+
+  <ProductDuplicateModel
+    :categories="allcategories"
+    :colors="colors"
+    :suppliers="suppliers"
+    :sizes="sizes"
+    v-model:open="isDuplicateModalOpen"
+    :selected-product="selectedProduct"
+  />
+
+
+
+
+
   <ProductViewModel
     :categories="allcategories"
     :colors="colors"
@@ -361,8 +393,9 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
-
 import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
+
+import ProductDuplicateModel from "@/Components/custom/ProductDuplicateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
@@ -370,6 +403,7 @@ import { debounce } from "lodash";
 
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
+const isDuplicateModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
@@ -387,6 +421,13 @@ const openEditModal = (product) => {
   selectedProduct.value = product; // Set the selected product
   isEditModalOpen.value = true; // Open the edit modal
 };
+
+
+const openDuplicateModal = (product) => {
+  selectedProduct.value = product; // Set the selected product
+  isDuplicateModalOpen.value = true; // Open the edit modal
+};
+
 
 const openViewModal = (product) => {
   selectedProduct.value = product; // Set the selected product

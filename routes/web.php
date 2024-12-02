@@ -52,6 +52,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('suppliers', SupplierController::class);
     Route::post('suppliers/{supplier}', [SupplierController::class, 'update']);
     Route::post('products/{product}', [ProductController::class, 'update']);
+    Route::post('products-variant', [ProductController::class, 'productVariantStore'])->name('productVariant');
+
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::post('/pos', [PosController::class, 'getProduct'])->name('pos.getProduct');
     Route::post('/pos/submit', [PosController::class, 'submit'])->name('pos.checkout');
@@ -60,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::resource('colors', ColorController::class);
     Route::resource('sizes', SizeController::class);
+
 });
 
 Route::get('/barcode/{id}', [CategoryController::class, 'showBarcode']);
