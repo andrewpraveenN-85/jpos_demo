@@ -247,72 +247,58 @@ class ProductController extends Controller
 
 
      public function update(Request $request, Product $product)
-     {
+{
+    $validated = $request->validate([
+        'category_id' => 'nullable|exists:categories,id',
+        'name' => 'string|max:255',
+        'code' => 'string|max:50',
+        'size_id' => 'nullable|exists:sizes,id',
+        'color_id' => 'nullable|exists:colors,id',
+        'cost_price' => 'numeric|min:0',
+        'selling_price' => 'numeric|min:0',
+        'stock_quantity' => 'required|integer|min:0',
+        'discounted_price' => 'nullable|numeric|min:0',
+        'discount' => 'nullable|numeric|min:0|max:100',
+        'supplier_id' => 'nullable|exists:suppliers,id',
+        'image' => 'nullable|max:2048',
+    ]);
 
+    // Handle image update
+    if ($request->hasFile('image')) {
+        // Delete the old image if it exists
+        if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
+        }
 
-         $validated = $request->validate([
-             'category_id' => 'nullable|exists:categories,id',
-             'name' => 'string|max:255',
-             'code' => 'string|max:50',
-             'size_id' => 'nullable|exists:sizes,id',
-             'color_id' => 'nullable|exists:colors,id',
-             'cost_price' => 'numeric|min:0',
-             'selling_price' => 'numeric|min:0',
+        // Save the new image
+        $fileExtension = $request->file('image')->getClientOriginalExtension();
+        $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+        $path = $request->file('image')->storeAs('products', $fileName, 'public');
+        $validated['image'] = 'storage/' . $path;
+    } else {
+        $validated['image'] = $product->image;
+    }
 
+    // Calculate stock change
+    $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
 
-             'stock_quantity' => 'required|integer|min:0',
-             'discounted_price' => 'nullable|numeric|min:0',
-             'discount' => 'nullable|numeric|min:0|max:100',
-             'supplier_id' => 'nullable|exists:suppliers,id',
-             'image' => 'nullable|max:2048',
-         ]);
+    // Determine transaction type
+    $transactionType = $stockChange > 0 ? 'Purchase' : 'Return';
 
-         // Handle image update
-         if ($request->hasFile('image')) {
-             // Delete the old image if it exists
-             if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
-                 Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
-             }
+    // Update product
+    $product->update($validated);
 
-             // Save the new image
-             $fileExtension = $request->file('image')->getClientOriginalExtension();
-             $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
-             $path = $request->file('image')->storeAs('products', $fileName, 'public');
-             $validated['image'] = 'storage/' . $path;
-         } else {
+    // Log stock transaction
+    StockTransaction::create([
+        'product_id' => $product->id,
+        'transaction_type' => $transactionType,
+        'quantity' => abs($stockChange),
+        'transaction_date' => now(),
+        'supplier_id' => $validated['supplier_id'] ?? null,
+    ]);
 
-             $validated['image'] = $product->image;
-         }
-
-
-
-    // Calculate the stock change
-    $newQuantity = $validated['stock_quantity'];
-    $stockChange = $newQuantity;
-    $validated['stock_quantity'] += $product->stock_quantity;
-
-
-     $product->update($validated);
-
-
-  $transactionType = $stockChange > 0 ? 'addition' : 'subtraction';
-  StockTransaction::create([
-      'product_id' => $product->id,
-      'transaction_type' => 2,
-      'quantity' => abs($stockChange),
-      'transaction_date' => now(),
-      'supplier_id' => $validated['supplier_id'] ?? null,  
-  ]);
-
-
-
-
-
-         return redirect()->route('products.index')->banner('Product updated successfully');
-     }
-
-
-
+    return redirect()->route('products.index')->with('banner', 'Product updated successfully');
+}
 
 
 
