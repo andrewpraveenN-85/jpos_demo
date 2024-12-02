@@ -516,7 +516,7 @@ watch(
 );
 
 const submit = () => {
-    form.post(route("productVariant"), {
+    form.post('/products-variant', {
         preserveScroll: true,
         onSuccess: () => {
             console.log("Product Variation successfully created!");
