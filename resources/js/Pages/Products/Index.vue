@@ -1,10 +1,9 @@
 
 <style lang="css">
-.pagination-disabled
-{
-    color: rgb(37 99 235);
-    transition: all 0.5s ease;
-    background: rgb(229 231 235 / var(--tw-bg-opacity));
+.pagination-disabled {
+  color: rgb(37 99 235);
+  transition: all 0.5s ease;
+  background: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 .pagination {
   display: flex;
@@ -15,18 +14,13 @@
   float: right;
 }
 
-
-
 .pagination a:first-child,
 .pagination a:last-child {
   padding: 8px 16px;
 }
-
-
-
 </style>
 <template>
-     <Head title="Products"/>
+  <Head title="Products" />
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -45,19 +39,27 @@
       </div>
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4">
-
-                <Link href="/"   @click="() => { playClickSound();}">
-                  <img src="/images/back-arrow.png" class="w-14 h-14" />
-                </Link>
-               <p class="text-4xl font-bold tracking-wide text-black uppercase">
-                  Products
-               </p>
-
-
+          <Link
+            href="/"
+            @click="
+              () => {
+                playClickSound();
+              }
+            "
+          >
+            <img src="/images/back-arrow.png" class="w-14 h-14" />
+          </Link>
+          <p class="text-4xl font-bold tracking-wide text-black uppercase">
+            Products
+          </p>
         </div>
         <p
-
-          @click="() => { playClickSound(); isCreateModalOpen = true; }"
+          @click="
+            () => {
+              playClickSound();
+              isCreateModalOpen = true;
+            }
+          "
           class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
@@ -173,8 +175,14 @@
             class="space-y-4 text-white transition-transform duration-300 transform bg-black border-4 border-black shadow-lg hover:-translate-y-4"
           >
             <div
-               @click="() => { playClickSound(); openViewModal(product); }"
-            class="cursor-pointer">
+              @click="
+                () => {
+                  playClickSound();
+                  openViewModal(product);
+                }
+              "
+              class="cursor-pointer"
+            >
               <!-- <img
                 :src="`/${product.image}`"
                 alt="Product Image"
@@ -182,11 +190,14 @@
               /> -->
 
               <img
-  :src="product.image ? `/${product.image}` : '/images/placeholder.jpg'"
-  alt="Product Image"
-  class="object-cover w-full h-64"
-/>
-
+                :src="
+                  product.image
+                    ? `/${product.image}`
+                    : '/images/placeholder.jpg'
+                "
+                alt="Product Image"
+                class="object-cover w-full h-64"
+              />
             </div>
             <div class="px-4 py-4 space-y-4">
               <div
@@ -194,20 +205,18 @@
               >
                 <p>{{ product.name || "N/A" }}</p>
                 <p class="px-4 text-white bg-green-700 rounded-full">
-
-
-                    {{
-    product.selling_price && product.discount !== null && product.discount !== undefined
-        ? product.discount > 0
-            ? (
-                product.selling_price -
-                (product.selling_price * product.discount) / 100
-            ).toFixed(2) + " LKR"
-            : product.selling_price + " LKR"
-        : "N/A"
-}}
-
-
+                  {{
+                    product.selling_price &&
+                    product.discount !== null &&
+                    product.discount !== undefined
+                      ? product.discount > 0
+                        ? (
+                            product.selling_price -
+                            (product.selling_price * product.discount) / 100
+                          ).toFixed(2) + " LKR"
+                        : product.selling_price + " LKR"
+                      : "N/A"
+                  }}
                 </p>
               </div>
               <div class="flex items-center justify-center w-full space-x-4">
@@ -216,9 +225,7 @@
                 >
                   <span>Color :</span>
 
-
                   {{ product.color?.name || "N/A" }}
-
                 </p>
 
                 <p class="text-justify text-gray-400">
@@ -227,17 +234,14 @@
                 </p>
               </div>
 
-
-                  <div class="flex items-center justify-center w-full space-x-4">
+              <div class="flex items-center justify-center w-full space-x-4">
                 <p
                   class="flex items-center space-x-2 text-justify text-gray-400"
                 >
                   Supplier :
 
-               {{ product.supplier?.name || "N/A" }}
+                  {{ product.supplier?.name || "N/A" }}
                 </p>
-
-
               </div>
               <div class="flex items-center justify-between">
                 <p
@@ -251,25 +255,36 @@
                 </p>
 
                 <div class="flex space-x-4">
-                    <button
-
-@click="() => { playClickSound(); openDuplicateModal(product); }"
-class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-green-600 hover:text-white"
->
-<i class="ri-file-copy-2-line"></i>
-</button>
-
+                  <button
+                    @click="
+                      () => {
+                        playClickSound();
+                        openDuplicateModal(product);
+                      }
+                    "
+                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-green-600 hover:text-white"
+                  >
+                    <i class="ri-file-copy-2-line"></i>
+                  </button>
 
                   <button
-
-                    @click="() => { playClickSound(); openEditModal(product); }"
+                    @click="
+                      () => {
+                        playClickSound();
+                        openEditModal(product);
+                      }
+                    "
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
                   >
                     <i class="ri-pencil-line"></i>
                   </button>
                   <button
-
-                      @click="() => { playClickSound(); openDeleteModal(product); }"
+                    @click="
+                      () => {
+                        playClickSound();
+                        openDeleteModal(product);
+                      }
+                    "
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
                   >
                     <i class="ri-delete-bin-line"></i>
@@ -288,44 +303,46 @@ class="flex items-center justify-center w-10 h-10 text-gray-800 transition durat
         </template>
       </div>
 
-     <div class="flex space-x-2 pagination">
-  <!-- Prev Button -->
-  <Link
-    v-if="products.links[0]"
-    :href="products.links[0].url"
-    :class="[
-      'pagination-btn',
-      { 'pagination-disabled': !products.links[0].url }
-    ]"
-  >
-    Previous
-  </Link>
+      <div class="flex space-x-2 pagination">
+        <!-- Prev Button -->
+        <Link
+          v-if="products.links[0]"
+          :href="products.links[0].url"
+          :class="[
+            'pagination-btn',
+            { 'pagination-disabled': !products.links[0].url },
+          ]"
+        >
+          Previous
+        </Link>
 
-  <!-- Pagination Links -->
-  <Link
-    v-for="(link, index) in products.links.slice(1, products.links.length - 1)"
-    :key="link.label"
-    :href="link.url"
-    :class="[
-      'pagination-btn',
-      { 'pagination-active': link.active }
-    ]"
-    v-html="link.label"
-  ></Link>
+        <!-- Pagination Links -->
+        <Link
+          v-for="(link, index) in products.links.slice(
+            1,
+            products.links.length - 1
+          )"
+          :key="link.label"
+          :href="link.url"
+          :class="['pagination-btn', { 'pagination-active': link.active }]"
+          v-html="link.label"
+        ></Link>
 
-  <!-- Next Button -->
-  <Link
-    v-if="products.links[products.links.length - 1]"
-    :href="products.links[products.links.length - 1].url"
-    :class="[
-      'pagination-btn',
-      { 'pagination-disabled': !products.links[products.links.length - 1].url }
-    ]"
-  >
-    Next
-  </Link>
-</div>
-
+        <!-- Next Button -->
+        <Link
+          v-if="products.links[products.links.length - 1]"
+          :href="products.links[products.links.length - 1].url"
+          :class="[
+            'pagination-btn',
+            {
+              'pagination-disabled':
+                !products.links[products.links.length - 1].url,
+            },
+          ]"
+        >
+          Next
+        </Link>
+      </div>
     </div>
   </div>
 
@@ -335,7 +352,6 @@ class="flex items-center justify-center w-10 h-10 text-gray-800 transition durat
     :sizes="sizes"
     :suppliers="suppliers"
     v-model:open="isCreateModalOpen"
-
   />
   <ProductUpdateModel
     :categories="allcategories"
@@ -345,16 +361,6 @@ class="flex items-center justify-center w-10 h-10 text-gray-800 transition durat
     v-model:open="isEditModalOpen"
     :selected-product="selectedProduct"
   />
-
-  <ProductUpdateModel
-    :categories="allcategories"
-    :colors="colors"
-    :suppliers="suppliers"
-    :sizes="sizes"
-    v-model:open="isEditModalOpen"
-    :selected-product="selectedProduct"
-  />
-
 
   <ProductDuplicateModel
     :categories="allcategories"
@@ -365,14 +371,9 @@ class="flex items-center justify-center w-10 h-10 text-gray-800 transition durat
     :selected-product="selectedProduct"
   />
 
-
-
-
-
   <ProductViewModel
     :categories="allcategories"
     :colors="colors"
-
     :sizes="sizes"
     v-model:open="isViewModalOpen"
     :selected-product="selectedProduct"
@@ -387,7 +388,7 @@ class="flex items-center justify-center w-10 h-10 text-gray-800 transition durat
 
 <script setup>
 import { ref } from "vue";
-import { Head } from '@inertiajs/vue3';
+import { Head } from "@inertiajs/vue3";
 import { Link, useForm, router } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
@@ -408,12 +409,10 @@ const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
 
-
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
   clickSound.play();
 };
-
 
 const emit = defineEmits(["update:open"]);
 
@@ -422,12 +421,10 @@ const openEditModal = (product) => {
   isEditModalOpen.value = true; // Open the edit modal
 };
 
-
 const openDuplicateModal = (product) => {
   selectedProduct.value = product; // Set the selected product
   isDuplicateModalOpen.value = true; // Open the edit modal
 };
-
 
 const openViewModal = (product) => {
   selectedProduct.value = product; // Set the selected product
@@ -474,7 +471,7 @@ const applyFilters = () => {
       search: search.value,
       sort: sort.value,
       color: color.value,
-      size: size.value
+      size: size.value,
     },
     { preserveState: true }
   );
