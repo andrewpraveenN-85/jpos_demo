@@ -283,7 +283,7 @@ class ProductController extends Controller
     $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
 
     // Determine transaction type
-    $transactionType = $stockChange > 0 ? 'Purchase' : 'Return';
+    $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
 
     // Update product
     $product->update($validated);
