@@ -169,7 +169,7 @@ class ProductController extends Controller
                 $validated['image'] = 'storage/' . $path;
             }
 
-        
+
             Product::create($validated);
 
             // Redirect with success message
@@ -248,6 +248,8 @@ class ProductController extends Controller
 
      public function update(Request $request, Product $product)
      {
+
+
          $validated = $request->validate([
              'category_id' => 'nullable|exists:categories,id',
              'name' => 'string|max:255',
@@ -278,29 +280,33 @@ class ProductController extends Controller
              $path = $request->file('image')->storeAs('products', $fileName, 'public');
              $validated['image'] = 'storage/' . $path;
          } else {
-             // Retain the old image if no new image is uploaded
+
              $validated['image'] = $product->image;
          }
 
 
 
-         if ($validated['stock_quantity'] !== $product->stock_quantity) {
-            $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
+    // Calculate the stock change
+    $newQuantity = $validated['stock_quantity'];
+    $stockChange = $newQuantity;
+    $validated['stock_quantity'] += $product->stock_quantity;
 
 
-            $transactionType = $stockChange > 0 ? 'Purchase' : 'Adjustment';
-            // Log the stock transaction
-            StockTransaction::create([
-                'product_id' => $product->id,
-                'transaction_type' => $transactionType,
-                'quantity' => abs($stockChange),  // Log the absolute value of the change
-                'transaction_date' => now(),
-                'supplier_id' => $validated['supplier_id'] ?? null,  // Use the supplier ID if provided
-            ]);
-        }
+     $product->update($validated);
 
-         // Update the product
-         $product->update($validated);
+
+  $transactionType = $stockChange > 0 ? 'addition' : 'subtraction';
+  StockTransaction::create([
+      'product_id' => $product->id,
+      'transaction_type' => 2,
+      'quantity' => abs($stockChange),
+      'transaction_date' => now(),
+      'supplier_id' => $validated['supplier_id'] ?? null,  
+  ]);
+
+
+
+
 
          return redirect()->route('products.index')->banner('Product updated successfully');
      }
