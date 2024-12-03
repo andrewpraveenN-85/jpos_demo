@@ -164,6 +164,15 @@
               {{ sizeOption.name }}
             </option>
           </select>
+
+
+
+        <Link href="/products" @click="playClickSound" class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select">
+
+
+            Reset
+
+        </Link>
         </div>
       </div>
 
