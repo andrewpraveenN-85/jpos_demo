@@ -67,12 +67,21 @@ class PosController extends Controller
             return $carry + ($product['quantity'] * $product['selling_price']);
         }, 0);
 
+        $totalCost = collect($products)->reduce(function ($carry, $product) {
+            return $carry + ($product['quantity'] * $product['cost_price']);
+        }, 0);
+
+        $totalDiscount = collect($products)->reduce(function ($carry, $product) {
+            return $carry + ($product['quantity'] * $product['discounted_price']);
+        }, 0);
+
         $sale = Sale::create([
             'customer_id' => $customer ? $customer->id : null, // Nullable customer_id
             'user_id' => $request->input('userId'), // Logged-in user ID
             'order_id' => $request->input('orderId'),
             'total_amount' => $totalAmount, // Total amount of the sale
-            'discount' => 0, // Default discount to 0 if not provided
+            'discount' => $totalDiscount, // Default discount to 0 if not provided
+            'total_cost' => $totalCost,
             'payment_method' => $request->input('paymentMethod'), // Payment method from the request
             'sale_date' => now()->toDateString(), // Current date
         ]);
