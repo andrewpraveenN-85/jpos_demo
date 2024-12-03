@@ -10,10 +10,7 @@
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between space-x-4">
         <div class="flex w-full space-x-4">
-          <Link
-            href="/"
-
-          >
+          <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
@@ -242,7 +239,6 @@
                 <button
                   @click="
                     () => {
-
                       submitOrder();
                     }
                   "
@@ -300,8 +296,6 @@ const handleModalOpenUpdate = (newValue) => {
     refreshData();
   }
 };
-
- 
 
 const props = defineProps({
   loggedInUser: Object,
@@ -393,7 +387,9 @@ const totalDiscount = computed(() => {
     .reduce((total, item) => {
       // Check if item has a discount
       if (item.discount && item.discount > 0) {
-        const discountAmount = (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) * item.quantity;
+        const discountAmount =
+          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+          item.quantity;
         return total + discountAmount;
       }
       return total; // If no discount, return total as-is
@@ -430,7 +426,6 @@ let timeout; // Timeout to detect the end of the scan
 
 // Automatically submit the barcode to the backend
 const submitBarcode = async () => {
-
   try {
     // Send POST request to the backend
     const response = await axios.post(route("pos.getProduct"), {
@@ -456,7 +451,11 @@ const submitBarcode = async () => {
         existingProduct.quantity += 1;
       } else {
         // If it doesn't exist, add it to the products array with quantity 1
-        products.value.push({ ...fetchedProduct, quantity: 1 });
+        products.value.push({
+          ...fetchedProduct,
+          quantity: 1,
+          apply_discount: false, // Add the new attribute
+        });
       }
 
       product.value = fetchedProduct; // Update product state for individual display

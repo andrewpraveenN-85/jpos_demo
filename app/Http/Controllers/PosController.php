@@ -71,6 +71,7 @@ class PosController extends Controller
             return $carry + ($product['quantity'] * $product['cost_price']);
         }, 0);
 
+
         $totalDiscount = collect($products)->reduce(function ($carry, $product) {
             return $carry + ($product['quantity'] * $product['discounted_price']);
         }, 0);

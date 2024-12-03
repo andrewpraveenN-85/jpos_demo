@@ -17,6 +17,7 @@ class Sale extends Model
         'discount',
         'payment_method',
         'sale_date',
+        'total_cost'
     ];
     
 
