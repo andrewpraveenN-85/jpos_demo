@@ -70,7 +70,7 @@
       </div>
       <div class="flex w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
-              <Link href="/"   @click="() => { playClickSound();}">
+              <Link href="/"  >
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="text-4xl font-bold tracking-wide text-black uppercase">
@@ -82,7 +82,7 @@
 
           <p
 
-@click="() => { playClickSound(); isCreateModalOpen = true; }"
+@click="() => {   isCreateModalOpen = true; }"
 class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600  rounded-xl"
 >
 <i class="pr-4 ri-add-circle-fill"></i> Add More Size
@@ -183,10 +183,6 @@ defineProps({
   totalSize: Number,
 });
 
-const playClickSound = () => {
-  const clickSound = new Audio("/sounds/click-sound.mp3");
-  clickSound.play();
-};
 
 const openEditModal = (size) => {
   console.log("Opening edit modal for size:", size);

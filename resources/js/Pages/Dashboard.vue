@@ -5,7 +5,7 @@
       <Header />
 
       <div class="grid w-full h-full grid-cols-4 gap-8 auto-rows-fr">
-        <Link href="/pos" @click="playClickSound">
+        <Link href="/pos" >
           <div class="dashboard-card bg-[#4d7c0f]">
             <div class="card-content">
               <div class="icon-container">
@@ -21,7 +21,7 @@
           </div>
         </Link>
 
-        <Link href="/categories" @click="playClickSound">
+        <Link href="/categories" >
           <div class="dashboard-card bg-[#003161]">
             <div class="card-content">
               <div class="icon-container">
@@ -37,7 +37,7 @@
           </div>
         </Link>
 
-        <Link href="/products" @click="playClickSound">
+        <Link href="/products" >
           <div class="dashboard-card bg-[#C62E2E]">
             <div class="card-content">
               <div class="icon-container">
@@ -53,7 +53,7 @@
           </div>
         </Link>
 
-        <Link href="/suppliers" @click="playClickSound">
+        <Link href="/suppliers" >
           <div class="dashboard-card bg-[#914F1E]">
             <div class="card-content">
               <div class="icon-container">
@@ -69,7 +69,7 @@
           </div>
         </Link>
 
-        <Link href="/customers" @click="playClickSound">
+        <Link href="/customers"  >
           <div class="dashboard-card bg-[#CB9DF0]">
             <div class="card-content">
               <div class="icon-container">
@@ -85,7 +85,7 @@
           </div>
         </Link>
 
-        <Link href="/reports" @click="playClickSound">
+        <Link href="/reports"  >
           <div class="dashboard-card bg-[#FF8000]">
             <div class="card-content">
               <div class="icon-container">
@@ -101,7 +101,7 @@
           </div>
         </Link>
 
-        <Link href="/colors" @click="playClickSound">
+        <Link href="/colors" >
           <div class="dashboard-card bg-[#9a9c9c]">
             <div class="card-content">
               <div class="icon-container">
@@ -117,7 +117,7 @@
           </div>
         </Link>
 
-        <Link href="/sizes" @click="playClickSound">
+        <Link href="/sizes"  >
           <div class="dashboard-card bg-[#36f5f5]">
             <div class="card-content">
               <div class="icon-container">
@@ -145,10 +145,7 @@
   import { Link } from "@inertiajs/vue3";
   import { Head } from "@inertiajs/vue3";
 
-  const playClickSound = () => {
-    const clickSound = new Audio("/sounds/click-sound.mp3");
-    clickSound.play();
-  };
+
   </script>
 
   <style>

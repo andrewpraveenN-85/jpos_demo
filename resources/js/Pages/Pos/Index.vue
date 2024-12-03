@@ -12,11 +12,7 @@
         <div class="flex w-full space-x-4">
           <Link
             href="/"
-            @click="
-              () => {
-                playClickSound();
-              }
-            "
+
           >
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
@@ -246,7 +242,7 @@
                 <button
                   @click="
                     () => {
-                      playClickSound();
+
                       submitOrder();
                     }
                   "
@@ -305,14 +301,7 @@ const handleModalOpenUpdate = (newValue) => {
   }
 };
 
-const playClickSound = () => {
-  const clickSound = new Audio("/sounds/click-sound.mp3");
-  clickSound.play();
-};
-const playClickSound2 = () => {
-  const clickSound = new Audio("/sounds/click-sound2.mp3");
-  clickSound.play();
-};
+ 
 
 const props = defineProps({
   loggedInUser: Object,
@@ -441,7 +430,7 @@ let timeout; // Timeout to detect the end of the scan
 
 // Automatically submit the barcode to the backend
 const submitBarcode = async () => {
-  playClickSound2();
+
   try {
     // Send POST request to the backend
     const response = await axios.post(route("pos.getProduct"), {
