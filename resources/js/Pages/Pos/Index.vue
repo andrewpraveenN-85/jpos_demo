@@ -141,7 +141,7 @@
                 />
               </div>
               <div
-                class="flex flex-col items-start justify-start w-4/6 space-y-4"
+                class="flex flex-col items-start justify-start w-4/6"
               >
                 <p class="text-3xl text-black">
                   {{ item.name }}
@@ -169,12 +169,19 @@
                   <div class="flex items-center justify-center">
                     <div>
                       <p
-                        v-if="item.discount && item.discount > 0"
-                        class="py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider"
+                        @click="applyDiscount(item.id)"
+                        v-if="item.discount && item.discount > 0 && item.apply_discount == false"
+                        class="cursor-pointer py-1 text-center px-4 bg-green-600 rounded-xl font-bold text-white tracking-wider"
+                        >Apply {{ item.discount }}% off</p>
+                      
+                      <p
+                        v-if="item.discount && item.discount > 0 && item.apply_discount == true"
+                        @click="removeDiscount(item.id)"
+                        class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider"
                       >
-                        {{ item.discount }}% Off
+                        Reomove {{ item.discount }}% Off
                       </p>
-                      <p class="text-2xl font-bold text-black">
+                      <p class="text-2xl font-bold text-black text-right">
                         {{ item.selling_price }}
                         LKR
                       </p>
@@ -386,7 +393,7 @@ const totalDiscount = computed(() => {
   return products.value
     .reduce((total, item) => {
       // Check if item has a discount
-      if (item.discount && item.discount > 0) {
+      if (item.discount && item.discount > 0 && item.apply_discount == true) {
         const discountAmount =
           (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
           item.quantity;
@@ -402,7 +409,7 @@ const total = computed(() => {
     .reduce((total, item) => {
       // Check if item has a discount
       const price =
-        item.discount && item.discount > 0
+        (item.discount && item.discount > 0 && item.apply_discount == true)
           ? parseFloat(item.discounted_price) // Use discounted price
           : parseFloat(item.selling_price); // Use regular price
 
@@ -504,4 +511,20 @@ const handleScannerInput = (event) => {
 onMounted(() => {
   document.addEventListener("keypress", handleScannerInput);
 });
+
+const applyDiscount = (id) => {
+  products.value.forEach((product) => {
+    if (product.id === id) {
+      product.apply_discount = true;
+    }
+  });
+};
+
+const removeDiscount = (id) => {
+  products.value.forEach((product) => {
+    if (product.id === id) {
+      product.apply_discount = false;
+    }
+  });
+}
 </script>

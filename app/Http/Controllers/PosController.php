@@ -72,8 +72,20 @@ class PosController extends Controller
         }, 0);
 
 
+        // $totalDiscount = collect($products)->reduce(function ($carry, $product) {
+        //     if (isset($product['discount']) && $product['discount'] > 0 && isset($product['apply_discount']) && $product['apply_discount'] != false) {
+        //         return $carry + ($product['quantity'] * $product['discounted_price']);
+        //     }
+        //     return $carry;
+        // }, 0);
+
         $totalDiscount = collect($products)->reduce(function ($carry, $product) {
-            return $carry + ($product['quantity'] * $product['discounted_price']);
+            if (isset($product['discount']) && $product['discount'] > 0 && isset($product['apply_discount']) && $product['apply_discount'] != false) {
+                // Calculate the discount amount per product
+                $discountAmount = ($product['selling_price'] - $product['discounted_price']) * $product['quantity'];
+                return $carry + $discountAmount;
+            }
+            return $carry;
         }, 0);
 
         $sale = Sale::create([

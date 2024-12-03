@@ -104,19 +104,18 @@ const handlePrintReceipt = () => {
     0
   );
 
-  const totalDiscount =  props.products
-      .reduce((total, item) => {
-        // Check if item has a discount
-        if (item.discount && item.discount > 0) {
-          const discountAmount =
-            (parseFloat(item.selling_price) -
-              parseFloat(item.discounted_price)) *
-            item.quantity;
-          return total + discountAmount;
-        }
-        return total; // If no discount, return total as-is
-      }, 0)
-      .toFixed(2); // Ensures two decimal places
+  const totalDiscount = props.products
+    .reduce((total, item) => {
+      // Check if item has a discount
+      if (item.discount && item.discount > 0 && item.apply_discount == true) {
+        const discountAmount =
+          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+          item.quantity;
+        return total + discountAmount;
+      }
+      return total; // If no discount, return total as-is
+    }, 0)
+    .toFixed(2); // Ensures two decimal places
 
   const discount = 0; // Example discount (can be dynamic)
   const total = subTotal - totalDiscount;
@@ -130,7 +129,7 @@ const handlePrintReceipt = () => {
         <td>${product.quantity}</td>
         <td>
           ${
-            product.discount && product.discount > 0
+            product.discount && product.discount > 0 && product.apply_discount
               ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
               : ""
           }
