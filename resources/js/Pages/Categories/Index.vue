@@ -58,7 +58,7 @@
   >
     <Header />
     <div class="w-5/6 py-12 space-y-24">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between float-end">
         <p class="text-3xl italic font-bold text-black">
           <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
             totalCategories
@@ -66,6 +66,12 @@
           <span class="text-xl">/ Total Categories</span>
         </p>
       </div>
+
+
+
+
+
+
       <div class="flex w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">

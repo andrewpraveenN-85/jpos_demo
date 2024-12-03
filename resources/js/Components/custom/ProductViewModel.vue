@@ -201,10 +201,10 @@
                   <div
                     class="flex items-center justify-center w-full space-x-4"
                   >
-                    <p class="text-lg font-bold text-black">
+                    <p class="text-md font-bold text-black">
                       {{ selectedProduct.category.name }}
                     </p>
-                    <p class="text-lg font-bold text-black">
+                    <p class="text-md font-bold text-black">
                       {{ selectedProduct.selling_price }} LKR
                     </p>
                   </div>
@@ -231,12 +231,12 @@
 
                   <!-- Barcode -->
 
-                  <p style="color: #000; text-align: center; width: 100%">
+                  <p style="color: #000; text-align: center; width: 100%; padding-bottom: 5px;">
 
                     {{ selectedProduct.code }}
                   </p>
 
-                  <p style="color: #000; text-align: center; width: 100%">
+                  <p style="color: #000; text-align: center; width: 100%;">
                     [{{ selectedProduct.size.name }}] -
                     {{ selectedProduct.color.name }}
                   </p>
