@@ -41,11 +41,7 @@
         <div class="flex items-center justify-center space-x-4">
           <Link
             href="/"
-            @click="
-              () => {
-                playClickSound();
-              }
-            "
+            
           >
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
@@ -56,7 +52,7 @@
         <p
           @click="
             () => {
-              playClickSound();
+
               isCreateModalOpen = true;
             }
           "
@@ -167,7 +163,7 @@
 
 
 
-        <Link href="/products" @click="playClickSound" class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select">
+        <Link href="/products"  class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select">
 
 
             Reset
@@ -186,8 +182,7 @@
             <div
               @click="
                 () => {
-                  playClickSound();
-                  openViewModal(product);
+                 openViewModal(product);
                 }
               "
               class="cursor-pointer"
@@ -267,7 +262,7 @@
                   <button
                     @click="
                       () => {
-                        playClickSound();
+
                         openDuplicateModal(product);
                       }
                     "
@@ -279,7 +274,7 @@
                   <button
                     @click="
                       () => {
-                        playClickSound();
+
                         openEditModal(product);
                       }
                     "
@@ -290,7 +285,7 @@
                   <button
                     @click="
                       () => {
-                        playClickSound();
+
                         openDeleteModal(product);
                       }
                     "
@@ -418,10 +413,7 @@ const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
 
-const playClickSound = () => {
-  const clickSound = new Audio("/sounds/click-sound.mp3");
-  clickSound.play();
-};
+
 
 const emit = defineEmits(["update:open"]);
 

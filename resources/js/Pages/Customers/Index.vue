@@ -70,11 +70,7 @@
         <div class="flex items-center space-x-4">
           <Link
             href="/"
-            @click="
-              () => {
-                playClickSound();
-              }
-            "
+            
           >
             <img src="/images/back-arrow.png" class="w-14 h-14" alt="Back" />
           </Link>
@@ -152,7 +148,7 @@
                     <button
                       @click="
                         () => {
-                          playClickSound();
+
                           openEditModal(customer);
                         }
                       "
@@ -163,7 +159,7 @@
                     <button
                       @click="
                         () => {
-                          playClickSound();
+
                           openDeleteModal(customer);
                         }
                       "
@@ -201,7 +197,7 @@
     v-model:open="isDeleteModalOpen"
   />
 </template>
-  
+
 <script setup>
 
 import { ref } from "vue";
@@ -218,10 +214,10 @@ defineProps({
   totalCustomers: Array,
 });
 
-const playClickSound = () => {
-  const clickSound = new Audio("/sounds/click-sound.mp3");
-  clickSound.play();
-};
+
+
+
+
 
 const form = useForm({});
 
