@@ -179,7 +179,7 @@
                         @click="removeDiscount(item.id)"
                         class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider"
                       >
-                        Reomove {{ item.discount }}% Off
+                        Remove {{ item.discount }}% Off
                       </p>
                       <p class="text-2xl font-bold text-black text-right">
                         {{ item.selling_price }}
