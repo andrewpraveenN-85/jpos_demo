@@ -213,6 +213,7 @@
                       v-model="form.selling_price"
                       class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       placeholder="Enter selling price"
+                      @blur="updateDiscountedPrice"
                       required
                     />
                     <span
@@ -232,7 +233,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Discount (%):</label
                     >
-                    <input
+                    <!-- <input
                       type="text"
                       id="discount"
                       v-model="form.discount"
@@ -240,6 +241,14 @@
                       placeholder="Enter discount percentage"
                       min="0"
                       max="100"
+                    /> -->
+                    <input
+                      type="text"
+                      id="discount"
+                      v-model="form.discount"
+                      @blur="updateDiscountedPrice"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      placeholder="Enter discount percentage"
                     />
                     <span v-if="form.errors.discount" class="mt-2 text-red-500">
                       {{ form.errors.discount }}
@@ -258,8 +267,9 @@
                       type="text"
                       id="discounted_price"
                       v-model="form.discounted_price"
+                      @blur="updateDiscount"
                       class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Discounted price will be calculated"
+                      placeholder="Discounted price will appear here"
                     />
                     <span
                       v-if="form.errors.discounted_price"
@@ -483,7 +493,7 @@ const handleImageUpload = (event) => {
   form.image = event.target.files[0];
 };
 
-// Utility function to limit to 2 decimal points
+
 function limitToTwoDecimals(value) {
   if (value === null || value === undefined) return value;
   const strValue = value.toString();
@@ -491,33 +501,62 @@ function limitToTwoDecimals(value) {
   return match ? parseFloat(match[0]) : value;
 }
 
-// Computed property for dynamically calculating the discounted price
-const discountedPrice = computed(() => {
+
+
+// Function to update discounted price based on selling price and discount
+function updateDiscountedPrice() {
   if (form.selling_price && form.discount) {
     const discountAmount = (form.selling_price * form.discount) / 100;
-    return limitToTwoDecimals(form.selling_price - discountAmount);
+    form.discounted_price = limitToTwoDecimals(
+      form.selling_price - discountAmount
+    );
   }
-  return form.selling_price || 0;
-});
+}
 
-// Watch the computed discounted price and update the form's discounted_price field
-watch(discountedPrice, (newValue) => {
-  form.discounted_price = limitToTwoDecimals(newValue);
-});
-
-// Watch the discounted_price field to dynamically calculate the discount percentage
-watch(
-  () => form.discounted_price,
-  (newDiscountedPrice) => {
-    if (form.selling_price && newDiscountedPrice) {
-      const discountAmount =
-        form.selling_price - parseFloat(newDiscountedPrice);
-      form.discount = limitToTwoDecimals(
-        (discountAmount / form.selling_price) * 100
-      );
-    }
+// Function to update discount based on selling price and discounted price
+function updateDiscount() {
+  if (form.selling_price && form.discounted_price) {
+    const discountAmount = form.selling_price - form.discounted_price;
+    form.discount = limitToTwoDecimals(
+      (discountAmount / form.selling_price) * 100
+    );
   }
-);
+}
+// Utility function to limit to 2 decimal points
+// function limitToTwoDecimals(value) {
+//   if (value === null || value === undefined) return value;
+//   const strValue = value.toString();
+//   const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
+//   return match ? parseFloat(match[0]) : value;
+// }
+
+// // Computed property for dynamically calculating the discounted price
+// const discountedPrice = computed(() => {
+//   if (form.selling_price && form.discount) {
+//     const discountAmount = (form.selling_price * form.discount) / 100;
+//     return limitToTwoDecimals(form.selling_price - discountAmount);
+//   }
+//   return form.selling_price || 0;
+// });
+
+// // Watch the computed discounted price and update the form's discounted_price field
+// watch(discountedPrice, (newValue) => {
+//   form.discounted_price = limitToTwoDecimals(newValue);
+// });
+
+// // Watch the discounted_price field to dynamically calculate the discount percentage
+// watch(
+//   () => form.discounted_price,
+//   (newDiscountedPrice) => {
+//     if (form.selling_price && newDiscountedPrice) {
+//       const discountAmount =
+//         form.selling_price - parseFloat(newDiscountedPrice);
+//       form.discount = limitToTwoDecimals(
+//         (discountAmount / form.selling_price) * 100
+//       );
+//     }
+//   }
+// );
 
 // Watch for changes in selectedProduct and populate form
 watch(
@@ -534,7 +573,7 @@ watch(
       form.cost_price = newValue.cost_price || null;
       form.discount = newValue.discount || 0;
       form.selling_price = newValue.selling_price || null;
-      form.discounted_price = discountedPrice.value;
+      form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
       form.image = newValue.image || null;
     }
