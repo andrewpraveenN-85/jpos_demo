@@ -371,11 +371,15 @@ const submitOrder = async () => {
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
   } catch (error) {
+    if (error.response.status === 423) {
+      isAlertModalOpen.value = true;
+      message.value = error.response.data.message;
+    }
     console.error(
       "Error submitting customer details:",
       error.response?.data || error.message
     );
-    alert("Failed to submit customer details. Please try again.");
+    // alert("Failed to submit customer details. Please try again.");
   }
 };
 // };
