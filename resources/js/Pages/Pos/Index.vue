@@ -141,13 +141,13 @@
                 />
               </div>
               <div
-                class="flex flex-col items-start justify-start w-4/6"
+                class="flex flex-col justify-start w-4/6"
               >
                 <p class="text-3xl text-black">
                   {{ item.name }}
                 </p>
-                <div class="flex items-center justify-between w-full">
-                  <div class="flex items-center justify-start space-x-4">
+                <div class="flex items-end justify-between w-full">
+                  <div class="flex space-x-4">
                     <p
                       @click="incrementQuantity(item.id)"
                       class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer"
