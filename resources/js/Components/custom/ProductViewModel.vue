@@ -232,6 +232,11 @@
                   <!-- Barcode -->
 
                   <p style="color: #000; text-align: center; width: 100%">
+
+                    {{ selectedProduct.code }}
+                  </p>
+
+                  <p style="color: #000; text-align: center; width: 100%">
                     [{{ selectedProduct.size.name }}] -
                     {{ selectedProduct.color.name }}
                   </p>

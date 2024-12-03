@@ -26,8 +26,10 @@ class ProductController extends Controller
 
         $productsQuery = Product::with('category', 'color', 'size','supplier')
             ->when($query, function ($queryBuilder) use ($query) {
-                $queryBuilder->where('name', 'like', "%{$query}%");
+                $queryBuilder->where('name', 'like', "%{$query}%")
+                ->orWhere('code', 'like', "%{$query}%");;
             })
+
             ->when($selectedColor, function ($queryBuilder) use ($selectedColor) {
                 $queryBuilder->whereHas('color', function ($colorQuery) use ($selectedColor) {
                     $colorQuery->where('name', $selectedColor);

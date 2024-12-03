@@ -41,7 +41,7 @@
         <div class="flex items-center justify-center space-x-4">
           <Link
             href="/"
-            
+
           >
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
@@ -205,7 +205,7 @@
             </div>
             <div class="px-4 py-4 space-y-4">
               <div
-                class="flex justify-between text-[11px] font-bold tracking-wide uppercase"
+                class="flex justify-between text-[11px] font-bold tracking-wide"
               >
                 <p>{{ product.name || "N/A" }}</p>
                 <p class="px-4 text-white bg-green-700 rounded-full">
