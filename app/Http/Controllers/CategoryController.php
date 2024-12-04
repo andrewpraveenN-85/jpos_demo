@@ -18,6 +18,10 @@ class CategoryController extends Controller
     }
     public function index()
     {
+        if (!Gate::allows('hasRole', ['Admin', 'Manager'])) {
+            abort(403, 'Unauthorized');
+        }
+        Gate::allows('hasRole', ['Admin', 'Manager']);
         // $paginatedcategories = Category::with('parent')->latest()->paginate(10);
         // $allcategories = Category::with('parent')->latest()->get();
         // $allcategories = Category::with('parent')->latest()->get()

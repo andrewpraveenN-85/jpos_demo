@@ -22,8 +22,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Gate::define('hasRole', function ($user, $roles) {
+        //     return in_array($user->role_type, (array) $roles);
+        // });
+
         Gate::define('hasRole', function ($user, $roles) {
-            return in_array($user->role_type, (array) $roles);
+            if (!is_array($roles)) {
+                $roles = func_get_args();
+                array_shift($roles); // Remove $user from arguments
+            }
+            return in_array($user->role_type, $roles);
         });
     }
 }
