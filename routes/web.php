@@ -12,6 +12,7 @@ use App\Http\Controllers\SizeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,13 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/', function () {
+        // 
+        if (Gate::allows('hasRole', ['Cashier'])) {
+            return redirect()->route('pos.index');
+        }
+
         return Inertia::render('Dashboard');
+        
     })->name('dashboard');
 });
 

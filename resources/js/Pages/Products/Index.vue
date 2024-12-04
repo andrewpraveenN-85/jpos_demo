@@ -211,25 +211,37 @@
 
                 <div class="flex space-x-4">
                   <button
-                    v-if="HasRole(['Admin'])"
+                    :disabled="!HasRole(['Admin'])"
                     @click="
                       () => {
-                        openDuplicateModal(product);
+                        if (HasRole(['Admin'])) {
+                          openDuplicateModal(product);
+                        }
                       }
                     "
-                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-green-600 hover:text-white"
+                    :class="{
+                      'cursor-not-allowed opacity-50': !HasRole(['Admin']),
+                      'cursor-pointer hover:bg-green-600 hover:text-white': HasRole(['Admin']),
+                    }"
+                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full"
                   >
                     <i class="ri-file-copy-2-line"></i>
                   </button>
 
                   <button
-                    v-if="HasRole(['Admin'])"
+                    :disabled="!HasRole(['Admin'])"
                     @click="
                       () => {
-                        openEditModal(product);
+                        if (HasRole(['Admin'])) {
+                          openDuplicateModal(product);
+                        }
                       }
                     "
-                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-blue-600 hover:text-white"
+                    :class="{
+                      'cursor-not-allowed opacity-50': !HasRole(['Admin']),
+                      'cursor-pointer hover:bg-green-600 hover:text-white': HasRole(['Admin']),
+                    }"
+                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full"
                   >
                     <i class="ri-pencil-line"></i>
                   </button>
