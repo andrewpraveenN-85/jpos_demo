@@ -221,7 +221,8 @@
                     "
                     :class="{
                       'cursor-not-allowed opacity-50': !HasRole(['Admin']),
-                      'cursor-pointer hover:bg-green-600 hover:text-white': HasRole(['Admin']),
+                      'cursor-pointer hover:bg-green-600 hover:text-white':
+                        HasRole(['Admin']),
                     }"
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full"
                   >
@@ -239,20 +240,28 @@
                     "
                     :class="{
                       'cursor-not-allowed opacity-50': !HasRole(['Admin']),
-                      'cursor-pointer hover:bg-green-600 hover:text-white': HasRole(['Admin']),
+                      'cursor-pointer hover:bg-green-600 hover:text-white':
+                        HasRole(['Admin']),
                     }"
                     class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full"
                   >
                     <i class="ri-pencil-line"></i>
                   </button>
                   <button
-                    v-if="HasRole(['Admin'])"
+                    :disabled="!HasRole(['Admin'])"
                     @click="
                       () => {
-                        openDeleteModal(product);
+                        if (HasRole(['Admin'])) {
+                          openDeleteModal(product);
+                        }
                       }
                     "
-                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white"
+                    :class="{
+                      'cursor-not-allowed opacity-50': !HasRole(['Admin']),
+                      'cursor-pointer hover:bg-green-600 hover:text-white':
+                        HasRole(['Admin']),
+                    }"
+                    class="flex items-center justify-center w-10 h-10 text-gray-800 transition duration-200 bg-gray-100 rounded-full"
                   >
                     <i class="ri-delete-bin-line"></i>
                   </button>
