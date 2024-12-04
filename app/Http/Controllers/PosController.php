@@ -46,23 +46,7 @@ class PosController extends Controller
         $phone = $request->input('countryCode') . $request->input('contactNumber');
 
         $customer = null;
-        // Save the customer data to the database
-        if ($request->input('customer.name')) {
-
-            $customer = Customer::where('email', $request->input('customer.email'))->first();
-
-            if (!$customer) {
-                $customer = Customer::create([
-                    'name' => $request->input('customer.name'),
-                    'email' => $request->input('customer.email'),
-                    'phone' => $phone,
-                    'address' => $request->input('customer.address', ''), // Optional address
-                    'member_since' => now()->toDateString(), // Current date
-                    'loyalty_points' => 0, // Default value
-                ]);
-            }
-        }
-
+        
         $products = $request->input('products');
         $totalAmount = collect($products)->reduce(function ($carry, $product) {
             return $carry + ($product['quantity'] * $product['selling_price']);
@@ -84,6 +68,23 @@ class PosController extends Controller
         DB::beginTransaction(); // Start a transaction
 
         try {
+            // Save the customer data to the database
+            if ($request->input('customer.name')) {
+
+                $customer = Customer::where('email', $request->input('customer.email'))->first();
+
+                if (!$customer) {
+                    $customer = Customer::create([
+                        'name' => $request->input('customer.name'),
+                        'email' => $request->input('customer.email'),
+                        'phone' => $phone,
+                        'address' => $request->input('customer.address', ''), // Optional address
+                        'member_since' => now()->toDateString(), // Current date
+                        'loyalty_points' => 0, // Default value
+                    ]);
+                }
+            }
+
             // Create the sale record
             $sale = Sale::create([
                 'customer_id' => $customer ? $customer->id : null, // Nullable customer_id
