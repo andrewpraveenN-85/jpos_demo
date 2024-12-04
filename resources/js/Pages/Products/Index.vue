@@ -47,15 +47,21 @@
           </p>
         </div>
         <p
-          v-if="HasRole(['Admin'])"
+          :disabled="!HasRole(['Admin'])"
           @click="
             () => {
-              isCreateModalOpen = true;
+              if (HasRole(['Admin'])) {
+                isCreateModalOpen = true;
+              }
             }
           "
-          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
+          :class="{
+            'cursor-not-allowed opacity-50': !HasRole(['Admin']),
+            'cursor-pointer': HasRole(['Admin']),
+          }"
+          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl"
         >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Products
+          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
         </p>
       </div>
 

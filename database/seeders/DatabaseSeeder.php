@@ -23,6 +23,24 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('Mn2#yx4'),
             ]);
         }
+
+        if (!\App\Models\User::where('email', 'manager@manager.com')->exists()) {
+            \App\Models\User::factory()->create([
+                'name' => 'manager',
+                'email' => 'manager@manager.com',
+                'role_type' => 'Manager',
+                'password' => Hash::make('JvP0sMgr'),
+            ]);
+        }
+
+        if (!\App\Models\User::where('email', 't1@cashier.com')->exists()) {
+            \App\Models\User::factory()->create([
+                'name' => 't1',
+                'email' => 't1@cashier.com',
+                'role_type' => 'Cashier',
+                'password' => Hash::make('JvP0sT1'),
+            ]);
+        }
         
         // $this->call([
         //     ColorSeeder::class,
