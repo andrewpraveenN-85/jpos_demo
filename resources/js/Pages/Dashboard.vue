@@ -7,7 +7,7 @@
     <Header />
 
     <div class="grid w-full h-full grid-cols-4 gap-8 auto-rows-fr">
-      <Link href="/categories" v-if="HasRole(['Admin', 'Manager'])">
+      <Link href="/pos" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#4d7c0f]">
           <div class="card-content">
             <div class="icon-container">
