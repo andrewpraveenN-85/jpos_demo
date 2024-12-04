@@ -318,8 +318,16 @@ class ProductController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
+        $imagePath = str_replace('storage/', '', $product->image);
+
+        // Check for other products using the same image
+        $imageUsageCount = Product::where('image', $product->image)
+                                  ->where('id', '!=', $product->id)
+                                  ->count();
+
+        if ($imageUsageCount === 0 && Storage::disk('public')->exists($imagePath)) {
+            // Delete the image only if no other products are using it
+            Storage::disk('public')->delete($imagePath);
         }
 
         $product->delete();

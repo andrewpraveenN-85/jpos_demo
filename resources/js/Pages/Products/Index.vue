@@ -233,7 +233,7 @@
                     @click="
                       () => {
                         if (HasRole(['Admin'])) {
-                          openDuplicateModal(product);
+                          openEditModal(product);
                         }
                       }
                     "
