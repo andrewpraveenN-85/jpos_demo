@@ -112,40 +112,26 @@
         </div>
       </Link>
 
-      <div
-        :class="
-          HasRole(['Admin'])
-            ? 'dashboard-card bg-[#FF8000] hover:cursor-pointer'
-            : 'dashboard-card bg-[#FF8000] hover:cursor-not-allowed opacity-50'
-        "
-        :title="
-          HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to access this feature'
-        "
-        @click="
-          () => {
-            if (HasRole(['Admin'])) $router.push('/reports');
-          }
-        "
-      >
-        <div class="card-content">
-          <div class="icon-container">
-            <img
-              src="/images/dashboard/report.png"
-              class="icon"
-              alt="dresshub.lk"
-            />
-          </div>
-          <div class="text-container">
-            <p class="title">Reports</p>
-            <p class="description">
-              Generate insights on sales, inventory, and performance to aid
-              decision-making.
-            </p>
+      <Link href="/reports" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#FF8000]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/report.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Reports</p>
+              <p class="description">
+                Generate insights on sales, inventory, and performance to aid
+                decision-making.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
 
       <Link href="/colors" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#9a9c9c]">
