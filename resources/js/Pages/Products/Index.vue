@@ -204,40 +204,31 @@
               />
             </div>
             <div class="px-4 py-4 space-y-4">
-              <div
-                class="flex justify-between text-[11px] font-bold tracking-wide"
-              >
-                <p>{{ product.name || "N/A" }}</p>
-                <p class="px-4 text-white bg-green-700 rounded-full">
 
 
-                    {{ product.selling_price || "N/A" }}
-                  <!-- {{
-                    product.selling_price &&
-                    product.discount !== null &&
-                    product.discount !== undefined
-                      ? product.discount > 0
-                        ? (
-                            product.selling_price -
-                            (product.selling_price * product.discount) / 100
-                          ).toFixed(2) + " LKR"
-                        : product.selling_price + " LKR"
-                      : "N/A"
-                  }} -->
-                </p>
-              </div>
+
+                <div class="flex items-start justify-between text-[11px] font-bold tracking-wide">
+  <p>{{ product.name || "N/A" }}</p>
+  <p class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center">
+    {{ product.selling_price || "N/A" }}
+  </p>
+</div>
+
+
+
+
               <div class="flex items-center justify-center w-full space-x-4">
                 <p
                   class="flex items-center space-x-2 text-justify text-gray-400"
                 >
-                  <span>Color :</span>
+                  Color :
 
-                  {{ product.color?.name || "N/A" }}
+                  <b> &nbsp; {{ product.color?.name || "N/A" }} </b>
                 </p>
 
                 <p class="text-justify text-gray-400">
                   Size :
-                  {{ product.size?.name || "N/A" }}
+                  <b> {{ product.size?.name || "N/A" }} </b>
                 </p>
               </div>
 
@@ -247,7 +238,7 @@
                 >
                   Supplier :
 
-                  {{ product.supplier?.name || "N/A" }}
+                  <b> &nbsp; {{ product.supplier?.name || "N/A" }} </b>
                 </p>
               </div>
               <div class="flex items-center justify-between">
