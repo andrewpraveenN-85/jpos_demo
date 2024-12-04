@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title inertia>{{ config('app.name', 'Dresshub.lk') }}</title>
-    <link rel="icon" type="image/gif" href="{{ asset('images/favicon.gif') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
