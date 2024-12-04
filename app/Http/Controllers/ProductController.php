@@ -317,7 +317,7 @@ class ProductController extends Controller
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
-        
+
         if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
             Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
         }
