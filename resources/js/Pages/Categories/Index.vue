@@ -67,11 +67,6 @@
         </p>
       </div>
 
-
-
-
-
-
       <div class="flex w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">
@@ -83,7 +78,12 @@
         </div>
         <div class="flex justify-end w-full">
           <p
-            @click="() => { isCreateModalOpen = true; }"
+            v-if="HasRole(['Admin'])"
+            @click="
+              () => {
+                isCreateModalOpen = true;
+              }
+            "
             class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
           >
             <i class="pr-4 ri-add-circle-fill"></i> Add More Categories
@@ -128,13 +128,21 @@
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
                     <button
-                      @click="() => { openEditModal(category); }"
+                      @click="
+                        () => {
+                          openEditModal(category);
+                        }
+                      "
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
                     >
                       Edit
                     </button>
                     <button
-                      @click="() => { openDeleteModal(category); }"
+                      @click="
+                        () => {
+                          openDeleteModal(category);
+                        }
+                      "
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
                     >
                       Delete
@@ -174,6 +182,7 @@ import CategoryCreateModel from "@/Components/custom/CategoryCreateModel.vue";
 import CategoryEditModel from "@/Components/custom/CategoryEditModel.vue";
 import CategoryDeleteModel from "@/Components/custom/CategoryDeleteModel.vue";
 import Banner from "@/Components/Banner.vue";
+import { HasRole } from "@/Utils/Permissions";
 
 defineProps({
   allcategories: Array,
@@ -194,8 +203,6 @@ const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedCategory = ref(null);
-
-
 
 $(document).ready(function () {
   let table = $("#CategoryTable").DataTable({

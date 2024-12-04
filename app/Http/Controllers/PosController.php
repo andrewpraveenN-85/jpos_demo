@@ -10,11 +10,15 @@ use App\Models\SaleItem;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PosController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
+            abort(403, 'Unauthorized');
+        }
 
         // Render the page for GET requests
         return Inertia::render('Pos/Index', [
