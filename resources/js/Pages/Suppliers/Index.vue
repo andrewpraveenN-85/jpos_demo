@@ -98,22 +98,27 @@
             <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
           </p> -->
 
-
-<p
-  @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
-  :class="HasRole(['Admin'])
-            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
-  :title="HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to add more Color'"
->
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
-</p>
-
-
-
-
+          <p
+            @click="
+              () => {
+                if (HasRole(['Admin'])) {
+                  isCreateModalOpen = true;
+                }
+              }
+            "
+            :class="
+              HasRole(['Admin'])
+                ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+                : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
+            "
+            :title="
+              HasRole(['Admin'])
+                ? ''
+                : 'You do not have permission to add more Color'
+            "
+          >
+            <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
+          </p>
         </div>
       </div>
       <template v-if="allsuppliers && allsuppliers.length > 0">
@@ -212,32 +217,48 @@
                     </button> -->
 
                     <!-- Edit Button -->
-<button
-  :class="HasRole(['Admin'])
-            ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
-            : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
-  :title="HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to edit'"
-  :disabled="!HasRole(['Admin'])"
-  @click="() => { if (HasRole(['Admin'])) openEditModal(supplier); }"
->
-  Edit
-</button>
+                    <button
+                      :class="
+                        HasRole(['Admin'])
+                          ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+                          : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'
+                      "
+                      :title="
+                        HasRole(['Admin'])
+                          ? ''
+                          : 'You do not have permission to edit'
+                      "
+                      :disabled="!HasRole(['Admin'])"
+                      @click="
+                        () => {
+                          if (HasRole(['Admin'])) openEditModal(supplier);
+                        }
+                      "
+                    >
+                      Edit
+                    </button>
 
-<!-- Delete Button -->
-<button
-  :class="HasRole(['Admin'])
-            ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
-            : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
-  :title="HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to delete'"
-  :disabled="!HasRole(['Admin'])"
-  @click="() => { if (HasRole(['Admin'])) openDeleteModal(supplier); }"
->
-  Delete
-</button>
+                    <!-- Delete Button -->
+                    <button
+                      :class="
+                        HasRole(['Admin'])
+                          ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+                          : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'
+                      "
+                      :title="
+                        HasRole(['Admin'])
+                          ? ''
+                          : 'You do not have permission to delete'
+                      "
+                      :disabled="!HasRole(['Admin'])"
+                      @click="
+                        () => {
+                          if (HasRole(['Admin'])) openDeleteModal(supplier);
+                        }
+                      "
+                    >
+                      Delete
+                    </button>
                   </div>
                 </td>
               </tr>
