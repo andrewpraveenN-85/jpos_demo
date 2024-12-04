@@ -128,6 +128,7 @@
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
                     <button
+                      v-if="HasRole(['Admin'])"
                       @click="
                         () => {
                           openEditModal(category);
@@ -138,6 +139,7 @@
                       Edit
                     </button>
                     <button
+                      v-if="HasRole(['Admin'])"
                       @click="
                         () => {
                           openDeleteModal(category);

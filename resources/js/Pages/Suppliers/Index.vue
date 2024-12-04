@@ -51,7 +51,7 @@
 </style>
 
 <template>
-    <Head title="Suppliers"/>
+  <Head title="Suppliers" />
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -70,7 +70,7 @@
       </div>
       <div class="flex w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
-              <Link href="/" >
+          <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="text-4xl font-bold tracking-wide text-black uppercase">
@@ -87,14 +87,16 @@
           </p> -->
 
           <p
-
-@click="() => {   isCreateModalOpen = true; }"
-class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
->
-<i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
-</p>
-
-
+            v-if="HasRole(['Admin'])"
+            @click="
+              () => {
+                isCreateModalOpen = true;
+              }
+            "
+            class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded rounded-xl"
+          >
+            <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
+          </p>
         </div>
       </div>
       <template v-if="allsuppliers && allsuppliers.length > 0">
@@ -151,17 +153,15 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
                   />
                   <span v-else class="text-gray-500">N/A</span> -->
 
-
-
-
                   <img
-  :src="supplier.image ? `/${supplier.image}` : '/images/placeholder.jpg'"
-   alt="Supplier Image"
-  class="object-cover rounded-md shadow h-15 w-15"
-/>
-
-
-
+                    :src="
+                      supplier.image
+                        ? `/${supplier.image}`
+                        : '/images/placeholder.jpg'
+                    "
+                    alt="Supplier Image"
+                    class="object-cover rounded-md shadow h-15 w-15"
+                  />
                 </td>
                 <td class="p-4 border-t border-gray-200">
                   {{ supplier.email || "N/A" }}
@@ -172,16 +172,23 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
                     <button
-
-                       @click="() => {  openEditModal(supplier); }"
+                      v-if="HasRole(['Admin'])"
+                      @click="
+                        () => {
+                          openEditModal(supplier);
+                        }
+                      "
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
                     >
                       Edit
                     </button>
                     <button
-
-                     @click="() => {   openDeleteModal(supplier); }"
-
+                      v-if="HasRole(['Admin'])"
+                      @click="
+                        () => {
+                          openDeleteModal(supplier);
+                        }
+                      "
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
                     >
                       Delete
@@ -226,20 +233,19 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
-import { Head } from '@inertiajs/vue3';
+import { Head } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import SupplierCreateModel from "@/Components/custom/SupplierCreateModel.vue";
 import SupplierDeleteModel from "@/Components/custom/SupplierDeleteModel.vue";
 import SupplierUpdateModel from "@/Components/custom/SupplierUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
+import { HasRole } from "@/Utils/Permissions";
 
 defineProps({
   allsuppliers: Array, // Array of suppliers
   totalSuppliers: Number, // Total count of suppliers
 });
-
-
 
 const openEditModal = (supplier) => {
   console.log("Opening edit modal for supplier:", supplier);

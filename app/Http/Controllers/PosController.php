@@ -30,6 +30,10 @@ class PosController extends Controller
 
     public function getProduct(Request $request)
     {
+        if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
+            abort(403, 'Unauthorized');
+        }
+
         $request->validate([
             'barcode' => 'required',
         ]);
@@ -46,6 +50,9 @@ class PosController extends Controller
 
     public function submit(Request $request)
     {
+        if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
+            abort(403, 'Unauthorized');
+        }
         // Combine countryCode and contactNumber to create the phone field
         $phone = $request->input('countryCode') . $request->input('contactNumber');
 

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\StockTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -24,10 +25,10 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
 
-        $productsQuery = Product::with('category', 'color', 'size','supplier')
+        $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             ->when($query, function ($queryBuilder) use ($query) {
                 $queryBuilder->where('name', 'like', "%{$query}%")
-                ->orWhere('code', 'like', "%{$query}%");;
+                    ->orWhere('code', 'like', "%{$query}%");;
             })
 
             ->when($selectedColor, function ($queryBuilder) use ($selectedColor) {
@@ -98,7 +99,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
+        }
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
@@ -142,7 +145,9 @@ class ProductController extends Controller
     public function productVariantStore(Request $request)
     {
 
-
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
+        }
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
@@ -192,7 +197,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
+        }
         // $categories = Category::all();
         // $sizes = Size::all();
         // $suppliers = Supplier::all();
@@ -202,13 +209,7 @@ class ProductController extends Controller
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
 
-
-
-
-
-
-        $product->load('category', 'color', 'size','suppliers');
-
+        $product->load('category', 'color', 'size', 'suppliers');
 
         return Inertia::render('Products/Show', [
 
@@ -230,9 +231,6 @@ class ProductController extends Controller
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
 
-
-
-
         return inertia('Products/Edit', [
             'product' => $product,
             'categories' => $categories,
@@ -248,59 +246,63 @@ class ProductController extends Controller
 
 
 
-     public function update(Request $request, Product $product)
-{
-    $validated = $request->validate([
-        'category_id' => 'nullable|exists:categories,id',
-        'name' => 'string|max:255',
-        'code' => 'string|max:50',
-        'size_id' => 'nullable|exists:sizes,id',
-        'color_id' => 'nullable|exists:colors,id',
-        'cost_price' => 'numeric|min:0',
-        'selling_price' => 'numeric|min:0',
-        'stock_quantity' => 'required|integer|min:0',
-        'discounted_price' => 'nullable|numeric|min:0',
-        'discount' => 'nullable|numeric|min:0|max:100',
-        'supplier_id' => 'nullable|exists:suppliers,id',
-        'image' => 'nullable|max:2048',
-    ]);
-
-    // Handle image update
-    if ($request->hasFile('image')) {
-        // Delete the old image if it exists
-        if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
+    public function update(Request $request, Product $product)
+    {
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
         }
 
-        // Save the new image
-        $fileExtension = $request->file('image')->getClientOriginalExtension();
-        $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
-        $path = $request->file('image')->storeAs('products', $fileName, 'public');
-        $validated['image'] = 'storage/' . $path;
-    } else {
-        $validated['image'] = $product->image;
+        $validated = $request->validate([
+            'category_id' => 'nullable|exists:categories,id',
+            'name' => 'string|max:255',
+            'code' => 'string|max:50',
+            'size_id' => 'nullable|exists:sizes,id',
+            'color_id' => 'nullable|exists:colors,id',
+            'cost_price' => 'numeric|min:0',
+            'selling_price' => 'numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
+            'discounted_price' => 'nullable|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'image' => 'nullable|max:2048',
+        ]);
+
+        // Handle image update
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
+            }
+
+            // Save the new image
+            $fileExtension = $request->file('image')->getClientOriginalExtension();
+            $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+            $path = $request->file('image')->storeAs('products', $fileName, 'public');
+            $validated['image'] = 'storage/' . $path;
+        } else {
+            $validated['image'] = $product->image;
+        }
+
+        // Calculate stock change
+        $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
+
+        // Determine transaction type
+        $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
+
+        // Update product
+        $product->update($validated);
+
+        // Log stock transaction
+        StockTransaction::create([
+            'product_id' => $product->id,
+            'transaction_type' => $transactionType,
+            'quantity' => abs($stockChange),
+            'transaction_date' => now(),
+            'supplier_id' => $validated['supplier_id'] ?? null,
+        ]);
+
+        return redirect()->route('products.index')->with('banner', 'Product updated successfully');
     }
-
-    // Calculate stock change
-    $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
-
-    // Determine transaction type
-    $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
-
-    // Update product
-    $product->update($validated);
-
-    // Log stock transaction
-    StockTransaction::create([
-        'product_id' => $product->id,
-        'transaction_type' => $transactionType,
-        'quantity' => abs($stockChange),
-        'transaction_date' => now(),
-        'supplier_id' => $validated['supplier_id'] ?? null,
-    ]);
-
-    return redirect()->route('products.index')->with('banner', 'Product updated successfully');
-}
 
 
 
@@ -312,6 +314,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
+        }
+        
         if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
             Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
         }

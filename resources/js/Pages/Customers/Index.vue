@@ -146,6 +146,7 @@
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
                     <button
+                    v-if="HasRole(['Admin'])"
                       @click="
                         () => {
 
@@ -208,6 +209,7 @@ import Footer from "@/Components/custom/Footer.vue";
 import CustomerDeleteModel from "@/Components/custom/CustomerDeleteModel.vue";
 import CustomerUpdateModel from "@/Components/custom/CustomerUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
+import { HasRole } from "@/Utils/Permissions";
 
 defineProps({
   allcustomers: Array,

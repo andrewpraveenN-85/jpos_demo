@@ -39,10 +39,7 @@
       </div>
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4">
-          <Link
-            href="/"
-
-          >
+          <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="text-4xl font-bold tracking-wide text-black uppercase">
@@ -50,9 +47,9 @@
           </p>
         </div>
         <p
+          v-if="HasRole(['Admin'])"
           @click="
             () => {
-
               isCreateModalOpen = true;
             }
           "
@@ -61,48 +58,6 @@
           <i class="pr-4 ri-add-circle-fill"></i> Add More Products
         </p>
       </div>
-
-      <!-- <div class="flex items-center space-x-2">
-
-        <input
-          v-model="search"
-          @input="performSearch"
-          type="text"
-          placeholder="Search Product Here"
-          class="w-1/3 px-4 py-2 border border-gray-500 rounded-lg focus:outline-none"
-        />
-
-        <button
-          class="flex items-center px-3 py-2 border border-gray-500 rounded-lg focus:outline-none"
-        >
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5 text-gray-500"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-.293.707L13 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 019 17v-5.586L3.293 7.707A1 1 0 013 7V5z"
-              clip-rule="evenodd"
-            />
-          </svg>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5 ml-1 text-gray-500"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </div> -->
 
       <div class="flex items-center space-x-4">
         <!-- Search Input on the Left -->
@@ -161,14 +116,12 @@
             </option>
           </select>
 
-
-
-        <Link href="/products"  class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select">
-
-
+          <Link
+            href="/products"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select"
+          >
             Reset
-
-        </Link>
+          </Link>
         </div>
       </div>
 
@@ -182,7 +135,7 @@
             <div
               @click="
                 () => {
-                 openViewModal(product);
+                  openViewModal(product);
                 }
               "
               class="cursor-pointer"
@@ -204,18 +157,16 @@
               />
             </div>
             <div class="px-4 py-4 space-y-4">
-
-
-
-                <div class="flex items-start justify-between text-[11px] font-bold tracking-wide">
-  <p>{{ product.name || "N/A" }}</p>
-  <p class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center">
-    {{ product.selling_price || "N/A" }}
-  </p>
-</div>
-
-
-
+              <div
+                class="flex items-start justify-between text-[11px] font-bold tracking-wide"
+              >
+                <p>{{ product.name || "N/A" }}</p>
+                <p
+                  class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center"
+                >
+                  {{ product.selling_price || "N/A" }}
+                </p>
+              </div>
 
               <div class="flex items-center justify-center w-full space-x-4">
                 <p
@@ -254,9 +205,9 @@
 
                 <div class="flex space-x-4">
                   <button
+                    v-if="HasRole(['Admin'])"
                     @click="
                       () => {
-
                         openDuplicateModal(product);
                       }
                     "
@@ -266,9 +217,9 @@
                   </button>
 
                   <button
+                    v-if="HasRole(['Admin'])"
                     @click="
                       () => {
-
                         openEditModal(product);
                       }
                     "
@@ -277,9 +228,9 @@
                     <i class="ri-pencil-line"></i>
                   </button>
                   <button
+                    v-if="HasRole(['Admin'])"
                     @click="
                       () => {
-
                         openDeleteModal(product);
                       }
                     "
@@ -399,6 +350,7 @@ import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
 import { debounce } from "lodash";
+import { HasRole } from "@/Utils/Permissions";
 
 const isCreateModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -406,8 +358,6 @@ const isDuplicateModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
-
-
 
 const emit = defineEmits(["update:open"]);
 
