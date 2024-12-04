@@ -207,8 +207,8 @@
 
 
 
-                <div class="flex items-start justify-between text-[11px] font-bold tracking-wide">
-  <p>{{ product.name || "N/A" }}</p>
+                <div class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide">
+  <p class="text-justify">{{ product.name || "N/A" }}</p>
   <p class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center">
     {{ product.selling_price || "N/A" }}
   </p>
