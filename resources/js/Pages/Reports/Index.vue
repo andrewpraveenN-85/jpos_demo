@@ -6,7 +6,7 @@
     >
       <!-- Include the Header -->
       <Header />
-      <div class="w-5/6 py-12 space-y-16">
+      <div class="w-full py-12 space-y-16">
         <div class="flex items-center justify-between">
           <div class="flex items-center justify-center space-x-4">
                 <Link href="/" >
@@ -21,28 +21,59 @@
           <!-- <button class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl">
             <i class="pr-4 ri-add-circle-fill"></i> Date
           </button> -->
-          <div class="relative max-w-sm">
-    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-      <svg
-        class="w-4 h-4 text-gray-500 dark:text-gray-400"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path
-          d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-        />
-      </svg>
+          <div date-rangepicker class="flex items-center">
+    <!-- Start Date -->
+    <div class="relative">
+      <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5 text-blue  dark:text-blue-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <input
+        v-model="startDate"
+        type="date"
+        class=" text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-white-700 dark:border-blue-600 dark:placeholder-blue-400 dark:text-blue dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Select date start"
+      />
     </div>
-    <input
-      id="default-datepicker"
-      type="date"
-      v-model="selectedDate"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      placeholder="Select date"
-    />
-  </div>33
+
+    <span class="mx-4 text-xl font-bold tracking-wider text-blue-600">to</span>
+
+    <!-- End Date -->
+    <div class="relative">
+      <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5 text-gray-500 dark:text-gray-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <input
+        v-model="endDate"
+        type="date"
+        class=" text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-white-700 dark:border-blue-600 dark:placeholder-blue-400 dark:text-blue dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Select date end"
+      />
+    </div>
+  </div>
         </div>
       </div>
 

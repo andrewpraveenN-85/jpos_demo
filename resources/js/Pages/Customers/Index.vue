@@ -70,7 +70,7 @@
         <div class="flex items-center space-x-4">
           <Link
             href="/"
-            
+
           >
             <img src="/images/back-arrow.png" class="w-14 h-14" alt="Back" />
           </Link>
@@ -145,7 +145,7 @@
                 </td>
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
-                    <button
+                    <!-- <button
                     v-if="HasRole(['Admin'])"
                       @click="
                         () => {
@@ -167,7 +167,38 @@
                       class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
                     >
                       Delete
-                    </button>
+                    </button> -->
+
+<!-- Edit Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+            : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to edit'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openEditModal(customer); }"
+>
+  Edit
+</button>
+
+<!-- Delete Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+            : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to delete'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openDeleteModal(customer); }"
+>
+  Delete
+</button>
+
+
+
                   </div>
                 </td>
               </tr>

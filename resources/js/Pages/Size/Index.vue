@@ -80,13 +80,22 @@
         <div class="flex justify-end w-full">
 
 
-          <p
-
-@click="() => {   isCreateModalOpen = true; }"
-class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600  rounded-xl"
+            <p
+  @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
+  :class="HasRole(['Admin'])
+            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to add more sizes'"
 >
-<i class="pr-4 ri-add-circle-fill"></i> Add More Size
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Size
 </p>
+
+
+
+
+
 
 
         </div>
@@ -116,18 +125,45 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
             <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
               <td class="px-6 py-3">{{ size.name }}</td>
               <td class="px-6 py-3 text- ">
-                <button
-                  class="px-4 py-2 bg-green-500 text-white rounded-lg"
-                  @click="openEditModal(size)"
-                >
-                  Edit
-                </button>
-                <button
-                  class="px-4 py-2 bg-red-500 text-white rounded-lg ml-2"
-                  @click="openDeleteModal(size)"
-                >
-                  Delete
-                </button>
+
+
+
+<!-- Edit Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+            : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to edit'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openEditModal(size); }"
+>
+  Edit
+</button>
+
+<!-- Delete Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+            : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to delete'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openDeleteModal(size); }"
+>
+  Delete
+</button>
+
+
+
+
+
+
+
+
+
               </td>
             </tr>
           </tbody>
@@ -177,6 +213,7 @@ import SizeCreateModel from "@/Components/custom/SizeCreateModel.vue";
 import SizeDeleteModel from "@/Components/custom/SizeDeleteModel.vue";
 import SizeUpdateModel from "@/Components/custom/SizeUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
+import { HasRole } from "@/Utils/Permissions";
 
 defineProps({
   allsize: Array,

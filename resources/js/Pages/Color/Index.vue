@@ -80,13 +80,29 @@
         <div class="flex justify-end w-full">
 
 
-          <p
+          <!-- <p
 
 @click="() => {  isCreateModalOpen = true; }"
 class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600  rounded-xl"
 >
 <i class="pr-4 ri-add-circle-fill"></i> Add More Color
+</p> -->
+
+
+
+<p
+  @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
+  :class="HasRole(['Admin'])
+            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to add more Color'"
+>
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Color
 </p>
+
+
 
 
         </div>
@@ -116,18 +132,44 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
             <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
               <td class="px-6 py-3">{{ color.name }}</td>
               <td class="px-6 py-3 text- ">
-                <button
-                  class="px-4 py-2 bg-green-500 text-white rounded-lg"
-                  @click="openEditModal(color)"
-                >
-                  Edit
-                </button>
-                <button
-                  class="px-4 py-2 bg-red-500 text-white rounded-lg ml-2"
-                  @click="openDeleteModal(color)"
-                >
-                  Delete
-                </button>
+
+
+
+
+
+
+<!-- Edit Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+            : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to edit'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openEditModal(color); }"
+>
+  Edit
+</button>
+
+<!-- Delete Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+            : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to delete'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openDeleteModal(color); }"
+>
+  Delete
+</button>
+
+
+
+
+
               </td>
             </tr>
           </tbody>
@@ -177,13 +219,14 @@ import ColorCreateModel from "@/Components/custom/ColorCreateModel.vue";
 import ColorDeleteModel from "@/Components/custom/ColorDeleteModel.vue";
 import ColorUpdateModel from "@/Components/custom/ColorUpdateModel.vue";
 import Banner from "@/Components/Banner.vue";
+import { HasRole } from "@/Utils/Permissions";
 
 defineProps({
   allcolors: Array,
   totalColors: Number,
 });
 
- 
+
 
 const openEditModal = (color) => {
   console.log("Opening edit modal for Colors:", color);

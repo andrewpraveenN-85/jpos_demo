@@ -8,6 +8,9 @@ use App\Models\Report;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
+
 
 class ReportController extends Controller
 {
@@ -16,13 +19,26 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
-
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
+        }
         $products = Product::orderBy('created_at', 'desc')->get();
         $sales = Sale::orderBy('created_at', 'desc')->get();
         $totalSaleAmount = Sale::sum('total_amount');
         $totalCustomer = Customer::count();
         $totalProduct = Product::count();
         //dd($totalSaleAmount);
+
+
+        $productCostPrice =  $products->sum('total_amount');
+        $productQty = $products->sum('total_amount');
+
+        $totalAmountSum = $sales->sum('total_amount');
+        $totalDiscountSum = $sales->sum('discount');
+
+
+$netProfit =  $totalAmountSum - $totalDiscountSum;
+
 
 
         return Inertia::render('Reports/Index', [
