@@ -293,13 +293,27 @@ class ProductController extends Controller
         $product->update($validated);
 
         // Log stock transaction
-        StockTransaction::create([
-            'product_id' => $product->id,
-            'transaction_type' => $transactionType,
-            'quantity' => abs($stockChange),
-            'transaction_date' => now(),
-            'supplier_id' => $validated['supplier_id'] ?? null,
-        ]);
+        // StockTransaction::create([
+        //     'product_id' => $product->id,
+        //     'transaction_type' => $transactionType,
+        //     'quantity' => abs($stockChange),
+        //     'transaction_date' => now(),
+        //     'supplier_id' => $validated['supplier_id'] ?? null,
+        // ]);
+
+
+        if ($stockChange !== 0) {
+            // Determine transaction type
+            $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
+
+            StockTransaction::create([
+                'product_id' => $product->id,
+                'transaction_type' => $transactionType,
+                'quantity' => abs($stockChange),
+                'transaction_date' => now(),
+                'supplier_id' => $validated['supplier_id'] ?? null,
+            ]);
+        }
 
         return redirect()->route('products.index')->with('banner', 'Product updated successfully');
     }
