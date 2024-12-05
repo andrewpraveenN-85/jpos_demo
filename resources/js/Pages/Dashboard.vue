@@ -177,17 +177,16 @@
         </div>
       </Link>
 
-     <Link href="/stock-transition" v-if="HasRole(['Admin', 'Manager'])">
+     <Link href="/stock-transition" v-if="HasRole(['Admin'])">
             <div class="dashboard-card bg-[#3426ff]">
                 <div class="card-content">
                     <div class="icon-container">
-                        <img src="/images/dashboard/measuring-tape.png" class="icon" alt="dresshub.lk" />
+                        <img src="/images/dashboard/stock_transtion.png" class="icon" alt="dresshub.lk" />
                     </div>
                     <div class="text-container">
                         <p class="title">Stock Transition</p>
                         <p class="description">
-                            Organize and update product sizes to streamline inventory tracking and simplify the sales
-                            process.
+                            View and manage stock changes, including additions, deductions, and returns, all in one place.
                         </p>
                     </div>
                 </div>
