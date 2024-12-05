@@ -283,7 +283,7 @@
         <!-- Prev Button -->
         <Link
           v-if="products.links[0]"
-          :href="products.links[0].url"
+          @click.prevent="navigateTo(products.links[0].url)"
           :class="[
             'pagination-btn',
             { 'pagination-disabled': !products.links[0].url },
@@ -299,7 +299,7 @@
             products.links.length - 1
           )"
           :key="link.label"
-          :href="link.url"
+          @click.prevent="navigateTo(link.url)"
           :class="['pagination-btn', { 'pagination-active': link.active }]"
           v-html="link.label"
         ></Link>
@@ -307,7 +307,9 @@
         <!-- Next Button -->
         <Link
           v-if="products.links[products.links.length - 1]"
-          :href="products.links[products.links.length - 1].url"
+          @click.prevent="
+            navigateTo(products.links[products.links.length - 1].url)
+          "
           :class="[
             'pagination-btn',
             {
@@ -436,7 +438,7 @@ const performSearch = debounce(() => {
   applyFilters();
 }, 500);
 
-const applyFilters = () => {
+const applyFilters = (page) => {
   router.get(
     route("products.index"),
     {
@@ -471,11 +473,31 @@ const deleteProduct = (id) => {
     },
   });
 };
-// const deleteProduct = (id) => {
-//   if (confirm("Are you sure you want to delete this product?")) {
-//     form.delete(`/products/${id}`);
-//   }
-// };
+const navigateTo = (url) => {
+  if (!url) return; // Avoid null or undefined URLs
+
+  // Extract the `page` parameter from the URL
+  const urlParams = new URLSearchParams(
+    new URL(url, window.location.origin).search
+  );
+  const page = urlParams.get("page");
+
+  // Use Inertia's router.get with current filters
+  router.get(
+    route("products.index"),
+    {
+      page, // Add the page parameter
+      search: search.value,
+      sort: sort.value,
+      color: color.value,
+      size: size.value,
+    },
+    {
+      preserveState: true, // Maintain the current state
+      preserveScroll: true, // Prevent scroll reset
+    }
+  );
+};
 </script>
 
 

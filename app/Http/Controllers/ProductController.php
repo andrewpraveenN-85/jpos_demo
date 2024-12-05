@@ -27,10 +27,11 @@ class ProductController extends Controller
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             ->when($query, function ($queryBuilder) use ($query) {
-                $queryBuilder->where('name', 'like', "%{$query}%")
-                    ->orWhere('code', 'like', "%{$query}%");;
+                $queryBuilder->where(function ($subQuery) use ($query) {
+                    $subQuery->where('name', 'like', "%{$query}%")
+                        ->orWhere('code', 'like', "%{$query}%");
+                });
             })
-
             ->when($selectedColor, function ($queryBuilder) use ($selectedColor) {
                 $queryBuilder->whereHas('color', function ($colorQuery) use ($selectedColor) {
                     $colorQuery->where('name', $selectedColor);
@@ -48,7 +49,6 @@ class ProductController extends Controller
         $count = $productsQuery->count();
 
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
-
 
 
         $allcategories = Category::with('parent')->get();
@@ -336,8 +336,8 @@ class ProductController extends Controller
 
         // Check for other products using the same image
         $imageUsageCount = Product::where('image', $product->image)
-                                  ->where('id', '!=', $product->id)
-                                  ->count();
+            ->where('id', '!=', $product->id)
+            ->count();
 
         if ($imageUsageCount === 0 && Storage::disk('public')->exists($imagePath)) {
             // Delete the image only if no other products are using it
