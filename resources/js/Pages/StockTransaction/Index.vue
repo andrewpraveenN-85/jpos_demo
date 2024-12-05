@@ -146,6 +146,13 @@
           </table>
         </div>
       </template>
+      <template v-else>
+        <div class="col-span-4 text-center text-blue-500">
+          <p class="text-center text-red-500 text-[17px]">
+            No Stock Transition available
+          </p>
+        </div>
+      </template>
     </div>
   </div>
 

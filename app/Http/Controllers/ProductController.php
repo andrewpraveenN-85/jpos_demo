@@ -113,7 +113,7 @@ class ProductController extends Controller
             'selling_price' => 'nullable|numeric|min:0',
             'discounted_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100', // Validation for discount
+            'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -128,7 +128,19 @@ class ProductController extends Controller
             }
 
             // Create the product
-            Product::create($validated);
+            $product = Product::create($validated);
+
+            // Add stock transaction if stock quantity is provided
+            $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
+            if ($stockQuantity > 0) {
+                StockTransaction::create([
+                    'product_id' => $product->id,
+                    'transaction_type' => 'Added',
+                    'quantity' => $stockQuantity,
+                    'transaction_date' => now(),
+                    'supplier_id' => $validated['supplier_id'] ?? null,
+                ]);
+            }
 
             // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
@@ -139,6 +151,7 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'An error occurred while creating the product. Please try again.');
         }
     }
+
 
 
 
@@ -177,7 +190,29 @@ class ProductController extends Controller
             }
 
 
-            Product::create($validated);
+           // Product::create($validated);
+
+
+
+            $product = Product::create($validated);
+
+            // Add stock transaction if stock quantity is provided
+            $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
+            if ($stockQuantity > 0) {
+                StockTransaction::create([
+                    'product_id' => $product->id,
+                    'transaction_type' => 'Added',
+                    'quantity' => $stockQuantity,
+                    'transaction_date' => now(),
+                    'supplier_id' => $validated['supplier_id'] ?? null,
+                ]);
+            }
+
+
+
+
+
+
 
             // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
@@ -292,14 +327,6 @@ class ProductController extends Controller
         // Update product
         $product->update($validated);
 
-        // Log stock transaction
-        // StockTransaction::create([
-        //     'product_id' => $product->id,
-        //     'transaction_type' => $transactionType,
-        //     'quantity' => abs($stockChange),
-        //     'transaction_date' => now(),
-        //     'supplier_id' => $validated['supplier_id'] ?? null,
-        // ]);
 
 
         if ($stockChange !== 0) {
