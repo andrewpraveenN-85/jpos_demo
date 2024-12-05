@@ -248,8 +248,8 @@
                   </p>
 
                   <p style="color: #000; text-align: center; width: 100%">
-                    [{{ selectedProduct.size.name }}] -
-                    {{ selectedProduct.color.name }}
+                    [{{ selectedProduct.size?.name || "N/A" }}] -
+                    {{ selectedProduct.color?.name || "N/A" }}
                   </p>
                   <p style="color: #000; text-align: center; width: 100%">
                     {{ selectedProduct.name }}
