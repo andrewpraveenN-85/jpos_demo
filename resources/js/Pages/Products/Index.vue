@@ -46,7 +46,7 @@
             Products
           </p>
         </div>
-        <p
+        <!-- <p
           :disabled="!HasRole(['Admin'])"
           @click="
             () => {
@@ -62,7 +62,30 @@
           class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl"
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
-        </p>
+        </p> -->
+
+
+
+
+        <p
+  @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
+  :class="HasRole(['Admin'])
+            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to add more Productss'"
+>
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
+</p>
+
+
+
+
+
+
+
+
       </div>
 
       <div class="flex items-center space-x-4">

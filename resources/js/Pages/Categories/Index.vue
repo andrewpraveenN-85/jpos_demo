@@ -77,7 +77,7 @@
           </p>
         </div>
         <div class="flex justify-end w-full">
-          <p
+          <!-- <p
             :disabled="!HasRole(['Admin'])"
             @click="
               () => {
@@ -94,6 +94,25 @@
           >
             <i class="pr-4 ri-add-circle-fill"></i> Add More Categories
           </p>
+ -->
+
+
+
+          <p
+  @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
+  :class="HasRole(['Admin'])
+            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to add more Categories'"
+>
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Categories
+</p>
+
+
+
+
         </div>
       </div>
       <template v-if="allcategories && allcategories.length > 0">
@@ -133,40 +152,47 @@
                 </td>
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
-                    <button
-                      :disabled="!HasRole(['Admin'])"
-                      @click="
-                        () => {
-                          if (HasRole(['Admin'])) {
-                            openEditModal(category);
-                          }
-                        }
-                      "
-                      :class="{
-                        'cursor-not-allowed opacity-50': !HasRole(['Admin']),
-                        '': true,
-                      }"
-                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      :disabled="!HasRole(['Admin'])"
-                      @click="
-                        () => {
-                          if (HasRole(['Admin'])) {
-                            openDeleteModal(category);
-                          }
-                        }
-                      "
-                      :class="{
-                        'cursor-not-allowed opacity-50': !HasRole(['Admin']),
-                        '': true,
-                      }"
-                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
-                    >
-                      Delete
-                    </button>
+
+<!-- Edit Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+            : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to edit'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openEditModal(category); }"
+>
+  Edit
+</button>
+
+<!-- Delete Button -->
+<button
+  :class="HasRole(['Admin'])
+            ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+            : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
+  :title="HasRole(['Admin'])
+            ? ''
+            : 'You do not have permission to delete'"
+  :disabled="!HasRole(['Admin'])"
+  @click="() => { if (HasRole(['Admin'])) openDeleteModal(category); }"
+>
+  Delete
+</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   </div>
                 </td>
               </tr>

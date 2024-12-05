@@ -31,17 +31,20 @@
                                         <!-- Product Name -->
                                         <p class="text-3xl font-bold text-black">
                                             {{ selectedProduct.name }}
-                                        </p>
 
-                                        <!-- Discounted Price -->
-                                        <span
+
+                                            <span
     v-if="
         selectedProduct.discount &&
         selectedProduct.discount > 0
     "
-    class="absolute -mt-32  inline-block px-2 py-2 text-sm font-medium text-white bg-red-600 rounded">
+    class="  inline-block px-2 py-2 text-sm font-medium text-white bg-red-600 rounded">
     {{ selectedProduct.discount }} % OFF
 </span>
+                                        </p>
+
+                                        <!-- Discounted Price -->
+
 
                                     </div>
 
@@ -151,14 +154,17 @@
                                     <div class="mt-2">
                                         <input hidden type="text" id="barcodeInput" v-model="selectedProduct.barcode"
                                             class="w-full px-4 py-2 placeholder-gray-400 border-gray-300 rounded order f focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400" />
-                                        <button
-                                            class="w-full px-4 py-3 text-2xl font-semibold tracking-widest text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                                            @click="() => {
-                                                    generateAndPrintBarcode();
-                                                }
-                                                ">
-                                            Print Bar Code
-                                        </button>
+
+
+
+                                            <button
+    v-if="HasRole(['Admin'])"
+    class="w-full px-4 py-3 text-2xl font-semibold tracking-widest text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+    @click="generateAndPrintBarcode"
+>
+    Print Bar Code
+</button>
+
                                     </div>
 
                                 </div>
@@ -235,6 +241,7 @@ import {
 import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import dayjs from "dayjs";
+import { HasRole } from "@/Utils/Permissions";
 
 const playClickSound = () => {
     const clickSound = new Audio("/sounds/click-sound.mp3");
