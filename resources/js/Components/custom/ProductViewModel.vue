@@ -186,7 +186,7 @@
                     />
 
                     <button
-                      v-if="HasRole(['Admin'])"
+                      v-if="HasRole(['Admin', 'Manager'])"
                       class="w-full px-4 py-3 text-2xl font-semibold tracking-widest text-white bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                       @click="generateAndPrintBarcode"
                     >
