@@ -4,16 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\StockTransaction;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class StockTransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
+
+     public function index()
+     {
+         $allStockTransactions = StockTransaction::with('product','supplier')->orderBy('created_at', 'desc')->get();
+
+
+         return Inertia::render('StockTransaction/Index', [
+             'allStockTransactions' => $allStockTransactions,
+             'totalStockTransactions' => $allStockTransactions->count()
+         ]);
+     }
 
     /**
      * Show the form for creating a new resource.

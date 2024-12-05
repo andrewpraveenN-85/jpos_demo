@@ -28,7 +28,7 @@
           </div>
         </div>
       </Link>
- 
+
 
       <Link href="/categories" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#003161]">
@@ -177,7 +177,7 @@
         </div>
       </Link>
 
-      <!-- <Link href="/stock-transition">
+     <Link href="/stock-transition" v-if="HasRole(['Admin', 'Manager'])">
             <div class="dashboard-card bg-[#3426ff]">
                 <div class="card-content">
                     <div class="icon-container">
@@ -192,7 +192,7 @@
                     </div>
                 </div>
             </div>
-            </Link> -->
+            </Link>
     </div>
   </div>
 
