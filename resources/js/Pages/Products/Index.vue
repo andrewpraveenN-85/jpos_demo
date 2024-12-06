@@ -64,28 +64,27 @@
           <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
         </p> -->
 
-
-
-
         <p
-  @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
-  :class="HasRole(['Admin'])
-            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
-  :title="HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to add more Productss'"
->
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
-</p>
-
-
-
-
-
-
-
-
+          @click="
+            () => {
+              if (HasRole(['Admin'])) {
+                isCreateModalOpen = true;
+              }
+            }
+          "
+          :class="
+            HasRole(['Admin'])
+              ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+              : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
+          "
+          :title="
+            HasRole(['Admin'])
+              ? ''
+              : 'You do not have permission to add more Productss'
+          "
+        >
+          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
+        </p>
       </div>
 
       <div class="flex items-center space-x-4">
@@ -99,9 +98,48 @@
             class="w-full custom-input"
           />
         </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <!-- Search Input on the Left -->
+        <!-- <div class="w-1/3">
+          <input
+            v-model="search"
+            @input="performSearch"
+            type="text"
+            placeholder="Search ..."
+            class="w-full custom-input"
+          />
+        </div> -->
 
         <!-- Filter Dropdowns on the Right -->
         <div class="flex justify-end w-full space-x-2">
+          <select
+            v-model="selectedCategory"
+            @change="applyFilters"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
+          >
+            <option value="">Filter by Category</option>
+            <option
+              v-for="category in props.allcategories"
+              :key="category.id"
+              :value="category.id"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+
+          <!-- Stocks Filter -->
+          <select
+            v-model="stockStatus"
+            @change="applyFilters"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
+          >
+            <option value="">Filter by Stock</option>
+            <option value="in">In Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+
           <!-- Price Filter -->
           <select
             v-model="sort"
@@ -445,6 +483,8 @@ const props = defineProps({
   sort: String,
   color: String,
   size: String,
+  stockStatus: String,
+  selectedCategory: String,
 });
 
 const search = ref(props.search || "");
@@ -452,10 +492,8 @@ const sort = ref(props.sort || "");
 const color = ref(props.color || "");
 const size = ref(props.size || "");
 const suppliers = ref(props.suppliers || "");
-
-// const performSearch = () => {
-//   router.get(route("products.index"), { search: search.value }, { preserveState: true });
-// };
+const stockStatus = ref(props.stockStatus || "");
+const selectedCategory = ref(props.selectedCategory || "");
 
 const performSearch = debounce(() => {
   applyFilters();
@@ -469,6 +507,8 @@ const applyFilters = (page) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
+      stockStatus: stockStatus.value,
+      selectedCategory: selectedCategory.value
     },
     { preserveState: true }
   );
@@ -514,6 +554,8 @@ const navigateTo = (url) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
+      stockStatus: stockStatus.value,
+      selectedCategory: selectedCategory.value
     },
     {
       preserveState: true, // Maintain the current state

@@ -24,6 +24,9 @@ class ProductController extends Controller
         $sortOrder = $request->input('sort');
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
+        $stockStatus = $request->input('stockStatus');
+        $selectedCategory = $request->input('selectedCategory'); 
+
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             ->when($query, function ($queryBuilder) use ($query) {
@@ -44,7 +47,18 @@ class ProductController extends Controller
             })
             ->when(in_array($sortOrder, ['asc', 'desc']), function ($queryBuilder) use ($sortOrder) {
                 $queryBuilder->orderBy('selling_price', $sortOrder);
+            })
+            ->when($stockStatus, function ($queryBuilder) use ($stockStatus) {
+                if ($stockStatus === 'in') {
+                    $queryBuilder->where('stock_quantity', '>', 0); // In Stock
+                } elseif ($stockStatus === 'out') {
+                    $queryBuilder->where('stock_quantity', '<=', 0); // Out of Stock
+                }
+            })
+            ->when($selectedCategory, function ($queryBuilder) use ($selectedCategory) {
+                $queryBuilder->where('category_id', $selectedCategory); // Filter by category
             });
+
 
         $count = $productsQuery->count();
 
@@ -68,6 +82,8 @@ class ProductController extends Controller
             'sort' => $sortOrder,
             'color' => $selectedColor,
             'size' => $selectedSize,
+            'stockStatus' => $stockStatus,
+            'selectedCategory' => $selectedCategory
         ]);
     }
 
@@ -190,7 +206,7 @@ class ProductController extends Controller
             }
 
 
-           // Product::create($validated);
+            // Product::create($validated);
 
 
 

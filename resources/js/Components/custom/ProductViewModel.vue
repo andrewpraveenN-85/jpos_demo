@@ -73,7 +73,7 @@
                   <p
                     class="pb-6 mt-2 text-[#00000099] text-xl font-normal italic"
                   >
-                    {{ selectedProduct.category.name }}
+                    {{ selectedProduct.category?.name ?? 'No Category' }}
                   </p>
 
                   <p class="pb-6 text-2xl font-bold text-black">
