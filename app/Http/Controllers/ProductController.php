@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Category;
@@ -369,26 +369,75 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(Product $product)
+    // {
+    //     if (!Gate::allows('hasRole', ['Admin'])) {
+    //         abort(403, 'Unauthorized');
+    //     }
+
+    //     $imagePath = str_replace('storage/', '', $product->image);
+
+    //     // Check for other products using the same image
+    //     $imageUsageCount = Product::where('image', $product->image)
+    //         ->where('id', '!=', $product->id)
+    //         ->count();
+
+    //     if ($imageUsageCount === 0 && Storage::disk('public')->exists($imagePath)) {
+    //         // Delete the image only if no other products are using it
+    //         Storage::disk('public')->delete($imagePath);
+    //     }
+
+    //     $product->delete();
+
+    //     return redirect()->route('products.index')->banner('Product Deleted successfully.');
+    // }
+
+
+
     public function destroy(Product $product)
     {
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
 
+        // Prepare to delete the image
         $imagePath = str_replace('storage/', '', $product->image);
-
-        // Check for other products using the same image
         $imageUsageCount = Product::where('image', $product->image)
             ->where('id', '!=', $product->id)
             ->count();
 
         if ($imageUsageCount === 0 && Storage::disk('public')->exists($imagePath)) {
-            // Delete the image only if no other products are using it
             Storage::disk('public')->delete($imagePath);
         }
 
+        try {
+            // Log the stock transaction
+            StockTransaction::create([
+                'product_id' => $product->id,
+                'transaction_type' => 'Deleted',
+                'quantity' => $product->stock_quantity ?? 0, // Fallback to 0 if undefined
+                'transaction_date' => now(),
+                'supplier_id' => $product->supplier_id ?? null, // Handle potential null value
+            ]);
+        } catch (\Exception $e) {
+            // Log error and return a failure message
+            report($e);
+            return redirect()->route('products.index')->withErrors('Failed to log stock transaction. Please try again.');
+        }
+
+        // Delete the product
         $product->delete();
 
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
+
+
+
+
+
+
+
+
+
+
 }

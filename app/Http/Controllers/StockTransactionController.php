@@ -16,7 +16,7 @@ class StockTransactionController extends Controller
      {
          $allStockTransactions = StockTransaction::with('product','supplier')->orderBy('created_at', 'desc')->get();
 
-
+     
          return Inertia::render('StockTransaction/Index', [
              'allStockTransactions' => $allStockTransactions,
              'totalStockTransactions' => $allStockTransactions->count()
