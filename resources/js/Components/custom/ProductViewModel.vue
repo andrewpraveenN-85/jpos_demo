@@ -293,6 +293,7 @@ const playClickSound = () => {
 
 // Extend Day.js for ordinal formatting
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { OpenDrawer } from "@/Utils/OpenDrawer";
 dayjs.extend(advancedFormat);
 
 const emit = defineEmits(["update:open"]);
@@ -361,32 +362,9 @@ function generateAndPrintBarcode() {
   document.body.innerHTML = printContents;
   window.print();
   document.body.innerHTML = originalContents;
-
-  openCashDrawer();
+  OpenDrawer();
 
   location.reload();
-}
-
-function openCashDrawer() {
-  qz.websocket
-    .connect()
-    .then(() => {
-      console.log("Connected to QZ Tray!");
-
-      const config = qz.configs.create("XP-58C"); // Replace with your printer name
-      const openDrawerCommand = [
-        { type: "raw", format: "hex", data: "1B700019FA" }, // ESC/POS command for cash drawer
-      ];
-
-      return qz.print(config, openDrawerCommand);
-    })
-    .then(() => {
-      console.log("Cash drawer opened!");
-    })
-    .catch((err) => console.error("Error: ", err))
-    .finally(() => {
-      qz.websocket.disconnect();
-    });
 }
 </script>
 

@@ -79,6 +79,8 @@ import {
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
+import { OpenDrawer } from "@/Utils/OpenDrawer";
+
 const emit = defineEmits(["update:open"]);
 
 // The `open` prop controls the visibility of the modal
@@ -326,6 +328,7 @@ const handlePrintReceipt = () => {
     printWindow.focus();
     printWindow.print();
     printWindow.close();
+    OpenDrawer();
   };
 };
 </script>

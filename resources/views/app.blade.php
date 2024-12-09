@@ -21,8 +21,6 @@
   {{-- <link rel="stylesheet" href="/css/app.css"> --}}
 
 
-  <script src="https://cdn.jsdelivr.net/npm/qz-tray/qz-tray.js"></script>
-
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- DataTables JavaScript -->
