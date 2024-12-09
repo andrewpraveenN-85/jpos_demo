@@ -293,7 +293,6 @@ const playClickSound = () => {
 
 // Extend Day.js for ordinal formatting
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import { OpenDrawer } from "@/Utils/OpenDrawer";
 dayjs.extend(advancedFormat);
 
 const emit = defineEmits(["update:open"]);
@@ -362,7 +361,6 @@ function generateAndPrintBarcode() {
   document.body.innerHTML = printContents;
   window.print();
   document.body.innerHTML = originalContents;
-  OpenDrawer();
 
   location.reload();
 }

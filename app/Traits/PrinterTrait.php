@@ -10,6 +10,7 @@ trait PrinterTrait
      * @param string $printerName
      * @return bool|string
      */
+    
     // public function openCashDrawer()
     // {
     //     // ESC/POS command to open cash drawer
