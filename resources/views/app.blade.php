@@ -21,8 +21,6 @@
   {{-- <link rel="stylesheet" href="/css/app.css"> --}}
 
 
-
-
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- DataTables JavaScript -->

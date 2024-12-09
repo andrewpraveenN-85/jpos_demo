@@ -14,6 +14,45 @@
         <p class="text-xl"><i class="ri-notification-4-line"></i></p>
         <p class="text-xl"><i class="ri-arrow-down-s-line"></i></p>
       </div> -->
+      <!-- <div class="relative inline-block cursor-pointer">
+        <Dropdown align="right" width="96">
+          <template #trigger>
+            <BellIcon class="h-7 w-7 text-gray-600" />
+
+            <span
+              class="absolute bottom-3 left-3 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs"
+            >
+              {{ 2 }}
+            </span>
+          </template>
+
+          <template #content>
+            <div class="block px-4 py-2 text-xs text-gray-400 w-[350px]">
+              Notifications
+            </div>
+
+            <div class="border-t border-gray-200" />
+
+            <div>
+              <DropdownLink :href="route('dashboard')">
+                <div class="block text-xs">Title</div>
+                <div>Notification description</div>
+              </DropdownLink>
+
+              <div class="border-t border-gray-200" />
+            </div>
+
+            <div>
+              <DropdownLink :href="route('dashboard')">
+                <div class="block text-xs">Title 2</div>
+                <div>Notification description 2</div>
+              </DropdownLink>
+
+              <div class="border-t border-gray-200" />
+            </div>
+          </template>
+        </Dropdown>
+      </div> -->
       <div class="flex flex-col justify-end items-end">
         <p class="text-xl">
           <span class="font-bold">Account Type:</span>
@@ -68,6 +107,9 @@
 <script setup>
 import { ref } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
+import { BellIcon } from '@heroicons/vue/24/solid'
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
 
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
