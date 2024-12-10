@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -47,7 +48,25 @@ class PosController extends Controller
         ]);
     }
 
+    public function getCoupon(Request $request)
+    {
+        $request->validate(
+            ['code' => 'required|string'],
+            ['code.required' => 'The coupon code missing.', 'code.string' => 'The coupon code must be a valid string.']
+        );
 
+        $coupon = Coupon::where('code', $request->code)->first();
+
+        if (!$coupon) {
+            return response()->json(['error' => 'Invalid coupon code.']);
+        }
+
+        if (!$coupon->isValid()) {
+            return response()->json(['error' => 'Coupon is expired or has been fully used.']);
+        }
+
+        return response()->json(['success' => 'Coupon applied successfully.', 'coupon' => $coupon]);
+    }
 
     public function submit(Request $request)
     {
@@ -58,7 +77,7 @@ class PosController extends Controller
         $phone = $request->input('countryCode') . $request->input('contactNumber');
 
         $customer = null;
-        
+
         $products = $request->input('products');
         $totalAmount = collect($products)->reduce(function ($carry, $product) {
             return $carry + ($product['quantity'] * $product['selling_price']);

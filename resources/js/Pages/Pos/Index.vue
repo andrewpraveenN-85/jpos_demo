@@ -120,6 +120,39 @@
               </div>
             </div>
 
+            <div class="w-full my-5">
+              <div class="relative flex items-center">
+                <!-- Input Field -->
+                <label for="coupon" class="sr-only">Coupon Code</label>
+                <input
+                  id="coupon"
+                  v-model="couponForm.code"
+                  type="text"
+                  placeholder="Enter Coupon Code"
+                  class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+
+                <template v-if="!appliedCoupon">
+                  <button
+                    type="button"
+                    @click="submitCoupon"
+                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Apply Coupon
+                  </button>
+                </template>
+                <template v-else>
+                  <button
+                    type="button"
+                    @click="removeCoupon"
+                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Remove Coupon
+                  </button>
+                </template>
+              </div>
+            </div>
+
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
                 No Products to show
@@ -140,9 +173,7 @@
                   class="object-cover w-16 h-16 border border-gray-500"
                 />
               </div>
-              <div
-                class="flex flex-col justify-start w-4/6"
-              >
+              <div class="flex flex-col justify-start w-4/6">
                 <p class="text-3xl text-black">
                   {{ item.name }}
                 </p>
@@ -170,12 +201,24 @@
                     <div>
                       <p
                         @click="applyDiscount(item.id)"
-                        v-if="item.discount && item.discount > 0 && item.apply_discount == false"
+                        v-if="
+                          item.discount &&
+                          item.discount > 0 &&
+                          item.apply_discount == false &&
+                          !appliedCoupon
+                        "
                         class="cursor-pointer py-1 text-center px-4 bg-green-600 rounded-xl font-bold text-white tracking-wider"
-                        >Apply {{ item.discount }}% off</p>
-                      
+                      >
+                        Apply {{ item.discount }}% off
+                      </p>
+
                       <p
-                        v-if="item.discount && item.discount > 0 && item.apply_discount == true"
+                        v-if="
+                          item.discount &&
+                          item.discount > 0 &&
+                          item.apply_discount == true &&
+                          !appliedCoupon
+                        "
                         @click="removeDiscount(item.id)"
                         class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider"
                       >
@@ -296,6 +339,7 @@ const products = ref([]);
 const isSuccessModalOpen = ref(false);
 const isAlertModalOpen = ref(false);
 const message = ref("");
+const appliedCoupon = ref(null);
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
@@ -328,6 +372,11 @@ const refreshData = () => {
 
 const removeProduct = (id) => {
   products.value = products.value.filter((item) => item.id !== id);
+};
+
+const removeCoupon = () => {
+  appliedCoupon.value = null; // Clear the applied coupon
+  couponForm.code = ""; // Clear the coupon field
 };
 
 const incrementQuantity = (id) => {
@@ -394,7 +443,7 @@ const subtotal = computed(() => {
 });
 
 const totalDiscount = computed(() => {
-  return products.value
+  const productDiscount = products.value
     .reduce((total, item) => {
       // Check if item has a discount
       if (item.discount && item.discount > 0 && item.apply_discount == true) {
@@ -404,36 +453,64 @@ const totalDiscount = computed(() => {
         return total + discountAmount;
       }
       return total; // If no discount, return total as-is
-    }, 0)
-    .toFixed(2); // Ensures two decimal places
+    }, 0); // Ensures two decimal places
+
+  
+
+  const couponDiscount = appliedCoupon.value ? Number(appliedCoupon.value.discount) : 0;
+
+  return (productDiscount + couponDiscount).toFixed(2);
 });
 
 const total = computed(() => {
-  return products.value
-    .reduce((total, item) => {
-      // Check if item has a discount
-      const price =
-        (item.discount && item.discount > 0 && item.apply_discount == true)
-          ? parseFloat(item.discounted_price) // Use discounted price
-          : parseFloat(item.selling_price); // Use regular price
+  // Ensure subtotal and totalDiscount are numbers before performing calculations
+  const subtotalValue = parseFloat(subtotal.value);
+  const discountValue = parseFloat(totalDiscount.value);
 
-      return total + price * item.quantity;
-    }, 0)
-    .toFixed(2); // Ensures two decimal places
+  // Subtract totalDiscount from subtotal to get the total
+  return (subtotalValue - discountValue).toFixed(2);
 });
 
-// const total = computed(() => {
-//   return (parseFloat(subtotal.value) - parseFloat(discount.value)).toFixed(2); // Ensures two decimal places
-// });
 
 // Check for product or handle errors
 const form = useForm({
   barcode: "", // Form field for barcode
 });
 
+const couponForm = useForm({
+  code: "",
+});
+
 // Temporary barcode storage during scanning
 let barcode = "";
 let timeout; // Timeout to detect the end of the scan
+
+const submitCoupon = async () => {
+  try {
+    const response = await axios.post(route("pos.getCoupon"), {
+      code: couponForm.code, // Send the coupon field
+    });
+
+    const { coupon: fetchedCoupon, error: fetchedError } = response.data;
+
+    if (fetchedCoupon) {
+      appliedCoupon.value = fetchedCoupon;
+      products.value.forEach((product) => {
+        product.apply_discount = false;
+      });
+    } else {
+      isAlertModalOpen.value = true;
+      message.value = fetchedError;
+      error.value = fetchedError;
+    }
+  } catch (err) {
+    // console.error(error);
+    if (err.response.status === 422) {
+      isAlertModalOpen.value = true;
+      message.value = err.response.data.message;
+    }
+  }
+};
 
 // Automatically submit the barcode to the backend
 const submitBarcode = async () => {
@@ -530,5 +607,5 @@ const removeDiscount = (id) => {
       product.apply_discount = false;
     }
   });
-}
+};
 </script>
