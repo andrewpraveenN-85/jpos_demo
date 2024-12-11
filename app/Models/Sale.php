@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sale extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'customer_id',
         'user_id',
@@ -19,10 +19,25 @@ class Sale extends Model
         'sale_date',
         'total_cost'
     ];
-    
+
+
+
 
     public function sale()
     {
         return $this->belongsTo(Sale::class, 'sale_id','id');
     }
+
+    public function saleItem()
+    {
+        return $this->belongsTo(SaleItem::class, 'order_id','id');
+    }
+    public function saleItems()
+    {
+        return $this->hasMany(SaleItem::class);
+    }
+
+   
+
+
 }
