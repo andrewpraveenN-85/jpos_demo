@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-between w-full space-x-4">
     <!-- Logo -->
-    <Link href="/" title="Home Page | Dresshub.lk">
+    <Link href="/" title="Home Page | JASBEEN LAKSHA">
       <img src="/images/spicelogo.png" class="flex-col w-3/4" alt="Logo" style="width: 300px;"/>
     </Link>
     <!-- <Link href="/dashboard">

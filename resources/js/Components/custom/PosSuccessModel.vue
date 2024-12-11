@@ -246,9 +246,9 @@ const handlePrintReceipt = () => {
 <body>
     <div class="receipt-container">
         <div class="header">
-            <h1>DRESS HUB</h1>
+            <h1>JASBEEEN LAKSHA</h1>
             <p>3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
-            <p>0771119200 | dresshub.lk</p>
+            <p>0771119200 | JASBEEN</p>
         </div>
         <div class="section">
             <div class="info-row">
