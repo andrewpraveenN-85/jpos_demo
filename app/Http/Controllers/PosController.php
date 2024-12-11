@@ -40,7 +40,7 @@ class PosController extends Controller
             'barcode' => 'required',
         ]);
 
-        $product = Product::where('barcode', $request->barcode)->first();
+        $product = Product::with('size')->where('barcode', $request->barcode)->first();
 
         return response()->json([
             'product' => $product,
