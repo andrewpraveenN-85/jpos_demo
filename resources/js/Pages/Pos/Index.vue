@@ -120,9 +120,8 @@
               </div>
             </div>
 
-            <div class="w-full my-5">
+            <!-- <div class="w-full my-5">
               <div class="relative flex items-center">
-                <!-- Input Field -->
                 <label for="coupon" class="sr-only">Coupon Code</label>
                 <input
                   id="coupon"
@@ -151,7 +150,7 @@
                   </button>
                 </template>
               </div>
-            </div>
+            </div> -->
 
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
