@@ -49,16 +49,22 @@
               </div>
             </div>
             <div class="flex justify-center items-center space-x-4 pt-4 mt-4">
-              <p
+              <!-- <p
                 class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
               >
                 Send Reciept To Email
-              </p>
+              </p> -->
               <p
                 @click="handlePrintReceipt"
                 class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
               >
                 Print Receipt
+              </p>
+              <p
+                @click="handlePrintReceipta4"
+                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
+              >
+                Print Receipt With A4
               </p>
             </div>
           </DialogPanel>
@@ -244,12 +250,257 @@ const handlePrintReceipt = () => {
     </style>
 </head>
 <body>
-    <div class="receipt-container">
+    <div>
         <div class="header">
             <h1>JASBEEEN LAKSHA</h1>
             <p>3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
             <p>0771119200 | JASBEEN</p>
         </div>
+        <div class="section">
+            <div class="info-row">
+                <div>
+                    <p>Date:</p>
+                    <small>${new Date().toLocaleDateString()}</small>
+                </div>
+                <div>
+                    <p>Order No:</p>
+                    <small>${props.orderId}</small>
+                </div>
+            </div>
+            <div class="info-row">
+                <div>
+                    <p>Customer:</p>
+                    <small>${props.customer.name}</small>
+                </div>
+                <div>
+                    <p>Cashier:</p>
+                    <small>${props.cashier.name}</small>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th style="text-align: center;">Qty</th>
+                        <th style="text-align: right;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productRows}
+                </tbody>
+            </table>
+        </div>
+        <div class="totals">
+            <div>
+                <span>Sub Total</span>
+                <span>${subTotal.toFixed(2)} LKR</span>
+            </div>
+            <div>
+                <span>Discount</span>
+                <span>${totalDiscount} LKR</span>
+            </div>
+            <div>
+                <span>Total</span>
+                <span>${total.toFixed(2)} LKR</span>
+            </div>
+        </div>
+        <div class="footer">
+            <p>THANK YOU FOR SHOPPING WITH US</p>
+            <p class="italic">Let the quality define its own standards</p>
+            <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+        </div>
+    </div>
+</body>
+</html>
+`;
+
+  // Open a new window
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("Failed to open print window. Please check your browser settings.");
+    return;
+  }
+
+  // Write the content to the new window
+  printWindow.document.open();
+  printWindow.document.write(receiptHTML);
+  printWindow.document.close();
+
+  // Wait for the content to load before triggering print
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+};
+
+const handlePrintReceipta4 = () => {
+  // Calculate totals from props.products
+  const subTotal = props.products.reduce(
+    (sum, product) =>
+      sum + parseFloat(product.selling_price) * product.quantity,
+    0
+  );
+
+  const totalDiscount = props.products
+    .reduce((total, item) => {
+      // Check if item has a discount
+      if (item.discount && item.discount > 0 && item.apply_discount == true) {
+        const discountAmount =
+          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+          item.quantity;
+        return total + discountAmount;
+      }
+      return total; // If no discount, return total as-is
+    }, 0)
+    .toFixed(2); // Ensures two decimal places
+
+  const discount = 0; // Example discount (can be dynamic)
+  const total = subTotal - totalDiscount;
+
+  // Generate table rows dynamically using props.products
+  const productRows = props.products
+    .map((product) => {
+      return `
+      <tr>
+        <td>${product.name}</td>
+        <td>${product.quantity} x ${product.size?.name}</td>
+        <td>
+          ${
+            product.discount && product.discount > 0 && product.apply_discount
+              ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
+              : ""
+          }
+         
+         <div>${product.selling_price} </div>
+        </td>
+      </tr>
+    `;
+    })
+    .join("");
+
+  // Generate the receipt HTML
+const receiptHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <style>
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        }
+        body {
+            background-image: url('/images/letter_head.jpg'); /* Replace with your image path */
+            background-size: cover; /* Ensure the image covers the entire page */
+            background-position: center; /* Center the image */
+            -webkit-print-color-adjust: exact; /* Ensure background prints in WebKit browsers */
+            print-color-adjust: exact; /* Ensure background prints in modern browsers */
+            font-size: 12px;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0; /* Ensure no extra spacing on the body */
+            color: #000;
+            height: 100vh; /* Ensure the body covers the full viewport height */
+            width: 100vw; /* Ensure the body covers the full viewport width */
+        }
+
+        .section {
+            margin-bottom: 16px;
+            padding: 8px 16px;
+            border-top: 1px solid #000;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .info-row p {
+            margin: 0;
+            font-weight: bold;
+        }
+        .info-row small {
+            font-weight: normal;
+        }
+
+        table {
+            width: 100%;
+            font-size: 14px;
+            border-collapse: collapse;
+            margin-top: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f8f9fa;
+            text-align: left;
+        }
+        table td {
+            text-align: right;
+        }
+        table td:first-child {
+            text-align: left;
+        }
+
+        .totals {
+            border-top: 2px solid #000;
+            padding-top: 16px;
+            font-size: 14px;
+        }
+        .totals div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .totals div:last-child {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 24px;
+            padding: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+        .footer .italic {
+            font-style: italic;
+        }
+
+        .receipt-container {
+            padding-top: 200px;
+            padding-left:50px;
+            padding-right:50px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
         <div class="section">
             <div class="info-row">
                 <div>
@@ -302,7 +553,6 @@ const handlePrintReceipt = () => {
         </div>
         <div class="footer">
             <p>THANK YOU FOR SHOPPING WITH US</p>
-            <p class="italic">Let the quality define its own standards</p>
             <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
         </div>
     </div>
