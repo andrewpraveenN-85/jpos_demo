@@ -7,7 +7,6 @@
     <Header />
 
     <div class="grid w-full h-full grid-cols-4 gap-8 auto-rows-fr">
-
       <Link href="/pos" v-if="HasRole(['Admin', 'Cashier'])">
         <div class="dashboard-card bg-[#4d7c0f]">
           <div class="card-content">
@@ -28,7 +27,6 @@
           </div>
         </div>
       </Link>
-
 
       <Link href="/categories" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#003161]">
@@ -177,21 +175,48 @@
         </div>
       </Link>
 
-     <Link href="/stock-transition" v-if="HasRole(['Admin'])">
-            <div class="dashboard-card bg-[#3426ff]">
-                <div class="card-content">
-                    <div class="icon-container">
-                        <img src="/images/dashboard/stock_transtion.png" class="icon" alt="dresshub.lk" />
-                    </div>
-                    <div class="text-container">
-                        <p class="title">Stock Transition</p>
-                        <p class="description">
-                            View and manage stock changes, including additions, deductions, and returns, all in one place.
-                        </p>
-                    </div>
-                </div>
+      <Link href="/stock-transition" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#3426ff]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/stock_transtion.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
             </div>
-            </Link>
+            <div class="text-container">
+              <p class="title">Stock Transition</p>
+              <p class="description">
+                View and manage stock changes, including additions, deductions,
+                and returns, all in one place.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+      <Link href="/coupons" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#FF1744]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/coupons.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Stock Transition</p>
+              <p class="description">
+                Effortlessly manage coupons with options for additions, deductions, and returns—all 
+                in one centralized platform.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
     </div>
   </div>
 

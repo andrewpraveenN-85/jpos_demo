@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Color;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
