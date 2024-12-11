@@ -223,7 +223,7 @@
                 class="object-cover w-full h-64"
               />
             </div>
-            <div class="px-4 py-4 space-y-4">
+            <div class="px-2 py-4 space-y-4">
               <div
                 class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide"
               >
@@ -235,19 +235,29 @@
                 </p>
               </div>
 
-              <div class="flex items-center justify-center w-full space-x-4">
-                <p
-                  class="flex items-center space-x-2 text-justify text-gray-400"
+              <div class="flex justify-center space-x-2 items-start w-full">
+
+                <div class="flex space-x-1 text-gray-400">
+                    <p
+                  class=" font-bold"
                 >
-                  Color :
-
-                  <b> &nbsp; {{ product.color?.name || "N/A" }} </b>
+                  Color:
                 </p>
 
-                <p class="text-justify text-gray-400">
-                  Size :
-                  <b> {{ product.size?.name || "N/A" }} </b>
+                 <p>{{ product.color?.name || "N/A" }}
                 </p>
+
+                </div>
+
+                <div class="flex space-x-1 text-gray-400">
+                <p class="font-bold">
+                  Size:
+                  </p>
+                <p>
+                   {{ product.size?.name || "N/A" }}
+                </p>
+                </div>
+
               </div>
 
               <div class="flex items-center justify-center w-full space-x-4">
