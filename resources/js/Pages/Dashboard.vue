@@ -208,7 +208,7 @@
               />
             </div>
             <div class="text-container">
-              <p class="title">Stock Transition</p>
+              <p class="title">Coupons</p>
               <p class="description">
                 Effortlessly manage coupons with options for additions, deductions, and returns—all 
                 in one centralized platform.
