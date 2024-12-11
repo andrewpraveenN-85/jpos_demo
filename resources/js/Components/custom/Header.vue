@@ -14,7 +14,7 @@
         <p class="text-xl"><i class="ri-notification-4-line"></i></p>
         <p class="text-xl"><i class="ri-arrow-down-s-line"></i></p>
       </div> -->
-      <div class="relative inline-block cursor-pointer">
+      <!-- <div class="relative inline-block cursor-pointer">
         <Dropdown align="right" width="96">
           <template #trigger>
             <BellIcon class="h-7 w-7 text-gray-600" />
@@ -52,7 +52,7 @@
             </div>
           </template>
         </Dropdown>
-      </div>
+      </div> -->
       <div class="flex flex-col justify-end items-end">
         <p class="text-xl">
           <span class="font-bold">Account Type:</span>
