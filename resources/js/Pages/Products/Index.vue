@@ -125,7 +125,11 @@
               :key="category.id"
               :value="category.id"
             >
-              {{ category.name }}
+              {{
+                category.hierarchy_string
+                  ? category.hierarchy_string + " ----> " + category.name
+                  : category.name
+              }}
             </option>
           </select>
 
@@ -236,28 +240,18 @@
               </div>
 
               <div class="flex justify-center space-x-2 items-start w-full">
-
                 <div class="flex space-x-1 text-gray-400">
-                    <p
-                  class=" font-bold"
-                >
-                  Color:
-                </p>
+                  <p class="font-bold">Color:</p>
 
-                 <p>{{ product.color?.name || "N/A" }}
-                </p>
-
+                  <p>{{ product.color?.name || "N/A" }}</p>
                 </div>
 
                 <div class="flex space-x-1 text-gray-400">
-                <p class="font-bold">
-                  Size:
+                  <p class="font-bold">Size:</p>
+                  <p>
+                    {{ product.size?.name || "N/A" }}
                   </p>
-                <p>
-                   {{ product.size?.name || "N/A" }}
-                </p>
                 </div>
-
               </div>
 
               <div class="flex items-center justify-center w-full space-x-4">
@@ -518,7 +512,7 @@ const applyFilters = (page) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     { preserveState: true }
   );
@@ -565,7 +559,7 @@ const navigateTo = (url) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     {
       preserveState: true, // Maintain the current state
