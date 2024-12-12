@@ -236,28 +236,18 @@
               </div>
 
               <div class="flex justify-center space-x-2 items-start w-full">
-
                 <div class="flex space-x-1 text-gray-400">
-                    <p
-                  class=" font-bold"
-                >
-                  Color:
-                </p>
+                  <p class="font-bold">Color:</p>
 
-                 <p>{{ product.color?.name || "N/A" }}
-                </p>
-
+                  <p>{{ product.color?.name || "N/A" }}</p>
                 </div>
 
                 <div class="flex space-x-1 text-gray-400">
-                <p class="font-bold">
-                  Size:
+                  <p class="font-bold">Size:</p>
+                  <p>
+                    {{ product.size?.name || "N/A" }}
                   </p>
-                <p>
-                   {{ product.size?.name || "N/A" }}
-                </p>
                 </div>
-
               </div>
 
               <div class="flex items-center justify-center w-full space-x-4">
@@ -337,6 +327,22 @@
                     <i class="ri-delete-bin-line"></i>
                   </button>
                 </div>
+              </div>
+              <div class="w-full">
+                <button
+                  :disabled="!HasRole(['Admin'])"
+                  @click="
+                    () => {
+                      if (HasRole(['Admin'])) {
+                        openInputBarCodeModal(product);
+                      }
+                    }
+                  "
+                  type="button"
+                  class="w-full py-2 text-gray-800 transition duration-200 bg-gray-100 rounded-full hover:bg-gray-200"
+                >
+                  Input barcode
+                </button>
               </div>
             </div>
           </div>
@@ -432,6 +438,12 @@
     :selected-product="selectedProduct"
     @delete="deleteProduct"
   />
+
+  <InputBarCodeModel
+    v-model:open="isInputBarCodeModalOpen"
+    :selected-product="selectedProduct"
+    @delete="deleteProduct"
+  />
   <Footer />
 </template>
 
@@ -449,6 +461,7 @@ import ProductDuplicateModel from "@/Components/custom/ProductDuplicateModel.vue
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
+import InputBarCodeModel from "@/Components/custom/InputBarCodeModel.vue";
 import { debounce } from "lodash";
 import { HasRole } from "@/Utils/Permissions";
 
@@ -458,6 +471,7 @@ const isDuplicateModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
+const isInputBarCodeModalOpen = ref(false);
 
 const emit = defineEmits(["update:open"]);
 
@@ -479,6 +493,11 @@ const openViewModal = (product) => {
 const openDeleteModal = (product) => {
   selectedProduct.value = product;
   isDeleteModalOpen.value = true;
+};
+
+const openInputBarCodeModal = (product) => {
+  selectedProduct.value = product;
+  isInputBarCodeModalOpen.value = true;
 };
 
 const props = defineProps({
@@ -518,7 +537,7 @@ const applyFilters = (page) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     { preserveState: true }
   );
@@ -546,6 +565,9 @@ const deleteProduct = (id) => {
     },
   });
 };
+
+
+
 const navigateTo = (url) => {
   if (!url) return; // Avoid null or undefined URLs
 
@@ -565,7 +587,7 @@ const navigateTo = (url) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     {
       preserveState: true, // Maintain the current state

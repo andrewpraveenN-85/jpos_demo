@@ -51,7 +51,6 @@ Route::middleware([
         }
 
         return Inertia::render('Dashboard');
-        
     })->name('dashboard');
 });
 
@@ -75,8 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('sizes', SizeController::class);
     Route::resource('stock-transition', StockTransactionController::class);
 
-
-
+    Route::post('/update-barcode/{product}', [ProductController::class, 'updateBarcode'])->name('product.updateBarcode');
 });
 
 Route::get('/barcode/{id}', [CategoryController::class, 'showBarcode']);

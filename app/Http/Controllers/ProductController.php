@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\Size;
 use App\Models\Color;
@@ -25,7 +26,7 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
-        $selectedCategory = $request->input('selectedCategory'); 
+        $selectedCategory = $request->input('selectedCategory');
 
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
@@ -431,13 +432,14 @@ class ProductController extends Controller
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
 
+    public function updateBarcode(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'barcode' => 'required|string|max:50|unique:products,barcode,' . $product->id,
+        ]);
 
+        $product->update($validated);
 
-
-
-
-
-
-
-
+        return redirect()->route('products.index')->with('banner', 'Barcode updated successfully');
+    }
 }
