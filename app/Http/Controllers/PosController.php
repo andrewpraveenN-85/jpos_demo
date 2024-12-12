@@ -74,7 +74,7 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
         // Combine countryCode and contactNumber to create the phone field
-        $phone = $request->input('countryCode') . $request->input('contactNumber');
+        $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
 
         $customer = null;
 
