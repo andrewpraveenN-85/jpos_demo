@@ -242,6 +242,25 @@
                   </div>
                 </div>
 
+                <div class="w-full">
+                  <label
+                    for="stock_quantity"
+                    class="block text-sm font-medium text-gray-300"
+                    >Barcode</label
+                  >
+                  <input
+                    type="text"
+                    id="stock_quantity"
+                    v-model="form.barcode"
+                    class="cursor-not-allowed w-full px-4 py-2 mt-2 text-black bg-gray-200 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    placeholder="Scan barcode"
+                    readonly
+                  />
+                  <span v-if="form.errors.barcode" class="mt-2 text-red-500">
+                    {{ form.errors.barcode }}
+                  </span>
+                </div>
+
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
@@ -363,8 +382,36 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref, computed, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
+import { onMounted, onBeforeUnmount } from "vue";
+
+// Code to get barcode
+let barcodeBuffer = ""; // Temporary buffer to store barcode input
+let barcodeTimeout = null; // Timeout to detect end of barcode input
+
+// Add event listeners for barcode scanner input
+onMounted(() => {
+  window.addEventListener("keypress", handleBarcodeInput);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keypress", handleBarcodeInput);
+});
+
+const handleBarcodeInput = (event) => {
+  const char = String.fromCharCode(event.which); // Get the character from the keypress
+  barcodeBuffer += char;
+
+  // Clear the buffer after a short delay (assuming barcode input happens quickly)
+  if (barcodeTimeout) clearTimeout(barcodeTimeout);
+
+  barcodeTimeout = setTimeout(() => {
+    form.barcode = barcodeBuffer.trim(); // Update the barcode field
+    barcodeBuffer = ""; // Reset the buffer
+  }, 200); // 200ms delay to detect end of barcode input
+};
+
+// End of Code to get barcode
 
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -425,8 +472,6 @@ function limitToTwoDecimals(value) {
   const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
   return match ? parseFloat(match[0]) : value;
 }
-
-
 
 // Function to update discounted price based on selling price and discount
 function updateDiscountedPrice() {
