@@ -168,7 +168,10 @@
                           {{ color.name }}
                         </option>
                       </select>
-                      <span v-if="form.errors.color_id" class="mt-2 text-red-500">
+                      <span
+                        v-if="form.errors.color_id"
+                        class="mt-2 text-red-500"
+                      >
                         {{ form.errors.color_id }}
                       </span>
                     </div>
@@ -321,6 +324,26 @@
                     </select>
                     <span v-if="form.errors.sub_id" class="mt-4 text-red-500">
                       {{ form.errors.sub_id }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <div class="w-full">
+                    <label
+                      for="barcode"
+                      class="block text-sm font-medium text-gray-300"
+                      >Barcode</label
+                    >
+                    <input
+                      type="text"
+                      id="barcode"
+                      v-model="form.barcode"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      placeholder="Scan barcode"
+                    />
+                    <span v-if="form.errors.barcode" class="mt-2 text-red-500">
+                      {{ form.errors.barcode }}
                     </span>
                   </div>
                 </div>
@@ -493,15 +516,12 @@ const handleImageUpload = (event) => {
   form.image = event.target.files[0];
 };
 
-
 function limitToTwoDecimals(value) {
   if (value === null || value === undefined) return value;
   const strValue = value.toString();
   const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
   return match ? parseFloat(match[0]) : value;
 }
-
-
 
 // Function to update discounted price based on selling price and discount
 function updateDiscountedPrice() {

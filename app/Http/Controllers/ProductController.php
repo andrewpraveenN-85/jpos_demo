@@ -13,9 +13,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use App\Traits\GeneratesUniqueCode;
 
 class ProductController extends Controller
 {
+
+    use GeneratesUniqueCode;
     /**
      * Display a listing of the resource.
      */
@@ -133,6 +136,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'barcode' => 'nullable|unique:products,barcode',
         ]);
 
         try {
@@ -144,6 +148,9 @@ class ProductController extends Controller
                 $validated['image'] = 'storage/' . $path;
             }
 
+            if (empty($validated['barcode'])) {
+                $validated['barcode'] = $this->generateUniqueCode(12); // Generate a unique barcode
+            }
             // Create the product
             $product = Product::create($validated);
 
@@ -192,6 +199,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100', // Validation for discount
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
+            'barcode' => 'nullable|unique:products,barcode',
         ]);
 
 
@@ -317,6 +325,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
+            'barcode' => 'required|string|max:50|unique:products,barcode,' . $product->id,
         ]);
 
         // Handle image update

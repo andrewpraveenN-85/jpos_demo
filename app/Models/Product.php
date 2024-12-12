@@ -26,15 +26,15 @@ class Product extends Model
         'image',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
-        // Automatically generate a unique code when creating an order
-        static::creating(function ($model) {
-            $model->barcode = $model->generateUniqueCode(12);
-        });
-    }
+    //     // Automatically generate a unique code when creating an order
+    //     static::creating(function ($model) {
+    //         $model->barcode = $model->generateUniqueCode(12);
+    //     });
+    // }
 
     public function category()
     {

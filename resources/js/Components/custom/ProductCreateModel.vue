@@ -244,17 +244,16 @@
 
                 <div class="w-full">
                   <label
-                    for="stock_quantity"
+                    for="barcode"
                     class="block text-sm font-medium text-gray-300"
                     >Barcode</label
                   >
                   <input
                     type="text"
-                    id="stock_quantity"
+                    id="barcode"
                     v-model="form.barcode"
-                    class="cursor-not-allowed w-full px-4 py-2 mt-2 text-black bg-gray-200 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                     placeholder="Scan barcode"
-                    readonly
                   />
                   <span v-if="form.errors.barcode" class="mt-2 text-red-500">
                     {{ form.errors.barcode }}
@@ -383,35 +382,6 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { useForm } from "@inertiajs/vue3";
-import { onMounted, onBeforeUnmount } from "vue";
-
-// Code to get barcode
-let barcodeBuffer = ""; // Temporary buffer to store barcode input
-let barcodeTimeout = null; // Timeout to detect end of barcode input
-
-// Add event listeners for barcode scanner input
-onMounted(() => {
-  window.addEventListener("keypress", handleBarcodeInput);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("keypress", handleBarcodeInput);
-});
-
-const handleBarcodeInput = (event) => {
-  const char = String.fromCharCode(event.which); // Get the character from the keypress
-  barcodeBuffer += char;
-
-  // Clear the buffer after a short delay (assuming barcode input happens quickly)
-  if (barcodeTimeout) clearTimeout(barcodeTimeout);
-
-  barcodeTimeout = setTimeout(() => {
-    form.barcode = barcodeBuffer.trim(); // Update the barcode field
-    barcodeBuffer = ""; // Reset the buffer
-  }, 200); // 200ms delay to detect end of barcode input
-};
-
-// End of Code to get barcode
 
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");

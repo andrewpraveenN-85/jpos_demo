@@ -328,7 +328,7 @@
                   </button>
                 </div>
               </div>
-              <div class="w-full">
+              <!-- <div class="w-full">
                 <button
                   :disabled="!HasRole(['Admin'])"
                   @click="
@@ -343,7 +343,7 @@
                 >
                   Input barcode
                 </button>
-              </div>
+              </div> -->
             </div>
           </div>
         </template>
@@ -461,7 +461,7 @@ import ProductDuplicateModel from "@/Components/custom/ProductDuplicateModel.vue
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
 import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
-import InputBarCodeModel from "@/Components/custom/InputBarCodeModel.vue";
+// import InputBarCodeModel from "@/Components/custom/InputBarCodeModel.vue";
 import { debounce } from "lodash";
 import { HasRole } from "@/Utils/Permissions";
 
@@ -471,7 +471,7 @@ const isDuplicateModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
-const isInputBarCodeModalOpen = ref(false);
+// const isInputBarCodeModalOpen = ref(false);
 
 const emit = defineEmits(["update:open"]);
 
@@ -495,10 +495,10 @@ const openDeleteModal = (product) => {
   isDeleteModalOpen.value = true;
 };
 
-const openInputBarCodeModal = (product) => {
-  selectedProduct.value = product;
-  isInputBarCodeModalOpen.value = true;
-};
+// const openInputBarCodeModal = (product) => {
+//   selectedProduct.value = product;
+//   isInputBarCodeModalOpen.value = true;
+// };
 
 const props = defineProps({
   products: Object,
