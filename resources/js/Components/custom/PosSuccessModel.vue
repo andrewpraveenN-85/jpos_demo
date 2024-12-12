@@ -279,7 +279,7 @@ const handlePrintReceipt = () => {
                     <tr>
                         <th>Description</th>
                         <th style="text-align: center;">Qty</th>
-                        <th>Price</th>
+                        <th style="text-align: right;">Price</th>
                     </tr>
                 </thead>
                 <tbody>
