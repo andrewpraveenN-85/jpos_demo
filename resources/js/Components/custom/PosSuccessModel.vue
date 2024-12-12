@@ -246,7 +246,8 @@ const handlePrintReceipt = () => {
 <body>
     <div class="receipt-container">
         <div class="header">
-            <h1>Pioneer</h1>
+            <img src="/images/pioneer_logo.png" style="width: 70px" alt="Logo">
+            <h1 style="font-size: 20px;">Pioneer Communication and Bookshop</h1>
             <p>245/2, Miriswatte, Demanhandiya.</p>
             <p>0777969831 | Pioneer</p>
         </div>
