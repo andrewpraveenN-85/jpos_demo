@@ -42,7 +42,7 @@ const submit = () => {
     >
       <div class="flex items-center justify-center w-full">
         <!-- <img src="./assetes/images/logo.png" class="w-[180px] h-[100px]" /> -->
-        <img :src="logo" alt="Logo" class="w-[180px] h-[100px]" />
+        <img :src="logo" alt="Logo" class="w-[180px] h-[100px] object-contain" />
       </div>
       <div class="w-full max-w-md p-8 space-y-8 tracking-wider bg-black">
         <h2 class="text-3xl font-bold text-center text-white roboto-regular">
