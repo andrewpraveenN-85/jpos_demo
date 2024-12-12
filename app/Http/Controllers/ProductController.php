@@ -69,7 +69,11 @@ class ProductController extends Controller
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
 
 
-        $allcategories = Category::with('parent')->get();
+        // $allcategories = Category::with('parent')->get();
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();

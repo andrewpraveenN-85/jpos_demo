@@ -98,7 +98,13 @@
                           :key="category.id"
                           :value="category.id"
                         >
-                          {{ category.name }}
+                          {{
+                            category.hierarchy_string
+                              ? category.hierarchy_string +
+                                " ----> " +
+                                category.name
+                              : category.name
+                          }}
                         </option>
                       </select>
                       <span v-if="form.errors.name" class="mt-4 text-red-500">{{
@@ -201,7 +207,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Selling Price:</label
                     >
-                     <input
+                    <input
                       type="text"
                       id="selling_price"
                       v-model="form.selling_price"
@@ -227,7 +233,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Discount (%):</label
                     >
-                     <input
+                    <input
                       type="text"
                       id="discount"
                       v-model="form.discount"

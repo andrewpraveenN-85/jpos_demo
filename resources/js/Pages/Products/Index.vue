@@ -125,7 +125,11 @@
               :key="category.id"
               :value="category.id"
             >
-              {{ category.name }}
+              {{
+                category.hierarchy_string
+                  ? category.hierarchy_string + " ----> " + category.name
+                  : category.name
+              }}
             </option>
           </select>
 
