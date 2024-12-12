@@ -7,7 +7,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/jaan_logo.png";
 
 defineProps({
   canResetPassword: Boolean,
@@ -93,11 +93,11 @@ const submit = () => {
       class="flex items-center justify-center w-full space-x-4 tracking-wider roboto-regular"
     >
       <p class="text-2xl font-bold">
-        <i class="ri-global-line"></i> dressshub.lk
+        <i class="ri-global-line"></i> Pioneer
       </p>
       <p class="text-2xl">|</p>
       <p class="text-2xl font-bold">
-        JAAN PoS <span class="font-normal">(Textile) Version 1.1</span>
+        JAAN PoS <span class="font-normal">Version 1.1</span>
       </p>
     </div>
     <div
