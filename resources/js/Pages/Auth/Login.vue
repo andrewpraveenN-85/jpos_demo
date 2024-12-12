@@ -7,7 +7,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import logo from "@/assets/jaan_logo.png";
+import logo from "@/assets/pioneer_logo.png";
 
 defineProps({
   canResetPassword: Boolean,

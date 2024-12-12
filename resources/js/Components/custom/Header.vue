@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center justify-between w-full space-x-4">
     <!-- Logo -->
-    <Link href="/" title="Home Page | Dresshub.lk">
-      <img src="/images/jaan_logo.png" class="flex-col w-3/4" alt="Logo" style="width: 300px"/>
+    <Link href="/" title="Home Page | Pioneer">
+      <img src="/images/pioneer_logo.png" class="flex-col w-3/4" alt="Logo" style="width: 100px"/>
     </Link>
     <!-- <Link href="/dashboard">
         <img src="/images/logo1.png" class="w-1/4" alt="Logo" />

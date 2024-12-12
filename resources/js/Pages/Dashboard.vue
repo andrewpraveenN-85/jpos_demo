@@ -14,7 +14,7 @@
               <img
                 src="/images/dashboard/checkout.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -35,7 +35,7 @@
               <img
                 src="/images/dashboard/app.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -56,7 +56,7 @@
               <img
                 src="/images/dashboard/products.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -77,7 +77,7 @@
               <img
                 src="/images/dashboard/team-building.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -98,7 +98,7 @@
               <img
                 src="/images/dashboard/customers.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -119,7 +119,7 @@
               <img
                 src="/images/dashboard/report.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -140,7 +140,7 @@
               <img
                 src="/images/dashboard/color-wheel.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -161,7 +161,7 @@
               <img
                 src="/images/dashboard/measuring-tape.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -182,7 +182,7 @@
               <img
                 src="/images/dashboard/stock_transtion.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
@@ -204,7 +204,7 @@
               <img
                 src="/images/dashboard/coupons.png"
                 class="icon"
-                alt="dresshub.lk"
+                alt="Pioneer"
               />
             </div>
             <div class="text-container">
