@@ -124,7 +124,6 @@
                         >Size:</label
                       >
                       <select
-                        required
                         v-model="form.size_id"
                         id="parent_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
@@ -154,7 +153,6 @@
                         >Color:</label
                       >
                       <select
-                        required
                         v-model="form.color_id"
                         id="sub_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
