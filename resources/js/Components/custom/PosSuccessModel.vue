@@ -1,149 +1,129 @@
 <template>
-  <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="$emit('update:open', false)">
-      <!-- Modal Overlay -->
-      <TransitionChild
-        as="template"
-        enter="ease-out duration-300"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="ease-in duration-200"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
-      >
-        <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-        />
-      </TransitionChild>
+    <TransitionRoot as="template" :show="open" static>
+        <Dialog class="relative z-10" static>
+            <!-- Modal Overlay -->
+            <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
+                leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click.stop/>
+            </TransitionChild>
 
-      <!-- Modal Content -->
-      <div class="fixed inset-0 z-10 flex items-center justify-center">
-        <TransitionChild
-          as="template"
-          enter="ease-out duration-300"
-          enter-from="opacity-0 scale-95"
-          enter-to="opacity-100 scale-100"
-          leave="ease-in duration-200"
-          leave-from="opacity-100 scale-100"
-          leave-to="opacity-0 scale-95"
-        >
-          <DialogPanel
-            class="bg-white border-4 border-blue-600 rounded-[20px] shadow-xl max-w-xl w-full p-6 text-center"
-          >
-            <!-- Modal Title -->
-            <DialogTitle class="text-5xl font-bold"
-              >Payment Successful!</DialogTitle
-            >
+            <!-- Modal Content -->
+            <div class="fixed inset-0 z-10 flex items-center justify-center">
+                <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 scale-95"
+                    enter-to="opacity-100 scale-100" leave="ease-in duration-200" leave-from="opacity-100 scale-100"
+                    leave-to="opacity-0 scale-95">
+                    <DialogPanel
+                        class="bg-white border-4 border-blue-600 rounded-[20px] shadow-xl max-w-xl w-full p-6 text-center">
+                        <!-- Modal Title -->
+                        <DialogTitle class="text-5xl font-bold">Payment Successful!</DialogTitle>
 
-            <div
-              class="w-full h-full flex flex-col justify-center items-center space-y-8 mt-4"
-            >
-              <p class="text-justify text-3xl text-black">
-                Order Payment is Successful!
-              </p>
-              <div>
-                <img
-                  src="/images/checked.png"
-                  class="h-24 object-cover w-full"
-                />
-              </div>
+                        <div class="w-full h-full flex flex-col justify-center items-center space-y-8 mt-4">
+                            <p class="text-justify text-3xl text-black">
+                                Order Payment is Successful!
+                            </p>
+                            <div>
+                                <img src="/images/checked.png" class="h-24 object-cover w-full" />
+                            </div>
+                        </div>
+                        <div class="flex justify-center items-center space-x-4 pt-4 mt-4">
+                            <p
+                                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl">
+                                Send Reciept To Email
+                            </p>
+                            <p @click="handlePrintReceipt"
+                                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl">
+                                Print Receipt
+                            </p>
+                            <p @click="$emit('update:open', false)"
+                                class="cursor-pointer bg-red-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl">
+                                Close
+                            </p>
+                        </div>
+                    </DialogPanel>
+                </TransitionChild>
             </div>
-            <div class="flex justify-center items-center space-x-4 pt-4 mt-4">
-              <p
-                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
-              >
-                Send Reciept To Email
-              </p>
-              <p
-                @click="handlePrintReceipt"
-                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
-              >
-                Print Receipt
-              </p>
-            </div>
-          </DialogPanel>
-        </TransitionChild>
-      </div>
-    </Dialog>
-  </TransitionRoot>
+        </Dialog>
+    </TransitionRoot>
 </template>
 
 <script setup>
 import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
 } from "@headlessui/vue";
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
+const handleClose = () => {
+  console.log("Modal close prevented");
+};
 
 const emit = defineEmits(["update:open"]);
 
 // The `open` prop controls the visibility of the modal
 const props = defineProps({
-  open: {
-    type: Boolean,
-    required: true,
-  },
-  products: {
-    type: Array,
-    required: true,
-  },
-  cashier: Object,
-  customer: Object,
-  orderId: String,
+    open: {
+        type: Boolean,
+        required: true,
+    },
+    products: {
+        type: Array,
+        required: true,
+    },
+    cashier: Object,
+    customer: Object,
+    orderId: String,
 });
 
 const handlePrintReceipt = () => {
-  // Calculate totals from props.products
-  const subTotal = props.products.reduce(
-    (sum, product) =>
-      sum + parseFloat(product.selling_price) * product.quantity,
-    0
-  );
+    // Calculate totals from props.products
+    const subTotal = props.products.reduce(
+        (sum, product) =>
+            sum + parseFloat(product.selling_price) * product.quantity,
+        0
+    );
 
-  const totalDiscount = props.products
-    .reduce((total, item) => {
-      // Check if item has a discount
-      if (item.discount && item.discount > 0 && item.apply_discount == true) {
-        const discountAmount =
-          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
-          item.quantity;
-        return total + discountAmount;
-      }
-      return total; // If no discount, return total as-is
-    }, 0)
-    .toFixed(2); // Ensures two decimal places
+    const totalDiscount = props.products
+        .reduce((total, item) => {
+            // Check if item has a discount
+            if (item.discount && item.discount > 0 && item.apply_discount == true) {
+                const discountAmount =
+                    (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+                    item.quantity;
+                return total + discountAmount;
+            }
+            return total; // If no discount, return total as-is
+        }, 0)
+        .toFixed(2); // Ensures two decimal places
 
-  const discount = 0; // Example discount (can be dynamic)
-  const total = subTotal - totalDiscount;
+    const discount = 0; // Example discount (can be dynamic)
+    const total = subTotal - totalDiscount;
 
-  // Generate table rows dynamically using props.products
-  const productRows = props.products
-    .map((product) => {
-      return `
+    // Generate table rows dynamically using props.products
+    const productRows = props.products
+        .map((product) => {
+            return `
       <tr>
         <td>${product.name}</td>
         <td>${product.quantity}</td>
         <td>
-          ${
-            product.discount && product.discount > 0 && product.apply_discount
-              ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
-              : ""
-          }
-         
+          ${product.discount && product.discount > 0 && product.apply_discount
+                    ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
+                    : ""
+                }
+
          <div>${product.selling_price}</div>
         </td>
       </tr>
     `;
-    })
-    .join("");
+        })
+        .join("");
 
-  // Generate the receipt HTML
-  const receiptHTML = `
+    // Generate the receipt HTML
+    const receiptHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -302,7 +282,7 @@ const handlePrintReceipt = () => {
             </div>
         </div>
         <div class="footer">
-            <p>THANK YOU FOR SHOPPING WITH US</p>
+            <p>THANK YOU COME AGAIN</p>
             <p class="italic">Let the quality define its own standards</p>
             <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
         </div>
@@ -311,23 +291,23 @@ const handlePrintReceipt = () => {
 </html>
 `;
 
-  // Open a new window
-  const printWindow = window.open("", "_blank");
-  if (!printWindow) {
-    alert("Failed to open print window. Please check your browser settings.");
-    return;
-  }
+    // Open a new window
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+        alert("Failed to open print window. Please check your browser settings.");
+        return;
+    }
 
-  // Write the content to the new window
-  printWindow.document.open();
-  printWindow.document.write(receiptHTML);
-  printWindow.document.close();
+    // Write the content to the new window
+    printWindow.document.open();
+    printWindow.document.write(receiptHTML);
+    printWindow.document.close();
 
-  // Wait for the content to load before triggering print
-  printWindow.onload = () => {
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
-  };
+    // Wait for the content to load before triggering print
+    printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
 };
 </script>

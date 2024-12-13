@@ -210,7 +210,31 @@
             <div class="text-container">
               <p class="title">Coupons</p>
               <p class="description">
-                Effortlessly manage coupons with options for additions, deductions, and returns—all 
+                Effortlessly manage coupons with options for additions, deductions, and returns—all
+                in one centralized platform.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
+
+      <Link href="/company-info">
+        <div class="dashboard-card bg-[#76e02f]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/building.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Company Info</p>
+              <p class="description">
+                Effortlessly manage coupons with options for additions, deductions, and returns—all
                 in one centralized platform.
               </p>
             </div>
