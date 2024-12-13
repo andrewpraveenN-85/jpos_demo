@@ -74,7 +74,7 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
         // Combine countryCode and contactNumber to create the phone field
-        $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
+
 
         $customer = null;
 
@@ -100,8 +100,9 @@ class PosController extends Controller
 
         try {
             // Save the customer data to the database
-            if ($request->input('customer.phone') || $request->input('customer.name') || $request->input('customer.email')) {
+            if ($request->input('customer.contactNumber') || $request->input('customer.name') || $request->input('customer.email')) {
 
+                $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
                 $customer = Customer::where('email', $request->input('customer.email'))->first();
                 $customer1 = Customer::where('phone', $phone)->first();
 
@@ -111,19 +112,20 @@ class PosController extends Controller
                     $email = $request->input('customer.email');
                 }
 
-                if (!$customer) {
+                if ($customer1) {
                     $phone = '';
                 }
 
-                $customer = Customer::create([
-                    'name' => $request->input('customer.name'),
-                    'email' => $request->input('customer.email'),
-                    'phone' => $phone,
-                    'address' => $request->input('customer.address', ''), // Optional address
-                    'member_since' => now()->toDateString(), // Current date
-                    'loyalty_points' => 0, // Default value
-                ]);
-
+                if (!empty($phone) || !empty($email) || !empty($request->input('customer.name'))) {
+                    $customer = Customer::create([
+                        'name' => $request->input('customer.name'),
+                        'email' => $email,
+                        'phone' => $phone,
+                        'address' => $request->input('customer.address', ''), // Optional address
+                        'member_since' => now()->toDateString(), // Current date
+                        'loyalty_points' => 0, // Default value
+                    ]);
+                }
             }
 
             // Create the sale record
