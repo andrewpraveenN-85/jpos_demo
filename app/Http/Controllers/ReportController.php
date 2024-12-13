@@ -107,6 +107,7 @@ foreach ($sales as $item) {
              'totalSaleAmount' => $totalSaleAmount,
              'totalCustomer' => $totalCustomer,
              'netProfit' => $netProfit,
+             'totalDiscount' => $totalDiscount,
              'totalTransactions' => $totalTransactions,
              'averageTransactionValue' => round($averageTransactionValue, 2), // Round to 2 decimals
              'startDate' => $startDate,
