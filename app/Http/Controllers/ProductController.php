@@ -221,7 +221,9 @@ class ProductController extends Controller
 
             // Product::create($validated);
 
-
+            if (empty($validated['barcode'])) {
+                $validated['barcode'] = $this->generateUniqueCode(12); // Generate a unique barcode
+            }
 
             $product = Product::create($validated);
 
@@ -353,6 +355,10 @@ class ProductController extends Controller
 
         // Determine transaction type
         $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
+
+        if (empty($validated['barcode'])) {
+            $validated['barcode'] = $this->generateUniqueCode(12); // Generate a unique barcode
+        }
 
         // Update product
         $product->update($validated);
