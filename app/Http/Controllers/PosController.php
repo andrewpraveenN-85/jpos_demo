@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\StockTransaction;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 
 class PosController extends Controller
 {
@@ -74,7 +74,7 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
         // Combine countryCode and contactNumber to create the phone field
-        $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
+
 
         $customer = null;
 
@@ -100,14 +100,26 @@ class PosController extends Controller
 
         try {
             // Save the customer data to the database
-            if ($request->input('customer.name')) {
+            if ($request->input('customer.contactNumber') || $request->input('customer.name') || $request->input('customer.email')) {
 
+                $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
                 $customer = Customer::where('email', $request->input('customer.email'))->first();
+                $customer1 = Customer::where('phone', $phone)->first();
 
-                if (!$customer) {
+                if ($customer) {
+                    $email = '';
+                } else {
+                    $email = $request->input('customer.email');
+                }
+
+                if ($customer1) {
+                    $phone = '';
+                }
+
+                if (!empty($phone) || !empty($email) || !empty($request->input('customer.name'))) {
                     $customer = Customer::create([
                         'name' => $request->input('customer.name'),
-                        'email' => $request->input('customer.email'),
+                        'email' => $email,
                         'phone' => $phone,
                         'address' => $request->input('customer.address', ''), // Optional address
                         'member_since' => now()->toDateString(), // Current date
@@ -139,7 +151,7 @@ class PosController extends Controller
                         // Rollback transaction and return error
                         DB::rollBack();
                         return response()->json([
-                            'message' => "Insufficient stock for product: {$productModel->name} 
+                            'message' => "Insufficient stock for product: {$productModel->name}
                             ({$productModel->stock_quantity} available)",
                         ], 423);
                     }

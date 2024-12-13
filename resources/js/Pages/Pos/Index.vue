@@ -40,14 +40,14 @@
                 />
               </div>
               <div class="flex gap-2 mb-3 text-black">
-                <select
+                <!-- <select
                   v-model="customer.countryCode"
                   class="w-[60px] px-2 py-2 bg-white placeholder-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="+94">+94</option>
                   <option value="+1">+1</option>
                   <option value="+44">+44</option>
-                </select>
+                </select> -->
                 <input
                   v-model="customer.contactNumber"
                   type="text"
@@ -362,7 +362,7 @@ const discount = ref(0);
 
 const customer = ref({
   name: "",
-  countryCode: "+94",
+  countryCode: "",
   contactNumber: "",
   email: "",
 });
