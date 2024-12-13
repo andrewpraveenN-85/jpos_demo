@@ -120,38 +120,7 @@
               </div>
             </div>
 
-            <div class="w-full my-5">
-              <div class="relative flex items-center">
-                <!-- Input Field -->
-                <label for="coupon" class="sr-only">Coupon Code</label>
-                <input
-                  id="coupon"
-                  v-model="couponForm.code"
-                  type="text"
-                  placeholder="Enter Coupon Code"
-                  class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-
-                <template v-if="!appliedCoupon">
-                  <button
-                    type="button"
-                    @click="submitCoupon"
-                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    Apply Coupon
-                  </button>
-                </template>
-                <template v-else>
-                  <button
-                    type="button"
-                    @click="removeCoupon"
-                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  >
-                    Remove Coupon
-                  </button>
-                </template>
-              </div>
-            </div>
+           
 
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
@@ -257,6 +226,40 @@
                 <p class="text-3xl text-black">{{ total }} LKR</p>
               </div>
             </div>
+
+            <div class="w-full my-5">
+                <div class="relative flex items-center">
+                  <!-- Input Field -->
+                  <label for="coupon" class="sr-only">Coupon Code</label>
+                  <input
+                    id="coupon"
+                    v-model="couponForm.code"
+                    type="text"
+                    placeholder="Enter Coupon Code"
+                    class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+
+                  <template v-if="!appliedCoupon">
+                    <button
+                      type="button"
+                      @click="submitCoupon"
+                      class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      Apply Coupon
+                    </button>
+                  </template>
+                  <template v-else>
+                    <button
+                      type="button"
+                      @click="removeCoupon"
+                      class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      Remove Coupon
+                    </button>
+                  </template>
+                </div>
+              </div>
+
             <div class="flex flex-col w-full space-y-8">
               <div
                 class="flex items-center justify-center w-full pt-8 space-x-8"
@@ -285,6 +288,9 @@
                   <img src="/images/bank-card.png" alt="" class="w-24" />
                 </div>
               </div>
+
+             
+
               <div class="flex items-center justify-center w-full">
                 <button
                   @click="
@@ -443,21 +449,20 @@ const subtotal = computed(() => {
 });
 
 const totalDiscount = computed(() => {
-  const productDiscount = products.value
-    .reduce((total, item) => {
-      // Check if item has a discount
-      if (item.discount && item.discount > 0 && item.apply_discount == true) {
-        const discountAmount =
-          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
-          item.quantity;
-        return total + discountAmount;
-      }
-      return total; // If no discount, return total as-is
-    }, 0); // Ensures two decimal places
+  const productDiscount = products.value.reduce((total, item) => {
+    // Check if item has a discount
+    if (item.discount && item.discount > 0 && item.apply_discount == true) {
+      const discountAmount =
+        (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+        item.quantity;
+      return total + discountAmount;
+    }
+    return total; // If no discount, return total as-is
+  }, 0); // Ensures two decimal places
 
-  
-
-  const couponDiscount = appliedCoupon.value ? Number(appliedCoupon.value.discount) : 0;
+  const couponDiscount = appliedCoupon.value
+    ? Number(appliedCoupon.value.discount)
+    : 0;
 
   return (productDiscount + couponDiscount).toFixed(2);
 });
@@ -470,7 +475,6 @@ const total = computed(() => {
   // Subtract totalDiscount from subtotal to get the total
   return (subtotalValue - discountValue).toFixed(2);
 });
-
 
 // Check for product or handle errors
 const form = useForm({
