@@ -80,10 +80,10 @@
           :title="
             HasRole(['Admin'])
               ? ''
-              : 'You do not have permission to add more Productss'
+              : 'You do not have permission to add more Products'
           "
         >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
+          <i class="pr-4 ri-add-circle-fill"></i> Add More Product
         </p>
       </div>
 
