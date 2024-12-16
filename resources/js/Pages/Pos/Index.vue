@@ -120,8 +120,6 @@
               </div>
             </div>
 
-           
-
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
                 No Products to show
@@ -225,40 +223,58 @@
                 <p class="text-3xl text-black">Total</p>
                 <p class="text-3xl text-black">{{ total }} LKR</p>
               </div>
+              <div
+                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Cash</p>
+                <span>
+                  <CurrencyInput
+                    v-model="cash"
+                    :options="{ currency: 'EUR' }"
+                  />
+                  <span class="ml-2">LKR</span>
+                </span>
+              </div>
+              <div
+                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Balance</p>
+                <p>{{ balance }} LKR</p>
+              </div>
             </div>
 
             <div class="w-full my-5">
-                <div class="relative flex items-center">
-                  <!-- Input Field -->
-                  <label for="coupon" class="sr-only">Coupon Code</label>
-                  <input
-                    id="coupon"
-                    v-model="couponForm.code"
-                    type="text"
-                    placeholder="Enter Coupon Code"
-                    class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
+              <div class="relative flex items-center">
+                <!-- Input Field -->
+                <label for="coupon" class="sr-only">Coupon Code</label>
+                <input
+                  id="coupon"
+                  v-model="couponForm.code"
+                  type="text"
+                  placeholder="Enter Coupon Code"
+                  class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
 
-                  <template v-if="!appliedCoupon">
-                    <button
-                      type="button"
-                      @click="submitCoupon"
-                      class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Apply Coupon
-                    </button>
-                  </template>
-                  <template v-else>
-                    <button
-                      type="button"
-                      @click="removeCoupon"
-                      class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    >
-                      Remove Coupon
-                    </button>
-                  </template>
-                </div>
+                <template v-if="!appliedCoupon">
+                  <button
+                    type="button"
+                    @click="submitCoupon"
+                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Apply Coupon
+                  </button>
+                </template>
+                <template v-else>
+                  <button
+                    type="button"
+                    @click="removeCoupon"
+                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Remove Coupon
+                  </button>
+                </template>
               </div>
+            </div>
 
             <div class="flex flex-col w-full space-y-8">
               <div
@@ -288,8 +304,6 @@
                   <img src="/images/bank-card.png" alt="" class="w-24" />
                 </div>
               </div>
-
-             
 
               <div class="flex items-center justify-center w-full">
                 <button
@@ -323,6 +337,8 @@
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
+    :cash="cash"
+    :balance="balance"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
   <Footer />
@@ -338,6 +354,7 @@ import { ref, onMounted, computed } from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
+import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 
 const product = ref(null);
 const error = ref(null);
@@ -346,6 +363,8 @@ const isSuccessModalOpen = ref(false);
 const isAlertModalOpen = ref(false);
 const message = ref("");
 const appliedCoupon = ref(null);
+const cash = ref(0);
+// const balance = ref(0);
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
@@ -415,6 +434,11 @@ const orderId = computed(() => {
 const submitOrder = async () => {
   // if (window.confirm("Are you sure you want to confirm the order?")) {
   console.log(products.value);
+  if (balance.value < 0) {
+    isAlertModalOpen.value = true;
+    message.value = "Cash is not enough";
+    return;
+  }
   try {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
@@ -476,6 +500,12 @@ const total = computed(() => {
   return (subtotalValue - discountValue).toFixed(2);
 });
 
+const balance = computed(() => {
+  if (cash.value == null || cash.value === 0) {
+    return 0;  // If cash.value is null or 0, return 0
+  }
+  return (parseFloat(cash.value) - parseFloat(total.value)).toFixed(2);
+});
 // Check for product or handle errors
 const form = useForm({
   barcode: "", // Form field for barcode
