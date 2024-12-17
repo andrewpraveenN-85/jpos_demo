@@ -76,6 +76,8 @@ const props = defineProps({
     cashier: Object,
     customer: Object,
     orderId: String,
+    balance: Number,
+    cash: Number,
 });
 
 const handlePrintReceipt = () => {
@@ -115,7 +117,7 @@ const handlePrintReceipt = () => {
                     : ""
                 }
 
-         <div>${product.selling_price}</div>
+         <div>${(product.selling_price * product.quantity).toFixed(2)}</div>
         </td>
       </tr>
     `;
@@ -206,7 +208,7 @@ const handlePrintReceipt = () => {
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .totals div:last-child {
+        .totals div:nth-child(3) {
             font-size: 14px;
             font-weight: bold;
         }
@@ -279,6 +281,14 @@ const handlePrintReceipt = () => {
             <div>
                 <span>Total</span>
                 <span>${total.toFixed(2)} LKR</span>
+            </div>
+            <div>
+                <span>Cash</span>
+                <span>${props.cash } LKR</span>
+            </div>
+            <div style="font-weight: bold;">
+                <span>Balance</span>
+                <span>${props.balance } LKR</span>
             </div>
         </div>
         <div class="footer">

@@ -221,7 +221,7 @@
 
 
 
-      <Link href="/company-info">
+      <Link href="/company-info" v-if="HasRole(['Admin'])">
         <div class="dashboard-card bg-[#76e02f]">
           <div class="card-content">
             <div class="icon-container">

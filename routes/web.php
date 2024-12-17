@@ -6,6 +6,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CompanyInfoController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
@@ -45,7 +46,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/', function () {
-        // 
+        //
         if (Gate::allows('hasRole', ['Cashier'])) {
             return redirect()->route('pos.index');
         }
@@ -61,6 +62,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('suppliers/{supplier}', [SupplierController::class, 'update']);
     Route::post('products/{product}', [ProductController::class, 'update']);
     Route::post('products-variant', [ProductController::class, 'productVariantStore'])->name('productVariant');
+
+    // Route::resource('company-info', CompanyInfoController::class)->name('companyInfo.index');
+    Route::get('/company-info', [CompanyInfoController::class, 'index'])->name('companyInfo.index');
+    Route::post('/company-info/{company}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');
+
+
+
 
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::post('/pos', [PosController::class, 'getProduct'])->name('pos.getProduct');
