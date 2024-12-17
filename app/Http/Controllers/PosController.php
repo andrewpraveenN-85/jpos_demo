@@ -22,8 +22,11 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $products = Product::all();
+
         // Render the page for GET requests
         return Inertia::render('Pos/Index', [
+            'products' => $products,
             'product' => null,
             'error' => null,
             'loggedInUser' => Auth::user(),
@@ -40,7 +43,9 @@ class PosController extends Controller
             'barcode' => 'required',
         ]);
 
-        $product = Product::where('barcode', $request->barcode)->first();
+        $product = Product::where('barcode', $request->barcode)
+            ->orWhere('code', $request->barcode)
+            ->first();
 
         return response()->json([
             'product' => $product,

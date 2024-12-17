@@ -127,6 +127,42 @@
               </div>
             </div>
 
+            <!-- <div class="max-w-xs relative space-y-3">
+              <label for="search" class="text-gray-900">
+                Type the product name to search
+              </label>
+
+              <input
+                v-model="form.barcode"
+                id="search"
+                type="text"
+                placeholder="Enter BarCode Here!"
+                class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              <ul
+                v-if="searchResults.length"
+                class="w-full rounded bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10"
+              >
+                <li class="px-1 pt-1 pb-2 font-bold border-b border-gray-200">
+                  Showing {{ searchResults.length }} results
+                </li>
+                <li
+                  v-for="product in searchResults"
+                  :key="product.id"
+                  @click="selectProduct(product.name)"
+                  class="cursor-pointer hover:bg-gray-100 p-1"
+                >
+                  {{ product.name }}
+                </li>
+              </ul>
+
+              <p v-if="form.barcode" class="text-lg pt-2 absolute">
+                You have selected:
+                <span class="font-semibold">{{ form.barcode }}</span>
+              </p>
+            </div> -->
+
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
                 No Products to show
@@ -361,12 +397,13 @@ import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import AlertModel from "@/Components/custom/AlertModel.vue";
 import { useForm, router } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
+import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
 
 const product = ref(null);
 const error = ref(null);
@@ -388,6 +425,7 @@ const handleModalOpenUpdate = (newValue) => {
 
 const props = defineProps({
   loggedInUser: Object,
+  products: Array,
 });
 
 const discount = ref(0);
@@ -655,4 +693,37 @@ const removeDiscount = (id) => {
     }
   });
 };
+// const searchTerm = ref(form.barcode);
+
+// // Computed property for filtered product results
+// const searchResults = computed(() => {
+//   if (searchTerm.value === "") {
+//     return [];
+//   }
+
+//   let matches = 0;
+//   return props.products.filter((product) => {
+//     if (
+//       product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) &&
+//       matches < 10
+//     ) {
+//       matches++;
+//       return product;
+//     }
+//   });
+// });
+
+// // Watch for changes in the form barcode field and update the search term
+// watch(
+//   () => form.barcode,
+//   (newValue) => {
+//     searchTerm.value = newValue;
+//   }
+// );
+
+// // Method to select a product (or barcode)
+// const selectProduct = (productName) => {
+//   form.barcode = productName; // Set the selected product name to the barcode field
+//   searchTerm.value = ""; // Clear the search term after selection
+// };
 </script>
