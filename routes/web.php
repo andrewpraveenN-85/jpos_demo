@@ -66,9 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::resource('company-info', CompanyInfoController::class)->name('companyInfo.index');
     Route::get('/company-info', [CompanyInfoController::class, 'index'])->name('companyInfo.index');
-    Route::post('/company-info/{company}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');
-
-
+    Route::post('/company-info/{companyInfo}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');
 
 
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
