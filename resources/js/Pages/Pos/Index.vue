@@ -93,7 +93,14 @@
         </div>
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
-            <h2 class="text-5xl font-bold text-black">Billing Details</h2>
+            <div class="flex items-center justify-between w-full">
+              <h2 class="text-5xl font-bold text-black">Billing Details</h2>
+              <!-- <span class="flex">
+                <p class="text-xl text-blue-600 font-bold">User Manual</p>
+                <img @click="isSelectModalOpen = true" src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2 cursor-pointer" />
+              </span> -->
+            </div>
+
             <div
               class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl"
             >
@@ -341,6 +348,10 @@
     :balance="balance"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
+
+  <!-- <SelectProductModel
+    v-model:open="isSelectModalOpen"
+  /> -->
   <Footer />
 </template>
 <script setup>
@@ -355,6 +366,7 @@ import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
+import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
 
 const product = ref(null);
 const error = ref(null);
@@ -364,6 +376,7 @@ const isAlertModalOpen = ref(false);
 const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
+const isSelectModalOpen = ref(false);
 // const balance = ref(0);
 
 const handleModalOpenUpdate = (newValue) => {
@@ -502,7 +515,7 @@ const total = computed(() => {
 
 const balance = computed(() => {
   if (cash.value == null || cash.value === 0) {
-    return 0;  // If cash.value is null or 0, return 0
+    return 0; // If cash.value is null or 0, return 0
   }
   return (parseFloat(cash.value) - parseFloat(total.value)).toFixed(2);
 });
