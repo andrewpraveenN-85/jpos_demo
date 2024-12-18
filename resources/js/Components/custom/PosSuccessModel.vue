@@ -54,8 +54,17 @@ import {
     TransitionChild,
     TransitionRoot,
 } from "@headlessui/vue";
+import { computed } from 'vue'
 import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm , usePage} from "@inertiajs/vue3";
+
+
+const page = usePage()
+
+// Access the companyInfo from the page props
+const companyInfo = computed(() => page.props.companyInfo)
+
+//  console.log(companyInfo.name);
 
 const handleClose = () => {
   console.log("Modal close prevented");
@@ -228,9 +237,9 @@ const handlePrintReceipt = () => {
 <body>
     <div class="receipt-container">
         <div class="header">
-            <h1>DRESS HUB</h1>
-            <p>3rd Floor, Discovery Building, Main Street, Pettah, Colombo 11, Sri Lanka</p>
-            <p>0771119200 | dresshub.lk</p>
+            <h1>${companyInfo.value.name}</h1>
+            <p>${companyInfo.value.address}</p>
+            <p>${companyInfo.value.phone} | ${companyInfo.value.email}</p>
         </div>
         <div class="section">
             <div class="info-row">
