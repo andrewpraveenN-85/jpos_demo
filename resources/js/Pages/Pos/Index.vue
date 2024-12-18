@@ -385,9 +385,10 @@
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
-  <!-- <SelectProductModel
+  <SelectProductModel
     v-model:open="isSelectModalOpen"
-  /> -->
+    :products="products"
+  />
   <Footer />
 </template>
 <script setup>

@@ -28,21 +28,36 @@
           <DialogPanel
             class="bg-white border-1 border-gray-600 rounded-[20px] shadow-xl max-w-md w-full p-6 text-center"
           >
-           
-            <div>
-                <div class="grid grid-cols-4 gap-8">
+            <div
+              class="flex flex-col items-center justify-start py-8 space-y-8 px-36"
+            >
+              <div class="w-5/6 py-12 space-y-16">
+                <div class="flex items-center space-x-4">
+                  <!-- Search Input on the Left -->
+                  <div class="w-1/3">
+                    <input
+                      v-model="search"
+                      @input="performSearch"
+                      type="text"
+                      placeholder="Search ..."
+                      class="w-full custom-input"
+                    />
+                  </div>
                 </div>
+
+                <div class="flex items-center space-x-4">
+                  
+                </div>
+              </div>
             </div>
             <!-- Modal Buttons -->
             <div class="mt-6 space-x-4">
-              
-
               <button
                 class="px-6 py-2 text-[15px] text-white bg-blue-600 rounded hover:bg-blue-700"
                 @click.prevent="
                   () => {
                     playClickSound();
-                    deleteItem();
+                    $emit('update:open', false);
                   }
                 "
               >
@@ -78,12 +93,9 @@ const { open } = defineProps({
     type: Boolean,
     required: true,
   },
-  products: Object,
+  products: Array,
 });
 
 // Form for handling deletion
 const form = useForm({});
-
-// Delete the selected category
-const deleteItem = () => {};
 </script>
