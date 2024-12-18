@@ -61,6 +61,8 @@ document.addEventListener("click", () => {
   const audio = new Audio("/sounds/click-sound.mp3");
   audio.play();
 });
+
+ 
 </script>
 
 </html>
