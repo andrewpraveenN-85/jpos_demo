@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\Size;
 use App\Models\Color;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -25,7 +27,7 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
-        $selectedCategory = $request->input('selectedCategory'); 
+        $selectedCategory = $request->input('selectedCategory');
 
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
@@ -126,7 +128,12 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:products,code',
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('products')->whereNull('deleted_at'),
+            ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -185,7 +192,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:products,code',
+            'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -434,14 +441,4 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
-
-
-
-
-
-
-
-
-
-
 }
