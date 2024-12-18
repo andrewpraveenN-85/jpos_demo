@@ -80,10 +80,10 @@
           :title="
             HasRole(['Admin'])
               ? ''
-              : 'You do not have permission to add more Productss'
+              : 'You do not have permission to add more Products'
           "
         >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
+          <i class="pr-4 ri-add-circle-fill"></i> Add More Product
         </p>
       </div>
 
@@ -338,7 +338,7 @@
         <template v-else>
           <div class="col-span-4 text-center text-gray-500">
             <p class="text-center text-red-500 text-[17px]">
-              No products available
+              No Products Available
             </p>
           </div>
         </template>

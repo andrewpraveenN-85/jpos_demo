@@ -40,14 +40,14 @@
                 />
               </div>
               <div class="flex gap-2 mb-3 text-black">
-                <select
+                <!-- <select
                   v-model="customer.countryCode"
                   class="w-[60px] px-2 py-2 bg-white placeholder-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="+94">+94</option>
                   <option value="+1">+1</option>
                   <option value="+44">+44</option>
-                </select>
+                </select> -->
                 <input
                   v-model="customer.contactNumber"
                   type="text"
@@ -93,7 +93,14 @@
         </div>
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
-            <h2 class="text-5xl font-bold text-black">Billing Details</h2>
+            <div class="flex items-center justify-between w-full">
+              <h2 class="text-5xl font-bold text-black">Billing Details</h2>
+              <!-- <span class="flex">
+                <p class="text-xl text-blue-600 font-bold">User Manual</p>
+                <img @click="isSelectModalOpen = true" src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2 cursor-pointer" />
+              </span> -->
+            </div>
+
             <div
               class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl"
             >
@@ -120,38 +127,41 @@
               </div>
             </div>
 
-            <div class="w-full my-5">
-              <div class="relative flex items-center">
-                <!-- Input Field -->
-                <label for="coupon" class="sr-only">Coupon Code</label>
-                <input
-                  id="coupon"
-                  v-model="couponForm.code"
-                  type="text"
-                  placeholder="Enter Coupon Code"
-                  class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
+            <!-- <div class="max-w-xs relative space-y-3">
+              <label for="search" class="text-gray-900">
+                Type the product name to search
+              </label>
 
-                <template v-if="!appliedCoupon">
-                  <button
-                    type="button"
-                    @click="submitCoupon"
-                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    Apply Coupon
-                  </button>
-                </template>
-                <template v-else>
-                  <button
-                    type="button"
-                    @click="removeCoupon"
-                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  >
-                    Remove Coupon
-                  </button>
-                </template>
-              </div>
-            </div>
+              <input
+                v-model="form.barcode"
+                id="search"
+                type="text"
+                placeholder="Enter BarCode Here!"
+                class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              <ul
+                v-if="searchResults.length"
+                class="w-full rounded bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10"
+              >
+                <li class="px-1 pt-1 pb-2 font-bold border-b border-gray-200">
+                  Showing {{ searchResults.length }} results
+                </li>
+                <li
+                  v-for="product in searchResults"
+                  :key="product.id"
+                  @click="selectProduct(product.name)"
+                  class="cursor-pointer hover:bg-gray-100 p-1"
+                >
+                  {{ product.name }}
+                </li>
+              </ul>
+
+              <p v-if="form.barcode" class="text-lg pt-2 absolute">
+                You have selected:
+                <span class="font-semibold">{{ form.barcode }}</span>
+              </p>
+            </div> -->
 
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
@@ -256,7 +266,59 @@
                 <p class="text-3xl text-black">Total</p>
                 <p class="text-3xl text-black">{{ total }} LKR</p>
               </div>
+              <div
+                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Cash</p>
+                <span>
+                  <CurrencyInput
+                    v-model="cash"
+                    :options="{ currency: 'EUR' }"
+                  />
+                  <span class="ml-2">LKR</span>
+                </span>
+              </div>
+              <div
+                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Balance</p>
+                <p>{{ balance }} LKR</p>
+              </div>
             </div>
+
+            <div class="w-full my-5">
+              <div class="relative flex items-center">
+                <!-- Input Field -->
+                <label for="coupon" class="sr-only">Coupon Code</label>
+                <input
+                  id="coupon"
+                  v-model="couponForm.code"
+                  type="text"
+                  placeholder="Enter Coupon Code"
+                  class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+
+                <template v-if="!appliedCoupon">
+                  <button
+                    type="button"
+                    @click="submitCoupon"
+                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Apply Coupon
+                  </button>
+                </template>
+                <template v-else>
+                  <button
+                    type="button"
+                    @click="removeCoupon"
+                    class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Remove Coupon
+                  </button>
+                </template>
+              </div>
+            </div>
+
             <div class="flex flex-col w-full space-y-8">
               <div
                 class="flex items-center justify-center w-full pt-8 space-x-8"
@@ -285,6 +347,7 @@
                   <img src="/images/bank-card.png" alt="" class="w-24" />
                 </div>
               </div>
+
               <div class="flex items-center justify-center w-full">
                 <button
                   @click="
@@ -317,8 +380,15 @@
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
+    :cash="cash"
+    :balance="balance"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
+
+  <SelectProductModel
+    v-model:open="isSelectModalOpen"
+    :products="products"
+  />
   <Footer />
 </template>
 <script setup>
@@ -328,10 +398,13 @@ import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import AlertModel from "@/Components/custom/AlertModel.vue";
 import { useForm, router } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
+import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
+import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
+import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
 
 const product = ref(null);
 const error = ref(null);
@@ -340,6 +413,9 @@ const isSuccessModalOpen = ref(false);
 const isAlertModalOpen = ref(false);
 const message = ref("");
 const appliedCoupon = ref(null);
+const cash = ref(0);
+const isSelectModalOpen = ref(false);
+// const balance = ref(0);
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
@@ -350,13 +426,14 @@ const handleModalOpenUpdate = (newValue) => {
 
 const props = defineProps({
   loggedInUser: Object,
+  products: Array,
 });
 
 const discount = ref(0);
 
 const customer = ref({
   name: "",
-  countryCode: "+94",
+  countryCode: "",
   contactNumber: "",
   email: "",
 });
@@ -409,6 +486,11 @@ const orderId = computed(() => {
 const submitOrder = async () => {
   // if (window.confirm("Are you sure you want to confirm the order?")) {
   console.log(products.value);
+  if (balance.value < 0) {
+    isAlertModalOpen.value = true;
+    message.value = "Cash is not enough";
+    return;
+  }
   try {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
@@ -443,21 +525,20 @@ const subtotal = computed(() => {
 });
 
 const totalDiscount = computed(() => {
-  const productDiscount = products.value
-    .reduce((total, item) => {
-      // Check if item has a discount
-      if (item.discount && item.discount > 0 && item.apply_discount == true) {
-        const discountAmount =
-          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
-          item.quantity;
-        return total + discountAmount;
-      }
-      return total; // If no discount, return total as-is
-    }, 0); // Ensures two decimal places
+  const productDiscount = products.value.reduce((total, item) => {
+    // Check if item has a discount
+    if (item.discount && item.discount > 0 && item.apply_discount == true) {
+      const discountAmount =
+        (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+        item.quantity;
+      return total + discountAmount;
+    }
+    return total; // If no discount, return total as-is
+  }, 0); // Ensures two decimal places
 
-  
-
-  const couponDiscount = appliedCoupon.value ? Number(appliedCoupon.value.discount) : 0;
+  const couponDiscount = appliedCoupon.value
+    ? Number(appliedCoupon.value.discount)
+    : 0;
 
   return (productDiscount + couponDiscount).toFixed(2);
 });
@@ -471,7 +552,12 @@ const total = computed(() => {
   return (subtotalValue - discountValue).toFixed(2);
 });
 
-
+const balance = computed(() => {
+  if (cash.value == null || cash.value === 0) {
+    return 0; // If cash.value is null or 0, return 0
+  }
+  return (parseFloat(cash.value) - parseFloat(total.value)).toFixed(2);
+});
 // Check for product or handle errors
 const form = useForm({
   barcode: "", // Form field for barcode
@@ -608,4 +694,37 @@ const removeDiscount = (id) => {
     }
   });
 };
+// const searchTerm = ref(form.barcode);
+
+// // Computed property for filtered product results
+// const searchResults = computed(() => {
+//   if (searchTerm.value === "") {
+//     return [];
+//   }
+
+//   let matches = 0;
+//   return props.products.filter((product) => {
+//     if (
+//       product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) &&
+//       matches < 10
+//     ) {
+//       matches++;
+//       return product;
+//     }
+//   });
+// });
+
+// // Watch for changes in the form barcode field and update the search term
+// watch(
+//   () => form.barcode,
+//   (newValue) => {
+//     searchTerm.value = newValue;
+//   }
+// );
+
+// // Method to select a product (or barcode)
+// const selectProduct = (productName) => {
+//   form.barcode = productName; // Set the selected product name to the barcode field
+//   searchTerm.value = ""; // Clear the search term after selection
+// };
 </script>

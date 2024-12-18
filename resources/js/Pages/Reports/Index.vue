@@ -51,7 +51,7 @@
              </div>
           </div>
           <!-- Statistic Boxes -->
-          <div class="grid w-full grid-cols-5 gap-4">
+          <div class="grid w-full grid-cols-6 gap-4">
              <!-- Total Sales -->
              <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#EC6116] w-full space-y-4 rounded-2xl bg-[#EC611666] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -81,6 +81,18 @@
                    <p class="text-3xl font-bold text-black">{{ netProfit }} LKR</p>
                 </div>
              </div>
+              <!-- Total Products -->
+              <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#16D0EC] w-full space-y-4 rounded-2xl bg-[#16D0EC66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center text-center justify-center">
+                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                    Total Discount
+                   </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                   <p class="text-3xl font-bold text-black">{{ totalDiscount }}  LKR</p>
+                </div>
+             </div>
              <!-- Average Transaction Value -->
              <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#F6F20E] w-full space-y-4 rounded-2xl bg-[#F6F20E66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -95,6 +107,7 @@
                    </p>
                 </div>
              </div>
+
              <!-- Number of Transactions -->
              <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#9E16EC] w-full space-y-4 rounded-2xl bg-[#9E16EC66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -107,19 +120,7 @@
                    <p class="text-3xl font-bold text-black">{{ totalTransactions }}</p>
                 </div>
              </div>
-             <!-- Total Products -->
-             <!-- <div
-                class="py-6 flex flex-col justify-center items-center border-2 border-[#16D0EC] w-full space-y-4 rounded-2xl bg-[#16D0EC66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
-                <div class="flex flex-col items-center text-center justify-center">
-                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
-                      Total Number of
-                      Return Products
-                   </h2>
-                </div>
-                <div class="flex flex-col items-center justify-center">
-                   <p class="text-3xl font-bold text-black">0000---</p>
-                </div>
-             </div> -->
+
              <!-- Total Customers -->
              <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#EC16D7] w-full space-y-4 rounded-2xl bg-[#EC16D766] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
@@ -218,6 +219,7 @@ const props = defineProps({
   averageTransactionValue: { type: Number, required: true },
   netProfit: { type: Number, required: true },
   totalTransactions: { type: Number, required: true },
+  totalDiscount: { type: Number, required: true },
   totalCustomer: { type: Number, required: true },
   startDate: { type: String, default: "" },
   endDate: { type: String, default: "" },
