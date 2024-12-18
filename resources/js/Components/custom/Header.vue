@@ -1,8 +1,11 @@
 <template>
     <div class="flex items-center justify-between w-full space-x-4 px-4 py-2">
       <!-- Logo -->
-      <Link href="/" :title="companyInfo.name" class="flex-shrink-0">
-        <img :src="companyInfo.logo" class="w-60 h-auto" alt="Logo" />
+      <Link href="/" :title="companyInfo && companyInfo.name ? companyInfo.name : 'Default Company Name'" class="flex-shrink-0">
+
+        <img :src="companyInfo && companyInfo.logo ? companyInfo.logo : '/images/placeholder.jpg'" class="w-60 h-auto" alt="Logo" />
+
+
       </Link>
       <!-- User Account Information -->
       <div class="flex space-x-8">
