@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('stock_transactions', function (Blueprint $table) {
-            DB::statement("ALTER TABLE `stock_transactions` MODIFY COLUMN `transaction_type` ENUM('Added', 'Deducted') AFTER `product_id`");
+            // DB::statement("ALTER TABLE `stock_transactions` MODIFY COLUMN `transaction_type` ENUM('Added', 'Deducted') AFTER `product_id`");
 
         });
     }

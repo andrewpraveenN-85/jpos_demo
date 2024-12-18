@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="$emit('update:open', false)">
+    <Dialog class="relative z-10" @close="closeModal">
       <!-- Modal Overlay -->
       <TransitionChild
         as="template"
@@ -26,17 +26,14 @@
           leave-to="opacity-0 scale-95"
         >
           <DialogPanel
-            class="bg-white border-1 border-gray-600 rounded-[20px] shadow-xl max-w-md w-full p-6 text-center"
+            class="bg-white border-1 border-gray-600 rounded-[20px] shadow-xl max-w-lg p-6 text-center"
           >
-            <div
-              class="flex flex-col items-center justify-start py-8 space-y-8 px-36"
-            >
-              <div class="w-5/6 py-12 space-y-16">
+            <div class="flex flex-col items-center justify-start">
+              <div class="w-6/7 py-12 space-y-16">
                 <div class="flex items-center space-x-4">
                   <!-- Search Input on the Left -->
-                  <div class="w-1/3">
+                  <div class="">
                     <input
-                      v-model="search"
                       @input="performSearch"
                       type="text"
                       placeholder="Search ..."
@@ -46,7 +43,90 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                  
+                  <!-- Filter Dropdowns on the Right -->
+                  <div class="flex justify-end w-full space-x-2">
+                    <select
+                      v-model="selectedCategory"
+                      @change="applyFilters"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
+                    >
+                      <option value="">Filter by Category</option>
+                      <option
+                        v-for="category in props.allcategories"
+                        :key="category.id"
+                        :value="category.id"
+                      >
+                        {{
+                          category.hierarchy_string
+                            ? category.hierarchy_string +
+                              " ----> " +
+                              category.name
+                            : category.name
+                        }}
+                      </option>
+                    </select>
+
+                    <!-- Stocks Filter -->
+                    <select
+                      v-model="stockStatus"
+                      @change="applyFilters"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
+                    >
+                      <option value="">Filter by Stock</option>
+                      <option value="in">In Stock</option>
+                      <option value="out">Out of Stock</option>
+                    </select>
+
+                    <!-- Price Filter -->
+                    <select
+                      v-model="sort"
+                      @change="applyFilters"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
+                    >
+                      <option value="">Filter by Price</option>
+                      <option value="asc">Ascending</option>
+                      <option value="desc">Descending</option>
+                    </select>
+
+                    <!-- Color Filter -->
+                    <select
+                      v-model="color"
+                      @change="applyFilters"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+                    >
+                      <option value="">Select Color</option>
+                      <option
+                        v-for="colorOption in props.colors"
+                        :key="colorOption.id"
+                        :value="colorOption.name"
+                      >
+                        {{ colorOption.name }}
+                      </option>
+                    </select>
+
+                    <!-- Size Filter -->
+                    <select
+                      v-model="size"
+                      @change="applyFilters"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
+                    >
+                      <option value="">Select Size</option>
+                      <option
+                        v-for="sizeOption in props.sizes"
+                        :key="sizeOption.id"
+                        :value="sizeOption.name"
+                      >
+                        {{ sizeOption.name }}
+                      </option>
+                    </select>
+
+                    <Link
+                      href="/products"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select"
+                    >
+                      Reset
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -54,12 +134,7 @@
             <div class="mt-6 space-x-4">
               <button
                 class="px-6 py-2 text-[15px] text-white bg-blue-600 rounded hover:bg-blue-700"
-                @click.prevent="
-                  () => {
-                    playClickSound();
-                    $emit('update:open', false);
-                  }
-                "
+                @click.prevent="closeModal"
               >
                 Import
               </button>
@@ -70,7 +145,8 @@
     </Dialog>
   </TransitionRoot>
 </template>
-  <script setup>
+
+<script setup>
 import {
   Dialog,
   DialogPanel,
@@ -98,4 +174,12 @@ const { open } = defineProps({
 
 // Form for handling deletion
 const form = useForm({});
+
+const search = ref("");
+
+// Close modal handler to emit the state change properly
+const closeModal = () => {
+  playClickSound();
+  emit("update:open", false); // Emit the updated value of "open"
+};
 </script>
