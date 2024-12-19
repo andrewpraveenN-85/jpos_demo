@@ -76,7 +76,7 @@ class CompanyInfoController extends Controller
         'phone' => 'nullable|string|max:15',
         'email' => 'nullable|email|max:255',
         'website' => 'nullable|url|max:255',
-        'logo' => 'nullable|image|max:2048', // Ensure the uploaded file is an image
+        'logo' => 'nullable|max:2048', // Ensure the uploaded file is an image
     ]);
 
     // Handle logo upload

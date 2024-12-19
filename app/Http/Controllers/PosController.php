@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Color;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\Size;
 use App\Models\StockTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,14 +25,21 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $products = Product::all();
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
 
         // Render the page for GET requests
         return Inertia::render('Pos/Index', [
-            'products' => $products,
             'product' => null,
             'error' => null,
             'loggedInUser' => Auth::user(),
+            'allcategories' => $allcategories,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
     }
 

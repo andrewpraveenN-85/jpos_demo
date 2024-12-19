@@ -81,7 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('sizes', SizeController::class);
     Route::resource('stock-transition', StockTransactionController::class);
 
-
+    Route::post('/api/products', [ProductController::class, 'fetchProducts']);
 
 });
 
