@@ -703,6 +703,11 @@ const removeDiscount = (id) => {
     }
   });
 };
+
+const handleSelectedProducts = (selectedProducts) => {
+  console.log("Selected Products:", selectedProducts);
+  // Handle the array of selected products here
+};
 // const searchTerm = ref(form.barcode);
 
 // // Computed property for filtered product results

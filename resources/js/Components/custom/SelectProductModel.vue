@@ -284,11 +284,11 @@ const selectProduct = (product) => {
   if (index === -1) {
     // Product does not exist, add it to the array
     selectedProducts.value.push(product);
-    console.log("Product added:", product);
+    // console.log("Product added:", product);
   } else {
     // Product exists, remove it from the array
     selectedProducts.value.splice(index, 1);
-    console.log("Product removed:", product);
+    // console.log("Product removed:", product);
   }
 };
 
