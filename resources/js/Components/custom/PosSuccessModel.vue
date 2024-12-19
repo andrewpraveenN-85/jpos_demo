@@ -237,9 +237,12 @@ const handlePrintReceipt = () => {
 <body>
     <div class="receipt-container">
         <div class="header">
-            <h1>${companyInfo.value.name}</h1>
-            <p>${companyInfo.value.address}</p>
-            <p>${companyInfo.value.phone} | ${companyInfo.value.email}</p>
+         <h1>{{ companyInfo.value.name || '' }}</h1>
+    <p>{{ companyInfo.value.address || '' }}</p>
+    <p>
+      {{ companyInfo.value.phone || '' }} |
+      {{ companyInfo.value.email || '' }}
+    </p>
         </div>
         <div class="section">
             <div class="info-row">
