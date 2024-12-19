@@ -50,6 +50,8 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('demo'),
             ]);
         }
+
+        
         
         // $this->call([
         //     ColorSeeder::class,

@@ -97,7 +97,11 @@
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
               <!-- <span class="flex">
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
-                <img @click="isSelectModalOpen = true" src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2 cursor-pointer" />
+                <img
+                  @click="isSelectModalOpen = true"
+                  src="/images/selectpsoduct.svg"
+                  class="w-6 h-6 ml-2 cursor-pointer"
+                />
               </span> -->
             </div>
 
@@ -385,10 +389,12 @@
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
-  <!-- <SelectProductModel
+  <SelectProductModel
     v-model:open="isSelectModalOpen"
-    :products="products"
-  /> -->
+    :allcategories="allcategories"
+    :colors="colors"
+    :sizes="sizes"
+  />
   <Footer />
 </template>
 <script setup>
@@ -425,8 +431,10 @@ const handleModalOpenUpdate = (newValue) => {
 };
 
 const props = defineProps({
-  loggedInUser: Object,
-  products: Array,
+  loggedInUser: Object, // Using backend product name to avoid messing with selected products
+  allcategories: Array,
+  colors: Array,
+  sizes: Array,
 });
 
 const discount = ref(0);
@@ -677,6 +685,7 @@ const handleScannerInput = (event) => {
 // Attach the keypress event listener when the component is mounted
 onMounted(() => {
   document.addEventListener("keypress", handleScannerInput);
+  console.log(props.products);
 });
 
 const applyDiscount = (id) => {

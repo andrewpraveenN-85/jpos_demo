@@ -17,6 +17,65 @@ use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
+
+    public function test(Request $request)
+    {
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
+        return Inertia::render('Products/index2', [
+            'categories' => $allcategories
+        ]);
+    }
+
+    public function fetchProducts(Request $request)
+    {
+        $query = $request->input('search');
+        $sortOrder = $request->input('sort');
+        $selectedColor = $request->input('color');
+        $selectedSize = $request->input('size');
+        $stockStatus = $request->input('stockStatus');
+        $selectedCategory = $request->input('selectedCategory');
+
+        $productsQuery = Product::with('category', 'color', 'size', 'supplier')
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where(function ($subQuery) use ($query) {
+                    $subQuery->where('name', 'like', "%{$query}%")
+                        ->orWhere('code', 'like', "%{$query}%");
+                });
+            })
+            ->when($selectedColor, function ($queryBuilder) use ($selectedColor) {
+                $queryBuilder->whereHas('color', function ($colorQuery) use ($selectedColor) {
+                    $colorQuery->where('name', $selectedColor);
+                });
+            })
+            ->when($selectedSize, function ($queryBuilder) use ($selectedSize) {
+                $queryBuilder->whereHas('size', function ($sizeQuery) use ($selectedSize) {
+                    $sizeQuery->where('name', $selectedSize);
+                });
+            })
+            ->when(in_array($sortOrder, ['asc', 'desc']), function ($queryBuilder) use ($sortOrder) {
+                $queryBuilder->orderBy('selling_price', $sortOrder);
+            })
+            ->when($stockStatus, function ($queryBuilder) use ($stockStatus) {
+                if ($stockStatus === 'in') {
+                    $queryBuilder->where('stock_quantity', '>', 0);
+                } elseif ($stockStatus === 'out') {
+                    $queryBuilder->where('stock_quantity', '<=', 0);
+                }
+            })
+            ->when($selectedCategory, function ($queryBuilder) use ($selectedCategory) {
+                $queryBuilder->where('category_id', $selectedCategory);
+            });
+
+        $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
+
+        return response()->json([
+            'products' => $products,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */

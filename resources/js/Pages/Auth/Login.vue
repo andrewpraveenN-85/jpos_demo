@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import AuthenticationCard from "@/Components/AuthenticationCard.vue";
 import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
 import Checkbox from "@/Components/Checkbox.vue";
@@ -8,6 +8,13 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import logo from "@/assets/logo.png";
+import { computed } from "vue";
+
+// Get the page properties using usePage()
+const page = usePage();
+
+// Access the companyInfo from the page props
+const companyInfo = computed(() => page.props.companyInfo);
 
 defineProps({
   canResetPassword: Boolean,
