@@ -392,6 +392,9 @@
     :orderId="orderId"
     :cash="cash"
     :balance="balance"
+    :subTotal="subtotal"
+    :totalDiscount="totalDiscount"
+    :total="total"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
