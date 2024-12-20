@@ -141,12 +141,12 @@
                         'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg',
                         product.stock_quantity > 0
                           ? selectedProducts.find((p) => p.id === product.id)
-                            ? 'border-green-600 hover:-translate-y-4'
-                            : 'border-black hover:-translate-y-4'
-                          : 'border-red-600 pointer-events-none',
+                            ? 'border-green-600 hover:-translate-y-4 cursor-pointer'
+                            : 'border-black hover:-translate-y-4 cursor-pointer'
+                          : 'border-red-600 cursor-not-allowed',
                       ]"
                     >
-                      <div class="cursor-pointer">
+                      <div class="">
                         <img
                           :src="
                             product.image
