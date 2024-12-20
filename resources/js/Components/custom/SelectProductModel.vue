@@ -11,7 +11,9 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 transition-opacity bg-opacity-75" />
+        <div
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+        />
       </TransitionChild>
 
       <!-- Modal Content -->
