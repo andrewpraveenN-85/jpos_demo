@@ -63,6 +63,24 @@
                   class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              <div class="text-black">
+                <select
+                  required
+                  v-model="employee_id"
+                  id="employee_id"
+                  class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="" disabled selected>Select an Employee</option>
+                  <option
+                    v-for="employee in allemployee"
+                    :key="employee.id"
+                    :value="employee.id"
+                  >
+                    {{ employee.name }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
           <div
@@ -82,6 +100,7 @@
                 Scan Barcode
               </button>
             </div> -->
+
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -95,14 +114,14 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <!-- <span class="flex">
+              <span class="flex">
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
                 <img
                   @click="isSelectModalOpen = true"
                   src="/images/selectpsoduct.svg"
                   class="w-6 h-6 ml-2 cursor-pointer"
                 />
-              </span> -->
+              </span>
             </div>
 
             <div
@@ -381,6 +400,7 @@
     :open="isSuccessModalOpen"
     @update:open="handleModalOpenUpdate"
     :products="products"
+    :employee="employee"
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
@@ -394,6 +414,7 @@
     :allcategories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    @selected-products="handleSelectedProducts"
   />
   <Footer />
 </template>
@@ -433,6 +454,7 @@ const handleModalOpenUpdate = (newValue) => {
 const props = defineProps({
   loggedInUser: Object, // Using backend product name to avoid messing with selected products
   allcategories: Array,
+  allemployee: Array,
   colors: Array,
   sizes: Array,
 });
@@ -445,6 +467,8 @@ const customer = ref({
   contactNumber: "",
   email: "",
 });
+
+const employee_id = ref("");
 
 const selectedPaymentMethod = ref("cash");
 
@@ -503,6 +527,7 @@ const submitOrder = async () => {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
       products: products.value,
+      employee_id: employee_id.value,
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
@@ -568,6 +593,7 @@ const balance = computed(() => {
 });
 // Check for product or handle errors
 const form = useForm({
+  employee_id: "",
   barcode: "", // Form field for barcode
 });
 
@@ -705,9 +731,25 @@ const removeDiscount = (id) => {
 };
 
 const handleSelectedProducts = (selectedProducts) => {
-  console.log("Selected Products:", selectedProducts);
-  // Handle the array of selected products here
+  selectedProducts.forEach((fetchedProduct) => {
+    const existingProduct = products.value.find(
+      (item) => item.id === fetchedProduct.id
+    );
+
+    if (existingProduct) {
+      // If the product exists, increment its quantity
+      existingProduct.quantity += 1;
+    } else {
+      // If the product doesn't exist, add it with a default quantity
+      products.value.push({
+        ...fetchedProduct,
+        quantity: 1,
+        apply_discount: false, // Default additional attribute
+      });
+    }
+  });
 };
+
 // const searchTerm = ref(form.barcode);
 
 // // Computed property for filtered product results
