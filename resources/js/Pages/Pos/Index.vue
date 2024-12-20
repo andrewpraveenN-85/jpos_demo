@@ -86,20 +86,6 @@
           <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
-            <!-- <div class="flex flex-col items-center w-full space-y-4">
-              <input
-                type="text"
-                v-model="form.barcode"
-                placeholder="Enter Barcode"
-                class="w-2/3 px-4 py-3 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                @click="submitBarcode"
-                class="px-6 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none"
-              >
-                Scan Barcode
-              </button>
-            </div> -->
 
             <img
               src="/images/Fading wheel.gif"
