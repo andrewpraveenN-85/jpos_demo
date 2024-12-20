@@ -11,6 +11,7 @@ use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Size;
 use App\Models\StockTransaction;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,8 @@ class PosController extends Controller
         });
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
+        $allemployee = Employee::orderBy('created_at', 'desc')->get();
+
 
         // Render the page for GET requests
         return Inertia::render('Pos/Index', [
@@ -38,6 +41,7 @@ class PosController extends Controller
             'error' => null,
             'loggedInUser' => Auth::user(),
             'allcategories' => $allcategories,
+            'allemployee' => $allemployee,
             'colors' => $colors,
             'sizes' => $sizes,
         ]);
@@ -85,6 +89,7 @@ class PosController extends Controller
 
     public function submit(Request $request)
     {
+
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
@@ -146,6 +151,7 @@ class PosController extends Controller
             // Create the sale record
             $sale = Sale::create([
                 'customer_id' => $customer ? $customer->id : null, // Nullable customer_id
+                'employee_id' => $request->input('employee_id'),
                 'user_id' => $request->input('userId'), // Logged-in user ID
                 'order_id' => $request->input('orderId'),
                 'total_amount' => $totalAmount, // Total amount of the sale
