@@ -14,7 +14,7 @@
         :src="
           companyInfo && companyInfo.logo
             ? companyInfo.logo
-            : '/images/placeholder.jpg'
+            : '/images/jaan_logo.jpg'
         "
         class="w-60 h-auto"
         alt="Logo"
