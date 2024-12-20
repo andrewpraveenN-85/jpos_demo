@@ -63,6 +63,24 @@
                   class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              <div class="text-black">
+                <select
+                  required
+                  v-model="employee_id"
+                  id="employee_id"
+                  class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="" disabled selected>Select an Employee</option>
+                  <option
+                    v-for="employee in allemployee"
+                    :key="employee.id"
+                    :value="employee.id"
+                  >
+                    {{ employee.name }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
           <div
@@ -82,6 +100,7 @@
                 Scan Barcode
               </button>
             </div> -->
+
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -381,6 +400,7 @@
     :open="isSuccessModalOpen"
     @update:open="handleModalOpenUpdate"
     :products="products"
+    :employee="employee"
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
@@ -434,6 +454,7 @@ const handleModalOpenUpdate = (newValue) => {
 const props = defineProps({
   loggedInUser: Object, // Using backend product name to avoid messing with selected products
   allcategories: Array,
+  allemployee: Array,
   colors: Array,
   sizes: Array,
 });
@@ -446,6 +467,8 @@ const customer = ref({
   contactNumber: "",
   email: "",
 });
+
+const employee_id = ref("");
 
 const selectedPaymentMethod = ref("cash");
 
@@ -504,6 +527,7 @@ const submitOrder = async () => {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
       products: products.value,
+      employee_id: employee_id.value,
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
@@ -569,6 +593,7 @@ const balance = computed(() => {
 });
 // Check for product or handle errors
 const form = useForm({
+  employee_id: "",
   barcode: "", // Form field for barcode
 });
 

@@ -335,8 +335,8 @@ const closeModal = (triggerImport = false) => {
 
   if (triggerImport) {
     emit("selected-products", selectedProducts.value);
-    selectedProducts.value = [];
   }
+  selectedProducts.value = [];
 };
 const fetchProducts = async (url = "/api/products") => {
   loading.value = true;
