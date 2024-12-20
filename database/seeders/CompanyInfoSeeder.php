@@ -22,7 +22,7 @@ class CompanyInfoSeeder extends Seeder
             'phone' => '0112456789',
             'email' => 'info@jaannetwork.com',
             'website' => 'https://jaannetwork.com',
-            'logo' => '/images/jaan_logo.png.jpg',
+            'logo' => '/images/jaan_logo.jpg',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

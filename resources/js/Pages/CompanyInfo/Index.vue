@@ -101,7 +101,7 @@
       <!-- Display Current Logo -->
       <img
         v-if="form.logo"
-        :src="`/${form.logo}`"
+        :src="`${form.logo}`"
         alt="companyInfo logo"
         class="rounded-lg"
       />
