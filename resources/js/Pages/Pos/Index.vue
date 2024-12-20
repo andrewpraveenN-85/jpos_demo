@@ -95,14 +95,14 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <!-- <span class="flex">
+              <span class="flex">
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
                 <img
                   @click="isSelectModalOpen = true"
                   src="/images/selectpsoduct.svg"
                   class="w-6 h-6 ml-2 cursor-pointer"
                 />
-              </span> -->
+              </span>
             </div>
 
             <div
@@ -394,6 +394,7 @@
     :allcategories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    @selected-products="handleSelectedProducts"
   />
   <Footer />
 </template>
@@ -705,9 +706,25 @@ const removeDiscount = (id) => {
 };
 
 const handleSelectedProducts = (selectedProducts) => {
-  console.log("Selected Products:", selectedProducts);
-  // Handle the array of selected products here
+  selectedProducts.forEach((fetchedProduct) => {
+    const existingProduct = products.value.find(
+      (item) => item.id === fetchedProduct.id
+    );
+
+    if (existingProduct) {
+      // If the product exists, increment its quantity
+      existingProduct.quantity += 1;
+    } else {
+      // If the product doesn't exist, add it with a default quantity
+      products.value.push({
+        ...fetchedProduct,
+        quantity: 1,
+        apply_discount: false, // Default additional attribute
+      });
+    }
+  });
 };
+
 // const searchTerm = ref(form.barcode);
 
 // // Computed property for filtered product results

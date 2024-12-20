@@ -134,12 +134,16 @@
                     <div
                       v-for="product in products.data"
                       :key="product.id"
-                      @click="selectProduct(product)"
+                      @click="
+                        product.stock_quantity > 0 && selectProduct(product)
+                      "
                       :class="[
-                        'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg hover:-translate-y-4',
-                        selectedProducts.find((p) => p.id === product.id)
-                          ? 'border-green-600'
-                          : 'border-black',
+                        'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg',
+                        product.stock_quantity > 0
+                          ? selectedProducts.find((p) => p.id === product.id)
+                            ? 'border-green-600 hover:-translate-y-4'
+                            : 'border-black hover:-translate-y-4'
+                          : 'border-red-600 pointer-events-none',
                       ]"
                     >
                       <div class="cursor-pointer">
@@ -233,7 +237,7 @@
                     </div>
                     <button
                       class="px-6 py-2 text-[15px] text-white bg-blue-600 rounded hover:bg-blue-700"
-                      @click.prevent="closeModal"
+                      @click.prevent="closeModal(true)"
                     >
                       Import
                     </button>
@@ -308,7 +312,7 @@ const playClickSound = () => {
   clickSound.play();
 };
 
-const emit = defineEmits(["update:open"]);
+const emit = defineEmits(["update:open", "selected-products"]);
 
 // Props for the modal
 const { open, allcategories, colors, sizes } = defineProps({
@@ -325,11 +329,15 @@ const { open, allcategories, colors, sizes } = defineProps({
 const form = useForm({});
 
 // Close modal handler to emit the state change properly
-const closeModal = () => {
+const closeModal = (triggerImport = false) => {
   playClickSound();
-  emit("update:open", false); // Emit the updated value of "open"
-};
+  emit("update:open", false); 
 
+  if (triggerImport) {
+    emit("selected-products", selectedProducts.value);
+    selectedProducts.value = [];
+  }
+};
 const fetchProducts = async (url = "/api/products") => {
   loading.value = true;
   try {
