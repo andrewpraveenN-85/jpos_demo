@@ -1,6 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
-// import 'remixicon/fonts/remixicon.css';
+import 'remixicon/fonts/remixicon.css';
 
 
 import { createApp, h } from 'vue';

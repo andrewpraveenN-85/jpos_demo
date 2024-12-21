@@ -14,7 +14,7 @@
 
   <!-- DataTables Buttons CSS -->
 
-  <link rel="stylesheet" href="/css/remixicon.css" integrity="sha512-6p+GTq7fjTHD/sdFPWHaFoALKeWOU9f9MPBoPnvJEWBkGS4PKVVbCpMps6IXnTiXghFbxlgDE8QRHc3MU91lJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- <link rel="stylesheet" href="/css/remixicon.css" integrity="sha512-6p+GTq7fjTHD/sdFPWHaFoALKeWOU9f9MPBoPnvJEWBkGS4PKVVbCpMps6IXnTiXghFbxlgDE8QRHc3MU91lJg==" crossorigin="anonymous" referrerpolicy="no-referrer"> -->
   <link rel="stylesheet" href="/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="/css/buttons.dataTables.min.css">
   {{-- <link rel="stylesheet" href="/css/app.css"> --}}
