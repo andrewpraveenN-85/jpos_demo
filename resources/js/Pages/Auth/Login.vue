@@ -51,7 +51,7 @@ const submit = () => {
         <!-- <img src="./assetes/images/logo.png" class="w-[180px] h-[100px]" /> -->
         <!-- <img :src="logo" alt="Logo" class="w-[180px] h-[100px]" /> -->
 
-        <img :src="companyInfo && companyInfo.logo ? companyInfo.logo : '/images/placeholder.jpg'" class="w-[180px] h-[100px]" alt="Logo" />
+        <img :src="companyInfo && companyInfo.logo ? companyInfo.logo : '/images/jaan_logo.jpg'" class="w-[180px] h-[100px]" alt="Logo" />
       </div>
       <div class="w-full max-w-md p-8 space-y-8 tracking-wider bg-black">
         <h2 class="text-3xl font-bold text-center text-white roboto-regular">

@@ -11,7 +11,9 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 transition-opacity bg-opacity-75" />
+        <div
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+        />
       </TransitionChild>
 
       <!-- Modal Content -->
@@ -141,12 +143,12 @@
                         'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg',
                         product.stock_quantity > 0
                           ? selectedProducts.find((p) => p.id === product.id)
-                            ? 'border-green-600 hover:-translate-y-4'
-                            : 'border-black hover:-translate-y-4'
-                          : 'border-red-600 pointer-events-none',
+                            ? 'border-green-600 hover:-translate-y-4 cursor-pointer'
+                            : 'border-black hover:-translate-y-4 cursor-pointer'
+                          : 'border-red-600 cursor-not-allowed',
                       ]"
                     >
-                      <div class="cursor-pointer">
+                      <div class="">
                         <img
                           :src="
                             product.image
