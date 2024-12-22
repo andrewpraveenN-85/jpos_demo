@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\StockTransaction;
+use App\Traits\GeneratesUniqueCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +18,7 @@ use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
+    use GeneratesUniqueCode;
 
     public function test(Request $request)
     {
@@ -201,6 +203,7 @@ class ProductController extends Controller
             'stock_quantity' => 'nullable|integer|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
+            'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -211,6 +214,10 @@ class ProductController extends Controller
                 $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
                 $path = $request->file('image')->storeAs('products', $fileName, 'public');
                 $validated['image'] = 'storage/' . $path;
+            }
+
+            if (empty($validated['barcode'])) {
+                $validated['barcode'] = $this->generateUniqueCode(12);
             }
 
             // Create the product
