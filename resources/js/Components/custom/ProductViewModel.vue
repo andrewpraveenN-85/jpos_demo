@@ -53,7 +53,7 @@
                 <div class="flex flex-col justify-between w-1/2 h-full">
                   <div class="flex items-center justify-between">
                     <!-- Product Name -->
-                    <p class="text-3xl font-bold text-black">
+                    <p class="text-3xl font-bold text-black w-full break-words">
                       {{ selectedProduct.name }}
 
                       <span
