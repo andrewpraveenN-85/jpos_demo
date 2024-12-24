@@ -234,13 +234,39 @@
             <div class="text-container">
               <p class="title">Company Info</p>
               <p class="description">
-                Effortlessly manage coupons with options for additions, deductions, and returns—all
-                in one centralized platform.
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
               </p>
             </div>
           </div>
         </div>
       </Link>
+
+
+      <Link href="/employees" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#e02f82]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/employee.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Employees</p>
+              <p class="description">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
+
+
+
     </div>
   </div>
 

@@ -35,7 +35,13 @@ class ReportController extends Controller
             $salesQuery->whereBetween('sale_date', [$startDate, $endDate]);
         }
 
-        $sales = $salesQuery->orderBy('sale_date', 'desc')->get();
+        $sales = $salesQuery
+        ->with('employee')
+        ->orderBy('sale_date', 'desc')
+        ->get();
+
+
+ 
 
 
 
@@ -70,23 +76,35 @@ class ReportController extends Controller
             }
         }
 
-        // // Display the totals by payment method
-        // foreach ($paymentMethodTotals as $method => $total) {
-        //     echo "Payment Method: {$method}, Total Amount: {$total} <br>";
-        // }
+
+        $employeeSalesSummary = []; // Initialize an array to store employee sales summary
+
+        foreach ($sales as $item) {
+            $employee = $item->employee; // Access the related employee via the relationship
+
+            // Skip the iteration if the employee is null
+            if ($employee === null) {
+                continue;
+            }
+
+
+            if (!isset($employeeSalesSummary[$employee->name])) {
+                $employeeSalesSummary[$employee->name] = [
+                    'Employee Name' => $employee->name,
+                    'Total Sales Amount' => 0,
+                ];
+            }
+
+
+            $discount = $item->discount ?? 0;
+            $netAmount = $item->total_amount - $discount;
+
+
+            $employeeSalesSummary[$employee->name]['Total Sales Amount'] += $netAmount;
+        }
 
 
 
-        //  foreach ($categorySales as $category => $total) {
-        //      echo "Category: $category, Total Sales Amount: $total <br>";
-        //  }
-
-        // foreach ($sales as $sale) {
-
-        //             foreach ($sale->saleItems as $item) {
-        //                 echo "- Product: {$item->product->category->name} ";
-        //             }
-        //         }
 
         // Calculate totals based on filtered sales
         $totalSaleAmount = $sales->sum('total_amount');
@@ -114,7 +132,8 @@ class ReportController extends Controller
             'averageTransactionValue' => round($averageTransactionValue, 2), // Round to 2 decimals
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'categorySales' => $categorySales
+            'categorySales' => $categorySales,
+            'employeeSalesSummary' => $employeeSalesSummary,
         ]);
     }
 

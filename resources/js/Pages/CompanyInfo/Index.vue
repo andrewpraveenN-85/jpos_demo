@@ -37,7 +37,7 @@
                 <p v-if="form.errors.name" class="text-red-500 text-sm mt-1">{{ form.errors.name }}</p>
               </div>
 
-              <!-- <div class="flex flex-col">
+              <div class="flex flex-col">
                 <label for="address" class="text-xl font-medium text-gray-700">Company Address</label>
                 <input
                   id="address"
@@ -91,7 +91,41 @@
                   :class="{'border-red-500': form.errors.website}"
                 />
                 <p v-if="form.errors.website" class="text-red-500 text-sm mt-1">{{ form.errors.website }}</p>
-              </div> -->
+              </div>
+
+
+
+  <div class="w-full md:w-6/12">
+    <label class="block text-sm font-medium text-white"> Logo:</label>
+    <div class="mt-2">
+      <!-- Display Current Logo -->
+      <img
+        v-if="form.logo"
+        :src="`${form.logo}`"
+        alt="companyInfo logo"
+        class="rounded-lg"
+      />
+      <p v-else class="text-sm text-gray-500">No logo available</p>
+    </div>
+
+    <!-- File Input -->
+    <input
+      type="file"
+      id="logo"
+      @change="handleImageUpload"
+      class="w-full px-4 py-2 mt-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+    />
+
+    <!-- Error Message -->
+    <span v-if="form.errors.logo" class="mt-2 text-red-500">
+      {{ form.errors.logo }}
+    </span>
+  </div>
+
+
+
+
+
 
 
 
@@ -122,11 +156,7 @@
   import Footer from "@/Components/custom/Footer.vue";
   import Banner from "@/Components/Banner.vue";
 
-  // Define props
-//   const props = defineProps({
-//     companyInfo: Array,
 
-//   });
 
   const { companyInfo } = defineProps({
     companyInfo: Object,
@@ -134,26 +164,37 @@
 
   const form = useForm({
     name: "",
-    // address: "",
-    // phone: "",
-    // email: "",
-    // website: "",
-    // logo: null,
+    address: "",
+    phone: "",
+    email: "",
+    website: "",
+    logo: null,
   });
 
-
+// Handle file input for the image upload
+const handleImageUpload = (event) => {
+  form.logo = event.target.files[0];
+};
 
   // Watch for selectedCompanyInfo prop and update form values accordingly
   watch(
   () => companyInfo,
   (newValue) => {
     if (newValue) {
-      form.name = newValue.name || '';
-      // Add other fields here like form.address = newValue.address || '';
+        form.name = newValue.name || "";
+        form.address = newValue.address || "";
+        form.phone = newValue.phone || "";
+        form.email = newValue.email || "";
+        form.website = newValue.website || "";
+        form.logo = newValue.logo || null;
+    } else {
+      form.reset(); // Reset form if no companyInfo selected
     }
+
   },
   { immediate: true }
 );
+
 
 
   // Handle form submission

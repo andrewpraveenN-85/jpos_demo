@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, GeneratesUniqueCode,SoftDeletes;
+    use HasFactory, GeneratesUniqueCode, SoftDeletes;
     protected $fillable = [
         'category_id',
         'supplier_id',

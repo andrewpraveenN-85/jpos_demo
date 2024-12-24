@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->string('name')->nullable()->change();
-            $table->dropUnique(['email']);
+        Schema::table('sales', function (Blueprint $table) {
+            $table->unsignedBigInteger('employee_id')->nullable()->after('customer_id');
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            // $table->string('name')->nullable(false)->change();
-            // $table->unique('email');
+        Schema::table('sales', function (Blueprint $table) {
+            $table->dropColumn('employee_id');
         });
     }
 };

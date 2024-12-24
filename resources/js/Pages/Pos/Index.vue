@@ -63,25 +63,30 @@
                   class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              <div class="text-black">
+                <select
+                  required
+                  v-model="employee_id"
+                  id="employee_id"
+                  class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="" disabled selected>Select an Employee</option>
+                  <option
+                    v-for="employee in allemployee"
+                    :key="employee.id"
+                    :value="employee.id"
+                  >
+                    {{ employee.name }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
           <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
-            <!-- <div class="flex flex-col items-center w-full space-y-4">
-              <input
-                type="text"
-                v-model="form.barcode"
-                placeholder="Enter Barcode"
-                class="w-2/3 px-4 py-3 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                @click="submitBarcode"
-                class="px-6 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none"
-              >
-                Scan Barcode
-              </button>
-            </div> -->
+
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -95,10 +100,14 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <!-- <span class="flex">
+              <span class="flex">
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
-                <img @click="isSelectModalOpen = true" src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2 cursor-pointer" />
-              </span> -->
+                <img
+                  @click="isSelectModalOpen = true"
+                  src="/images/selectpsoduct.svg"
+                  class="w-6 h-6 ml-2 cursor-pointer"
+                />
+              </span>
             </div>
 
             <div
@@ -126,6 +135,42 @@
                 </button>
               </div>
             </div>
+
+            <!-- <div class="max-w-xs relative space-y-3">
+              <label for="search" class="text-gray-900">
+                Type the product name to search
+              </label>
+
+              <input
+                v-model="form.barcode"
+                id="search"
+                type="text"
+                placeholder="Enter BarCode Here!"
+                class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              <ul
+                v-if="searchResults.length"
+                class="w-full rounded bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10"
+              >
+                <li class="px-1 pt-1 pb-2 font-bold border-b border-gray-200">
+                  Showing {{ searchResults.length }} results
+                </li>
+                <li
+                  v-for="product in searchResults"
+                  :key="product.id"
+                  @click="selectProduct(product.name)"
+                  class="cursor-pointer hover:bg-gray-100 p-1"
+                >
+                  {{ product.name }}
+                </li>
+              </ul>
+
+              <p v-if="form.barcode" class="text-lg pt-2 absolute">
+                You have selected:
+                <span class="font-semibold">{{ form.barcode }}</span>
+              </p>
+            </div> -->
 
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
@@ -341,17 +386,25 @@
     :open="isSuccessModalOpen"
     @update:open="handleModalOpenUpdate"
     :products="products"
+    :employee="employee"
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
     :cash="cash"
     :balance="balance"
+    :subTotal="subtotal"
+    :totalDiscount="totalDiscount"
+    :total="total"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
-  <!-- <SelectProductModel
+  <SelectProductModel
     v-model:open="isSelectModalOpen"
-  /> -->
+    :allcategories="allcategories"
+    :colors="colors"
+    :sizes="sizes"
+    @selected-products="handleSelectedProducts"
+  />
   <Footer />
 </template>
 <script setup>
@@ -361,12 +414,13 @@ import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import AlertModel from "@/Components/custom/AlertModel.vue";
 import { useForm, router } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
+import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
 
 const product = ref(null);
 const error = ref(null);
@@ -387,7 +441,11 @@ const handleModalOpenUpdate = (newValue) => {
 };
 
 const props = defineProps({
-  loggedInUser: Object,
+  loggedInUser: Object, // Using backend product name to avoid messing with selected products
+  allcategories: Array,
+  allemployee: Array,
+  colors: Array,
+  sizes: Array,
 });
 
 const discount = ref(0);
@@ -398,6 +456,8 @@ const customer = ref({
   contactNumber: "",
   email: "",
 });
+
+const employee_id = ref("");
 
 const selectedPaymentMethod = ref("cash");
 
@@ -456,6 +516,7 @@ const submitOrder = async () => {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
       products: products.value,
+      employee_id: employee_id.value,
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
@@ -521,6 +582,7 @@ const balance = computed(() => {
 });
 // Check for product or handle errors
 const form = useForm({
+  employee_id: "",
   barcode: "", // Form field for barcode
 });
 
@@ -638,6 +700,7 @@ const handleScannerInput = (event) => {
 // Attach the keypress event listener when the component is mounted
 onMounted(() => {
   document.addEventListener("keypress", handleScannerInput);
+  console.log(props.products);
 });
 
 const applyDiscount = (id) => {
@@ -655,4 +718,58 @@ const removeDiscount = (id) => {
     }
   });
 };
+
+const handleSelectedProducts = (selectedProducts) => {
+  selectedProducts.forEach((fetchedProduct) => {
+    const existingProduct = products.value.find(
+      (item) => item.id === fetchedProduct.id
+    );
+
+    if (existingProduct) {
+      // If the product exists, increment its quantity
+      existingProduct.quantity += 1;
+    } else {
+      // If the product doesn't exist, add it with a default quantity
+      products.value.push({
+        ...fetchedProduct,
+        quantity: 1,
+        apply_discount: false, // Default additional attribute
+      });
+    }
+  });
+};
+
+// const searchTerm = ref(form.barcode);
+
+// // Computed property for filtered product results
+// const searchResults = computed(() => {
+//   if (searchTerm.value === "") {
+//     return [];
+//   }
+
+//   let matches = 0;
+//   return props.products.filter((product) => {
+//     if (
+//       product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) &&
+//       matches < 10
+//     ) {
+//       matches++;
+//       return product;
+//     }
+//   });
+// });
+
+// // Watch for changes in the form barcode field and update the search term
+// watch(
+//   () => form.barcode,
+//   (newValue) => {
+//     searchTerm.value = newValue;
+//   }
+// );
+
+// // Method to select a product (or barcode)
+// const selectProduct = (productName) => {
+//   form.barcode = productName; // Set the selected product name to the barcode field
+//   searchTerm.value = ""; // Clear the search term after selection
+// };
 </script>

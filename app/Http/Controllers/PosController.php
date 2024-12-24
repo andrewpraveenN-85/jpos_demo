@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Color;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\Size;
 use App\Models\StockTransaction;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +26,24 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
+        $allemployee = Employee::orderBy('created_at', 'desc')->get();
+
+
         // Render the page for GET requests
         return Inertia::render('Pos/Index', [
             'product' => null,
             'error' => null,
             'loggedInUser' => Auth::user(),
+            'allcategories' => $allcategories,
+            'allemployee' => $allemployee,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
     }
 
@@ -40,7 +57,9 @@ class PosController extends Controller
             'barcode' => 'required',
         ]);
 
-        $product = Product::where('barcode', $request->barcode)->first();
+        $product = Product::where('barcode', $request->barcode)
+            ->orWhere('code', $request->barcode)
+            ->first();
 
         return response()->json([
             'product' => $product,
@@ -70,6 +89,7 @@ class PosController extends Controller
 
     public function submit(Request $request)
     {
+
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
@@ -131,6 +151,7 @@ class PosController extends Controller
             // Create the sale record
             $sale = Sale::create([
                 'customer_id' => $customer ? $customer->id : null, // Nullable customer_id
+                'employee_id' => $request->input('employee_id'),
                 'user_id' => $request->input('userId'), // Logged-in user ID
                 'order_id' => $request->input('orderId'),
                 'total_amount' => $totalAmount, // Total amount of the sale

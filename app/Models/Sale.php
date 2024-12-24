@@ -11,6 +11,7 @@ class Sale extends Model
 
     protected $fillable = [
         'customer_id',
+        'employee_id',
         'user_id',
         'order_id',
         'total_amount',
@@ -37,7 +38,10 @@ class Sale extends Model
         return $this->hasMany(SaleItem::class);
     }
 
-   
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id','id');
+    }
 
 
 }
