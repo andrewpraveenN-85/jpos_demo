@@ -262,24 +262,6 @@
                   </div>
                 </div>
 
-                <div class="w-full">
-                  <label
-                    for="barcode"
-                    class="block text-sm font-medium text-gray-300"
-                    >Barcode</label
-                  >
-                  <input
-                    type="text"
-                    id="barcode"
-                    v-model="form.barcode"
-                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                    placeholder="Scan barcode"
-                  />
-                  <span v-if="form.errors.barcode" class="mt-2 text-red-500">
-                    {{ form.errors.barcode }}
-                  </span>
-                </div>
-
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
@@ -401,6 +383,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
+import { ref, computed, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const playClickSound = () => {
