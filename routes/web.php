@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\StockTransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -66,9 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::resource('company-info', CompanyInfoController::class)->name('companyInfo.index');
     Route::get('/company-info', [CompanyInfoController::class, 'index'])->name('companyInfo.index');
-    Route::post('/company-info/{company}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');
-
-
+    Route::post('/company-info/{companyInfo}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');
 
 
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
@@ -81,9 +80,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('colors', ColorController::class);
     Route::resource('coupons', CouponController::class);
     Route::resource('sizes', SizeController::class);
+    Route::resource('employees', EmployeeController::class);
     Route::resource('stock-transition', StockTransactionController::class);
 
-
+    Route::post('/api/products', [ProductController::class, 'fetchProducts']);
 
 });
 

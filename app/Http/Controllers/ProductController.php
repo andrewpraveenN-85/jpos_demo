@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\Size;
 use App\Models\Color;
@@ -8,13 +9,75 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\StockTransaction;
+use App\Traits\GeneratesUniqueCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
+    use GeneratesUniqueCode;
+
+    public function test(Request $request)
+    {
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
+        return Inertia::render('Products/index2', [
+            'categories' => $allcategories
+        ]);
+    }
+
+    public function fetchProducts(Request $request)
+    {
+        $query = $request->input('search');
+        $sortOrder = $request->input('sort');
+        $selectedColor = $request->input('color');
+        $selectedSize = $request->input('size');
+        $stockStatus = $request->input('stockStatus');
+        $selectedCategory = $request->input('selectedCategory');
+
+        $productsQuery = Product::with('category', 'color', 'size', 'supplier')
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where(function ($subQuery) use ($query) {
+                    $subQuery->where('name', 'like', "%{$query}%")
+                        ->orWhere('code', 'like', "%{$query}%");
+                });
+            })
+            ->when($selectedColor, function ($queryBuilder) use ($selectedColor) {
+                $queryBuilder->whereHas('color', function ($colorQuery) use ($selectedColor) {
+                    $colorQuery->where('name', $selectedColor);
+                });
+            })
+            ->when($selectedSize, function ($queryBuilder) use ($selectedSize) {
+                $queryBuilder->whereHas('size', function ($sizeQuery) use ($selectedSize) {
+                    $sizeQuery->where('name', $selectedSize);
+                });
+            })
+            ->when(in_array($sortOrder, ['asc', 'desc']), function ($queryBuilder) use ($sortOrder) {
+                $queryBuilder->orderBy('selling_price', $sortOrder);
+            })
+            ->when($stockStatus, function ($queryBuilder) use ($stockStatus) {
+                if ($stockStatus === 'in') {
+                    $queryBuilder->where('stock_quantity', '>', 0);
+                } elseif ($stockStatus === 'out') {
+                    $queryBuilder->where('stock_quantity', '<=', 0);
+                }
+            })
+            ->when($selectedCategory, function ($queryBuilder) use ($selectedCategory) {
+                $queryBuilder->where('category_id', $selectedCategory);
+            });
+
+        $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
+
+        return response()->json([
+            'products' => $products,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +88,7 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
-        $selectedCategory = $request->input('selectedCategory'); 
+        $selectedCategory = $request->input('selectedCategory');
 
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
@@ -126,7 +189,12 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50',
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('products')->whereNull('deleted_at'),
+            ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -135,6 +203,7 @@ class ProductController extends Controller
             'stock_quantity' => 'nullable|integer|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
+            'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -145,6 +214,10 @@ class ProductController extends Controller
                 $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
                 $path = $request->file('image')->storeAs('products', $fileName, 'public');
                 $validated['image'] = 'storage/' . $path;
+            }
+
+            if (empty($validated['barcode'])) {
+                $validated['barcode'] = $this->generateUniqueCode(12);
             }
 
             // Create the product
@@ -185,7 +258,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50',
+            'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -310,7 +383,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
-            'code' => 'string|max:50',
+            'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'numeric|min:0',
@@ -434,14 +507,4 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
-
-
-
-
-
-
-
-
-
-
 }

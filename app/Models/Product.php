@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, GeneratesUniqueCode,SoftDeletes;
+    use HasFactory, GeneratesUniqueCode, SoftDeletes;
     protected $fillable = [
         'category_id',
         'supplier_id',
@@ -26,15 +26,15 @@ class Product extends Model
         'image',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
-        // Automatically generate a unique code when creating an order
-        static::creating(function ($model) {
-            $model->barcode = $model->generateUniqueCode(12);
-        });
-    }
+    //     // Automatically generate a unique code when creating an order
+    //     static::creating(function ($model) {
+    //         $model->barcode = $model->generateUniqueCode(12);
+    //     });
+    // }
 
     public function category()
     {

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\CompanyInfo;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,10 +35,19 @@ class HandleInertiaRequests extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function share(Request $request): array
+    public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            //
+
+            'companyInfo' => fn() => CompanyInfo::first()
+            ? CompanyInfo::first()->only( 'name',
+            'address',
+            'phone',
+            'email',
+            'website',
+            'logo',)
+            : null,
         ]);
     }
+
 }

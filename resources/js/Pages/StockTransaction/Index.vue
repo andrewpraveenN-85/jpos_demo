@@ -139,7 +139,7 @@
                   {{ stock.transaction_date || "N/A" }}
                 </td>
                 <td class="p-4    border-gray-200">
-                  {{ stock.supplier.name || "N/A" }}
+                 {{ stock.product.supplier?.name  || "N/A" }}
                 </td>
               </tr>
             </tbody>
