@@ -124,7 +124,7 @@
               >
                 <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
                 <td class="p-4 font-bold border-gray-200">
-                  {{ stock.product.name || "N/A" }}
+                  {{ stock.product?.name || "N/A" }}
                 </td>
                 <td class="p-4 border-gray-200">
                   <span
