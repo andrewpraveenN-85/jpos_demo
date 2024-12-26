@@ -86,7 +86,7 @@
           >
             <thead>
               <tr
-                class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
+                class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[12px] text-white border-b border-blue-700"
               >
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   #
@@ -95,18 +95,24 @@
                   Product Name
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Transaction Type
+                  Transaction Type & Date
                 </th>
 
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   Quantity
                 </th>
 
-                <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Transaction Date
-                </th>
+                <!-- <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                    Transaction Date
+                 </th> -->
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   Supplier
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Reason
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Reason Add
                 </th>
               </tr>
             </thead>
@@ -121,16 +127,44 @@
                   {{ stock.product?.name || "N/A" }}
                 </td>
                 <td class="p-4 border-gray-200">
-                  {{ stock.transaction_type || "N/A" }}
+                  <span
+                    :class="{
+                      'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-300':
+                        stock.transaction_type === 'Added',
+                      'bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-300':
+                        stock.transaction_type === 'Deducted',
+                      'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-300':
+                        stock.transaction_type === 'Sold',
+                      'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300':
+                        stock.transaction_type === 'Deleted' ||
+                        !stock.transaction_type,
+                    }"
+                    class="font-medium me-2 px-2.5 py-0.5 rounded"
+                  >
+                    {{ stock.transaction_type || "N/A" }}
+                  </span>
+
+                  <br />
+                  {{ stock.transaction_date || "N/A" }}
                 </td>
                 <td class="p-4 font-bold border-gray-200">
                   {{ stock.quantity || "N/A" }}
                 </td>
-                <td class="p-4 font-bold border-gray-200">
-                  {{ stock.transaction_date || "N/A" }}
-                </td>
+
                 <td class="p-4 border-gray-200">
-                  {{ stock.product?.supplier?.name || "N/A" }}
+                  {{ stock?.product?.supplier?.name || "N/A" }}
+                </td>
+                <td class="p-4 font-bold border-gray-200">
+                  {{ stock.reason || "N/A" }}
+                </td>
+
+                <td class="p-4 border-gray-200">
+                  <button
+                    class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+                    @click="openEditModal(stock)"
+                  >
+                    Add
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -147,21 +181,37 @@
     </div>
   </div>
 
+  <StockUpdateModel
+    :stocks="allStockTransactions"
+    :selected-stock="selectedStock"
+    v-model:open="isEditModalOpen"
+  />
   <Footer />
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
 import { Head, Link } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
-
+import StockUpdateModel from "@/Components/custom/StockTransResonModel.vue";
 import Banner from "@/Components/Banner.vue";
+import { HasRole } from "@/Utils/Permissions";
 
 defineProps({
   allStockTransactions: Array,
   totalStockTransactions: Number,
 });
+const form = useForm({});
+
+const isEditModalOpen = ref(false);
+const selectedStock = ref(null);
+
+const openEditModal = (stock) => {
+  selectedStock.value = stock;
+  isEditModalOpen.value = true;
+};
 
 $(document).ready(function () {
   let table = $("#TransitionTable").DataTable({

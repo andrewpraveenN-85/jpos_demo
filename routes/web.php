@@ -83,6 +83,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::resource('stock-transition', StockTransactionController::class);
 
+
+    // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');
+    // Route::post('/stock-transition', [PosController::class, 'getProduct'])->name('pos.getProduct');
+
+
+
+
+
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
 
 });
