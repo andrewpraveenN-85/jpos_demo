@@ -1,11 +1,68 @@
+<style>
+/* General DataTables Pagination Container Style */
+.dataTables_wrapper .dataTables_paginate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Style the filter container */
+#stockQtyTbl_filter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 16px; /* Add spacing below the filter */
+}
+
+/* Style the label and input field inside the filter */
+#stockQtyTbl_filter label {
+  font-size: 17px;
+  color: #000000; /* Match text color of the table header */
+  display: flex;
+  align-items: center;
+}
+
+/* Style the input field */
+#stockQtyTbl_filter input[type="search"] {
+  font-weight: 400;
+  padding: 9px 15px;
+  font-size: 14px;
+  color: #000000cc;
+  border: 1px solid rgb(209 213 219);
+  border-radius: 5px;
+  background: #fff;
+  outline: none;
+  transition: all 0.5s ease;
+}
+#stockQtyTbl_filter input[type="search"]:focus {
+  outline: none; /* Removes the default outline */
+  border: 1px solid #4b5563;
+  box-shadow: none; /* Removes any focus box-shadow */
+}
+
+#stockQtyTbl_filter {
+  float: left;
+}
+
+.dataTables_wrapper {
+  margin-bottom: 10px;
+}
+</style>
+
+
+
+
+
+
+
+
 <template>
     <Head title="Reports" />
        <Banner />
        <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36">
           <!-- Include the Header -->
           <Header />
-
-
           <div class="w-full py-12 space-y-16">
              <div class="flex items-center justify-between">
                 <div class="flex items-center justify-center space-x-4">
@@ -131,72 +188,124 @@
              <!-- <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4">
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
                       Sales by Category
                    </h2>
 
                    <Doughnut :data="chartData2" :options="chartOptions2" />
                 </div>
-             </div> -->
-
-
+                </div> -->
              <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4">
-                      Employee Sales
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
+                     Top Employee Sales
                    </h2>
                    <Doughnut :data="chartData4" :options="chartOptions4" />
                 </div>
-
-
-
-
-
-
-
-
              </div>
-
-
-
              <!-- Chart 3 -->
              <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4">Selling Product</h2>
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">Top Selling Product</h2>
                    <Pie :data="chartData" :options="chartOptions" />
                 </div>
              </div>
              <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4">
-                      Sales By Payment Method
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
+                    Top  Sales By Payment Method
                    </h2>
                    <!-- Render Doughnut Chart -->
                    <Doughnut :data="chartData1" :options="chartOptions1" />
                 </div>
              </div>
           </div>
-
-          <div class="w-full h-full space-x-4">
-
-          <!-- Charts Section -->
-          <div class="w-full h-full  ">
-            <div class="flex flex-col justify-between items-center w-100 bg-white border-4 border-black rounded-xl h-[500px]">
+          <div class="flex items-center justify-center w-full h-full space-x-4">
+             <!-- Chart 1 -->
+             <!-- <div
+                class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                    <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4">Products Stock</h2>
-                    <Bar :data="chartData5" :options="chartOptions5" />
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
+                      Sales by Category
+                   </h2>
+
+                   <Doughnut :data="chartData2" :options="chartOptions2" />
                 </div>
-            </div>
-        </div>
+                </div> -->
+                <div
+    class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
+    <div class="chart-container w-full h-full relative">
+        <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12"> Top Products Stock Chart</h2>
+        <Doughnut :data="chartData5" :options="chartOptions5" />
+    </div>
 </div>
 
 
-
-
-
+             <!-- Chart 3 -->
+             <div
+                class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px]">
+                <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Top Products Stock Table</h2>
+                <div class="overflow-x-auto">
+                   <table
+                      id="stockQtyTbl"
+                      class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
+                      >
+                      <thead>
+                         <tr
+                            class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[14px] text-white border-b border-blue-700"
+                            >
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                               #
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                                 Name
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                                 QTY
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  first-line:">
+                                Selling Price (LKR)
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                                Discount (%)
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                                Retail Value
+                            </th>
+                         </tr>
+                      </thead>
+                      <tbody class="text-[12px] font-normal">
+                         <tr
+                            v-for=" (product ,index) in products" :key="product.id"
+                            class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
+                            >
+                            <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
+                            <td class="p-4 font-bold  border-gray-200">
+                               {{ product.name || "N/A" }}
+                            </td>
+                            <td class="p-4    border-gray-200">
+                               {{ product.stock_quantity || "N/A" }}
+                            </td>
+                            <td class="p-4    border-gray-200">
+                               {{ product.selling_price || "N/A" }}
+                            </td>
+                            <td class="p-4    border-gray-200">
+                               {{ product.discount || "N/A" }}
+                            </td>
+                            <td class="p-4 border-gray-200">
+  {{ product.discount <= 100
+      ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+      : (product.selling_price - product.discount).toFixed(2) }}
+</td>
+                         </tr>
+                      </tbody>
+                   </table>
+                </div>
+             </div>
+          </div>
 
        </div>
        <Footer />
@@ -300,6 +409,7 @@
             },
         ],
     }));
+
 
     const chartOptions = {
         responsive: true,
@@ -426,75 +536,96 @@
 
 
 
-
-
-
-
-
-
     const sortedProductsStock = computed(() => {
-    return props.products.reduce((acc, product) => {
-        acc[product.name] = product.stock_quantity;
-        return acc;
-    }, {});
-});
+            return props.products.reduce((acc, product) => {
+                acc[product.name] = product.stock_quantity;
+                return acc;
+            }, {});
+        });
 
-// Bar Chart Data
-const chartData5 = computed(() => ({
-    labels: Object.keys(sortedProductsStock.value), // Product names
-    datasets: [
-        {
-            label: "Stock Quantity",
-            data: Object.values(sortedProductsStock.value), // Stock quantities
-            backgroundColor: [
-                "#28a745", "#ffc107", "#17a2b8", "#e83e8c", "#fd7e14",
-                "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF",
-                "#6610f2", "#6f42c1", "#dc3545", "#adb5bd", "#20c997",
-                "#ffc93c", "#6a0572", "#8ac926", "#ff595e", "#198754"
+        // Doughnut Chart Data
+        const chartData5 = computed(() => ({
+            labels: Object.keys(sortedProductsStock.value), // Product names
+            datasets: [
+                {
+                    label: "Stock Quantity",
+                    data: Object.values(sortedProductsStock.value), // Stock quantities
+                    backgroundColor: [
+                        "#28a745", "#ffc107", "#17a2b8", "#e83e8c", "#fd7e14",
+                        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF",
+                        "#6610f2", "#6f42c1", "#dc3545", "#adb5bd", "#20c997",
+                        "#ffc93c", "#6a0572", "#8ac926", "#ff595e", "#198754"
+                    ],
+                    borderColor: "#ffffff",
+                    borderWidth: 1,
+                },
             ],
-            borderColor: "#1E88E5",
-            borderWidth: 1,
-        },
-    ],
-}));
+        }));
 
-const chartOptions5 = {
-    responsive: true,
-    plugins: {
-        legend: {
-            display: true,
-            position: "top",
-        },
-        tooltip: {
-            callbacks: {
-                label: (context) => `${context.label}: ${context.raw} units`,
+        const chartOptions5 = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                    position: "bottom",
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => `${context.label}: ${context.raw} units`,
+                    },
+                },
             },
-        },
-    },
-    scales: {
-        x: {
-            title: {
-                display: true,
-                text: "Products",
+        };
+
+
+        $(document).ready(function () {
+    let table = $("#stockQtyTbl").DataTable({
+        dom: "Bfrtip",
+        buttons: [],
+        paging: false, // Disable pagination
+        buttons: [],
+        columnDefs: [
+            {
+                targets: 0, // Adjust the target column if needed
+                searchable: false,
+                orderable: false, // Disable sorting for this specific column
             },
+        ],
+        initComplete: function () {
+            let searchInput = $("div.dataTables_filter input");
+            searchInput.attr("placeholder", "Search ...");
+            searchInput.on("keypress", function (e) {
+                if (e.which == 13) {
+                    table.search(this.value).draw();
+                }
+            });
         },
-        y: {
-            beginAtZero: true,
-            title: {
-                display: true,
-                text: "Stock Quantity",
-            },
+        language: {
+            search: "",
         },
-    },
-};
+    });
+});
 
 
  </script>
  <style scoped>
  .chart-container {
- width: 100%;
- max-width: 800px;
- margin: 0 auto;
- padding: 20px;
- }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* Full width of the card */
+    height: calc(100% - 50px); /* Adjust height to leave space for the title */
+    position: relative;
+}
+
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.max-h-64 {
+  max-height: 16rem; /* Adjust the height to your preference */
+}
  </style>
