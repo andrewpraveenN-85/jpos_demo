@@ -1,27 +1,56 @@
 <template>
-  <input
-    ref="inputRef"
-    type="text"
-    class="w-40 text-right text-black px-6 pr-4 text-lg placeholder-gray-500 border border-gray-300 rounded-full"
-  />
-</template>
+    <div class="inline-block">
+      <input
+        ref="inputRef"
+        type="text"
+        :value="inputValue"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+        class="w-40 text-right text-black px-6   text-lg placeholder-gray-500 border border-gray-300 rounded-full"
+      />
+    </div>
+  </template>
 
-<script setup>
-import { useCurrencyInput } from 'vue-currency-input'
+  <script setup>
+  import { ref } from 'vue'
+  import { useCurrencyInput } from 'vue-currency-input'
 
-const props = defineProps({
-  modelValue: Number,
-  options: Object
-})
+  const props = defineProps({
+    modelValue: Number,
+    options: Object
+  })
 
-// Set options to hide the currency symbol and configure the input behavior
-const { inputRef } = useCurrencyInput({
-  currency: 'EUR',       // No currency symbol
-  hideCurrencySymbolOnFocus: true, // Explicitly hide currency symbol
-  currencyDisplay: 'hidden', // Display currency code
-  autoDecimalMode: true, // Automatically add decimals
-  precision: 2,         // Two decimal places
-  valueRange: { min: 0 }, // Optional: Disallow negative numbers
-  locale: 'en'          // Locale for formatting
-})
-</script>
+  // State to hold input value
+  const inputValue = ref(props.modelValue ?? '')
+
+  // Handle focus event to clear the input if the value is 0
+  const onFocus = () => {
+    if (inputValue.value === 0 || inputValue.value === '0.00') {
+      inputValue.value = ''
+    }
+  }
+
+  // Handle blur event to reset input to 0 if empty
+  const onBlur = () => {
+    if (inputValue.value === '' || inputValue.value === null) {
+      inputValue.value = 0
+    }
+  }
+
+  // Update the value on input
+  const onInput = (event) => {
+    inputValue.value = event.target.value
+  }
+
+  // Use the currency input hook
+  const { inputRef } = useCurrencyInput({
+    currency: 'LKR',
+    hideCurrencySymbolOnFocus: true,
+    currencyDisplay: 'hidden',
+    autoDecimalMode: true,
+    precision: 2,
+    valueRange: { min: 0 },
+    locale: 'en'
+  })
+  </script>

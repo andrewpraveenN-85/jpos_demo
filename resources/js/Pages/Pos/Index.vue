@@ -100,12 +100,12 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <span class="flex">
+              <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
                 <img
-                  @click="isSelectModalOpen = true"
+
                   src="/images/selectpsoduct.svg"
-                  class="w-6 h-6 ml-2 cursor-pointer"
+                  class="w-6 h-6 ml-2 "
                 />
               </span>
             </div>
