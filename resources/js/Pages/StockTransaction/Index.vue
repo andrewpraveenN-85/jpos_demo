@@ -67,11 +67,6 @@
         </p>
       </div>
 
-
-
-
-
-
       <div class="flex w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">
@@ -81,9 +76,7 @@
             Stock Transitions
           </p>
         </div>
-        <div class="flex justify-end w-full">
-
-        </div>
+        <div class="flex justify-end w-full"></div>
       </div>
       <template v-if="allStockTransactions && allStockTransactions.length > 0">
         <div class="overflow-x-auto">
@@ -95,27 +88,26 @@
               <tr
                 class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
               >
-              <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   #
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                    Product Name
+                  Product Name
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                    Transaction Type
-                 </th>
+                  Transaction Type
+                </th>
 
-                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                    Quantity
-                 </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Quantity
+                </th>
 
-                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                    Transaction Date
-                 </th>
-                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                    Supplier
-                 </th>
-
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Transaction Date
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Supplier
+                </th>
               </tr>
             </thead>
             <tbody class="text-[13px] font-normal">
@@ -124,22 +116,21 @@
                 :key="stock.id"
                 class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
               >
-
-              <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
-                <td class="p-4 font-bold  border-gray-200">
-                  {{ stock.product.name || "N/A" }}
+                <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
+                <td class="p-4 font-bold border-gray-200">
+                  {{ stock.product?.name || "N/A" }}
                 </td>
-                <td class="p-4    border-gray-200">
+                <td class="p-4 border-gray-200">
                   {{ stock.transaction_type || "N/A" }}
                 </td>
-                <td class="p-4 font-bold  border-gray-200">
+                <td class="p-4 font-bold border-gray-200">
                   {{ stock.quantity || "N/A" }}
                 </td>
-                <td class="p-4 font-bold  border-gray-200">
+                <td class="p-4 font-bold border-gray-200">
                   {{ stock.transaction_date || "N/A" }}
                 </td>
-                <td class="p-4    border-gray-200">
-                 {{ stock.product.supplier?.name  || "N/A" }}
+                <td class="p-4 border-gray-200">
+                  {{ stock.product.supplier?.name || "N/A" }}
                 </td>
               </tr>
             </tbody>
@@ -168,12 +159,9 @@ import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 
 defineProps({
-    allStockTransactions: Array,
+  allStockTransactions: Array,
   totalStockTransactions: Number,
 });
-
-
-
 
 $(document).ready(function () {
   let table = $("#TransitionTable").DataTable({
