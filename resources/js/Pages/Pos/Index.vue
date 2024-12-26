@@ -28,6 +28,65 @@
       </div>
       <div class="flex w-full gap-4">
         <div class="flex flex-col w-1/2">
+
+
+            <div class="p-4 w-full mx-auto border rounded-lg shadow-md mb-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4">
+      <h1 class="text-xl font-bold">
+        <span class="text-3xl font-bold tracking-wide text-black mb-4">Tables</span>
+      </h1>
+      <!-- Add More Tables Button -->
+      <button
+ @click="addTable"
+        class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 mr-2"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Add More Tables
+      </button>
+    </div>
+
+    <!-- Tables -->
+    <div class="grid grid-cols-3 gap-4">
+      <div
+        v-for="(table, index) in tables"
+        :key="table.id"
+        class="relative border rounded-lg p-4 text-center text-2xl text-black font-bold hover:bg-blue-100"
+      >
+        <div>Table</div>
+        <div>{{ table.number }}</div>
+        <button
+          @click="removeTable(index)"
+          class="absolute top-2 right-2 text-red-500 hover:text-red-700"
+        >
+          ✖
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
           <div class="flex flex-col w-full">
             <div class="p-16 space-y-8 bg-black shadow-lg rounded-3xl">
               <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
@@ -83,7 +142,7 @@
               </div>
             </div>
           </div>
-          <div
+          <!-- <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
 
@@ -94,7 +153,7 @@
             <p class="text-3xl text-black">
               Bar Code Scanner is in Progress...
             </p>
-          </div>
+          </div> -->
         </div>
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
@@ -431,7 +490,8 @@ const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
 const isSelectModalOpen = ref(false);
-// const balance = ref(0);
+const tables = ref([]); // State to manage tables
+const nextTableNumber = ref(1);
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
@@ -489,6 +549,20 @@ const decrementQuantity = (id) => {
   if (product && product.quantity > 1) {
     product.quantity -= 1;
   }
+};
+
+
+
+const addTable = () => {
+  tables.value.push({
+    id: Date.now(),
+    number: nextTableNumber.value,
+  });
+  nextTableNumber.value++;
+};
+
+const removeTable = (index) => {
+  tables.value.splice(index, 1);
 };
 
 // const orderId = computed(() => {
