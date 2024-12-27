@@ -521,8 +521,8 @@ const addTable = () => {
     number: nextTableNumber.value,
     orderId: generateOrderId(),
     products: [],
-    cash: 0,
-    balance: 0,
+    cash: 0.00,
+    balance: 0.00,
   };
   tables.value.push(newTable);
   nextTableNumber.value++;
@@ -561,8 +561,8 @@ const removeSelectedTable = () => {
       number: 1,
       orderId: generateOrderId(),
       products: [],
-      cash: 0,
-      balance: 0,
+      cash: 0.00,
+      balance: 0.00,
     };
     // Also update the table in the tables array
     tables.value[index] = selectedTable.value;
