@@ -92,7 +92,11 @@ const page = usePage();
 // Access the companyInfo from the page props
 const companyInfo = computed(() => page.props.companyInfo);
 
-//  console.log(companyInfo.name);
+if (companyInfo.value) {
+    console.log(companyInfo.value);
+} else {
+    console.log('companyInfo is undefined or null');
+}
 
 const handleClose = () => {
   console.log("Modal close prevented");
@@ -271,8 +275,8 @@ const handlePrintReceipt = () => {
               <div class="header">
          ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
 ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
-${(companyInfo?.value?.phone || companyInfo?.value?.email)
-  ? `<p>${companyInfo.value.phone || ''} | ${companyInfo.value.email || ''}</p>`
+${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email )
+  ? `<p>${companyInfo.value.phone || ''} | ${companyInfo.value.phone2 || ''}  ${companyInfo.value.email || ''}</p>`
   : ''}
 
         </div>
