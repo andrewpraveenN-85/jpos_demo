@@ -65,7 +65,7 @@
                   v-if="table.id === 'default'"
                   class="text-2xl text-black font-bold"
                 >
-                  Other Items
+                  Take Away
                 </div>
                 <div v-else>
                   <button
@@ -159,7 +159,7 @@
               <h2 class="text-5xl font-bold text-black">
                 {{
                   selectedTable?.id === "default"
-                    ? "Other Items"
+                    ? "Take Away"
                     : `Table ${selectedTable?.number - 1}`
                 }}
               </h2>
