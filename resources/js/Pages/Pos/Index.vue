@@ -30,11 +30,6 @@
         </div>
       </div>
       <div class="flex w-full gap-4">
-
-
-
-
-
         <div class="flex flex-col w-1/2">
           <div class="p-8 w-full border-4 border-black rounded-3xl mb-8">
             <!-- Header -->
@@ -56,42 +51,37 @@
 
             <!-- Tables -->
             <div class="grid grid-cols-4 gap-4">
-
-                <div
-
+              <div
                 v-for="(table, index) in tables"
                 :key="table.id"
                 :class="[
                   'w-full flex flex-col justify-center items-center rounded-xl px-2 py-6 border border-[#2563EB] text-center',
-                  table === selectedTable ? 'bg-blue-100' : '',
+                  table.id === selectedTable.id ? 'bg-blue-100' : '',
                   'hover:bg-blue-100',
                 ]"
                 @click="selectTable(table)"
+              >
+                <div
+                  v-if="table.id === 'default'"
+                  class="text-2xl text-black font-bold"
                 >
-
-                <div v-if="table.id === 'default'" class="text-2xl text-black font-bold">Other Items</div>
-                <div v-else>
-                    <button
-                  v-if="table.id !== 'default'"
-                  @click.stop="removeTable(index)"
-                  class=" ml-4 text-3xl   text-red-500 hover:text-red-700"
-                >
-                  ✖
-                </button>
-                  <div class="text-2xl text-black font-bold">Table</div>
-                  <div class="text-6xl text-black font-bold">{{ table.number - 1 }}</div>
-
-
-
+                  Other Items
                 </div>
-
-
-
+                <div v-else>
+                  <button
+                    v-if="table.id !== 'default'"
+                    @click.stop="removeTable(index)"
+                    class="ml-4 text-3xl text-red-500 hover:text-red-700"
+                  >
+                    ✖
+                  </button>
+                  <div class="text-2xl text-black font-bold">Table</div>
+                  <div class="text-6xl text-black font-bold">
+                    {{ table.number - 1 }}
+                  </div>
+                </div>
+              </div>
             </div>
-
-
-            </div>
-
           </div>
 
           <div class="flex flex-col w-full">
@@ -163,10 +153,6 @@
           </div> -->
         </div>
 
-
-
-
-
         <div class="flex w-1/2 h-full p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full mb-4">
@@ -186,69 +172,6 @@
                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
-
-            <!-- <div
-              class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl"
-            >
-              <div class="flex items-center justify-center w-3/4">
-                <label
-                  for="search"
-                  class="text-xl font-medium text-gray-800"
-                ></label>
-                <input
-                  v-model="form.barcode"
-                  id="search"
-                  type="text"
-                  placeholder="Enter BarCode Here!"
-                  class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div class="flex items-end justify-end w-1/4">
-                <button
-                  @click="submitBarcode"
-                  class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-r-xl"
-                >
-                  Enter
-                </button>
-              </div>
-            </div> -->
-
-            <!-- <div class="max-w-xs relative space-y-3">
-              <label for="search" class="text-gray-900">
-                Type the product name to search
-              </label>
-
-              <input
-                v-model="form.barcode"
-                id="search"
-                type="text"
-                placeholder="Enter BarCode Here!"
-                class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-
-              <ul
-                v-if="searchResults.length"
-                class="w-full rounded bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10"
-              >
-                <li class="px-1 pt-1 pb-2 font-bold border-b border-gray-200">
-                  Showing {{ searchResults.length }} results
-                </li>
-                <li
-                  v-for="product in searchResults"
-                  :key="product.id"
-                  @click="selectProduct(product.name)"
-                  class="cursor-pointer hover:bg-gray-100 p-1"
-                >
-                  {{ product.name }}
-                </li>
-              </ul>
-
-              <p v-if="form.barcode" class="text-lg pt-2 absolute">
-                You have selected:
-                <span class="font-semibold">{{ form.barcode }}</span>
-              </p>
-            </div> -->
-
             <div
               class="w-full text-center"
               v-if="!selectedTable || selectedTable.products.length === 0"
@@ -509,7 +432,8 @@ const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
 const isSelectModalOpen = ref(false);
-const tables = ref([
+// Load initial state from localStorage or use default values
+const savedTables = JSON.parse(localStorage.getItem("tables")) || [
   {
     id: "default",
     number: 1,
@@ -518,9 +442,31 @@ const tables = ref([
     cash: 0,
     balance: 0,
   },
-]);
-const nextTableNumber = ref(2);
-const selectedTable = ref(tables.value[0]);
+];
+const savedNextTableNumber =
+  JSON.parse(localStorage.getItem("nextTableNumber")) || 2;
+const savedSelectedTable =
+  JSON.parse(localStorage.getItem("selectedTable")) || savedTables[0];
+
+const tables = ref(savedTables);
+const nextTableNumber = ref(savedNextTableNumber);
+const selectedTable = ref(savedSelectedTable);
+
+watch(
+  tables,
+  (newTables) => {
+    localStorage.setItem("tables", JSON.stringify(newTables));
+  },
+  { deep: true }
+);
+
+watch(nextTableNumber, (newNextTableNumber) => {
+  localStorage.setItem("nextTableNumber", JSON.stringify(newNextTableNumber));
+});
+
+watch(selectedTable, (newSelectedTable) => {
+  localStorage.setItem("selectedTable", JSON.stringify(newSelectedTable));
+});
 
 // const tablesItems = ref([]);
 //
@@ -531,8 +477,8 @@ const addTable = () => {
     number: nextTableNumber.value,
     orderId: generateOrderId(),
     products: [],
-    cash: 0.00,
-    balance: 0.00,
+    cash: 0.0,
+    balance: 0.0,
   };
   tables.value.push(newTable);
   nextTableNumber.value++;
@@ -571,8 +517,8 @@ const removeSelectedTable = () => {
       number: 1,
       orderId: generateOrderId(),
       products: [],
-      cash: 0.00,
-      balance: 0.00,
+      cash: 0.0,
+      balance: 0.0,
     };
     // Also update the table in the tables array
     tables.value[index] = selectedTable.value;
@@ -957,24 +903,6 @@ const removeDiscount = (id) => {
 };
 
 const handleSelectedProducts = (selectedProducts) => {
-  // selectedProducts.forEach((fetchedProduct) => {
-  //   const existingProduct = products.value.find(
-  //     (item) => item.id === fetchedProduct.id
-  //   );
-
-  //   if (existingProduct) {
-  //     // If the product exists, increment its quantity
-  //     existingProduct.quantity += 1;
-  //   } else {
-  //     // If the product doesn't exist, add it with a default quantity
-  //     products.value.push({
-  //       ...fetchedProduct,
-  //       quantity: 1,
-  //       apply_discount: false, // Default additional attribute
-  //     });
-  //   }
-  // });
-
   if (!selectedTable.value) {
     console.error("No table selected");
     return;
@@ -998,38 +926,4 @@ const handleSelectedProducts = (selectedProducts) => {
     }
   });
 };
-
-// const searchTerm = ref(form.barcode);
-
-// // Computed property for filtered product results
-// const searchResults = computed(() => {
-//   if (searchTerm.value === "") {
-//     return [];
-//   }
-
-//   let matches = 0;
-//   return props.products.filter((product) => {
-//     if (
-//       product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) &&
-//       matches < 10
-//     ) {
-//       matches++;
-//       return product;
-//     }
-//   });
-// });
-
-// // Watch for changes in the form barcode field and update the search term
-// watch(
-//   () => form.barcode,
-//   (newValue) => {
-//     searchTerm.value = newValue;
-//   }
-// );
-
-// // Method to select a product (or barcode)
-// const selectProduct = (productName) => {
-//   form.barcode = productName; // Set the selected product name to the barcode field
-//   searchTerm.value = ""; // Clear the search term after selection
-// };
 </script>
