@@ -390,7 +390,7 @@
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
-    :cash="cash"
+    :cash="selectedTable.cash"
     :balance="balance"
     :subTotal="subtotal"
     :totalDiscount="totalDiscount"
