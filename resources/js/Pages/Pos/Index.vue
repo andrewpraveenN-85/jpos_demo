@@ -17,17 +17,78 @@
             PoS
           </p>
         </div>
-        <div class="flex items-center justify-between w-full space-x-4">
-          <p class="text-3xl font-bold tracking-wide text-black">
-            Order ID : #{{ orderId }}
+        <div class="flex items-center justify-end w-full space-x-4">
+          <p
+            v-if="selectedTable?.orderId"
+            class="text-3xl font-bold tracking-wide text-black"
+          >
+            Order ID : #{{ selectedTable.orderId }}
           </p>
-          <p class="text-3xl text-black cursor-pointer">
+          <!-- <p class="text-3xl text-black cursor-pointer">
             <i @click="refreshData" class="ri-restart-line"></i>
-          </p>
+          </p> -->
         </div>
       </div>
       <div class="flex w-full gap-4">
         <div class="flex flex-col w-1/2">
+          <div class="p-4 w-full mx-auto border rounded-lg shadow-md mb-8">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4">
+              <h1 class="text-xl font-bold">
+                <span class="text-3xl font-bold tracking-wide text-black mb-4"
+                  >Tables</span
+                >
+              </h1>
+              <!-- Add More Tables Button -->
+              <button
+                @click="addTable"
+                class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Add More Tables
+              </button>
+            </div>
+
+            <!-- Tables -->
+            <div class="grid grid-cols-3 gap-4">
+              <div
+                v-for="(table, index) in tables"
+                :key="table.id"
+                :class="[
+                  'relative border rounded-lg p-4 text-center text-2xl text-black font-bold',
+                  table === selectedTable ? 'bg-blue-100' : '',
+                  'hover:bg-blue-100',
+                ]"
+                @click="selectTable(table)"
+              >
+                <div v-if="table.id === 'default'">Other Items</div>
+                <div v-else>
+                  <div>Table</div>
+                  <div>{{ table.number - 1 }}</div>
+                </div>
+
+                <button
+                  v-if="table.id !== 'default'"
+                  @click.stop="removeTable(index)"
+                  class="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                >
+                  ✖
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div class="flex flex-col w-full">
             <div class="p-16 space-y-8 bg-black shadow-lg rounded-3xl">
               <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
@@ -83,7 +144,7 @@
               </div>
             </div>
           </div>
-          <div
+          <!-- <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
 
@@ -94,23 +155,29 @@
             <p class="text-3xl text-black">
               Bar Code Scanner is in Progress...
             </p>
-          </div>
+          </div> -->
         </div>
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
-            <div class="flex items-center justify-between w-full">
-              <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
-                <p class="text-xl text-blue-600 font-bold">User Manual</p>
-                <img
+            <div class="flex items-center justify-between w-full mb-4">
+              <h2 class="text-5xl font-bold text-black">
+                {{
+                  selectedTable?.id === "default"
+                    ? "Other Items"
+                    : `Table ${selectedTable?.number - 1}`
+                }}
+              </h2>
 
-                  src="/images/selectpsoduct.svg"
-                  class="w-6 h-6 ml-2 "
-                />
+              <span
+                class="flex cursor-pointer"
+                @click="isSelectModalOpen = true"
+              >
+                <p class="text-xl text-blue-600 font-bold">User Manual</p>
+                <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
 
-            <div
+            <!-- <div
               class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl"
             >
               <div class="flex items-center justify-center w-3/4">
@@ -134,7 +201,7 @@
                   Enter 
                 </button>
               </div>
-            </div>
+            </div> -->
 
             <!-- <div class="max-w-xs relative space-y-3">
               <label for="search" class="text-gray-900">
@@ -172,15 +239,17 @@
               </p>
             </div> -->
 
-            <div class="w-full text-center">
-              <p v-if="products.length === 0" class="text-2xl text-red-500">
-                No Products to show
-              </p>
+            <div
+              class="w-full text-center"
+              v-if="!selectedTable || selectedTable.products.length === 0"
+            >
+              <p class="text-2xl text-red-500">No Products to show</p>
             </div>
 
             <div
+              v-else
               class="flex items-center w-full py-4 border-b border-black"
-              v-for="item in products"
+              v-for="item in selectedTable.products"
               :key="item.id"
             >
               <div class="flex w-1/6">
@@ -281,7 +350,8 @@
                 <p class="text-xl text-black">Cash</p>
                 <span>
                   <CurrencyInput
-                    v-model="cash"
+                    v-if="selectedTable"
+                    v-model="selectedTable.cash"
                     :options="{ currency: 'EUR' }"
                   />
                   <span class="ml-2">LKR</span>
@@ -359,18 +429,16 @@
 
               <div class="flex items-center justify-center w-full">
                 <button
-                  @click="
-                    () => {
-                      submitOrder();
-                    }
-                  "
+                  @click="submitOrder"
                   type="button"
-                  :disabled="products.length === 0"
+                  :disabled="
+                    !selectedTable || selectedTable.products.length === 0
+                  "
                   :class="[
                     'w-full bg-black py-4 text-2xl font-bold tracking-wider text-center text-white uppercase rounded-xl',
-                    products.length === 0
-                      ? ' cursor-not-allowed'
-                      : ' cursor-pointer',
+                    !selectedTable || selectedTable.products.length === 0
+                      ? 'cursor-not-allowed'
+                      : 'cursor-pointer',
                   ]"
                 >
                   <i class="pr-4 ri-add-circle-fill"></i> Confirm Order
@@ -386,7 +454,6 @@
     :open="isSuccessModalOpen"
     @update:open="handleModalOpenUpdate"
     :products="products"
-    :employee="employee"
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
@@ -421,6 +488,7 @@ import axios from "axios";
 import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
 import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
+import { generateOrderId } from "@/Utils/Other.js";
 
 const product = ref(null);
 const error = ref(null);
@@ -431,12 +499,102 @@ const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
 const isSelectModalOpen = ref(false);
-// const balance = ref(0);
+const tables = ref([
+  {
+    id: "default",
+    number: 1,
+    orderId: generateOrderId(),
+    products: [],
+    cash: 0,
+    balance: 0,
+  },
+]);
+const nextTableNumber = ref(2);
+const selectedTable = ref(tables.value[0]);
+
+// const tablesItems = ref([]);
+//
+
+const addTable = () => {
+  const newTable = {
+    id: Date.now(),
+    number: nextTableNumber.value,
+    orderId: generateOrderId(),
+    products: [],
+    cash: 0.00,
+    balance: 0.00,
+  };
+  tables.value.push(newTable);
+  nextTableNumber.value++;
+
+  selectedTable.value = newTable;
+};
+
+const selectTable = (table) => {
+  selectedTable.value = table;
+};
+
+const removeTable = (index) => {
+  tables.value.splice(index, 1);
+
+  if (tables.value.length > 0) {
+    selectedTable.value = tables.value[tables.value.length - 1];
+  } else {
+    selectedTable.value = null;
+  }
+};
+
+const removeSelectedTable = () => {
+  if (!selectedTable.value) {
+    console.warn("No table is currently selected.");
+    return;
+  }
+
+  // Find the index of the selected table in the tables array
+  const index = tables.value.findIndex(
+    (table) => table.id === selectedTable.value.id
+  );
+
+  if (selectedTable.value.id === "default") {
+    selectedTable.value = {
+      id: "default",
+      number: 1,
+      orderId: generateOrderId(),
+      products: [],
+      cash: 0.00,
+      balance: 0.00,
+    };
+    // Also update the table in the tables array
+    tables.value[index] = selectedTable.value;
+    return;
+  }
+
+  if (index === -1) {
+    console.warn("Selected table not found in the tables array.");
+    return;
+  }
+
+  // Remove the selected table from the tables array
+  tables.value.splice(index, 1);
+
+  // Select the next table
+  if (tables.value.length > 0) {
+    // If there are tables left, select the next table (or the last one if the removed table was the last)
+    const nextIndex =
+      index >= tables.value.length ? tables.value.length - 1 : index;
+    selectedTable.value = tables.value[nextIndex];
+  } else {
+    // If no tables are left, clear the selection
+    selectedTable.value = null;
+  }
+};
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
   if (!newValue) {
-    refreshData();
+    removeSelectedTable();
+    cash.value = 0;
+    // refreshData();
   }
 };
 
@@ -469,7 +627,21 @@ const refreshData = () => {
 };
 
 const removeProduct = (id) => {
-  products.value = products.value.filter((item) => item.id !== id);
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
+
+  const initialLength = selectedTable.value.products.length;
+  selectedTable.value.products = selectedTable.value.products.filter(
+    (item) => item.id !== id
+  );
+
+  if (selectedTable.value.products.length < initialLength) {
+    console.log(`Product with ID ${id} removed successfully.`);
+  } else {
+    console.warn(`Product with ID ${id} not found in the selected table.`);
+  }
 };
 
 const removeCoupon = () => {
@@ -478,16 +650,34 @@ const removeCoupon = () => {
 };
 
 const incrementQuantity = (id) => {
-  const product = products.value.find((item) => item.id === id);
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
+
+  const product = selectedTable.value.products.find((item) => item.id === id);
   if (product) {
     product.quantity += 1;
+  } else {
+    console.error(`Product with ID ${id} not found in the selected table.`);
   }
 };
 
 const decrementQuantity = (id) => {
-  const product = products.value.find((item) => item.id === id);
-  if (product && product.quantity > 1) {
-    product.quantity -= 1;
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
+
+  const product = selectedTable.value.products.find((item) => item.id === id);
+  if (product) {
+    if (product.quantity > 1) {
+      product.quantity -= 1;
+    } else {
+      console.warn(`Product quantity for ID ${id} is already at the minimum.`);
+    }
+  } else {
+    console.error(`Product with ID ${id} not found in the selected table.`);
   }
 };
 
@@ -506,7 +696,7 @@ const orderId = computed(() => {
 
 const submitOrder = async () => {
   // if (window.confirm("Are you sure you want to confirm the order?")) {
-  console.log(products.value);
+  // console.log(products.value);
   if (balance.value < 0) {
     isAlertModalOpen.value = true;
     message.value = "Cash is not enough";
@@ -522,7 +712,7 @@ const submitOrder = async () => {
       orderId: orderId.value,
     });
     isSuccessModalOpen.value = true;
-    console.log(response.data); // Handle success
+    // console.log(response.data); // Handle success
   } catch (error) {
     if (error.response.status === 423) {
       isAlertModalOpen.value = true;
@@ -538,7 +728,11 @@ const submitOrder = async () => {
 // };
 
 const subtotal = computed(() => {
-  return products.value
+  if (!selectedTable.value) {
+    return "0.00"; // No table selected, subtotal is 0
+  }
+
+  return selectedTable.value.products
     .reduce(
       (total, item) => total + parseFloat(item.selling_price) * item.quantity,
       0
@@ -547,22 +741,26 @@ const subtotal = computed(() => {
 });
 
 const totalDiscount = computed(() => {
-  const productDiscount = products.value.reduce((total, item) => {
+  if (!selectedTable.value) {
+    return "0.00"; // No table selected, discount is 0
+  }
+
+  const productDiscount = selectedTable.value.products.reduce((total, item) => {
     // Check if item has a discount
-    if (item.discount && item.discount > 0 && item.apply_discount == true) {
+    if (item.discount && item.discount > 0 && item.apply_discount === true) {
       const discountAmount =
         (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
         item.quantity;
       return total + discountAmount;
     }
     return total; // If no discount, return total as-is
-  }, 0); // Ensures two decimal places
+  }, 0);
 
   const couponDiscount = appliedCoupon.value
     ? Number(appliedCoupon.value.discount)
     : 0;
 
-  return (productDiscount + couponDiscount).toFixed(2);
+  return (productDiscount + couponDiscount).toFixed(2); // Ensures two decimal places
 });
 
 const total = computed(() => {
@@ -574,12 +772,27 @@ const total = computed(() => {
   return (subtotalValue - discountValue).toFixed(2);
 });
 
+// const balance = computed(() => {
+//   if (cash.value == null || cash.value === 0) {
+//     return 0; // If cash.value is null or 0, return 0
+//   }
+//   return (parseFloat(cash.value) - parseFloat(total.value)).toFixed(2);
+// });
+
 const balance = computed(() => {
-  if (cash.value == null || cash.value === 0) {
-    return 0; // If cash.value is null or 0, return 0
+  if (!selectedTable.value) {
+    return 0; // Return 0 if no table is selected
   }
-  return (parseFloat(cash.value) - parseFloat(total.value)).toFixed(2);
+
+  if (selectedTable.value.cash == null || selectedTable.value.cash === 0) {
+    return 0; // If cash is null or 0, return 0
+  }
+
+  return (
+    parseFloat(selectedTable.value.cash) - parseFloat(total.value)
+  ).toFixed(2);
 });
+
 // Check for product or handle errors
 const form = useForm({
   employee_id: "",
@@ -700,28 +913,65 @@ const handleScannerInput = (event) => {
 // Attach the keypress event listener when the component is mounted
 onMounted(() => {
   document.addEventListener("keypress", handleScannerInput);
-  console.log(props.products);
+  // console.log(props.products);
 });
 
 const applyDiscount = (id) => {
-  products.value.forEach((product) => {
-    if (product.id === id) {
-      product.apply_discount = true;
-    }
-  });
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
+
+  const product = selectedTable.value.products.find((item) => item.id === id);
+  if (product) {
+    product.apply_discount = true;
+    console.log(`Discount applied to product with ID ${id}.`);
+  } else {
+    console.warn(`Product with ID ${id} not found in the selected table.`);
+  }
 };
 
 const removeDiscount = (id) => {
-  products.value.forEach((product) => {
-    if (product.id === id) {
-      product.apply_discount = false;
-    }
-  });
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
+
+  const product = selectedTable.value.products.find((item) => item.id === id);
+  if (product) {
+    product.apply_discount = false;
+    console.log(`Discount removed from product with ID ${id}.`);
+  } else {
+    console.warn(`Product with ID ${id} not found in the selected table.`);
+  }
 };
 
 const handleSelectedProducts = (selectedProducts) => {
+  // selectedProducts.forEach((fetchedProduct) => {
+  //   const existingProduct = products.value.find(
+  //     (item) => item.id === fetchedProduct.id
+  //   );
+
+  //   if (existingProduct) {
+  //     // If the product exists, increment its quantity
+  //     existingProduct.quantity += 1;
+  //   } else {
+  //     // If the product doesn't exist, add it with a default quantity
+  //     products.value.push({
+  //       ...fetchedProduct,
+  //       quantity: 1,
+  //       apply_discount: false, // Default additional attribute
+  //     });
+  //   }
+  // });
+
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
+
   selectedProducts.forEach((fetchedProduct) => {
-    const existingProduct = products.value.find(
+    const existingProduct = selectedTable.value.products.find(
       (item) => item.id === fetchedProduct.id
     );
 
@@ -730,7 +980,7 @@ const handleSelectedProducts = (selectedProducts) => {
       existingProduct.quantity += 1;
     } else {
       // If the product doesn't exist, add it with a default quantity
-      products.value.push({
+      selectedTable.value.products.push({
         ...fetchedProduct,
         quantity: 1,
         apply_discount: false, // Default additional attribute
