@@ -466,7 +466,7 @@ watch(nextTableNumber, (newNextTableNumber) => {
 
 watch(selectedTable, (newSelectedTable) => {
   localStorage.setItem("selectedTable", JSON.stringify(newSelectedTable));
-});
+},{ deep: true });
 
 // const tablesItems = ref([]);
 //
