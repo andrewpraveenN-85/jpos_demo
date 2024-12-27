@@ -30,8 +30,13 @@
         </div>
       </div>
       <div class="flex w-full gap-4">
+
+
+
+
+
         <div class="flex flex-col w-1/2">
-          <div class="p-4 w-full mx-auto border rounded-lg shadow-md mb-8">
+          <div class="p-8 w-full border-4 border-black rounded-3xl mb-8">
             <!-- Header -->
             <div class="flex items-center justify-between p-4">
               <h1 class="text-xl font-bold">
@@ -42,51 +47,51 @@
               <!-- Add More Tables Button -->
               <button
                 @click="addTable"
-                class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700"
+                class="flex items-center px-4 py-2 bg-blue-600 tracking-wide text-white text-xl font-semibold rounded-lg hover:bg-blue-700"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 mr-2"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
+                <p><i class="pr-4 ri-add-circle-fill"></i></p>
                 Add More Tables
               </button>
             </div>
 
             <!-- Tables -->
-            <div class="grid grid-cols-3 gap-4">
-              <div
+            <div class="grid grid-cols-4 gap-4">
+
+                <div
+
                 v-for="(table, index) in tables"
                 :key="table.id"
                 :class="[
-                  'relative border rounded-lg p-4 text-center text-2xl text-black font-bold',
+                  'w-full flex flex-col justify-center items-center rounded-xl px-2 py-6 border border-[#2563EB] text-center',
                   table === selectedTable ? 'bg-blue-100' : '',
                   'hover:bg-blue-100',
                 ]"
                 @click="selectTable(table)"
-              >
-                <div v-if="table.id === 'default'">Other Items</div>
-                <div v-else>
-                  <div>Table</div>
-                  <div>{{ table.number - 1 }}</div>
-                </div>
+                >
 
-                <button
+                <div v-if="table.id === 'default'" class="text-3xl text-black font-bold">Other Items</div>
+                <div v-else>
+                    <button
                   v-if="table.id !== 'default'"
                   @click.stop="removeTable(index)"
-                  class="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                  class=" ml-4 text-3xl   text-red-500 hover:text-red-700"
                 >
                   ✖
                 </button>
-              </div>
+                  <div class="text-2xl text-black font-bold">Table</div>
+                  <div class="text-6xl text-black font-bold">{{ table.number - 1 }}</div>
+
+
+
+                </div>
+
+
+
             </div>
+
+
+            </div>
+
           </div>
 
           <div class="flex flex-col w-full">
@@ -157,7 +162,12 @@
             </p>
           </div> -->
         </div>
-        <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
+
+
+
+
+
+        <div class="flex w-1/2 h-full p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full mb-4">
               <h2 class="text-5xl font-bold text-black">
