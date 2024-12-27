@@ -14,7 +14,7 @@
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
-            PoS
+            PoSS
           </p>
         </div>
         <div class="flex items-center justify-between w-full space-x-4">
