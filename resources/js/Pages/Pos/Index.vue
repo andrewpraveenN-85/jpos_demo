@@ -69,7 +69,7 @@
                 @click="selectTable(table)"
                 >
 
-                <div v-if="table.id === 'default'" class="text-3xl text-black font-bold">Other Items</div>
+                <div v-if="table.id === 'default'" class="text-2xl text-black font-bold">Other Items</div>
                 <div v-else>
                     <button
                   v-if="table.id !== 'default'"
