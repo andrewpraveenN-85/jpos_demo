@@ -198,7 +198,7 @@
              <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">
                      Top Employee Sales
                    </h2>
                    <Doughnut :data="chartData4" :options="chartOptions4" />
@@ -208,14 +208,14 @@
              <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">Top Selling Product</h2>
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Top Selling Product</h2>
                    <Pie :data="chartData" :options="chartOptions" />
                 </div>
              </div>
              <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
                 <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
+                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">
                     Top  Sales By Payment Method
                    </h2>
                    <!-- Render Doughnut Chart -->
@@ -236,18 +236,19 @@
                 </div>
                 </div> -->
                 <div
-    class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
-    <div class="chart-container w-full h-full relative">
-        <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12"> Top Products Stock Chart</h2>
-        <Doughnut :data="chartData5" :options="chartOptions5" />
-    </div>
-</div>
+                  class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
+                     <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2"> Top Products Stock Chart</h2>
+                     <div class="chart-container">
+                           <Doughnut :data="chartData5" :options="chartOptions5" />
+                     </div>
+                     
+               </div>
 
 
              <!-- Chart 3 -->
              <div
-                class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px]">
-                <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Top Products Stock Table</h2>
+                class=" bg-white border-4 border-black rounded-xl h-[500px]">
+                <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-4">Top Products Stock Table</h2>
                 <div class="overflow-x-auto">
                    <table
                       id="stockQtyTbl"
@@ -566,7 +567,7 @@
             responsive: true,
             plugins: {
                 legend: {
-                    display: false,
+                    display: true,
                     position: "bottom",
                 },
                 tooltip: {
@@ -615,8 +616,9 @@
     align-items: center;
     justify-content: center;
     width: 100%; /* Full width of the card */
-    height: calc(100% - 50px); /* Adjust height to leave space for the title */
+   
     position: relative;
+    overflow-y: scroll;
 }
 
 
