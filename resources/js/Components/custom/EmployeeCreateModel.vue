@@ -112,20 +112,30 @@
 
     <!-- Modal Buttons -->
     <div class="mt-6 space-x-4">
-      <button
-        class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-        type="submit"
-      >
-        Save
-      </button>
-      <button
-        class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-        type="button"
-        @click="closeModal"
-      >
-        Cancel
-      </button>
-    </div>
+                  <button
+                    @click="
+                      () => {
+                        playClickSound();
+                      }
+                    "
+                    class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                    type="submit"
+                  >
+                    Save
+                  </button>
+                  <button
+                    @click="
+                      () => {
+                        playClickSound();
+                        emit('update:open', false);
+                      }
+                    "
+                    class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                </div>
   </form>
 
 
@@ -153,7 +163,10 @@
   import { ref } from "vue";
   import { useForm } from "@inertiajs/vue3";
 
-
+const playClickSound = () => {
+    const clickSound = new Audio("/sounds/click-sound.mp3");
+    clickSound.play();
+  };
 
   const emit = defineEmits(["update:open"]);
 
