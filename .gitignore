@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 deploy.sh
 refresh_seed.sh
+merge-development.sh

@@ -131,7 +131,7 @@
                   @click="submitBarcode"
                   class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-r-xl"
                 >
-                  Enter
+                  Enter 
                 </button>
               </div>
             </div>

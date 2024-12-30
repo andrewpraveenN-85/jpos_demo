@@ -346,7 +346,7 @@
 
       <div class="flex space-x-2 pagination">
         <!-- Prev Button -->
-        <Link
+        <span
           v-if="products.links[0]"
           @click.prevent="navigateTo(products.links[0].url)"
           :class="[
@@ -355,10 +355,10 @@
           ]"
         >
           Previous
-        </Link>
+        </span>
 
         <!-- Pagination Links -->
-        <Link
+        <span
           v-for="(link, index) in products.links.slice(
             1,
             products.links.length - 1
@@ -367,10 +367,10 @@
           @click.prevent="navigateTo(link.url)"
           :class="['pagination-btn', { 'pagination-active': link.active }]"
           v-html="link.label"
-        ></Link>
+        ></span>
 
         <!-- Next Button -->
-        <Link
+        <span
           v-if="products.links[products.links.length - 1]"
           @click.prevent="
             navigateTo(products.links[products.links.length - 1].url)
@@ -384,7 +384,7 @@
           ]"
         >
           Next
-        </Link>
+        </span>
       </div>
     </div>
   </div>

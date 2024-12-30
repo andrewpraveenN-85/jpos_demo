@@ -363,6 +363,7 @@
                       emit('update:open', false);
                     }
                   "
+                  type="button"
                 >
                   Cancel
                 </button>
