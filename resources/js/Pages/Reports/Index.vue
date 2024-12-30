@@ -286,7 +286,7 @@
                 </div> -->
             <div
                 class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
-               
+
 
 
 
