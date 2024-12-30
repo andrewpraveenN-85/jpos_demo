@@ -189,12 +189,13 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => [
-                'required',
-                'string',
-                'max:50',
-                Rule::unique('products')->whereNull('deleted_at'),
-            ],
+            'code' => 'nullable|string|max:50',
+            // 'code' => [
+            //     'required',
+            //     'string',
+            //     'max:50',
+            //     Rule::unique('products')->whereNull('deleted_at'),
+            // ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -258,7 +259,9 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
+            'code' => 'nullable|string|max:50',
             // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
+            'barcode' => 'nullable|string|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -269,7 +272,6 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
         ]);
-
 
 
         try {
@@ -285,7 +287,9 @@ class ProductController extends Controller
 
             // Product::create($validated);
 
-
+            if (empty($validated['barcode'])) {
+                $validated['barcode'] = $this->generateUniqueCode(12);
+            }
 
             $product = Product::create($validated);
 
@@ -383,6 +387,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
+            'code' => 'nullable|string|max:50',
             // 'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
