@@ -204,11 +204,21 @@
 
             <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
-                <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
-                     Top Employee Sales
-                   </h2>
-                   <Doughnut :data="chartData4" :options="chartOptions4" />
+                <div class="chart-container w-full p-4">
+                    <!-- Header with Title and Button -->
+                    <div class="w-full flex justify-between items-center pb-4">
+                        <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-left">
+                            Top Employee Sales
+                        </h2>
+                        <button @click="downloadPDF"
+                            class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg">
+                            Download PDF
+                        </button>
+                    </div>
+                    <!-- Doughnut Chart -->
+                    <div class="w-full h-full flex justify-center items-center">
+                        <Doughnut :data="chartData4" :options="chartOptions4" />
+                    </div>
                 </div>
             </div>
 
@@ -219,19 +229,42 @@
             <!-- Chart 3 -->
             <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
-                <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">Top Selling Product</h2>
-                   <Pie :data="chartData" :options="chartOptions" />
+                <div class="chart-container w-full p-4">
+                    <div class="w-full flex justify-between items-center pb-4">
+                        <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-left">
+                            Product
+                        </h2>
+                        <button @click="downloadPDF2"
+                            class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg">
+                            Download PDF
+                        </button>
+                    </div>
+
+
+
+
+
+
+
+                    <Pie :data="chartData" :options="chartOptions" />
                 </div>
             </div>
             <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
-                <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
-                    Top  Sales By Payment Method
-                   </h2>
-                   <!-- Render Doughnut Chart -->
-                   <Doughnut :data="chartData1" :options="chartOptions1" />
+                <div class="chart-container w-full p-4">
+                    <div class="w-full flex justify-between items-center pb-4">
+                        <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-left">
+                            Top Sales By Payment Method
+                        </h2>
+                        <button @click="downloadPDF3"
+                            class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg">
+                            Download PDF
+                        </button>
+                    </div>
+
+
+                    <!-- Render Doughnut Chart -->
+                    <Doughnut :data="chartData1" :options="chartOptions1" />
                 </div>
             </div>
         </div>
@@ -247,19 +280,35 @@
                    <Doughnut :data="chartData2" :options="chartOptions2" />
                 </div>
                 </div> -->
-                <div
-    class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
-    <div class="chart-container w-full h-full relative">
-        <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12"> Top Products Stock Chart</h2>
-        <Doughnut :data="chartData5" :options="chartOptions5" />
-    </div>
-</div>
+            <div
+                class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
+                <div class="chart-container w-full h-full relative p-4">
 
 
-             <!-- Chart 3 -->
-             <div
+                        <div class="w-full flex justify-between items-center pb-4">
+                        <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-left">
+                            Top Products
+                            Stock Chart
+                        </h2>
+                        <button @click="downloadPDF4"
+                            class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg">
+                            Download PDF
+                        </button>
+                    </div>
+
+
+
+                    <Doughnut :data="chartData5" :options="chartOptions5" />
+
+                </div>
+            </div>
+
+
+            <!-- Chart 3 -->
+            <div
                 class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px]">
-                <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Top Products Stock Table</h2>
+                <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Top Products Stock
+                    Table</h2>
                 <div class="overflow-x-auto">
                     <table id="stockQtyTbl"
                         class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto">
@@ -652,20 +701,20 @@ const chartData5 = computed(() => ({
     ],
 }));
 
-        const chartOptions5 = {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false,
-                    position: "bottom",
-                },
-                tooltip: {
-                    callbacks: {
-                        label: (context) => `${context.label}: ${context.raw} units`,
-                    },
-                },
+const chartOptions5 = {
+    responsive: true,
+    plugins: {
+        legend: {
+            display: true,
+            position: "bottom",
+        },
+        tooltip: {
+            callbacks: {
+                label: (context) => `${context.label}: ${context.raw} units`,
             },
-        };
+        },
+    },
+};
 
 
 
@@ -736,9 +785,12 @@ $(document).ready(function () {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%; /* Full width of the card */
-    height: calc(100% - 50px); /* Adjust height to leave space for the title */
+    width: 100%;
+    /* Full width of the card */
+    height: calc(100% - 50px);
+    /* Adjust height to leave space for the title */
     position: relative;
+
 }
 
 
