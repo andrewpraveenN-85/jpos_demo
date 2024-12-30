@@ -24,6 +24,7 @@ class Product extends Model
         'stock_quantity',
         'barcode',
         'image',
+        'description',
     ];
 
     // public static function boot()

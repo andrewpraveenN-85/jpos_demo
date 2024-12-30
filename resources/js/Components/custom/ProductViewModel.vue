@@ -28,7 +28,7 @@
           leave-to="opacity-0 scale-95"
         >
           <DialogPanel
-            class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-3/6 p-6"
+            class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-4/6 p-6"
           >
             <div
               class="flex flex-col items-start justify-start w-full h-full px-2 pt-4"
@@ -87,6 +87,14 @@
                     </span>
 
                     {{ selectedProduct?.code ?? "N/A" }}
+                  </p>
+
+                  <p class="pb-6 text-2xl font-bold text-black">
+                    <span class="text-[#00000099] font-normal"
+                      >Product Description :
+                    </span>
+
+                    {{ selectedProduct?.description ?? "N/A" }}
                   </p>
 
                   <div

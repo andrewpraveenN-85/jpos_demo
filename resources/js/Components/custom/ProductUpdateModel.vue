@@ -172,7 +172,10 @@
                           {{ color.name }}
                         </option>
                       </select>
-                      <span v-if="form.errors.color_id" class="mt-2 text-red-500">
+                      <span
+                        v-if="form.errors.color_id"
+                        class="mt-2 text-red-500"
+                      >
                         {{ form.errors.color_id }}
                       </span>
                     </div>
@@ -327,6 +330,27 @@
                       {{ form.errors.sub_id }}
                     </span>
                   </div> -->
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300">
+                      Description:
+                    </label>
+                    <textarea
+                      v-model="form.description"
+                      id="description"
+                      placeholder="Enter Description"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      rows="2"
+                    ></textarea>
+                    <span
+                      v-if="form.errors.description"
+                      class="mt-4 text-red-500"
+                    >
+                      {{ form.errors.description }}
+                    </span>
+                  </div>
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
@@ -490,6 +514,7 @@ const form = useForm({
   discounted_price: null,
   barcode: "",
   image: null,
+  description: "",
 });
 
 // Handle file upload for images
@@ -497,15 +522,12 @@ const handleImageUpload = (event) => {
   form.image = event.target.files[0];
 };
 
-
 function limitToTwoDecimals(value) {
   if (value === null || value === undefined) return value;
   const strValue = value.toString();
   const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
   return match ? parseFloat(match[0]) : value;
 }
-
-
 
 // Function to update discounted price based on selling price and discount
 function updateDiscountedPrice() {
@@ -580,6 +602,7 @@ watch(
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
       form.image = newValue.image || null;
+      form.description = newValue.description || "";
     }
   },
   { immediate: true }

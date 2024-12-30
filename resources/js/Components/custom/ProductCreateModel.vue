@@ -322,6 +322,25 @@
                   </div>
                 </div>
 
+                <div>
+                  <label class="block text-sm font-medium text-gray-300">
+                    Description:
+                  </label>
+                  <textarea
+                    v-model="form.description"
+                    id="description"
+                    placeholder="Enter Description"
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    rows="2"
+                  ></textarea>
+                  <span
+                    v-if="form.errors.description"
+                    class="mt-4 text-red-500"
+                  >
+                    {{ form.errors.description }}
+                  </span>
+                </div>
+
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
@@ -437,6 +456,7 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  description: "",
 });
 
 // Utility function to limit to 2 decimal points
