@@ -20,6 +20,7 @@ class CompanyInfoSeeder extends Seeder
             'name' => 'JAAN Network (Pvt) Ltd.',
             'address' => 'No 163/B, Kandy Rd, Weliweriya.',
             'phone' => '0112456789',
+            'phone2' => '0717598064',
             'email' => 'info@jaannetwork.com',
             'website' => 'https://jaannetwork.com',
             'logo' => '/images/jaan_logo.jpg',
