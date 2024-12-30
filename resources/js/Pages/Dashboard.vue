@@ -234,7 +234,7 @@
             <div class="text-container">
               <p class="title">Company Info</p>
               <p class="description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                Manage essential business details like name, address, contact info, and logo for branding on invoices and reports.
               </p>
             </div>
           </div>
@@ -255,7 +255,7 @@
             <div class="text-container">
               <p class="title">Employees</p>
               <p class="description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+               Handle staff roles, contact details, and access permissions for secure and efficient operations.
               </p>
             </div>
           </div>
