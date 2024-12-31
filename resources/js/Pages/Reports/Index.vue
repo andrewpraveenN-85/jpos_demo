@@ -306,10 +306,10 @@
 
             <!-- Chart 3 -->
             <div
-                class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px]">
+                class=" bg-white border-4 border-black rounded-xl h-[500px]">
                 <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Top Products Stock
                     Table</h2>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto overflow-y-auto max-h-[400px]">
                     <table id="stockQtyTbl"
                         class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto">
                         <thead>
@@ -354,7 +354,7 @@
                                 <td class="p-4 border-gray-200">
                                     {{ product.discount <= 100 ? (product.selling_price * (1 - product.discount /
                                         100)).toFixed(2) : (product.selling_price - product.discount).toFixed(2) }}
-                                        </td>
+                           </td>
                             </tr>
                         </tbody>
                     </table>
@@ -705,7 +705,7 @@ const chartOptions5 = {
     responsive: true,
     plugins: {
         legend: {
-            display: true,
+            display: false,
             position: "bottom",
         },
         tooltip: {

@@ -520,6 +520,7 @@ const submitOrder = async () => {
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
+      cash: cash.value
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success

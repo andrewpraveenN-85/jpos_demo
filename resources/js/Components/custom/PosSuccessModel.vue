@@ -154,7 +154,7 @@ const handlePrintReceipt = () => {
       return `
       <tr>
         <td>${product.name}</td>
-        <td>${product.quantity}</td>
+        <td style="text-align: center;">${product.quantity}</td>
         <td>
           ${
             product.discount && product.discount > 0 && product.apply_discount

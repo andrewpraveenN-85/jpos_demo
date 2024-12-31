@@ -159,6 +159,7 @@ class PosController extends Controller
                 'total_cost' => $totalCost,
                 'payment_method' => $request->input('paymentMethod'), // Payment method from the request
                 'sale_date' => now()->toDateString(), // Current date
+                'cash' => $request->input('cash'),
             ]);
 
             foreach ($products as $product) {
