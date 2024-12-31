@@ -25,11 +25,11 @@
       <div class="flex items-end space-x-4 text-right space-y-2">
         <div class="flex flex-col">
           <p class="text-lg">
-            <span class="font-bold">Account Type:</span>
+            <span class="font-bold">Account Type : </span>
             <b>{{ $page.props.auth.user.role_type }}</b>
           </p>
           <p class="text-lg">
-            <span class="font-bold">Logged As:</span>
+            <span class="font-bold">Logged As : </span>
             <b>{{ $page.props.auth.user.name }}</b>
           </p>
         </div>
