@@ -278,6 +278,9 @@ const companyData = props.companyInfo[0];
         .footer .italic {
             font-style: italic;
         }
+        .text-right {
+            text-align: right;
+        }
       </style>
     </head>
     <body>
@@ -320,8 +323,8 @@ const companyData = props.companyInfo[0];
                 <thead>
                     <tr>
                         <th>Description</th>
-                        <th >Qty</th>
-                        <th>Price</th>
+                        <th class="text-right">Qty</th>
+                        <th class="text-right">Price</th>
                     </tr>
                 </thead>
                 <tbody>
