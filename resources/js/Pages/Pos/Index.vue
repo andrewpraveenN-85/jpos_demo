@@ -275,8 +275,7 @@
                 <p class="text-3xl text-black">Total</p>
                 <p class="text-3xl text-black">{{ total }} LKR</p>
               </div>
-              <div
-                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
               >
                 <p class="text-xl text-black">Cash</p>
                 <span>

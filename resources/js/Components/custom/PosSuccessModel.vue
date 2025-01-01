@@ -150,24 +150,29 @@ const handlePrintReceipt = () => {
 
   // Generate table rows dynamically using props.products
   const productRows = props.products
-    .map((product) => {
-      return `
+  .map((product) => {
+    // Determine the price based on discount
+    const price = product.discount > 0 && product.apply_discount
+      ? product.discounted_price  // Use discounted price if discount is applied
+      : product.selling_price;    // Use selling price if no discount
+
+    return `
       <tr>
         <td>${product.name}</td>
         <td style="text-align: center;">${product.quantity}</td>
         <td>
           ${
-            product.discount && product.discount > 0 && product.apply_discount
+            product.discount > 0 && product.apply_discount
               ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
               : ""
           }
-
-         <div>${(product.selling_price * product.quantity).toFixed(2)}</div>
+          <div>${product.selling_price}</div>
         </td>
       </tr>
     `;
-    })
-    .join("");
+  })
+  .join("");
+
 
   // Generate the receipt HTML
   const receiptHTML = `
@@ -289,7 +294,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
             <div class="info-row">
                 <div>
                     <p>Date:</p>
-                    <small>${new Date().toLocaleString()}</small>
+                    <small>${new Date().toLocaleString()} </small>
                 </div>
                 <div>
                     <p>Order No:</p>
@@ -313,7 +318,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
                     <tr>
                         <th>Description</th>
                         <th style="text-align: center;">Qty</th>
-                        <th>Price</th>
+                        <th style="text-align: right;">Price</th>
                     </tr>
                 </thead>
                 <tbody>
