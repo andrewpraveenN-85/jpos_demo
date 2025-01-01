@@ -206,7 +206,10 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'expire_date' => 'nullable|date',
         ]);
+
+        // dd($validated);
 
         try {
             // Handle image upload
@@ -271,6 +274,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100', // Validation for discount
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
+            'expire_date' => 'nullable|date',
         ]);
 
 
@@ -398,6 +402,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
+            'expire_date' => 'nullable|date',
         ]);
 
         // Handle image update

@@ -100,19 +100,42 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Bar code:</label
-                  >
-                  <input
-                    v-model="form.barcode"
-                    type="text"
-                    id="barcode"
-                    placeholder="Enter Barcode"
-                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
-                  <span v-if="form.errors.barcode" class="mt-4 text-red-500">{{
-                    form.errors.barcode
-                  }}</span>
+                  <div class="flex items-center gap-8">
+                    <div class="w-full">
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Bar code:</label
+                      >
+                      <input
+                        v-model="form.barcode"
+                        type="text"
+                        id="barcode"
+                        placeholder="Enter Barcode"
+                        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      />
+                      <span
+                        v-if="form.errors.barcode"
+                        class="mt-4 text-red-500"
+                        >{{ form.errors.barcode }}</span
+                      >
+                    </div>
+                    <div v-if="isPharma" class="w-full">
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Expire Date:</label
+                      >
+                      <input
+                        v-model="form.expire_date"
+                        type="date"
+                        id="barcode"
+                        placeholder="Enter Barcode"
+                        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      />
+                      <span
+                        v-if="form.errors.expire_date"
+                        class="mt-4 text-red-500"
+                        >{{ form.errors.expire_date }}</span
+                      >
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -394,6 +417,8 @@ const playClickSound = () => {
 
 const emit = defineEmits(["update:open"]);
 
+const isPharma = computed(() => import.meta.env.VITE_APP_NAME === "pharma");
+
 // Define props
 const { open, categories, colors, suppliers, sizes, selectedProduct } =
   defineProps({
@@ -437,6 +462,7 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  expire_date: null,
 });
 
 // Utility function to limit to 2 decimal points
