@@ -65,7 +65,7 @@
                   v-if="table.id === 'default'"
                   class="text-2xl text-black font-bold"
                 >
-                  Take Away
+                  Live Bill
                 </div>
                 <div v-else>
                   <button
@@ -139,18 +139,6 @@
               </div>
             </div>
           </div>
-          <!-- <div
-            class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
-          >
-
-            <img
-              src="/images/Fading wheel.gif"
-              class="object-cover w-32 h-32 rounded-full"
-            />
-            <p class="text-3xl text-black">
-              Bar Code Scanner is in Progress...
-            </p>
-          </div> -->
         </div>
 
         <div class="flex w-1/2 h-full p-8 border-4 border-black rounded-3xl">
@@ -159,7 +147,7 @@
               <h2 class="text-5xl font-bold text-black">
                 {{
                   selectedTable?.id === "default"
-                    ? "Take Away"
+                    ? "Live Bill"
                     : `Table ${selectedTable?.number - 1}`
                 }}
               </h2>
@@ -464,24 +452,36 @@ watch(nextTableNumber, (newNextTableNumber) => {
   localStorage.setItem("nextTableNumber", JSON.stringify(newNextTableNumber));
 });
 
-watch(selectedTable, (newSelectedTable) => {
-  localStorage.setItem("selectedTable", JSON.stringify(newSelectedTable));
-},{ deep: true });
+watch(
+  selectedTable,
+  (newSelectedTable) => {
+    localStorage.setItem("selectedTable", JSON.stringify(newSelectedTable));
+  },
+  { deep: true }
+);
 
 // const tablesItems = ref([]);
 //
 
 const addTable = () => {
+  const usedNumbers = tables.value.map((table) => table.number);
+  let newNumber = 1; // Start with 1
+  while (usedNumbers.includes(newNumber)) {
+    newNumber++; // Increment until we find an unused number
+  }
+
+  // Create the new table
   const newTable = {
     id: Date.now(),
-    number: nextTableNumber.value,
+    number: newNumber,
     orderId: generateOrderId(),
     products: [],
     cash: 0.0,
     balance: 0.0,
   };
+
   tables.value.push(newTable);
-  nextTableNumber.value++;
+  // nextTableNumber.value++;
 
   selectedTable.value = newTable;
 };
