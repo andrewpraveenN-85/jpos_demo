@@ -190,7 +190,6 @@ class ProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
             'code' => [
-                'required',
                 'string',
                 'max:50',
                 Rule::unique('products')->whereNull('deleted_at'),
@@ -507,4 +506,16 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
+
+
+
+
+ 
+
+
+
+
+
+
+
 }
