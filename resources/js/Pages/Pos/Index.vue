@@ -86,7 +86,6 @@
           <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
-
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -100,13 +99,12 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
+              <span
+                class="flex cursor-pointer"
+                @click="isSelectModalOpen = true"
+              >
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
-                <img
-
-                  src="/images/selectpsoduct.svg"
-                  class="w-6 h-6 ml-2 "
-                />
+                <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
 
@@ -210,10 +208,11 @@
                       {{ item.quantity }}
                     </p> -->
                     <input
-  type="number"
-  v-model="item.quantity"
-  class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center"
-/>
+                      type="number"
+                      v-model="item.quantity"
+                      min="0"
+                      class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center"
+                    />
                     <p
                       @click="decrementQuantity(item.id)"
                       class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer"
@@ -525,6 +524,7 @@ const submitOrder = async () => {
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
+      cash: cash.value
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
