@@ -29,12 +29,12 @@
     </button>
     <button
       @click="openDialog('color')"
-      class="px-8 py-3 text-white bg-green-600 rounded hover:bg-green-700 mt-4 text-lg font-medium mx-4">
+      class="px-8 py-3 text-white bg-green-600 rounded hover:bg-green-700  text-lg font-medium mx-4">
       Add Color
     </button>
     <button
       @click="openDialog('category')"
-      class="px-8 py-3 text-white bg-purple-600 rounded hover:bg-purple-700 mt-4 text-lg font-medium mx-4">
+      class="px-8 py-3 text-white bg-purple-600 rounded hover:bg-purple-700  before: text-lg font-medium mx-4">
       Add Category
     </button>
   </div>
