@@ -18,7 +18,8 @@ class Sale extends Model
         'discount',
         'payment_method',
         'sale_date',
-        'total_cost'
+        'total_cost',
+        'cash',
     ];
 
 
@@ -43,5 +44,13 @@ class Sale extends Model
         return $this->belongsTo(Employee::class, 'employee_id','id');
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id','id');
+    }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id','id');
+    }
 }
