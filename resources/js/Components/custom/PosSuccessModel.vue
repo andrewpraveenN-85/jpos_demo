@@ -289,7 +289,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
             <div class="info-row">
                 <div>
                     <p>Date:</p>
-                    <small>${new Date().toLocaleDateString()}</small>
+                    <small>${new Date().toLocaleString()}</small>
                 </div>
                 <div>
                     <p>Order No:</p>

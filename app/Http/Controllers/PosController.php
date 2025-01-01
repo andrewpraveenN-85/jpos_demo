@@ -178,6 +178,14 @@ class PosController extends Controller
                         ], 423);
                     }
 
+                    if ($productModel->expire_date && now()->greaterThan($productModel->expire_date)) {
+                        // Rollback transaction and return error
+                        DB::rollBack();
+                        return response()->json([
+                            'message' => "The product '{$productModel->name}' has expired (Expiration Date: {$productModel->expire_date->format('Y-m-d')}).",
+                        ], 423); // HTTP 422 Unprocessable Entity
+                    }
+
                     // Create sale item
                     SaleItem::create([
                         'sale_id' => $sale->id,

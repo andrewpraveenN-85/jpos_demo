@@ -297,7 +297,15 @@ const companyData = props.companyInfo[0];
             <div class="info-row">
                 <div>
                     <p>Date:</p>
-                    <small>${history.sale.sale_date}</small>
+                    <small>
+                        ${new Date(history.sale.created_at).toLocaleDateString('en-US', {
+                        dateStyle: 'medium', // Formats the date in medium style (e.g., Jan 1, 2025)
+                        })} 
+                        ${new Date(history.sale.created_at).toLocaleTimeString('en-US', {
+                        timeStyle: 'long', // Formats the time in long style (e.g., 11:38:09 PM)
+                        hourCycle: 'h23',   // Ensures 24-hour format and prevents the timezone offset
+                        })}
+                    </small>
                 </div>
                 <div>
                     <p>Order No:</p>
