@@ -103,7 +103,7 @@
                             <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.order_id || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.total_amount - (history.discount || 0) || "N/A" }}</td>
-                             <td class="p-4 font-bold border-gray-200">{{ history.discount || "N/A" }}</td>
+                             <td class="p-4 font-bold border-gray-200">{{((parseFloat(history.discount) || 0) + (parseFloat(history.custom_discount) || 0)).toLocaleString()}}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">
