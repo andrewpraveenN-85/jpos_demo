@@ -225,7 +225,7 @@
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
                 <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
-                        Total Selling Price In Stock:
+                        Total Selling Price In Stock:  (Without Discount)
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
