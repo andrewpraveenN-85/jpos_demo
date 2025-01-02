@@ -157,7 +157,9 @@
           </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
-          <p class="text-2xl font-bold text-black">{{ totalDiscount }} LKR</p>
+          <p class="text-2xl font-bold text-black">
+            {{ (totalDiscount || 0) + (customeDiscount || 0) }} LKR
+          </p>
         </div>
       </div>
       <!-- Average Transaction Value -->
@@ -202,25 +204,79 @@
         </div>
       </div>
     </div>
+
+
+     <div class="grid w-full grid-cols-3 gap-8">
+            <!-- Total Products -->
+            <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#ffb224] w-full space-y-4 rounded-2xl bg-[#ffb224] shadow-lg">
+                <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                        Total Quantity In Stock:
+                    </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-2xl font-bold text-black">{{ totalQty }} QTY </p>
+                </div>
+            </div>
+            <!-- Average Transaction Value -->
+            <!-- Number of Transactions -->
+            <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
+                <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                        Total Selling Price In Stock:
+                    </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-2xl font-bold text-black">{{ totalSellingPrice.toFixed(2) }} LKR</p>
+                </div>
+            </div>
+            <!-- Total Customers -->
+            <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#3e41ff] w-full space-y-4 rounded-2xl bg-[#3e41ff] shadow-lg ">
+                <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                        Total Cost Price In Stock:
+                    </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-2xl font-bold text-black">{{ totalRetailValue.toFixed(2) }} LKR</p>
+                </div>
+            </div>
+        </div>
     <!-- Charts Section -->
     <div class="flex items-center justify-center w-full h-full space-x-4">
+      <!-- Chart 1 -->
+      <!-- <div
+                class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
+                <div class="chart-container">
+                   <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
+                      Sales by Category
+                   </h2>
+
+                   <Doughnut :data="chartData2" :options="chartOptions2" />
+                </div>
+                </div> -->
+
       <div
         class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
           <!-- Header with Title and Button -->
-          <div class="w-full flex justify-between items-center py-4">
-            <h2 class="text-2xl font-medium tracking-wide text-slate-700">
+          <div class="w-full flex justify-between items-center pb-4">
+            <h2
+              class="text-2xl font-medium tracking-wide text-slate-700 text-left"
+            >
               Top Employee Sales
             </h2>
             <button
               @click="downloadPDF"
-              class="px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg hover:bg-orange-700 hover:shadow-lg"
+              class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
             >
               Download PDF
             </button>
           </div>
-
           <!-- Doughnut Chart -->
           <div class="w-full h-full flex justify-center items-center">
             <Doughnut :data="chartData4" :options="chartOptions4" />
@@ -232,26 +288,16 @@
       <div
         class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
       >
-        <!-- <div class="chart-container w-full p-4">
-                    <div class="w-full flex justify-between items-center pb-4">
-                        <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">
-                            Product
-                        </h2>
-                        <button @click="downloadPDF2"
-                            class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg">
-                            Download PDF
-                        </button>
-                    </div> -->
-
         <div class="chart-container w-full p-4">
-          <!-- Header with Title and Button -->
-          <div class="w-full flex justify-between items-center py-4">
-            <h2 class="text-2xl font-medium tracking-wide text-slate-700">
-              Top Product
+          <div class="w-full flex justify-between items-center pb-4">
+            <h2
+              class="text-2xl font-medium tracking-wide text-slate-700 text-left"
+            >
+              Product
             </h2>
             <button
               @click="downloadPDF2"
-              class="px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg hover:bg-orange-700 hover:shadow-lg"
+              class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
             >
               Download PDF
             </button>
@@ -264,14 +310,15 @@
         class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
-          <!-- Header with Title and Button -->
-          <div class="w-full flex justify-between items-center py-4">
-            <h2 class="text-2xl font-medium tracking-wide text-slate-700">
+          <div class="w-full flex justify-between items-center pb-4">
+            <h2
+              class="text-2xl font-medium tracking-wide text-slate-700 text-left"
+            >
               Top Sales By Payment Method
             </h2>
             <button
               @click="downloadPDF3"
-              class="px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg hover:bg-orange-700 hover:shadow-lg"
+              class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
             >
               Download PDF
             </button>
@@ -297,15 +344,16 @@
       <div
         class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4"
       >
-        <div class="chart-container w-full p-4">
-          <!-- Header with Title and Button -->
-          <div class="w-full flex justify-between items-center py-4">
-            <h2 class="text-2xl font-medium tracking-wide text-slate-700">
-              Top Products Stock Table
+        <div class="chart-container w-full h-full relative p-4">
+          <div class="w-full flex justify-between items-center pb-4">
+            <h2
+              class="text-2xl font-medium tracking-wide text-slate-700 text-left"
+            >
+              Top Products Stock Chart
             </h2>
             <button
               @click="downloadPDF4"
-              class="px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg hover:bg-orange-700 hover:shadow-lg"
+              class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
             >
               Download PDF
             </button>
@@ -316,15 +364,13 @@
       </div>
 
       <!-- Chart 3 -->
-      <div
-        class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px]"
-      >
+      <div class="bg-white border-4 border-black rounded-xl h-[500px]">
         <h2
-          class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-4"
+          class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2"
         >
           Top Products Stock Table
         </h2>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto overflow-y-auto max-h-[400px]">
           <table
             id="stockQtyTbl"
             class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
@@ -431,6 +477,7 @@ const props = defineProps({
   netProfit: { type: Number, required: true },
   totalTransactions: { type: Number, required: true },
   totalDiscount: { type: Number, required: true },
+  customeDiscount: { type: Number, required: true },
   totalCustomer: { type: Number, required: true },
   startDate: { type: String, default: "" },
   endDate: { type: String, default: "" },
@@ -441,6 +488,29 @@ const props = defineProps({
 // Date filters
 const startDate = ref(props.startDate);
 const endDate = ref(props.endDate);
+
+const products = ref(props.products);
+const sales = ref(props.sales);
+const totalQty = computed(() => {
+  return products.value.reduce(
+    (sum, product) => sum + (product.stock_quantity || 0),
+    0
+  );
+});
+const totalSellingPrice = computed(() => {
+  return products.value.reduce((sum, product) => {
+    return sum + (parseFloat(product.selling_price) || 0);
+  }, 0);
+});
+const totalRetailValue = computed(() => {
+  return products.value.reduce((sum, product) => {
+    if (product.discount <= 100) {
+      return sum + product.selling_price * (1 - product.discount / 100);
+    } else {
+      return sum + (product.selling_price - product.discount);
+    }
+  }, 0);
+});
 
 // Handle filter submission
 const filterData = () => {
@@ -558,7 +628,7 @@ const chartData = computed(() => ({
 const chartOptions = {
   responsive: true,
   plugins: {
-    legend: { display: false, position: "bottom" },
+    legend: { display: true, position: "bottom" },
   },
 };
 
@@ -606,7 +676,7 @@ const chartData1 = computed(() => ({
 const chartOptions1 = {
   responsive: true,
   plugins: {
-    legend: { display: false, position: "bottom" },
+    legend: { display: true, position: "bottom" },
     tooltip: {
       callbacks: {
         label: function (context) {
@@ -685,7 +755,7 @@ const chartOptions2 = {
   responsive: true,
   plugins: {
     legend: {
-      display: false,
+      display: true,
       position: "bottom",
     },
     tooltip: {
@@ -742,7 +812,7 @@ const chartOptions4 = {
   responsive: true,
   plugins: {
     legend: {
-      display: false,
+      display: true,
       position: "bottom",
     },
     tooltip: {

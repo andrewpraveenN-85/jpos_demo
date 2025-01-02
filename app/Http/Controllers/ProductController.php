@@ -189,13 +189,11 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-            // 'code' => [
-            //     'required',
-            //     'string',
-            //     'max:50',
-            //     Rule::unique('products')->whereNull('deleted_at'),
-            // ],
+            'code' => [
+                'string',
+                'max:50',
+                Rule::unique('products')->whereNull('deleted_at'),
+            ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -206,7 +204,10 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'expire_date' => 'nullable|date',
         ]);
+
+        // dd($validated);
 
         try {
             // Handle image upload
@@ -271,6 +272,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100', // Validation for discount
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
+            'expire_date' => 'nullable|date',
         ]);
 
 
@@ -398,6 +400,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
+            'expire_date' => 'nullable|date',
         ]);
 
         // Handle image update
