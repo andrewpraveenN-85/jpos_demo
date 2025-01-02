@@ -204,6 +204,47 @@
         </div>
       </div>
     </div>
+
+
+     <div class="grid w-full grid-cols-3 gap-8">
+            <!-- Total Products -->
+            <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#ffb224] w-full space-y-4 rounded-2xl bg-[#ffb224] shadow-lg">
+                <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                        Total Quantity In Stock:
+                    </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-2xl font-bold text-black">{{ totalQty }} QTY </p>
+                </div>
+            </div>
+            <!-- Average Transaction Value -->
+            <!-- Number of Transactions -->
+            <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
+                <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                        Total Selling Price In Stock:
+                    </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-2xl font-bold text-black">{{ totalSellingPrice.toFixed(2) }} LKR</p>
+                </div>
+            </div>
+            <!-- Total Customers -->
+            <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#3e41ff] w-full space-y-4 rounded-2xl bg-[#3e41ff] shadow-lg ">
+                <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                        Total Cost Price In Stock:
+                    </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-2xl font-bold text-black">{{ totalRetailValue.toFixed(2) }} LKR</p>
+                </div>
+            </div>
+        </div>
     <!-- Charts Section -->
     <div class="flex items-center justify-center w-full h-full space-x-4">
       <!-- Chart 1 -->
@@ -447,6 +488,29 @@ const props = defineProps({
 // Date filters
 const startDate = ref(props.startDate);
 const endDate = ref(props.endDate);
+
+const products = ref(props.products);
+const sales = ref(props.sales);
+const totalQty = computed(() => {
+  return products.value.reduce(
+    (sum, product) => sum + (product.stock_quantity || 0),
+    0
+  );
+});
+const totalSellingPrice = computed(() => {
+  return products.value.reduce((sum, product) => {
+    return sum + (parseFloat(product.selling_price) || 0);
+  }, 0);
+});
+const totalRetailValue = computed(() => {
+  return products.value.reduce((sum, product) => {
+    if (product.discount <= 100) {
+      return sum + product.selling_price * (1 - product.discount / 100);
+    } else {
+      return sum + (product.selling_price - product.discount);
+    }
+  }, 0);
+});
 
 // Handle filter submission
 const filterData = () => {
