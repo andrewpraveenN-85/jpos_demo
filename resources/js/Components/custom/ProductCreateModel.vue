@@ -15,7 +15,6 @@
           class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
         />
       </TransitionChild>
-
       <!-- Modal Content -->
       <div class="fixed inset-0 z-10 flex items-center justify-center">
         <TransitionChild
@@ -30,18 +29,208 @@
           <DialogPanel
             class="bg-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-3/6 p-10 text-center"
           >
-            <!-- Close Button -->
-            <!-- <button
-              @click="$emit('update:open', false)"
-              class="absolute text-xl text-white top-4 right-4 hover:text-gray-300"
-            >
-              &times;
-            </button> -->
-
-            <!-- Modal Title -->
+            <p v-if="successMessage" class="text-lg text-green-400 mt-2">
+              {{ successMessage }}
+            </p>
             <DialogTitle class="text-xl font-bold text-white"
               >Add Product</DialogTitle
             >
+
+            <div class="grid grid-cols-1 gap-4 pt-4">
+              <!-- Single Column with Buttons -->
+              <div class="p-4 rounded-lg text-center">
+                <button
+                  @click="openDialog('size')"
+                  class="px-8 py-3 text-white bg-blue-600 rounded hover:bg-blue-700 text-lg font-medium mx-4"
+                >
+                  Add Size
+                </button>
+                <button
+                  @click="openDialog('color')"
+                  class="px-8 py-3 text-white bg-green-600 rounded hover:bg-green-700 text-lg font-medium mx-4"
+                >
+                  Add Color
+                </button>
+                <button
+                  @click="openDialog('category')"
+                  class="px-8 py-3 text-white bg-purple-600 rounded hover:bg-purple-700 before: text-lg font-medium mx-4"
+                >
+                  Add Category
+                </button>
+              </div>
+            </div>
+
+            <!-- Dialog -->
+            <TransitionRoot
+              as="template"
+              :show="isDialogOpen"
+              @close="closeDialog"
+            >
+              <Dialog as="div" class="relative z-10" @close="closeDialog">
+                <div
+                  class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
+                ></div>
+                <div class="fixed inset-0 overflow-y-auto">
+                  <div
+                    class="flex items-center justify-center min-h-full p-4 text-center sm:p-0"
+                  >
+                    <DialogPanel
+                      class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full"
+                    >
+                      <div class="bg-gray-100 p-6">
+                        <!-- Dynamic Dialog Title -->
+                        <DialogTitle
+                          class="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          {{
+                            dialogType === "size"
+                              ? "Add Size"
+                              : dialogType === "color"
+                              ? "Add Color"
+                              : "Add Category"
+                          }}
+                        </DialogTitle>
+
+                        <div class="mt-4">
+                          <!-- Conditional Rendering of Forms -->
+                          <form
+                            v-if="dialogType === 'size'"
+                            @submit.prevent="submitSize"
+                          >
+                            <label class="block text-md font-bold text-gray-700"
+                              >Size Name:</label
+                            >
+                            <input
+                              v-model="sizeForm.sizeName"
+                              type="text"
+                              required
+                              class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                            />
+                            <span
+                              v-if="sizeForm.errors.sizeName"
+                              class="mt-2 text-red-500"
+                            >
+                              {{ sizeForm.errors.sizeName }}
+                            </span>
+                            <div class="mt-4">
+                              <button
+                                type="submit"
+                                class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                @click="closeDialog"
+                                class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400 ml-2"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </form>
+
+                          <form
+                            v-if="dialogType === 'color'"
+                            @submit.prevent="submitColor"
+                          >
+                            <label class="block text-md font-bold text-gray-700"
+                              >Color Name:</label
+                            >
+                            <input
+                              v-model="colorForm.colorName"
+                              type="text"
+                              required
+                              class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-green-600"
+                            />
+                            <span
+                              v-if="colorForm.errors.colorName"
+                              class="mt-2 text-red-500"
+                            >
+                              {{ colorForm.errors.colorName }}
+                            </span>
+                            <div class="mt-4">
+                              <button
+                                type="submit"
+                                class="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700"
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                @click="closeDialog"
+                                class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400 ml-2"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </form>
+
+                          <form
+                            v-if="dialogType === 'category'"
+                            @submit.prevent="submitCategory"
+                          >
+                            <label class="block text-md font-bold text-gray-700"
+                              >Category Name:</label
+                            >
+                            <input
+                              v-model="categoryForm.categoryName"
+                              type="text"
+                              required
+                              class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-purple-600"
+                            />
+                            <label
+                              class="block text-md font-bold text-gray-700 mt-4"
+                              >Parent Category:</label
+                            >
+                            <select
+                              v-model="categoryForm.parent_id"
+                              class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-purple-600"
+                            >
+                              <option value="">No Parent</option>
+                              <option
+                                v-for="category in categories"
+                                :key="category.id"
+                                :value="category.id"
+                              >
+                                {{
+                                  category.hierarchy_string
+                                    ? category.hierarchy_string +
+                                      " ----> " +
+                                      category.name
+                                    : category.name
+                                }}
+                              </option>
+                            </select>
+                            <span
+                              v-if="categoryForm.errors.parent_id"
+                              class="mt-2 text-red-500"
+                            >
+                              {{ categoryForm.errors.parent_id }}
+                            </span>
+                            <div class="mt-4">
+                              <button
+                                type="submit"
+                                class="px-4 py-2 text-white bg-purple-600 rounded hover:bg-purple-700"
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                @click="closeDialog"
+                                class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400 ml-2"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </DialogPanel>
+                  </div>
+                </div>
+              </Dialog>
+            </TransitionRoot>
+
             <form @submit.prevent="submit">
               <!-- Modal Form -->
               <div class="mt-6 space-y-4 text-left">
@@ -75,7 +264,6 @@
                     form.errors.name
                   }}</span>
                 </div>
-
                 <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Supplier Name:</label
@@ -98,23 +286,42 @@
                     form.errors.name
                   }}</span>
                 </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-gray-300"
-                    >Bar code:</label
-                  >
-                  <input
-                    v-model="form.barcode"
-                    type="text"
-                    id="barcode"
-                    placeholder="Enter Barcode"
-                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  />
-                  <span v-if="form.errors.barcode" class="mt-4 text-red-500">{{
-                    form.errors.barcode
-                  }}</span>
+                <div class="flex items-center gap-8">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Bar code:</label
+                    >
+                    <input
+                      v-model="form.barcode"
+                      type="text"
+                      id="barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.barcode"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.barcode }}</span
+                    >
+                  </div>
+                  <div v-if="isPharma" class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
+                    >
+                    <input
+                      v-model="form.expire_date"
+                      type="date"
+                      id="barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
+                  </div>
                 </div>
-
                 <div>
                   <div class="flex items-center gap-8">
                     <!-- First select box with label and error -->
@@ -134,7 +341,6 @@
                         form.errors.name
                       }}</span>
                     </div>
-
                     <!-- Second select box with label and error -->
                     <div class="w-full">
                       <label class="block text-sm font-medium text-gray-300"
@@ -144,7 +350,6 @@
                         v-model="form.code"
                         type="text"
                         id="code"
-                        required
                         class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                         placeholder="Enter Product Code"
                       />
@@ -154,7 +359,6 @@
                     </div>
                   </div>
                 </div>
-
                 <div>
                   <div class="flex items-center gap-8">
                     <!-- First select box with label and error -->
@@ -185,7 +389,6 @@
                         {{ form.errors.parent_id }}
                       </span>
                     </div>
-
                     <!-- Second select box with label and error -->
                     <div class="w-full">
                       <label
@@ -213,7 +416,6 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="flex items-center gap-8 mt-6">
                   <!-- Cost Price input -->
                   <div class="w-full">
@@ -238,7 +440,6 @@
                       {{ form.errors.cost_price }}
                     </span>
                   </div>
-
                   <div class="w-full">
                     <label
                       for="stock_quantity"
@@ -261,7 +462,6 @@
                     </span>
                   </div>
                 </div>
-
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
@@ -285,7 +485,6 @@
                       {{ form.errors.selling_price }}
                     </span>
                   </div>
-
                   <div class="w-full">
                     <label
                       for="discount"
@@ -302,7 +501,6 @@
                       placeholder="Enter discount percentage"
                     />
                   </div>
-
                   <div class="w-full">
                     <label
                       for="discounted_price"
@@ -310,7 +508,6 @@
                     >
                       Discounted Price:
                     </label>
-
                     <input
                       type="text"
                       id="discounted_price"
@@ -321,7 +518,6 @@
                     />
                   </div>
                 </div>
-
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
@@ -341,15 +537,9 @@
                   </div>
                 </div>
               </div>
-
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
                 <button
-                  @click="
-                    () => {
-                      playClickSound();
-                    }
-                  "
                   class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                   type="submit"
                 >
@@ -359,7 +549,6 @@
                   class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
                   @click="
                     () => {
-                      playClickSound();
                       emit('update:open', false);
                     }
                   "
@@ -375,8 +564,7 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script setup>
+ <script setup>
 import {
   Dialog,
   DialogPanel,
@@ -387,12 +575,9 @@ import {
 import { ref, computed, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
-const playClickSound = () => {
-  const clickSound = new Audio("/sounds/click-sound.mp3");
-  clickSound.play();
-};
-
 const emit = defineEmits(["update:open"]);
+
+const isPharma = computed(() => import.meta.env.VITE_APP_NAME === "pharma");
 
 // Define props
 const { open, categories, colors, suppliers, sizes, selectedProduct } =
@@ -437,7 +622,37 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  expire_date: null,
 });
+
+const isDialogOpen = ref(false);
+const dialogType = ref("size");
+
+// Form states for Size and Product
+const sizeForm = useForm({
+  sizeName: "",
+});
+
+const colorForm = useForm({
+  colorName: "",
+});
+
+const categoryForm = useForm({
+  categoryName: "",
+  parent_id: "",
+});
+
+// Functions to handle dialog open/close
+const openDialog = (type) => {
+  dialogType.value = type;
+  isDialogOpen.value = true;
+};
+
+const closeDialog = () => {
+  isDialogOpen.value = false;
+};
+
+const successMessage = ref("");
 
 // Utility function to limit to 2 decimal points
 function limitToTwoDecimals(value) {
@@ -481,6 +696,45 @@ const submit = () => {
     },
     onError: (errors) => {
       console.error("Form submission failed:", errors);
+    },
+  });
+};
+
+const submitSize = () => {
+  sizeForm.post("/sizes", {
+    onSuccess: () => {
+      successMessage.value = "Size created successfully!";
+      sizeForm.sizeName = ""; // Clear the sizeName field
+      closeDialog();
+    },
+    onError: (errors) => {
+      console.error("Size form submission failed:", errors);
+    },
+  });
+};
+
+const submitColor = () => {
+  colorForm.post("/colors", {
+    onSuccess: () => {
+      successMessage.value = "Color created successfully!";
+      colorForm.colorName = "";
+      closeDialog();
+    },
+    onError: (errors) => {
+      console.error("Color form submission failed:", errors);
+    },
+  });
+};
+
+const submitCategory = () => {
+  categoryForm.post("/categories", {
+    onSuccess: () => {
+      successMessage.value = "Category created successfully!";
+      categoryForm.categoryName = "";
+      closeDialog();
+    },
+    onError: (errors) => {
+      console.error("Category form submission failed:", errors);
     },
   });
 };

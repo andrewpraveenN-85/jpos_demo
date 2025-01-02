@@ -23,23 +23,63 @@ class ColorController extends Controller
         ]);
     }
 
+    // public function store(Request $request)
+    // {
+
+    //     if (!Gate::allows('hasRole', ['Admin'])) {
+    //         abort(403, 'Unauthorized');
+    //     }
+
+    //     $validated = $request->validate([
+    //         'name' => 'required|string|max:255',
+
+    //     ]);
+
+    //     Color::create($validated);
+
+    //     return redirect()->route('colors.index')->banner('Color created successfully.');
+
+    // }
     public function store(Request $request)
     {
 
-        if (!Gate::allows('hasRole', ['Admin'])) {
-            abort(403, 'Unauthorized');
+
+        if ($request->has('colorName')) {
+
+            $request->merge(['name' => $request->input('colorName')]);
+
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+
+            Color::create($validated);
+            return redirect()
+            ->route('products.index')
+            ->with('success', 'Color created successfully and redirected to Products.');
         }
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+        if ($request->has('name')) {
+            // Validate name directly
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
 
-        ]);
 
-        Color::create($validated);
+            Color::create($validated);
 
-        return redirect()->route('colors.index')->banner('Color created successfully.');
 
+            return redirect()->route('colors.index')->banner('Color created successfully !');
+        }
+
+        return redirect()->back()->withErrors(['error' => 'Invalid data provided.']);
     }
+
+
+
+
+
 
     public function update(Request $request, Color $color)
     {
