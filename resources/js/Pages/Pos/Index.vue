@@ -275,13 +275,16 @@
                 <p class="text-xl">Discount</p>
                 <p class="text-xl">( {{ totalDiscount }} LKR )</p>
               </div>
-              <div class="flex items-center justify-between w-full px-16 pt-4">
-                <p class="text-3xl text-black">Total</p>
-                <p class="text-3xl text-black">{{ total }} LKR</p>
+              <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+                <p class="text-xl text-black">Custom Discount</p>
+                <span>
+                  <CurrencyInput
+                    v-model="custom_discount"
+                  />
+                  <span class="ml-2">LKR</span>
+                </span>
               </div>
-              <div
-                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
-              >
+              <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                 <p class="text-xl text-black">Cash</p>
                 <span>
                   <CurrencyInput
@@ -291,6 +294,12 @@
                   <span class="ml-2">LKR</span>
                 </span>
               </div>
+              <div class="flex items-center justify-between w-full px-16 pt-4">
+                <p class="text-3xl text-black">Total</p>
+                <p class="text-3xl text-black">{{ total }} LKR</p>
+              </div>
+              
+              
               <div
                 class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
               >
@@ -399,6 +408,7 @@
     :subTotal="subtotal"
     :totalDiscount="totalDiscount"
     :total="total"
+    :custom_discount= "custom_discount"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -434,6 +444,7 @@ const isAlertModalOpen = ref(false);
 const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
+const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
 // const balance = ref(0);
 
@@ -524,7 +535,8 @@ const submitOrder = async () => {
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
-      cash: cash.value
+      cash: cash.value,
+      custom_discount: custom_discount.value,
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
@@ -574,9 +586,10 @@ const total = computed(() => {
   // Ensure subtotal and totalDiscount are numbers before performing calculations
   const subtotalValue = parseFloat(subtotal.value);
   const discountValue = parseFloat(totalDiscount.value);
+  const customValue = parseFloat(custom_discount.value);
 
   // Subtract totalDiscount from subtotal to get the total
-  return (subtotalValue - discountValue).toFixed(2);
+  return (subtotalValue - discountValue - customValue).toFixed(2);
 });
 
 const balance = computed(() => {

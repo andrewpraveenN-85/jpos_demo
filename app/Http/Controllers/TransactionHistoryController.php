@@ -13,7 +13,7 @@ class TransactionHistoryController extends Controller
 {
     public function index()
 {
-    $allhistoryTransactions = SaleItem::with(['sale','product','sale.customer','sale.user'])
+    $allhistoryTransactions = Sale::with(['saleItems','saleItems.product','customer','user'])
         ->orderBy('created_at', 'desc')
         ->get();
 

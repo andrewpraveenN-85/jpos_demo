@@ -20,6 +20,7 @@ class Sale extends Model
         'sale_date',
         'total_cost',
         'cash',
+        'custom_discount',
     ];
 
 

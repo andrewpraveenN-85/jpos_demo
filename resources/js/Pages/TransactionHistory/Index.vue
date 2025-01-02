@@ -101,11 +101,11 @@
                             class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
                         >
                             <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
-                            <td class="p-4 font-bold border-gray-200">{{ history.sale?.order_id || "N/A" }}</td>
-                            <td class="p-4 font-bold border-gray-200">{{ history.total_price || "N/A" }}</td>
-                             <td class="p-4 font-bold border-gray-200">{{ history.sale?.discount || "N/A" }}</td>
-                            <td class="p-4 font-bold border-gray-200">{{ history.sale?.payment_method || "N/A" }}</td>
-                            <td class="p-4 font-bold border-gray-200">{{ history.sale?.sale_date || "N/A" }}</td>
+                            <td class="p-4 font-bold border-gray-200">{{ history.order_id || "N/A" }}</td>
+                            <td class="p-4 font-bold border-gray-200">{{ history.total_amount - (history.discount || 0) || "N/A" }}</td>
+                             <td class="p-4 font-bold border-gray-200">{{ history.discount || "N/A" }}</td>
+                            <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
+                            <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">
                                 <button 
                                     @click="printReceipt(history)"
@@ -180,6 +180,20 @@ $(document).ready(function () {
 const printReceipt = (history) => {
 
 const companyData = props.companyInfo[0];
+const getSafeValue = (obj, path) => {
+    return path.split('.').reduce((acc, part) => (acc && acc[part] ? acc[part] : ''), obj);
+  };
+
+  // Get product details from sale items
+  const saleItems = history.sale_items || [];
+  const productRows = saleItems.map(item => `
+    <tr>
+      <td>${getSafeValue(item, 'product.name') || 'N/A'}</td>
+      <td class="text-right">${item.quantity || 0}</td>
+      <td class="text-right">${item.unit_price || 0} LKR</td>
+    </tr>
+  `).join('');
+
   const receiptContent = `
   <!DOCTYPE html>
     <html lang="en">
@@ -263,7 +277,7 @@ const companyData = props.companyInfo[0];
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .totals div:nth-child(3) {
+        .totals div:nth-child(4) {
             font-size: 14px;
             font-weight: bold;
         }
@@ -291,40 +305,38 @@ const companyData = props.companyInfo[0];
         <p>${companyData.address}</p>
         <p>${companyData.phone} | ${companyData.phone2} | ${companyData.email}</p>
       </div>
-      
 
-      <div class="section">
+        <div class="section">
             <div class="info-row">
                 <div>
                     <p>Date:</p>
                     <small>
-                        ${new Date(history.sale.created_at).toLocaleDateString('en-US', {
-                        dateStyle: 'medium', // Formats the date in medium style (e.g., Jan 1, 2025)
+                        ${new Date(history.created_at).toLocaleDateString('en-US', {
+                        dateStyle: 'medium', 
                         })} 
-                        ${new Date(history.sale.created_at).toLocaleTimeString('en-US', {
-                        timeStyle: 'long', // Formats the time in long style (e.g., 11:38:09 PM)
-                        hourCycle: 'h23',   // Ensures 24-hour format and prevents the timezone offset
+                        ${new Date(history.created_at).toLocaleTimeString('en-US', {
+                        timeStyle: 'long', 
+                        hourCycle: 'h23',   
                         })}
                     </small>
                 </div>
                 <div>
                     <p>Order No:</p>
-                    <small>${history.sale.order_id}</small>
+                    <small>${history.order_id}</small>
                 </div>
             </div>
             <div class="info-row">
                 <div>
                     <p>Customer:</p>
-                    <small>${history.sale.customer?.name || ' '}</small>
+                    <small>${history.customer?.name || ' '}</small>
                 </div>
 
                 <div>
                     <p>Cashier:</p>
-                    <small>${history.sale.user.name}</small>
+                    <small>${history.user?.name || ' '}</small>
                 </div>
             </div>
         </div>
-
 
         <div class="section">
             <table>
@@ -336,44 +348,39 @@ const companyData = props.companyInfo[0];
                     </tr>
                 </thead>
                 <tbody>
-                     <td>${history.product.name}</td>
-                     <td >${history.quantity}</td>
-                     <td>
-                        ${
-                          history.sale.discount && history.sale.discount > 0 
-                            ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${history.product.discount}% off</div>`
-                            : ""
-                        }
-
-                      <div>${history.unit_price}</div>
-                      </td>
+                    ${productRows}
                 </tbody>
             </table>
         </div>
-
+        
+        
         <div class="totals">
             <div>
                 <span>Sub Total</span>
-                <span>${history.total_price} LKR</span>
+                <span>${history.total_amount || 0} LKR</span>
             </div>
             <div>
                 <span>Discount</span>
-                <span>${history.sale.discount} LKR</span>
+                <span>${history.discount || 0} LKR</span>
+            </div>
+            <div>
+                <span>Custome Discount</span>
+                <span>${history.custom_discount || 0} LKR</span>
             </div>
             <div>
                 <span>Total</span>
-                <span> ${(history.total_price - (history.sale.discount || 0)).toFixed(2)} LKR</span>
+                <span>${(history.total_amount - (history.discount || 0)).toFixed(2)} LKR</span>
             </div>
-           <div>
+            <div>
                 <span>Cash</span>
-                <span>${history.sale.cash} LKR</span>
+                <span>${history.cash || 0} LKR</span>
             </div>
             <div>
                 <span>Balance</span>
-                <span> ${(history.sale.cash - (history.total_price - (history.sale.discount || 0))).toFixed(2)} LKR</span>
+                <span>${(history.cash - (history.total_amount - (history.discount || 0))).toFixed(2)} LKR</span>
             </div>
         </div>
-
+        
         <div class="footer">
             <p>THANK YOU COME AGAIN</p>
             <p class="italic">Let the quality define its own standards</p>
