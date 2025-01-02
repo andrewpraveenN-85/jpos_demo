@@ -24,6 +24,7 @@ class Product extends Model
         'stock_quantity',
         'barcode',
         'image',
+        'expire_date',
     ];
 
     // public static function boot()
@@ -56,6 +57,7 @@ class Product extends Model
         return $this->belongsTo(Supplier::class, 'supplier_id','id');
     }
 
-
-
+    protected $casts = [
+        'expire_date' => 'date', // Cast expiry_date as a date
+    ];    
 }

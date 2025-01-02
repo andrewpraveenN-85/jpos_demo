@@ -86,7 +86,6 @@
           <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
-
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -100,13 +99,12 @@
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">Billing Details</h2>
-              <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
+              <span
+                class="flex cursor-pointer"
+                @click="isSelectModalOpen = true"
+              >
                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
-                <img
-
-                  src="/images/selectpsoduct.svg"
-                  class="w-6 h-6 ml-2 "
-                />
+                <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
 
@@ -131,7 +129,7 @@
                   @click="submitBarcode"
                   class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-r-xl"
                 >
-                  Enter 
+                  Enter
                 </button>
               </div>
             </div>
@@ -188,11 +186,11 @@
                   class="object-cover w-16 h-16 border border-gray-500"
                 />
               </div>
-              <div class="flex flex-col justify-start w-4/6">
-                <p class="text-3xl text-black">
+              <div class="flex flex-col justify-between w-5/6">
+                <p class="text-xl text-black">
                   {{ item.name }}
                 </p>
-                <div class="flex items-end justify-between w-full">
+                <div class="flex items-center justify-between w-full">
                   <div class="flex space-x-4">
                     <p
                       @click="incrementQuantity(item.id)"
@@ -200,11 +198,17 @@
                     >
                       <i class="ri-add-line"></i>
                     </p>
-                    <p
+                    <!-- <p
                       class="bg-[#D9D9D9] border-2 border-black h-8 w-8 text-black flex justify-center items-center rounded"
                     >
                       {{ item.quantity }}
-                    </p>
+                    </p> -->
+                    <input
+                      type="number"
+                      v-model="item.quantity"
+                      min="0"
+                      class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center"
+                    />
                     <p
                       @click="decrementQuantity(item.id)"
                       class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer"

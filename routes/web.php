@@ -67,6 +67,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('products/{product}', [ProductController::class, 'update']);
     Route::post('products-variant', [ProductController::class, 'productVariantStore'])->name('productVariant');
 
+    Route::post('products-size', [ProductController::class, 'sizeStore'])->name('productSize');
+
+
     // Route::resource('company-info', CompanyInfoController::class)->name('companyInfo.index');
     Route::get('/company-info', [CompanyInfoController::class, 'index'])->name('companyInfo.index');
     Route::post('/company-info/{companyInfo}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');

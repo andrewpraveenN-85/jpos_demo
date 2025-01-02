@@ -132,6 +132,23 @@
                       >{{ form.errors.barcode }}</span
                     >
                   </div>
+                  <div class="w-full" v-if="isPharma">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
+                    >
+                    <input
+                      v-model="form.expire_date"
+                      type="date"
+                      id="barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
+                  </div>
                 </div>
 
                 <div>
@@ -424,6 +441,8 @@ import { useForm } from "@inertiajs/vue3";
 // Emit event to toggle modal visibility
 const emit = defineEmits(["update:open"]);
 
+const isPharma = computed(() => import.meta.env.VITE_APP_NAME === "pharma");
+
 // Play click sound function
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -473,6 +492,7 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  expire_date: null,
 });
 
 // Handle file upload for images
@@ -555,6 +575,9 @@ watch(
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
       form.image = newValue.image;
+      form.expire_date = newValue.expire_date
+        ? new Date(newValue.expire_date).toISOString().split("T")[0]
+        : null;
     }
   },
   { immediate: true }
