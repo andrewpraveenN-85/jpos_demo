@@ -275,6 +275,9 @@ const handlePrintReceipt = () => {
         .footer .italic {
             font-style: italic;
         }
+        .left-align {
+        text-align: left;
+    }
     </style>
 </head>
 <body>
@@ -296,7 +299,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
             <div class="info-row">
                 <div>
                     <p>Date:</p>
-                    <small>${new Date().toLocaleString()} </small>
+                    <small>${new Date().toLocaleDateString()} </small>
                 </div>
                 <div>
                     <p>Order No:</p>
@@ -308,8 +311,8 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
                     <p>Customer:</p>
                     <small>${props.customer.name}</small>
                 </div>
-                <div>
-                    <p>Cashier:</p>
+                <div class="left-align">
+                    <p >Cashier:</p>
                     <small>${props.cashier.name}</small>
                 </div>
             </div>
@@ -357,7 +360,8 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
         <div class="footer">
             <p>THANK YOU COME AGAIN</p>
             <p class="italic">Let the quality define its own standards</p>
-            <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+            <p style="font-weight: bold;">Powered by JAAN Network Ltd.</p>
+               <p>${new Date().toLocaleTimeString()} </p>
         </div>
     </div>
 </body>
