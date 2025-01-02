@@ -277,7 +277,7 @@ const getSafeValue = (obj, path) => {
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .totals div:nth-child(3) {
+        .totals div:nth-child(4) {
             font-size: 14px;
             font-weight: bold;
         }
@@ -362,6 +362,10 @@ const getSafeValue = (obj, path) => {
             <div>
                 <span>Discount</span>
                 <span>${history.discount || 0} LKR</span>
+            </div>
+            <div>
+                <span>Custome Discount</span>
+                <span>${history.custom_discount || 0} LKR</span>
             </div>
             <div>
                 <span>Total</span>

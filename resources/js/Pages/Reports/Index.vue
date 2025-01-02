@@ -145,7 +145,7 @@
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <p class="text-2xl font-bold text-black">{{ totalDiscount }} LKR</p>
+                    <p class="text-2xl font-bold text-black">{{ (totalDiscount || 0) + (customeDiscount || 0) }} LKR</p>
                 </div>
             </div>
             <!-- Average Transaction Value -->
@@ -406,6 +406,7 @@ const props = defineProps({
     netProfit: { type: Number, required: true },
     totalTransactions: { type: Number, required: true },
     totalDiscount: { type: Number, required: true },
+    customeDiscount : {type : Number, required: true},
     totalCustomer: { type: Number, required: true },
     startDate: { type: String, default: "" },
     endDate: { type: String, default: "" },

@@ -122,6 +122,8 @@ const props = defineProps({
   subTotal: String,
   totalDiscount: String,
   total: String,
+  custom_discount: Number,
+  
 });
 
 const handlePrintReceipt = () => {
@@ -131,7 +133,7 @@ const handlePrintReceipt = () => {
       sum + parseFloat(product.selling_price) * product.quantity,
     0
   );
-
+  const customDiscount = Number(props.custom_discount || 0);
   const totalDiscount = props.products
     .reduce((total, item) => {
       // Check if item has a discount
@@ -139,14 +141,14 @@ const handlePrintReceipt = () => {
         const discountAmount =
           (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
           item.quantity;
-        return total + discountAmount;
+        return total + discountAmount ;
       }
       return total; // If no discount, return total as-is
     }, 0)
     .toFixed(2); // Ensures two decimal places
 
   const discount = 0; // Example discount (can be dynamic)
-  const total = subTotal - totalDiscount;
+  const total = subTotal - totalDiscount - customDiscount;
 
   // Generate table rows dynamically using props.products
   const productRows = props.products
@@ -258,7 +260,7 @@ const handlePrintReceipt = () => {
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .totals div:nth-child(3) {
+        .totals div:nth-child(4) {
             font-size: 14px;
             font-weight: bold;
         }
@@ -334,6 +336,10 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value
             <div>
                 <span>Discount</span>
                 <span>${(Number(props.totalDiscount) || 0).toFixed(2)} LKR</span>
+            </div>
+            <div>
+                <span>Custom Discount</span>
+                <span>${(Number(props.custom_discount) || 0).toFixed(2)} LKR</span>
             </div>
             <div>
                 <span>Total</span>
