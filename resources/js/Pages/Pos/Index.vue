@@ -178,11 +178,7 @@
               </p>
             </div>
 
-            <div
-              class="flex items-center w-full py-4 border-b border-black"
-              v-for="item in products"
-              :key="item.id"
-            >
+            <div class="flex items-center w-full py-4 border-b border-black"  v-for="item in products"  :key="item.id"  >
               <div class="flex w-1/6">
                 <img
                   :src="
