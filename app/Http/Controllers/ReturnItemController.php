@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\Sale;
+use App\Models\SaleItem;
 use App\Models\ReturnItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 
 class ReturnItemController extends Controller
 {
@@ -12,7 +17,23 @@ class ReturnItemController extends Controller
      */
     public function index()
     {
-        //
+        if (!Gate::allows('hasRole', ['Admin','Manager'])) {
+            abort(403, 'Unauthorized');
+        }
+
+        $sales = Sale::with('customer')->orderBy('created_at', 'desc')->get();
+        $saleItems  = SaleItem::with('product')->orderBy('created_at', 'desc')->get();
+
+
+
+
+        return Inertia::render('ReturnItem/Index', [
+            'sales' => $sales,
+            'saleItems' => $saleItems,
+
+        ]);
+
+
     }
 
     /**
@@ -26,10 +47,25 @@ class ReturnItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+
+
+
+
+     public function store(Request $request)
+     {
+         // Debug the incoming data
+         if ($request->isJson()) {
+             $data = $request->json()->all();
+             dd($data); // Inspect the parsed data
+         }
+
+         // If data is not JSON, inspect it in other formats
+         dd($request->all());
+     }
+
+
+
+
 
     /**
      * Display the specified resource.
