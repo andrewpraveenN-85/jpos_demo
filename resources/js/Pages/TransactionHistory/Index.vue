@@ -102,7 +102,7 @@
                         >
                             <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.order_id || "N/A" }}</td>
-                            <td class="p-4 font-bold border-gray-200">{{ history.total_amount - (history.discount || 0) || "N/A" }}</td>
+                            <td class="p-4 font-bold border-gray-200">{{ history.total_amount - (history.discount || 0) - (history.custom_discount || 0) || "N/A" }}</td>
                              <td class="p-4 font-bold border-gray-200">{{((parseFloat(history.discount) || 0) + (parseFloat(history.custom_discount) || 0)).toLocaleString()}}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
@@ -190,7 +190,7 @@ const getSafeValue = (obj, path) => {
     <tr>
       <td>${getSafeValue(item, 'product.name') || 'N/A'}</td>
       <td class="text-right">${item.quantity || 0}</td>
-      <td class="text-right">${item.unit_price || 0} LKR</td>
+      <td class="text-right">${item.unit_price || 0} </td>
     </tr>
   `).join('');
 
@@ -314,10 +314,7 @@ const getSafeValue = (obj, path) => {
                         ${new Date(history.created_at).toLocaleDateString('en-US', {
                         dateStyle: 'medium', 
                         })} 
-                        ${new Date(history.created_at).toLocaleTimeString('en-US', {
-                        timeStyle: 'long', 
-                        hourCycle: 'h23',   
-                        })}
+                        
                     </small>
                 </div>
                 <div>
@@ -369,7 +366,7 @@ const getSafeValue = (obj, path) => {
             </div>
             <div>
                 <span>Total</span>
-                <span>${(history.total_amount - (history.discount || 0)).toFixed(2)} LKR</span>
+                <span>${(history.total_amount - (history.discount || 0) -(history.custom_discount || 0)).toFixed(2)} LKR</span>
             </div>
             <div>
                 <span>Cash</span>
@@ -377,7 +374,7 @@ const getSafeValue = (obj, path) => {
             </div>
             <div>
                 <span>Balance</span>
-                <span>${(history.cash - (history.total_amount - (history.discount || 0))).toFixed(2)} LKR</span>
+                <span>${(history.cash - (history.total_amount - (history.discount || 0) -(history.custom_discount || 0))).toFixed(2)} LKR</span>
             </div>
         </div>
         
@@ -385,6 +382,10 @@ const getSafeValue = (obj, path) => {
             <p>THANK YOU COME AGAIN</p>
             <p class="italic">Let the quality define its own standards</p>
             <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+            <p>${new Date(history.created_at).toLocaleTimeString('en-US', {
+                        timeStyle: 'long', 
+                        hourCycle: 'h23',   
+                        })}</p>
         </div>
       </div>
     </body>

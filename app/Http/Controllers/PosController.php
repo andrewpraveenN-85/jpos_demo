@@ -107,14 +107,21 @@ class PosController extends Controller
             return $carry + ($product['quantity'] * $product['cost_price']);
         }, 0);
 
-        $totalDiscount = collect($products)->reduce(function ($carry, $product) {
+        $productDiscounts = collect($products)->reduce(function ($carry, $product) {
             if (isset($product['discount']) && $product['discount'] > 0 && isset($product['apply_discount']) && $product['apply_discount'] != false) {
-                // Calculate the discount amount per product
                 $discountAmount = ($product['selling_price'] - $product['discounted_price']) * $product['quantity'];
                 return $carry + $discountAmount;
             }
             return $carry;
         }, 0);
+    
+        // Get coupon discount if applied
+        $couponDiscount = isset($request->input('appliedCoupon')['discount']) ? 
+            floatval($request->input('appliedCoupon')['discount']) : 0;
+    
+    
+        // Calculate total combined discount
+        $totalDiscount = $productDiscounts + $couponDiscount ;
 
         DB::beginTransaction(); // Start a transaction
 
@@ -161,6 +168,7 @@ class PosController extends Controller
                 'sale_date' => now()->toDateString(), // Current date
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
+
             ]); 
 
             foreach ($products as $product) {
