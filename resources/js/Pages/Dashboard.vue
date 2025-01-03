@@ -234,7 +234,7 @@
             <div class="text-container">
               <p class="title">Company Info</p>
               <p class="description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                 Manage essential business details like name, address, contact info, and logo for branding on invoices and reports.
               </p>
             </div>
           </div>
@@ -255,14 +255,32 @@
             <div class="text-container">
               <p class="title">Employees</p>
               <p class="description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                Handle staff roles, contact details, and access permissions for secure and efficient operations.
               </p>
             </div>
           </div>
         </div>
       </Link>
 
-
+      <Link href="/transactionHistory" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#FFBF00]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/history.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Order History</p>
+              <p class="description">
+                View and manage past orders with details like date, items, total amount, and payment status for easy tracking and reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
 
 
 

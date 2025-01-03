@@ -332,50 +332,27 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-8 mt-6">
+                <div class="flex items-center gap-8 mt-6" v-if="isPharma">
                   <div class="w-full">
-                    <label
-                      for="barcode"
-                      class="block text-sm font-medium text-gray-300"
-                      >Barcode</label
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
                     >
                     <input
-                      type="text"
+                      v-model="form.expire_date"
+                      type="date"
                       id="barcode"
-                      v-model="form.barcode"
-                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Scan barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                     />
-                    <span v-if="form.errors.barcode" class="mt-2 text-red-500">
-                      {{ form.errors.barcode }}
-                    </span>
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
                   </div>
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
-                  <!-- <div class="w-full">
-                                        <label for="image" class="block text-sm font-medium text-gray-300">Stock update
-                                            Type :</label>
-
-
-                                            <select required v-model="form.transaction_type" id="transaction_type"
-                                            class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600">
-                                            <option value="">Select Transaction Type</option>
-                                            <option value="0" selected>Addition</option>
-                                            <option value="1">Subtraction</option>
-                                        </select>
-
-                                        <input type="number" id="quantity" v-model="quantity"
-                                            class="w-full px-4 py-2 mt-4 text-black bg-white rounded-md m focus:outline-none focus:ring focus:ring-blue-600"
-                                            placeholder="Enter stock quantity" />
-
-
-
-
-
-
-                                    </div> -->
-
                   <div class="w-full">
                     <label
                       for="image"
@@ -463,6 +440,8 @@ import { useForm } from "@inertiajs/vue3";
 // Emit event to toggle modal visibility
 const emit = defineEmits(["update:open"]);
 
+const isPharma = computed(() => import.meta.env.VITE_APP_NAME === "pharma");
+
 // Play click sound function
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -513,6 +492,7 @@ const form = useForm({
   discounted_price: null,
   barcode: "",
   image: null,
+  expire_date: null,
 });
 
 // Handle file upload for images
@@ -600,6 +580,9 @@ watch(
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
       form.image = newValue.image || null;
+      form.expire_date = newValue.expire_date
+        ? new Date(newValue.expire_date).toISOString().split("T")[0]
+        : null;
     }
   },
   { immediate: true }

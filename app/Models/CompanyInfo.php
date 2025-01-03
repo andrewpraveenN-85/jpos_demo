@@ -13,6 +13,7 @@ class CompanyInfo extends Model
         'name',
         'address',
         'phone',
+        'phone2',
         'email',
         'website',
         'logo',
