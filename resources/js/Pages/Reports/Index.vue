@@ -225,7 +225,7 @@
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
                 <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
-                        Total Selling Price In Stock:  
+                        Total Selling Price In Stock:
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
@@ -587,7 +587,7 @@ const productQuantities = computed(() => {
   const quantities = {};
   props.sales.forEach((sale) => {
     sale.sale_items.forEach((item) => {
-      const productName = item.product.name;
+      const productName = item.product && item.product.name ? item.product.name : "N/A";
       quantities[productName] = (quantities[productName] || 0) + item.quantity;
     });
   });
