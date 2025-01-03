@@ -32,7 +32,7 @@ class CouponController extends Controller
 
         $validated = $request->validate([
             'code' => 'required|string|max:255|unique:coupons,code',
-            'discount' => 'required|string|max:255',
+            'discount' => 'required|numeric',
         ]);
 
         Coupon::create($validated);
