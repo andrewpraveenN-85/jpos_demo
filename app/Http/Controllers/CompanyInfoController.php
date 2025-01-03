@@ -73,9 +73,9 @@ class CompanyInfoController extends Controller
     $validated = $request->validate([
         'name' => 'nullable|string|max:255',
         'address' => 'nullable|string|max:255',
-        'phone' => 'nullable|string|max:15',
-        'phone2' => 'nullable|string|max:15',
-        'email' => 'nullable|email|max:255',
+        'phone' => 'nullable|string|regex:/^\d{10}$/',
+        'phone2' => 'nullable|string|regex:/^\d{10}$/',
+        'email' => 'nullable|email|max:255|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/',
         'website' => 'nullable|url|max:255',
         'logo' => 'nullable|max:2048', // Ensure the uploaded file is an image
     ]);
