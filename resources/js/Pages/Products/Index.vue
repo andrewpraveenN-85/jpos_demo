@@ -89,7 +89,7 @@
 
       <div class="flex items-center space-x-4">
         <!-- Search Input on the Left -->
-        <div class="w-1/3">
+        <div class="w-1/4">
           <input
             v-model="search"
             @input="performSearch"

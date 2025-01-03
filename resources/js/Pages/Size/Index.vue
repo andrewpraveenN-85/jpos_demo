@@ -111,7 +111,7 @@
             <tr
                 class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
               >
-              <th class="p-4 font-semibold tracking-wide   uppercase">#</th>
+              <th class="p-4 font-semibold tracking-wide   uppercase">Size ID</th>
               <th class="p-4 font-semibold tracking-wide   uppercase">Name</th>
               <th class="p-4 font-semibold tracking-wide  uppercase">Actions</th>
             </tr>
