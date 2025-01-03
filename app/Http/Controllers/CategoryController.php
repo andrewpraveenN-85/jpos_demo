@@ -105,7 +105,7 @@ class CategoryController extends Controller
         if ($request->has('name')) {
             // Validate name directly
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
                  'parent_id' => 'nullable|exists:categories,id',
             ]);
 

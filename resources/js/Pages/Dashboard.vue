@@ -282,6 +282,28 @@
         </div>
       </Link>
 
+      <Link href="/manualpos" v-if="HasRole(['Admin', 'Cashier'])">
+        <div class="dashboard-card bg-[#009990]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/checkout.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Manual Pos</p>
+              <p class="description">
+                Simplify sales with an intuitive interface for quick billing and
+                payment processing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
 
 
 

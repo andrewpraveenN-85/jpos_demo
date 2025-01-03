@@ -209,7 +209,7 @@ const handlePrintReceipt = () => {
           }
           table th, table td {
               padding: 6px 8px;
-              border-bottom: 1px solid #ddd;
+              
           }
           table th {
               text-align: left;
@@ -245,6 +245,10 @@ const handlePrintReceipt = () => {
           .footer .italic {
               font-style: italic;
           }
+
+           .left-align {
+                text-align: left;
+            }
       </style>
   </head>
   <body>
@@ -266,7 +270,7 @@ const handlePrintReceipt = () => {
               <div class="info-row">
                   <div>
                       <p>Date:</p>
-                      <small>${new Date().toLocaleString()} </small>
+                      <small>${new Date().toLocaleDateString()} </small>
                   </div>
                   <div>
                       <p>Order No:</p>
@@ -278,7 +282,7 @@ const handlePrintReceipt = () => {
                       <p>Customer:</p>
                       <small>${props.customer.name}</small>
                   </div>
-                  <div>
+                  <div class="left-align">
                       <p>Cashier:</p>
                       <small>${props.cashier.name}</small>
                   </div>
@@ -327,7 +331,8 @@ const handlePrintReceipt = () => {
           <div class="footer">
               <p>THANK YOU COME AGAIN</p>
               <p class="italic">Let the quality define its own standards</p>
-              <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+               <p style="font-weight: bold;">Powered by JAAN Network Ltd.</p>
+               <p>${new Date().toLocaleTimeString()} </p>
           </div>
       </div>
   </body>
