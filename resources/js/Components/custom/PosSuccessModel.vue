@@ -308,6 +308,9 @@
   <body>
       <div class="receipt-container">
                 <div class="header">
+
+<img src="/images/music_kade_bill.png" style="width: 200px; height: 150px;" />
+
            ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
   ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
   ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email )
