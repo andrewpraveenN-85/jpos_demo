@@ -209,7 +209,7 @@ const handlePrintReceipt = () => {
           }
           table th, table td {
               padding: 6px 8px;
-              border-bottom: 1px solid #ddd;
+              
           }
           table th {
               text-align: left;
