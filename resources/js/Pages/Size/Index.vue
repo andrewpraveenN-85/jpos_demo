@@ -89,7 +89,7 @@
             ? ''
             : 'You do not have permission to add more sizes'"
 >
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Size
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Sizes
 </p>
 
 
