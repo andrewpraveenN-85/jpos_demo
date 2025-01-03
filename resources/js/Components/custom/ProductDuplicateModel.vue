@@ -353,7 +353,7 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-8 mt-6">
+                <!-- <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
                       for="barcode"
@@ -371,7 +371,7 @@
                       {{ form.errors.barcode }}
                     </span>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
