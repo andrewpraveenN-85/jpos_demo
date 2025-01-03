@@ -99,7 +99,7 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
             ? ''
             : 'You do not have permission to add more Color'"
 >
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Color
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Colors
 </p>
 
 
