@@ -31,7 +31,7 @@ class SizeController extends Controller
 
 
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:191',
             ]);
 
 
@@ -44,7 +44,7 @@ class SizeController extends Controller
         if ($request->has('name')) {
             // Validate name directly
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:191',
             ]);
 
 
