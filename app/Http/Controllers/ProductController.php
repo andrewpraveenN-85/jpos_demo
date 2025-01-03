@@ -514,6 +514,6 @@ class ProductController extends Controller
     }
 
     public function addPromotion(Request $request){
-        return Inertia::render('Products/Index');
+        return Inertia::render('Products/Promotions');
     }
 }
