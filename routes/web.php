@@ -88,7 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::post('/stock-transition', [PosController::class, 'getProduct'])->name('pos.getProduct');
 
 
-
+    Route::get('/add_promotion', [ProductController::class, 'addPromotion']);
 
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);

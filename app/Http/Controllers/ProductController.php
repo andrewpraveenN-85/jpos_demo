@@ -512,4 +512,8 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
+
+    public function addPromotion(Request $request){
+        return Inertia::render('Products/Index');
+    }
 }

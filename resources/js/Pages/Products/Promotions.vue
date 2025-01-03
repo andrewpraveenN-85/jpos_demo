@@ -1,5 +1,5 @@
 
-<style lang="css">
+
 .pagination-disabled {
   color: rgb(37 99 235);
   transition: all 0.5s ease;
@@ -20,7 +20,7 @@
 }
 </style>
 <template>
-  <Head title="Products" />
+  <Head title="Add Promotions" />
   <Banner />
   <div
     class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
@@ -29,40 +29,15 @@
     <Header />
     <div class="w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between">
-        <div class="flex items-center justify-center space-x-4"></div>
-        <p class="text-3xl italic font-bold text-black">
-          <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
-            totalProducts
-          }}</span>
-          <span class="text-xl">/ Total Products</span>
-        </p>
-      </div>
-      <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4">
-          <Link href="/">
+          <Link href="/products">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="text-4xl font-bold tracking-wide text-black uppercase">
-            Products
+            Products / Add a Promotion
           </p>
         </div>
-        <!-- <p
-          :disabled="!HasRole(['Admin'])"
-          @click="
-            () => {
-              if (HasRole(['Admin'])) {
-                isCreateModalOpen = true;
-              }
-            }
-          "
-          :class="{
-            'cursor-not-allowed opacity-50': !HasRole(['Admin']),
-            'cursor-pointer': HasRole(['Admin']),
-          }"
-          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl"
-        >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
-        </p> -->
+       
         <div class="flex space-x-4">
           <Link
             href="/add_promotion"
@@ -405,184 +380,12 @@
     </div>
   </div>
 
-  <ProductCreateModel
-    :categories="allcategories"
-    :colors="colors"
-    :sizes="sizes"
-    :suppliers="suppliers"
-    v-model:open="isCreateModalOpen"
-  />
-  <ProductUpdateModel
-    :categories="allcategories"
-    :colors="colors"
-    :suppliers="suppliers"
-    :sizes="sizes"
-    v-model:open="isEditModalOpen"
-    :selected-product="selectedProduct"
-  />
-
-  <ProductDuplicateModel
-    :categories="allcategories"
-    :colors="colors"
-    :suppliers="suppliers"
-    :sizes="sizes"
-    v-model:open="isDuplicateModalOpen"
-    :selected-product="selectedProduct"
-  />
-
-  <ProductViewModel
-    :categories="allcategories"
-    :colors="colors"
-    :sizes="sizes"
-    v-model:open="isViewModalOpen"
-    :selected-product="selectedProduct"
-  />
-  <ProductDeleteModel
-    v-model:open="isDeleteModalOpen"
-    :selected-product="selectedProduct"
-    @delete="deleteProduct"
-  />
+  
   <Footer />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Head } from "@inertiajs/vue3";
-import { Link, useForm, router } from "@inertiajs/vue3";
-import Header from "@/Components/custom/Header.vue";
-import Footer from "@/Components/custom/Footer.vue";
-import Banner from "@/Components/Banner.vue";
-import { defineProps, onMounted } from "vue";
-import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
 
-import ProductDuplicateModel from "@/Components/custom/ProductDuplicateModel.vue";
-import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
-import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
-import ProductDeleteModel from "@/Components/custom/ProductDeleteModel.vue";
-import { debounce } from "lodash";
-import { HasRole } from "@/Utils/Permissions";
-
-const isCreateModalOpen = ref(false);
-const isEditModalOpen = ref(false);
-const isDuplicateModalOpen = ref(false);
-const isViewModalOpen = ref(false);
-const selectedProduct = ref(null);
-const isDeleteModalOpen = ref(false);
-
-const emit = defineEmits(["update:open"]);
-
-const openEditModal = (product) => {
-  selectedProduct.value = product; // Set the selected product
-  isEditModalOpen.value = true; // Open the edit modal
-};
-
-const openDuplicateModal = (product) => {
-  selectedProduct.value = product; // Set the selected product
-  isDuplicateModalOpen.value = true; // Open the edit modal
-};
-
-const openViewModal = (product) => {
-  selectedProduct.value = product; // Set the selected product
-  isViewModalOpen.value = true; // Open the view modal
-};
-
-const openDeleteModal = (product) => {
-  selectedProduct.value = product;
-  isDeleteModalOpen.value = true;
-};
-
-const props = defineProps({
-  products: Object,
-  categories: Array,
-  suppliers: Array,
-  colors: Array,
-  sizes: Array,
-  allcategories: Array,
-  totalProducts: Number,
-  search: String,
-  sort: String,
-  color: String,
-  size: String,
-  stockStatus: String,
-  selectedCategory: String,
-});
-
-const search = ref(props.search || "");
-const sort = ref(props.sort || "");
-const color = ref(props.color || "");
-const size = ref(props.size || "");
-const suppliers = ref(props.suppliers || "");
-const stockStatus = ref(props.stockStatus || "");
-const selectedCategory = ref(props.selectedCategory || "");
-
-const performSearch = debounce(() => {
-  applyFilters();
-}, 500);
-
-const applyFilters = (page) => {
-  router.get(
-    route("products.index"),
-    {
-      search: search.value,
-      sort: sort.value,
-      color: color.value,
-      size: size.value,
-      stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value,
-    },
-    { preserveState: true }
-  );
-};
-
-onMounted(() => {
-  // console.log("Products:", props.products);
-  // console.table(props.products);
-});
-const showModal = ref(false);
-const form = useForm({});
-
-const openModal = (id) => {
-  productToDelete.value = id;
-  showModal.value = true;
-};
-const deleteProduct = (id) => {
-  const form = useForm({});
-  form.delete(`/products/${id}`, {
-    onSuccess: () => {
-      isDeleteModalOpen.value = false; // Close the modal on success
-    },
-    onError: (errors) => {
-      console.error("Delete failed:", errors);
-    },
-  });
-};
-const navigateTo = (url) => {
-  if (!url) return; // Avoid null or undefined URLs
-
-  // Extract the `page` parameter from the URL
-  const urlParams = new URLSearchParams(
-    new URL(url, window.location.origin).search
-  );
-  const page = urlParams.get("page");
-
-  // Use Inertia's router.get with current filters
-  router.get(
-    route("products.index"),
-    {
-      page, // Add the page parameter
-      search: search.value,
-      sort: sort.value,
-      color: color.value,
-      size: size.value,
-      stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value,
-    },
-    {
-      preserveState: true, // Maintain the current state
-      preserveScroll: true, // Prevent scroll reset
-    }
-  );
-};
 </script>
 
 
