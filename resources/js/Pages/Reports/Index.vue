@@ -225,7 +225,7 @@
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
                 <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
-                        Total Selling Price In Stock:
+                        Total Selling Price In Stock:  
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
@@ -241,7 +241,8 @@
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <p class="text-2xl font-bold text-black">{{ totalRetailValue.toFixed(2) }} LKR</p>
+                    <p class="text-2xl font-bold text-black">
+                        {{ totalRetailValue.toFixed(2) }} LKR</p>
                 </div>
             </div>
         </div>
@@ -503,14 +504,14 @@ const totalSellingPrice = computed(() => {
   }, 0);
 });
 const totalRetailValue = computed(() => {
-  return products.value.reduce((sum, product) => {
-    if (product.discount <= 100) {
-      return sum + product.selling_price * (1 - product.discount / 100);
-    } else {
-      return sum + (product.selling_price - product.discount);
-    }
-  }, 0);
+    // Ensure products are valid and sum up cost_price
+    return products.value.reduce((total, product) => {
+        return total + (parseFloat(product.cost_price) || 0); // Handle cases where cost_price might not be valid
+    }, 0);
 });
+
+
+
 
 // Handle filter submission
 const filterData = () => {
