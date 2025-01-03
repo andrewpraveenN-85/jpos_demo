@@ -246,9 +246,7 @@ const handlePrintReceipt = () => {
               font-style: italic;
           }
 
-           .left-align {
-                text-align: left;
-            }
+          
       </style>
   </head>
   <body>
@@ -282,7 +280,7 @@ const handlePrintReceipt = () => {
                       <p>Customer:</p>
                       <small>${props.customer.name}</small>
                   </div>
-                  <div class="left-align">
+                  <div>
                       <p>Cashier:</p>
                       <small>${props.cashier.name}</small>
                   </div>

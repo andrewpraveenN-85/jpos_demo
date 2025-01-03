@@ -40,7 +40,7 @@ class SupplierController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/',
            'contact' => 'required|string|regex:/^\d{10}$/',
             'email' => 'required|email|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/|max:255|unique:suppliers,email',
             'address' => 'required|string|max:500',
@@ -78,7 +78,7 @@ class SupplierController extends Controller
         }
         // Validate incoming data
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:191',
             'contact' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255|unique:suppliers,email,' . $supplier->id,
             'address' => 'nullable|string|max:500',

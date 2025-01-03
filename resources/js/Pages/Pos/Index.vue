@@ -533,6 +533,7 @@ const submitOrder = async () => {
       orderId: orderId.value,
       cash: cash.value,
       custom_discount: custom_discount.value,
+      appliedCoupon: appliedCoupon.value,
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
