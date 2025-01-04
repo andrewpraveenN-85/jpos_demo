@@ -132,183 +132,94 @@
               </template>
               <template v-else>
                 <template v-if="products.data.length > 0">
-
-                    <div class="overflow-x-auto">
-  <div class="grid grid-flow-col auto-cols-[25%] gap-8">
-    <div
-      v-for="product in products.data"
-      :key="product.id"
-      @click="
-        product.stock_quantity > 0 && selectProduct(product)
-      "
-      :class="[
-        'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg',
-        product.stock_quantity > 0
-          ? selectedProducts.find((p) => p.id === product.id)
-            ? 'border-green-600 hover:-translate-y-4 cursor-pointer'
-            : 'border-black hover:-translate-y-4 cursor-pointer'
-          : 'border-red-600 cursor-not-allowed',
-      ]"
-    >
-      <div>
-        <img
-          :src="
-            product.image
-              ? `/${product.image}`
-              : '/images/placeholder.jpg'
-          "
-          alt="Product Image"
-          class="object-cover w-full h-64"
-        />
-      </div>
-      <div class="px-2 py-4 space-y-4">
-        <div
-          class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide"
-        >
-          <p class="text-justify">
-            {{ product.name || "N/A" }}
-          </p>
-          <p
-            class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center"
-          >
-            {{ product.selling_price || "N/A" }}
-          </p>
-        </div>
-        <div
-          class="flex justify-center space-x-2 items-start w-full"
-        >
-          <div class="flex space-x-1 text-gray-400">
-            <p class="font-bold">Color:</p>
-            <p>{{ product.color?.name || "N/A" }}</p>
-          </div>
-          <div class="flex space-x-1 text-gray-400">
-            <p class="font-bold">Size:</p>
-            <p>
-              {{ product.size?.name || "N/A" }}
-            </p>
-          </div>
-        </div>
-        <div
-          class="flex items-center justify-center w-full space-x-4"
-        >
-          <p
-            class="flex items-center space-x-2 text-justify text-gray-400"
-          >
-            Supplier :
-            <b>
-              &nbsp; {{ product.supplier?.name || "N/A" }}
-            </b>
-          </p>
-        </div>
-        <div class="flex items-center justify-between">
-          <p
-            v-if="product.stock_quantity > 0"
-            class="text-xl font-bold tracking-wider text-green-500"
-          >
-            <i class="ri-checkbox-blank-circle-fill"></i> In
-            Stock
-          </p>
-          <p
-            v-else
-            class="text-xl font-bold tracking-wider text-red-500"
-          >
-            <i class="ri-checkbox-blank-circle-fill"></i> Out of
-            Stock
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-                    <!-- <div class="grid grid-cols-4 gap-8">
-                    <div
-                      v-for="product in products.data"
-                      :key="product.id"
-                      @click="
-                        product.stock_quantity > 0 && selectProduct(product)
-                      "
-                      :class="[
-                        'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg',
-                        product.stock_quantity > 0
-                          ? selectedProducts.find((p) => p.id === product.id)
-                            ? 'border-green-600 hover:-translate-y-4 cursor-pointer'
-                            : 'border-black hover:-translate-y-4 cursor-pointer'
-                          : 'border-red-600 cursor-not-allowed',
-                      ]"
-                    >
-                      <div class="">
-                        <img
-                          :src="
-                            product.image
-                              ? `/${product.image}`
-                              : '/images/placeholder.jpg'
-                          "
-                          alt="Product Image"
-                          class="object-cover w-full h-64"
-                        />
-                      </div>
-                      <div class="px-2 py-4 space-y-4">
-                        <div
-                          class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide"
-                        >
-                          <p class="text-justify">
-                            {{ product.name || "N/A" }}
-                          </p>
-                          <p
-                            class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center"
-                          >
-                            {{ product.selling_price || "N/A" }}
-                          </p>
+                  <div class="overflow-x-auto">
+                    <div class="grid grid-flow-col auto-cols-[25%] gap-8">
+                      <div
+                        v-for="product in products.data"
+                        :key="product.id"
+                        @click="
+                          product.stock_quantity > 0 && selectProduct(product)
+                        "
+                        :class="[
+                          'space-y-4 text-white transition-transform duration-300 transform bg-black border-4 shadow-lg',
+                          product.stock_quantity > 0
+                            ? selectedProducts.find((p) => p.id === product.id)
+                              ? 'border-green-600 hover:-translate-y-4 cursor-pointer'
+                              : 'border-black hover:-translate-y-4 cursor-pointer'
+                            : 'border-red-600 cursor-not-allowed',
+                        ]"
+                      >
+                        <div>
+                          <img
+                            :src="
+                              product.image
+                                ? `/${product.image}`
+                                : '/images/placeholder.jpg'
+                            "
+                            alt="Product Image"
+                            class="object-cover w-full h-64"
+                          />
                         </div>
-                        <div
-                          class="flex justify-center space-x-2 items-start w-full"
-                        >
-                          <div class="flex space-x-1 text-gray-400">
-                            <p class="font-bold">Color:</p>
-
-                            <p>{{ product.color?.name || "N/A" }}</p>
+                        <div class="px-2 py-4 space-y-4">
+                          <div
+                            class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide"
+                          >
+                            <p class="text-justify">
+                              {{ product.name || "N/A" }}
+                            </p>
+                            <p
+                              class="px-3 text-white bg-green-700 py-2 rounded-full flex items-center"
+                            >
+                              {{ product.selling_price || "N/A" }}
+                            </p>
                           </div>
-
-                          <div class="flex space-x-1 text-gray-400">
-                            <p class="font-bold">Size:</p>
-                            <p>
-                              {{ product.size?.name || "N/A" }}
+                          <div
+                            class="flex justify-center space-x-2 items-start w-full"
+                          >
+                            <div class="flex space-x-1 text-gray-400">
+                              <p class="font-bold">Color:</p>
+                              <p>{{ product.color?.name || "N/A" }}</p>
+                            </div>
+                            <div class="flex space-x-1 text-gray-400">
+                              <p class="font-bold">Size:</p>
+                              <p>
+                                {{ product.size?.name || "N/A" }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            class="flex items-center justify-center w-full space-x-4"
+                          >
+                            <p
+                              class="flex items-center space-x-2 text-justify text-gray-400"
+                            >
+                              Supplier :
+                              <b>
+                                &nbsp; {{ product.supplier?.name || "N/A" }}
+                              </b>
+                            </p>
+                          </div>
+                          <div class="flex items-center justify-between">
+                            <p
+                              v-if="product.stock_quantity > 0"
+                              class="text-xl font-bold tracking-wider text-green-500"
+                            >
+                              <i class="ri-checkbox-blank-circle-fill"></i> In
+                              Stock
+                            </p>
+                            <p
+                              v-else
+                              class="text-xl font-bold tracking-wider text-red-500"
+                            >
+                              <i class="ri-checkbox-blank-circle-fill"></i> Out
+                              of Stock
                             </p>
                           </div>
                         </div>
-                        <div
-                          class="flex items-center justify-center w-full space-x-4"
-                        >
-                          <p
-                            class="flex items-center space-x-2 text-justify text-gray-400"
-                          >
-                            Supplier :
-
-                            <b>
-                              &nbsp; {{ product.supplier?.name || "N/A" }}
-                            </b>
-                          </p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                          <p
-                            v-if="product.stock_quantity > 0"
-                            class="text-xl font-bold tracking-wider text-green-500"
-                          >
-                            <i class="ri-checkbox-blank-circle-fill"></i> In
-                            Stock
-                          </p>
-                          <p
-                            v-else
-                            class="text-xl font-bold tracking-wider text-red-500"
-                          >
-                            <i class="ri-checkbox-blank-circle-fill"></i> Out of
-                            Stock
-                          </p>
-                        </div>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
+
                   <div class="flex items-center justify-between mt-6">
                     <div class="pagination flex space-x-4">
                       <button

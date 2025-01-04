@@ -12,6 +12,7 @@ use App\Models\SaleItem;
 use App\Models\Size;
 use App\Models\StockTransaction;
 use App\Models\Employee;
+use App\Models\PromotionItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -186,6 +187,36 @@ class PosController extends Controller
                         'total_price' => $product['quantity'] * $product['selling_price'],
                     ]);
 
+                    
+
+                    if($productModel->is_promotion){
+                        $promotionItems = PromotionItem::where('promotion_id', $productModel->id)->get();
+                        foreach($promotionItems as $promotionItem){
+                            $promoProduct = Product::find($promotionItem->product_id);
+
+                            $newITemStockQuantity = $promoProduct->stock_quantity - ($product['quantity'] * $promotionItem->quantity);
+                            if ($newITemStockQuantity < 0) {
+                                DB::rollBack();
+                                return response()->json([
+                                    'message' => "Insufficient stock for product: {$productModel->name} 
+                                    ({$productModel->stock_quantity} available) (Product inside Promotion)",
+                                ], 423);
+                            }
+
+                            StockTransaction::create([
+                                'product_id' => $promoProduct->id,
+                                'transaction_type' => 'Sold',
+                                'quantity' => $product['quantity'] * $promotionItem->quantity,
+                                'transaction_date' => now(),
+                                'supplier_id' => $productModel->supplier_id ?? null,
+                            ]);
+
+                            $promoProduct->update([
+                                'stock_quantity' => $newITemStockQuantity,
+                            ]);
+                        }
+                    }
+
                     StockTransaction::create([
                         'product_id' => $product['id'],
                         'transaction_type' => 'Sold',
@@ -193,7 +224,6 @@ class PosController extends Controller
                         'transaction_date' => now(),
                         'supplier_id' => $productModel->supplier_id ?? null,
                     ]);
-
                     // Update stock quantity
                     $productModel->update([
                         'stock_quantity' => $newStockQuantity,

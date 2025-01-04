@@ -401,6 +401,7 @@ import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
 import AlertModel from "@/Components/custom/AlertModel.vue";
+
 import { useForm, router } from "@inertiajs/vue3";
 import { ref, onMounted, computed, watch } from "vue";
 import { Head } from "@inertiajs/vue3";
@@ -658,10 +659,11 @@ const submitOrder = async () => {
     message.value = "Cash is not enough";
     return;
   }
+  
   try {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
-      products: products.value,
+      products: selectedTable.value.products,
       employee_id: employee_id.value,
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,

@@ -25,6 +25,7 @@ class Product extends Model
         'barcode',
         'image',
         'description',
+        'is_promotion',
     ];
 
     // public static function boot()
@@ -37,26 +38,37 @@ class Product extends Model
     //     });
     // }
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_promotion' => 'boolean', // Automatically cast is_promotion as boolean
+    ];
+
+    public function promotionItems()
+    {
+        return $this->hasMany(PromotionItem::class);
+    }
+
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id','id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
     public function color()
     {
-        return $this->belongsTo(Color::class, 'color_id','id');
+        return $this->belongsTo(Color::class, 'color_id', 'id');
     }
 
 
     public function size()
     {
-        return $this->belongsTo(Size::class, 'size_id','id');
+        return $this->belongsTo(Size::class, 'size_id', 'id');
     }
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class, 'supplier_id','id');
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
-
-
-
 }

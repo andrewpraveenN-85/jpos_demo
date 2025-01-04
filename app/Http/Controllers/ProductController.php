@@ -7,6 +7,7 @@ use App\Models\Size;
 use App\Models\Color;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\PromotionItem;
 use App\Models\Supplier;
 use App\Models\StockTransaction;
 use App\Traits\GeneratesUniqueCode;
@@ -221,7 +222,6 @@ class ProductController extends Controller
                 $validated['barcode'] = $this->generateUniqueCode(12);
             }
 
-            
 
             // Create the product
             $product = Product::create($validated);
@@ -249,8 +249,6 @@ class ProductController extends Controller
     }
 
 
-
-
     public function productVariantStore(Request $request)
     {
 
@@ -275,7 +273,6 @@ class ProductController extends Controller
         ]);
 
 
-
         try {
 
 
@@ -286,10 +283,7 @@ class ProductController extends Controller
                 $validated['image'] = 'storage/' . $path;
             }
 
-
             // Product::create($validated);
-
-
 
             $product = Product::create($validated);
 
@@ -304,12 +298,6 @@ class ProductController extends Controller
                     'supplier_id' => $validated['supplier_id'] ?? null,
                 ]);
             }
-
-
-
-
-
-
 
             // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
@@ -444,38 +432,6 @@ class ProductController extends Controller
     }
 
 
-
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy(Product $product)
-    // {
-    //     if (!Gate::allows('hasRole', ['Admin'])) {
-    //         abort(403, 'Unauthorized');
-    //     }
-
-    //     $imagePath = str_replace('storage/', '', $product->image);
-
-    //     // Check for other products using the same image
-    //     $imageUsageCount = Product::where('image', $product->image)
-    //         ->where('id', '!=', $product->id)
-    //         ->count();
-
-    //     if ($imageUsageCount === 0 && Storage::disk('public')->exists($imagePath)) {
-    //         // Delete the image only if no other products are using it
-    //         Storage::disk('public')->delete($imagePath);
-    //     }
-
-    //     $product->delete();
-
-    //     return redirect()->route('products.index')->banner('Product Deleted successfully.');
-    // }
-
-
-
     public function destroy(Product $product)
     {
         if (!Gate::allows('hasRole', ['Admin'])) {
@@ -513,7 +469,84 @@ class ProductController extends Controller
         return redirect()->route('products.index')->banner('Product Deleted successfully.');
     }
 
-    public function addPromotion(Request $request){
-        return Inertia::render('Products/Promotions');
+    public function addPromotion(Request $request)
+    {
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
+
+
+        return Inertia::render('Products/Promotions', [
+            'allcategories' => $allcategories,
+            'colors' => $colors,
+            'sizes' => $sizes,
+        ]);
+    }
+
+    public function submitPromotion(Request $request)
+    {
+        if (!Gate::allows('hasRole', ['Admin'])) {
+            abort(403, 'Unauthorized');
+        }
+
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|string|max:255',
+            'size_id' => 'nullable|exists:sizes,id',
+            'color_id' => 'nullable|exists:colors,id',
+            'cost_price' => 'required|numeric|min:0',
+            'selling_price' => 'required|numeric|min:0',
+            'discounted_price' => 'nullable|numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'barcode' => 'nullable|string|unique:products',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
+            'products' => 'nullable|array',
+        ], [
+            'category_id.required' => 'Category is required.', // Custom message for required
+            'category_id.exists' => 'The selected category is invalid.', // Custom message for exists
+        ]);
+
+        try {
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $fileExtension = $request->file('image')->getClientOriginalExtension();
+                $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+                $path = $request->file('image')->storeAs('products', $fileName, 'public');
+                $validated['image'] = 'storage/' . $path;
+            }
+
+            if (empty($validated['barcode'])) {
+                $validated['barcode'] = $this->generateUniqueCode(12);
+            }
+
+            $products = $validated['products'] ?? [];
+            unset($validated['products']);
+
+
+            // Create the product
+            $validated['is_promotion'] = true;
+            $product = Product::create($validated);
+            foreach ($products as $key => $promotionItem) {
+                PromotionItem::create([
+                    'product_id' => $promotionItem['id'],
+                    'promotion_id' => $product->id,
+                    'quantity' => $promotionItem['quantity'],
+                ]);
+            }
+
+            // Redirect with success message
+            return redirect()->route('products.index')->banner('Promotion created successfully');
+        } catch (\Exception $e) {
+            // Log error and redirect back with an error message
+            \Log::error('Error creating product: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while creating the product. Please try again.');
+        }
     }
 }
