@@ -156,7 +156,7 @@
                 class="flex cursor-pointer"
                 @click="isSelectModalOpen = true"
               >
-                <p class="text-xl text-blue-600 font-bold">User Manual</p>
+                <p class="text-xl text-blue-600 font-bold">Food Menu</p>
                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>

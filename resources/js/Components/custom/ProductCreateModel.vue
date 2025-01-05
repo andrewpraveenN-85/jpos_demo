@@ -99,7 +99,7 @@
                   }}</span>
                 </div> -->
 
-                <div>
+                <!-- <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Bar code:</label
                   >
@@ -113,7 +113,7 @@
                   <span v-if="form.errors.barcode" class="mt-4 text-red-500">{{
                     form.errors.barcode
                   }}</span>
-                </div>
+                </div> -->
 
                 <div>
                   <div class="flex items-center gap-8">
@@ -136,7 +136,7 @@
                     </div>
 
                     <!-- Second select box with label and error -->
-                    <div class="w-full">
+                    <!-- <div class="w-full">
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Code:</label
                       >
@@ -151,7 +151,7 @@
                       <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                         form.errors.code
                       }}</span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
 
@@ -216,7 +216,7 @@
 
                 <div class="flex items-center gap-8 mt-6">
                   <!-- Cost Price input -->
-                  <div class="w-full">
+                  <!-- <div class="w-full">
                     <label
                       for="cost_price"
                       class="block text-sm font-medium text-gray-300"
@@ -237,7 +237,7 @@
                     >
                       {{ form.errors.cost_price }}
                     </span>
-                  </div>
+                  </div> -->
 
                   <div class="w-full">
                     <label
@@ -403,7 +403,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const playClickSound = () => {
@@ -458,6 +458,13 @@ const form = useForm({
   image: null, // For file upload
   description: "",
 });
+
+watch(
+  () => form.selling_price,
+  (newSellingPrice) => {
+    form.cost_price = newSellingPrice;
+  }
+);
 
 // Utility function to limit to 2 decimal points
 function limitToTwoDecimals(value) {

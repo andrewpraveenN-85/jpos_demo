@@ -270,7 +270,7 @@
                 </div>
               </div>
 
-              <div class="flex items-center justify-center w-full space-x-4">
+              <!-- <div class="flex items-center justify-center w-full space-x-4">
                 <p
                   class="flex items-center space-x-2 text-justify text-gray-400"
                 >
@@ -278,7 +278,7 @@
 
                   <b> &nbsp; {{ product.supplier?.name || "N/A" }} </b>
                 </p>
-              </div>
+              </div> -->
               <div class="flex items-center justify-between">
                 <p
                   v-if="product.stock_quantity > 0"

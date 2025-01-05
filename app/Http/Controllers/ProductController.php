@@ -225,6 +225,7 @@ class ProductController extends Controller
 
             // Create the product
             $product = Product::create($validated);
+            $product->update(['code' => 'PROD-' . $product->id]);
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
@@ -272,6 +273,9 @@ class ProductController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        if (empty($validated['barcode'])) {
+            $validated['barcode'] = $this->generateUniqueCode(12);
+        }
 
         try {
 
@@ -284,8 +288,9 @@ class ProductController extends Controller
             }
 
             // Product::create($validated);
-
+            
             $product = Product::create($validated);
+            $product->update(['code' => 'PROD-' . $product->id]);
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided

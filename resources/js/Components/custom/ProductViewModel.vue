@@ -76,10 +76,10 @@
                     {{ selectedProduct.category?.name ?? "No Category" }}
                   </p>
 
-                  <p class="pb-6 text-2xl font-bold text-black">
+                  <!-- <p class="pb-6 text-2xl font-bold text-black">
                     <span class="text-[#00000099] font-normal">Supplier : </span
                     >{{ selectedProduct.supplier?.name || "N/A" }}
-                  </p>
+                  </p> -->
 
                   <p class="pb-6 text-2xl font-bold text-black">
                     <span class="text-[#00000099] font-normal"
@@ -138,14 +138,14 @@
                         LKR
                       </p>
                     </div>
-                    <div class="flex flex-col w-full">
+                    <!-- <div class="flex flex-col w-full">
                       <p class="text-[#00000099]">Cost Price :</p>
                       <p class="font-bold text-black">
                         {{ selectedProduct?.cost_price ?? "N/A" }}
 
                         LKR
                       </p>
-                    </div>
+                    </div> -->
                   </div>
 
                   <div
@@ -189,7 +189,7 @@
                     {{ formattedDate }}
                   </p>
 
-                  <div class="mt-2">
+                  <!-- <div class="mt-2">
                     <input
                       hidden
                       type="text"
@@ -205,7 +205,8 @@
                     >
                       Print Bar Code
                     </button>
-                  </div>
+                  </div> -->
+
                 </div>
               </div>
 

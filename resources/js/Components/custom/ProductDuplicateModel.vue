@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
-                  <div class="w-full">
+                  <!-- <div class="w-full">
                     <div>
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Code:</label
@@ -78,7 +78,7 @@
                         form.errors.code
                       }}</span>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- Cost Price input -->
                   <div class="w-full">
                     <!-- Category Name -->
