@@ -280,7 +280,7 @@ const handlePrintReceipt = () => {
       <div class="receipt-container">
                 <div class="header">
 
-                <img src="/images/blacknwhtlogo.png" style="width: 200px; height: 150px;" />
+                <img src="/images/blacknwhtlogo.png" style="width: 100px; height: 100px;" />
                 
            ${
              companyInfo?.value?.name
