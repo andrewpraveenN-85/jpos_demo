@@ -32,6 +32,19 @@ class ProductController extends Controller
         ]);
     }
 
+    public function getPromotionItems($productId)
+    {
+        $product = Product::with('promotionItems')->find($productId);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json([
+            'promotion_items' => $product->promotionItems,
+        ]);
+    }
+
     public function fetchProducts(Request $request)
     {
         $query = $request->input('search');

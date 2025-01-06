@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="$emit('update:open', false)">
+    <Dialog class="relative z-10" @close="closeModal">
       <!-- Modal Overlay -->
       <TransitionChild
         as="template"
@@ -26,9 +26,9 @@
           leave-to="opacity-0 scale-95"
         >
           <DialogPanel
-            class="w-full max-w-md p-6 bg-white border border-gray-300 shadow-xl rounded-xl"
+            class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-4/6 p-6"
           >
-          <p>This is a test model</p>
+            <p class="text-3xl font-bold text-black w-full break-words text-center">{{ product.name }}</p>
           </DialogPanel>
         </TransitionChild>
       </div>
@@ -43,46 +43,26 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
 
+const promoItems = ref([]);
 
-const playClickSound = () => {
-  const clickSound = new Audio("/sounds/click-sound.mp3");
-  clickSound.play();
-};
-
-const emit = defineEmits(["update:open"]);
-
-
-const { open, selectedProduct } = defineProps({
+// Props and Emits
+defineProps({
   open: {
     type: Boolean,
     required: true,
   },
-  selectedProduct: {
-    type: Object,
-    default: null,
-  },
+  product: Object,
 });
+const emit = defineEmits(["update:open"]);
 
-
-const form = useForm({});
-
-// Delete the selected product
-const deleteItem = () => {
-  if (!selectedProduct?.id) {
-    console.error("No product selected for deletion");
-    return;
-  }
-
-  form.delete(`/products/${selectedProduct.id}`, {
-    onSuccess: () => {
-      emit("update:open", false); // Close the modal on success
-    },
-    onError: (errors) => {
-      console.error("Delete failed:", errors);
-    },
-  });
+// Functions to handle modal visibility
+const closeModal = () => {
+  emit("update:open", false); // Notify the parent to update the open state
 };
+
+onMounted(() => {
+  
+});
 </script>

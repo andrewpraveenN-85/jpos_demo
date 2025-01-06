@@ -49,8 +49,9 @@ class Product extends Model
 
     public function promotionItems()
     {
-        return $this->hasMany(PromotionItem::class);
+        return $this->hasMany(PromotionItem::class, 'promotion_id', 'id');
     }
+
 
     public function category()
     {

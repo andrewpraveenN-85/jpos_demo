@@ -200,20 +200,30 @@
                             </p>
                           </div> -->
                           <div class="flex items-center justify-between">
-                            <p
-                              v-if="product.stock_quantity > 0"
-                              class="text-xl font-bold tracking-wider text-green-500"
-                            >
-                              <i class="ri-checkbox-blank-circle-fill"></i> In
-                              Stock
-                            </p>
-                            <p
-                              v-else
-                              class="text-xl font-bold tracking-wider text-red-500"
-                            >
-                              <i class="ri-checkbox-blank-circle-fill"></i> Out
-                              of Stock
-                            </p>
+                            <div>
+                              <p
+                                v-if="product.stock_quantity > 0"
+                                class="text-xl font-bold tracking-wider text-green-500"
+                              >
+                                <i class="ri-checkbox-blank-circle-fill"></i> In
+                                Stock
+                              </p>
+                              <p
+                                v-else
+                                class="text-xl font-bold tracking-wider text-red-500"
+                              >
+                                <i class="ri-checkbox-blank-circle-fill"></i>
+                                Out of Stock
+                              </p>
+                            </div>
+                            <div v-if="product.is_promotion">
+                              <p
+                                @click.stop="viewPromotion(product)"
+                                class="text-xl font-bold tracking-wider text-orange-300 border border-orange-300 rounded-3xl px-4 py-2"
+                              >
+                                Promotion Items
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -254,6 +264,12 @@
                 </template>
               </template>
             </div>
+
+            <PromotionItemModal
+              :open="itemModalOpen"
+              @update:open="itemModalOpen = $event"
+              :product="selectedPromotion"
+            />
           </DialogPanel>
         </TransitionChild>
       </div>
@@ -272,6 +288,9 @@ import { onMounted, ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import { debounce } from "lodash";
+import PromotionItemModal from "@/Components/custom/PromotionItemModal.vue";
+
+const itemModalOpen = ref(false);
 
 const products = ref({});
 // const categories = ref([]); // If you need to fetch categories for filtering
@@ -282,6 +301,8 @@ const stockStatus = ref("");
 const sort = ref("");
 const color = ref("");
 const size = ref("");
+
+const selectedPromotion = ref(null);
 
 const selectedProducts = ref([]);
 
@@ -296,6 +317,11 @@ const selectProduct = (product) => {
     selectedProducts.value.splice(index, 1);
     // console.log("Product removed:", product);
   }
+};
+
+const viewPromotion = (product) => {
+  selectedPromotion.value = product;
+  itemModalOpen.value = true;
 };
 
 const resetFilters = () => {

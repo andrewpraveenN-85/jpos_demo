@@ -90,7 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/add_promotion', [ProductController::class, 'addPromotion']);
     Route::post('/submit_promotion', [ProductController::class, 'submitPromotion']);
-
+    Route::get('/products/{id}/promotion-items', [ProductController::class, 'getPromotionItems']);
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
 
