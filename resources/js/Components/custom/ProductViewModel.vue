@@ -211,7 +211,10 @@
                   <div
                     class="flex items-center justify-center w-full space-x-4"
                   >
-                    <p class="text-md font-bold text-black">
+                    <p
+                      v-if="!isSmallStickers"
+                      class="text-md font-bold text-black"
+                    >
                       {{ selectedProduct.category?.name || "N/A" }}
                     </p>
                     <p class="text-md font-bold text-black">
@@ -243,6 +246,7 @@
                   <!-- Barcode -->
 
                   <p
+                    v-if="!isSmallStickers"
                     style="
                       color: #000;
                       text-align: center;
@@ -253,11 +257,17 @@
                     {{ selectedProduct?.code ?? "N/A" }}
                   </p>
 
-                  <p style="color: #000; text-align: center; width: 100%">
+                  <p
+                    v-if="!isSmallStickers"
+                    style="color: #000; text-align: center; width: 100%"
+                  >
                     [{{ selectedProduct.size?.name || "N/A" }}] -
                     {{ selectedProduct.color?.name || "N/A" }}
                   </p>
-                  <p style="color: #000; text-align: center; width: 100%">
+                  <p
+                    v-if="!isSmallStickers"
+                    style="color: #000; text-align: center; width: 100%"
+                  >
                     {{ selectedProduct?.name ?? "N/A" }}
                   </p>
                 </div>
@@ -285,6 +295,7 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import { HasRole } from "@/Utils/Permissions";
+const isSmallStickers = import.meta.env.VITE_SMALL_STICKERS === "true";
 
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -337,14 +348,25 @@ function generateAndPrintBarcode() {
     return;
   }
 
-  JsBarcode(barcodePrintElement, input, {
-    format: "CODE128", // Code 128 is compact and ideal for small labels
-    lineColor: "#000", // Black lines for high contrast
-    width: 1.3, // Narrower lines to fit more content within the label
-    height: 60, // Shorter height to fit within the 30mm space
-    displayValue: false, // Disable text display if it overlaps with the barcode
-    margin: 0, // Remove default margins to maximize space usage
-  });
+  if (isSmallStickers) {
+    JsBarcode(barcodePrintElement, input, {
+      format: "CODE128", // Code 128 is compact and ideal for small labels
+      lineColor: "#000", // Black lines for high contrast
+      width: 1.1, // Narrower lines to fit more content within the label
+      height: 50, // Shorter height to fit within the 30mm space
+      displayValue: false, // Disable text display if it overlaps with the barcode
+      margin: 10, // Remove default margins to maximize space usage
+    });
+  } else {
+    JsBarcode(barcodePrintElement, input, {
+      format: "CODE128", // Code 128 is compact and ideal for small labels
+      lineColor: "#000", // Black lines for high contrast
+      width: 1.3, // Narrower lines to fit more content within the label
+      height: 60, // Shorter height to fit within the 30mm space
+      displayValue: false, // Disable text display if it overlaps with the barcode
+      margin: 0, // Remove default margins to maximize space usage
+    });
+  }
 
   // JsBarcode(barcodePrintElement, input, {
   //   format: "CODE128",
