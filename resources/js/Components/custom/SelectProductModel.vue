@@ -28,7 +28,7 @@
           leave-to="opacity-0 scale-95"
         >
           <DialogPanel
-            class="bg-white border-1 border-gray-600 rounded-[20px] shadow-xl w-5/6 p-6 text-center"
+            class="bg-white border-1 border-gray-600 rounded-[20px] shadow-xl w-5/6 p-6 text-center min-h-[600px]"
           >
             <div class="flex flex-col items-center justify-start">
               <div class="w-full flex">
