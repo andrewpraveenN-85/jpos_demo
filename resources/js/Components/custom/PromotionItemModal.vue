@@ -28,7 +28,11 @@
           <DialogPanel
             class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-4/6 p-6"
           >
-            <p class="text-3xl font-bold text-black w-full break-words text-center">{{ product.name }}</p>
+            <p
+              class="text-3xl font-bold text-black w-full break-words text-center"
+            >
+              {{ product.name }}
+            </p>
           </DialogPanel>
         </TransitionChild>
       </div>
@@ -62,7 +66,21 @@ const closeModal = () => {
   emit("update:open", false); // Notify the parent to update the open state
 };
 
-onMounted(() => {
-  
-});
+const fetchPromotionItems = async () => {
+  if (!product?.id) return;
+
+  loading.value = true; // Show loading state
+  try {
+    const response = await axios.get(`/products/${product.id}/promotion-items`);
+    console.log("Promotion Items:", response.data.promotion_items);
+    promotionItems.value = response.data.promotion_items || [];
+  } catch (error) {
+    console.error("Error fetching promotion items:", error);
+  } finally {
+    loading.value = false; // Hide loading state
+  }
+};
+
+// Fetch promotion items on mounted
+onMounted(fetchPromotionItems);
 </script>
