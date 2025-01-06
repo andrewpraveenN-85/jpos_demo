@@ -47,18 +47,22 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const promoItems = ref([]);
 
 // Props and Emits
-defineProps({
+const props = defineProps({
   open: {
     type: Boolean,
     required: true,
   },
-  product: Object,
+  product: {
+    type: Object,
+    required: true,
+  },
 });
+
 const emit = defineEmits(["update:open"]);
 
 // Functions to handle modal visibility
@@ -67,20 +71,30 @@ const closeModal = () => {
 };
 
 const fetchPromotionItems = async () => {
-  if (!product?.id) return;
+  if (!props.product?.id) return; // Use props.product to access the prop
 
-  loading.value = true; // Show loading state
+  // loading.value = true; // Show loading state
   try {
-    const response = await axios.get(`/products/${product.id}/promotion-items`);
-    console.log("Promotion Items:", response.data.promotion_items);
+    const response = await axios.get(
+      `/products/${props.product.id}/promotion-items`
+    );
+    
     promotionItems.value = response.data.promotion_items || [];
   } catch (error) {
     console.error("Error fetching promotion items:", error);
   } finally {
-    loading.value = false; // Hide loading state
+    // loading.value = false; // Hide loading state
   }
 };
 
-// Fetch promotion items on mounted
-onMounted(fetchPromotionItems);
+watch(
+  () => props.product,
+  (newProduct) => {
+    if (newProduct?.id) {
+      console.log("Product prop changed:", newProduct);
+      fetchPromotionItems();
+    }
+  },
+  { immediate: true } // Trigger immediately when the component is mounted
+);
 </script>

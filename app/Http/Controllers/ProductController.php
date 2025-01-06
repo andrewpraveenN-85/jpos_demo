@@ -34,14 +34,18 @@ class ProductController extends Controller
 
     public function getPromotionItems($productId)
     {
-        $product = Product::with('promotionItems')->find($productId);
-
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
+        // Fetch promotion items where promotion_id equals $productId
+        $promotionItems = PromotionItem::where('promotion_id', $productId)
+            ->with('product') // Include related product details
+            ->get();
+    
+        // Check if any promotion items are found
+        if ($promotionItems->isEmpty()) {
+            return response()->json(['error' => 'No promotion items found for this promotion ID.'], 404);
         }
-
+    
         return response()->json([
-            'promotion_items' => $product->promotionItems,
+            'promotion_items' => $promotionItems,
         ]);
     }
 
