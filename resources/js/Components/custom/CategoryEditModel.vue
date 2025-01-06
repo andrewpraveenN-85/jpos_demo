@@ -54,6 +54,7 @@
                   </span>
                 </div>
 
+
                 <!-- Parent Category Dropdown -->
                 <div>
                   <label class="block text-sm font-medium text-gray-300">
@@ -78,6 +79,19 @@
                   </span>
                 </div>
               </div>
+
+              <div>
+                <label class="flex items-center space-x-2 mt-4">
+                  <input
+                    v-model="form.is_featured"
+                    type="checkbox"
+                    id="is_featured"
+                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span class="text-sm font-medium text-gray-300">Featured Category</span>
+                </label>
+              </div>
+
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
@@ -139,6 +153,7 @@ const { open, categories, selectedCategory } = defineProps({
 const form = useForm({
   name: "",
   parent_id: "",
+  is_featured: true,
 });
 
 // Computed property to filter categories
@@ -147,15 +162,19 @@ const filteredCategories = computed(() =>
 );
 
 // Watch for selectedCategory changes
+
 watch(
   () => selectedCategory,
   (newValue) => {
     if (newValue) {
-      form.name = newValue.name || ""; // Populate name
-      form.parent_id = newValue.parent?.id || "" // Populate parent_id
+      console.log(newValue)
+      form.name = newValue.name || "";
+      form.parent_id = newValue.parent?.id || "";
+      // Convert to number explicitly
+      form.is_featured =newValue.is_featured; // Ensure it's a number
     }
   },
-  { immediate: true } // Run immediately when the component is mounted
+  { immediate: true }
 );
 
 // Submit form
@@ -165,6 +184,7 @@ const submit = () => {
       form.reset();
       emit("update:open", false); // Close the modal
     },
+    preserveState: true, 
   });
 };
 </script>
