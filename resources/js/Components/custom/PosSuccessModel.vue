@@ -94,6 +94,7 @@ const props = defineProps({
     totalDiscount: String,
     total: String,
     custom_discount: Number,
+    selectedType: String,
 
 });
 
@@ -284,7 +285,11 @@ const handlePrintReceipt = () => {
                       <p>Cashier:</p>
                       <small>${props.cashier.name}</small>
                   </div>
+                  
               </div>
+              <div>
+                    <p style="font-weight: bold; border: 1px solid black; padding: 2px; font-size: 15px; text-align: center; display: flex; justify-content: center; align-items: center;">${props.selectedType === 'credit' ? 'Credit Bill' : ''}</p>
+                  </div>
           </div>
           <div class="section">
               <table>
@@ -331,6 +336,7 @@ const handlePrintReceipt = () => {
               <p class="italic">Let the quality define its own standards</p>
                <p style="font-weight: bold;">Powered by JAAN Network Ltd.</p>
                <p>${new Date().toLocaleTimeString()} </p>
+
           </div>
       </div>
   </body>

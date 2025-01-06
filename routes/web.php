@@ -89,6 +89,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('transactionHistory', TransactionHistoryController::class );
     Route::resource('stock-transition', StockTransactionController::class);
     Route::resource('manualpos', ManualPosController::class);
+    Route::post('/sales/{id}/update-status', [TransactionHistoryController::class, 'updateStatus']);
+
     
 
 

@@ -168,6 +168,7 @@ class PosController extends Controller
                 'sale_date' => now()->toDateString(), // Current date
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
+                'status' => $request->input('selectedType') === 'credit' ? 'pending' : 'completed',
 
             ]); 
 

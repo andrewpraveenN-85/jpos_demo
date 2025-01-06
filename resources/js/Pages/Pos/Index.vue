@@ -107,7 +107,20 @@
                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
+            <div>
+  <div class="flex justify-end mt-4">
+    <div class="flex items-center ml-auto">
+      <input type="radio" id="credit" value="credit" v-model="selectedType" class="mr-2" />
+      <label for="credit" class="text-xl text-blue-600 font-bold">Credit</label>
+    </div>
+  </div>
+</div>
 
+
+           
+
+
+        
             <div
               class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl"
             >
@@ -405,6 +418,7 @@
     :totalDiscount="totalDiscount"
     :total="total"
     :custom_discount= "custom_discount"
+     :selectedType="selectedType"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -442,7 +456,7 @@ const appliedCoupon = ref(null);
 const cash = ref(0);
 const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
-// const balance = ref(0);
+const selectedType = ref(""); 
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;
@@ -457,6 +471,7 @@ const props = defineProps({
   allemployee: Array,
   colors: Array,
   sizes: Array,
+  selectedType: String 
 });
 
 const discount = ref(0);
@@ -534,6 +549,7 @@ const submitOrder = async () => {
       cash: cash.value,
       custom_discount: custom_discount.value,
       appliedCoupon: appliedCoupon.value,
+      selectedType: selectedType.value,
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
