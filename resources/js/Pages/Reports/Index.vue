@@ -385,12 +385,20 @@
     // Aggregate data for Pie Chart (Product Quantities)
     const productQuantities = computed(() => {
         const quantities = {};
+
+
         props.sales.forEach((sale) => {
-            sale.sale_items.forEach((item) => {
-                const productName = item.product.name;
-                quantities[productName] = (quantities[productName] || 0) + item.quantity;
-            });
-        });
+    sale.sale_items.forEach((item) => {
+        if (item.product && item.product.name) {
+            const productName = item.product.name;
+            quantities[productName] = (quantities[productName] || 0) + item.quantity;
+        } else {
+            console.warn('Invalid item detected:', item);
+        }
+    });
+});
+
+
         return sortDescending(quantities);
     });
 
