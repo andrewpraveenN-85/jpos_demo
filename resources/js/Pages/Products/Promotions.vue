@@ -426,6 +426,7 @@
     :colors="colors"
     :sizes="sizes"
     @selected-products="handleSelectedProducts"
+    :hidePromotions=true
   />
   <Footer />
 </template>

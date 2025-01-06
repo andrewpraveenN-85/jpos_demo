@@ -135,7 +135,7 @@
                   <div class="overflow-x-auto">
                     <div class="grid grid-flow-col auto-cols-[25%] gap-8">
                       <div
-                        v-for="product in products.data"
+                        v-for="product in products.data.filter(product => !(hidePromotions && product.is_promotion))"
                         :key="product.id"
                         @click="
                           product.stock_quantity > 0 && selectProduct(product)
@@ -343,7 +343,7 @@ const playClickSound = () => {
 const emit = defineEmits(["update:open", "selected-products"]);
 
 // Props for the modal
-const { open, allcategories, colors, sizes } = defineProps({
+const { open, allcategories, colors, sizes, hidePromotions } = defineProps({
   open: {
     type: Boolean,
     required: true,
@@ -351,6 +351,11 @@ const { open, allcategories, colors, sizes } = defineProps({
   allcategories: Array,
   colors: Array,
   sizes: Array,
+  hidePromotions: {
+    type: Boolean, // The type of the prop
+    required: false, // Optional prop
+    default: false, // Default value if not provided
+  },
 });
 
 // Form for handling deletion

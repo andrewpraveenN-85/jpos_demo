@@ -31,7 +31,7 @@
             <p
               class="text-4xl font-bold text-black w-full break-words text-center"
             >
-              {{ product.name }}
+              Promotion Name: {{ product.name }}
             </p>
 
             <div class="w-full">
