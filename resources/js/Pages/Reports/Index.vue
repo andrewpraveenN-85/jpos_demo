@@ -66,12 +66,12 @@
   <Head title="Reports" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-8"
   >
     <!-- Include the Header -->
     <Header />
-    <div class="w-full py-12 space-y-16">
-      <div class="flex items-center justify-between">
+    <div class="w-full md:py-12 md:space-y-16">
+      <div class="md:flex items-center justify-between md:inline hidden">
         <div class="flex items-center justify-center space-x-4">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
@@ -116,8 +116,57 @@
         </div>
       </div>
     </div>
+    <div class="w-full flex justify-start items-center md:hidden">
+      <div class="flex items-center justify-center space-x-4">
+          <Link href="/">
+            <img src="/images/back-arrow.png" class="w-14 h-14" />
+          </Link>
+          <p class="text-4xl font-bold tracking-wide text-black uppercase">
+            Reports
+          </p>
+        </div>
+    </div>
+    
+      <div class="flex flex-col items-center justify-center md:hidden w-full">
+        
+        <div date-rangepicker class="flex items-center space-x-2 ">
+          <!-- Start Date -->
+          <div class="relative">
+            <input
+              v-model="startDate"
+              type="date"
+              class="md:text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Start Date"
+            />
+          </div>
+          <span class="text-xl font-bold tracking-wider text-blue-600">To</span>
+          <!-- End Date -->
+          <div class="relative">
+            <input
+              v-model="endDate"
+              type="date"
+              class="md:text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="End Date"
+            />
+          </div>
+          <!-- Filter Button -->
+          <button
+            @click="filterData"
+            class="px-6 py-3 md:text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select"
+          >
+            Filter
+          </button>
+          <Link
+            href="/reports"
+            class="px-6 py-3 md:text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select"
+          >
+            Reset
+          </Link>
+        </div>
+      </div>
+   
     <!-- Statistic Boxes -->
-    <div class="grid w-full grid-cols-6 gap-4">
+    <div class="grid w-full md:grid-cols-6 gap-4 grid-cols-3 gap-2">
       <!-- Total Sales -->
       <div
         class="py-6 flex flex-col justify-center items-center border-2 border-[#EC6116] w-full space-y-4 rounded-2xl bg-[#EC611666] shadow-lg transform transition-transform duration-300 hover:-translate-y-4"
@@ -206,7 +255,7 @@
     </div>
 
 
-     <div class="grid w-full grid-cols-3 gap-8">
+     <div class="grid w-full grid-cols-3 gap-8 ">
             <!-- Total Products -->
             <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#ffb224] w-full space-y-4 rounded-2xl bg-[#ffb224] shadow-lg">
@@ -247,7 +296,7 @@
             </div>
         </div>
     <!-- Charts Section -->
-    <div class="flex items-center justify-center w-full h-full space-x-4">
+    <div class="flex md:flex-row flex-col items-center justify-center w-full h-full md:space-x-4 md:space-y-0 space-y-4">
       <!-- Chart 1 -->
       <!-- <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
@@ -261,11 +310,11 @@
                 </div> -->
 
       <div
-        class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
+        class="flex flex-col justify-between items-center md:w-1/3 w-full bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
           <!-- Header with Title and Button -->
-          <div class="w-full flex justify-between items-center pb-4">
+          <div class="w-full flex justify-between items-center md:mt-4">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -287,10 +336,10 @@
 
       <!-- Chart 3 -->
       <div
-        class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
+        class="flex flex-col justify-between items-center md:w-1/3 w-full bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
-          <div class="w-full flex justify-between items-center pb-4">
+          <div class="w-full md:mt-4 flex justify-between items-center">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -308,10 +357,10 @@
         </div>
       </div>
       <div
-        class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
+        class="flex flex-col justify-between items-center md:w-1/3 w-full bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
-          <div class="w-full flex justify-between items-center pb-4">
+          <div class="w-full md:mt-4 flex justify-between items-center">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -330,7 +379,7 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-center w-full h-full space-x-4">
+    <div class="flex md:flex-row flex-col items-center justify-center w-full h-full md:space-x-4 md:space-y-0 space-y-4">
       <!-- Chart 1 -->
       <!-- <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
@@ -343,10 +392,10 @@
                 </div>
                 </div> -->
       <div
-        class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4"
+        class="flex flex-col justify-between items-center md:w-1/2 w-full bg-white border-4 border-black rounded-xl h-[500px] p-4"
       >
-        <div class="chart-container w-full h-full relative p-4">
-          <div class="w-full flex justify-between items-center pb-4">
+        <div class="chart-container w-full h-full relative">
+          <div class="w-full flex justify-between items-center ">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -365,7 +414,7 @@
       </div>
 
       <!-- Chart 3 -->
-      <div class="bg-white border-4 border-black rounded-xl h-[500px]">
+      <div class="bg-white border-4 border-black rounded-xl h-[500px] md:w-1/2 w-full">
         <h2
           class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2"
         >

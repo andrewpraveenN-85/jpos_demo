@@ -54,11 +54,11 @@
   <Head title="Suppliers" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-8"
   >
     <!-- Include the Header -->
     <Header />
-    <div class="w-5/6 py-12 space-y-24">
+    <div class="md:w-5/6 w-full py-12 space-y-24">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4"></div>
         <p class="text-3xl italic font-bold text-black">
@@ -68,7 +68,7 @@
           <span class="text-xl">/ Total Suppliers</span>
         </p>
       </div>
-      <div class="flex w-full">
+      <div class="flex md:flex-row flex-col w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
@@ -82,7 +82,7 @@
 
               @click="() => { playClickSound(); isCreateModalOpen = true; }"
             class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-pointer rounded-xl"
-          >
+          
             <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
           </p> -->
 
