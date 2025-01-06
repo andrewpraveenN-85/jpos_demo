@@ -99,7 +99,6 @@ const props = defineProps({
 });
 
 const handlePrintReceipt = () => {
-    // Calculate totals from props.products
     const subTotal = props.products.reduce(
         (sum, product) =>
             sum + parseFloat(product.selling_price) * product.quantity,
@@ -108,27 +107,24 @@ const handlePrintReceipt = () => {
     const customDiscount = Number(props.custom_discount || 0);
     const totalDiscount = props.products
         .reduce((total, item) => {
-            // Check if item has a discount
             if (item.discount && item.discount > 0 && item.apply_discount == true) {
                 const discountAmount =
                     (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
                     item.quantity;
                 return total + discountAmount;
             }
-            return total; // If no discount, return total as-is
+            return total; 
         }, 0)
-        .toFixed(2); // Ensures two decimal places
+        .toFixed(2); 
 
-    const discount = 0; // Example discount (can be dynamic)
+    const discount = 0; 
     const total = subTotal - totalDiscount - customDiscount;
 
-    // Generate table rows dynamically using props.products
     const productRows = props.products
         .map((product) => {
-            // Determine the price based on discount
             const price = product.discount > 0 && product.apply_discount
-                ? product.discounted_price  // Use discounted price if discount is applied
-                : product.selling_price;    // Use selling price if no discount
+                ? product.discounted_price 
+                : product.selling_price;   
 
             return `
         <tr>

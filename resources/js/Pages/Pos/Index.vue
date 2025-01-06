@@ -107,14 +107,14 @@
                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
-            <div>
-  <div class="flex justify-end mt-4">
-    <div class="flex items-center ml-auto">
-      <input type="radio" id="credit" value="credit" v-model="selectedType" class="mr-2" />
-      <label for="credit" class="text-xl text-blue-600 font-bold">Credit</label>
-    </div>
-  </div>
-</div>
+           
+              <div class="mt-4">
+                <div class=" w-[31rem]  text-right">
+                  <label for="credit" class="text-xl text-blue-600 font-bold mr-2">Credit</label>
+                  <input type="radio" id="credit" value="credit" v-model="selectedType" />
+                </div>
+              </div>
+            
 
 
            
