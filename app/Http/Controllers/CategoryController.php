@@ -66,8 +66,8 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
+            'is_featured' => 'boolean',
         ]);
-
 
         Category::create($validated);
 
@@ -75,7 +75,7 @@ class CategoryController extends Controller
 
         // return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
-
+    
     public function edit(Category $category)
     {
         return Inertia::render('Categories/Edit', [

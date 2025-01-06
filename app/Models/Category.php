@@ -13,12 +13,17 @@ class Category extends Model
     protected $fillable = [
         'name',
         'parent_id',
+        'is_featured',
     ];
 
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id','id');
     }
+
+    protected $casts = [
+        'is_featured' => 'boolean'
+    ];
 
     public function getHierarchyStringAttribute(): string
     {

@@ -93,7 +93,21 @@
                     >{{ form.errors.parent_id }}</span
                   >
                 </div>
+
+                <div>
+                  <label class="flex items-center space-x-2">
+                  <input
+                    v-model="form.is_featured"
+                    type="checkbox"
+                    id="is_featured"
+                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span class="text-sm font-medium text-gray-300">Featured Category</span>
+                </label>
+                </div>
               </div>
+
+              
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
@@ -162,10 +176,18 @@ defineProps({
 const form = useForm({
   name: "",
   parent_id: "",
+ is_featured: false,
 });
 
 const submit = () => {
+  // Ensure is_featured is explicitly boolean before sending
+  const formData = {
+    ...form.data(),
+    is_featured: Boolean(form.is_featured)
+  };
+  
   form.post("/categories", {
+    data: formData,
     onSuccess: () => {
       form.reset();
       emit("update:open", false);
