@@ -29,10 +29,72 @@
             class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-4/6 p-6"
           >
             <p
-              class="text-3xl font-bold text-black w-full break-words text-center"
+              class="text-4xl font-bold text-black w-full break-words text-center"
             >
               {{ product.name }}
             </p>
+
+            <div class="w-full">
+              <div class="flex flex-col items-start justify-center w-full">
+                <div class="flex items-center justify-between w-full">
+                  <h2 class="text-3xl font-bold text-black mb-4">Promotion Items</h2>
+                </div>
+
+                <div class="w-full text-center">
+                  <p
+                    v-if="promotionItems.length === 0"
+                    class="text-2xl text-red-500"
+                  >
+                    No items to show
+                  </p>
+                </div>
+                <div
+                  class="flex items-center w-full py-4"
+                  :class="{
+                    'border-b border-black':
+                      index !== promotionItems.length - 1,
+                  }"
+                  v-for="(item, index) in promotionItems"
+                  :key="item.id"
+                >
+                  <div class="flex w-1/5">
+                    <img
+                      :src="
+                        item.image
+                          ? `/${item.image}`
+                          : '/images/placeholder.jpg'
+                      "
+                      alt="Supplier Image"
+                      class="object-cover w-16 h-16 border border-gray-500"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-between w-1/5">
+                    <p class="text-xl text-black">Name</p>
+                    <div class="flex items-center justify-between w-full">
+                      <p>{{ item?.product?.name }}</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col justify-between w-1/5">
+                    <p class="text-xl text-black">Quantity</p>
+                    <div class="flex items-center justify-between w-full">
+                      <p>{{ item?.quantity }}</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col justify-between w-1/5">
+                    <p class="text-xl text-black">Price</p>
+                    <div class="flex items-center justify-between w-full">
+                      <p>{{ item?.product?.selling_price }}</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col justify-between w-1/5">
+                    <p class="text-xl text-black">Total Price</p>
+                    <div class="flex items-center justify-between w-full">
+                      <p>{{ item?.product?.selling_price * item?.quantity }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </DialogPanel>
         </TransitionChild>
       </div>
@@ -49,7 +111,7 @@ import {
 } from "@headlessui/vue";
 import { onMounted, ref, watch } from "vue";
 
-const promoItems = ref([]);
+const promotionItems = ref([]);
 
 // Props and Emits
 const props = defineProps({
@@ -78,7 +140,9 @@ const fetchPromotionItems = async () => {
     const response = await axios.get(
       `/products/${props.product.id}/promotion-items`
     );
-    
+
+    console.log("Promotion Items:", response.data.promotion_items);
+
     promotionItems.value = response.data.promotion_items || [];
   } catch (error) {
     console.error("Error fetching promotion items:", error);
