@@ -235,14 +235,14 @@
                     <label
                       for="sub_id"
                       class="block text-sm font-medium text-black-300"
-                      >Color:</label
+                      >Base :</label
                     >
                     <select
                       v-model="form.color_id"
                       id="sub_id"
                       class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                     >
-                      <option value="">Select a Color</option>
+                      <option value="">Select a Base</option>
                       <option
                         v-for="color in colors"
                         :key="color.id"
@@ -510,7 +510,7 @@ const submitForm = () => {
   form.post("/submit_promotion", {
     onSuccess: () => {
       console.log("Promotion created successfully!");
-      form.reset(); 
+      form.reset();
     },
     onError: (errors) => {
       console.error("Form submission failed:", errors);

@@ -134,7 +134,7 @@
       </Link>
 
       <Link href="/colors" v-if="HasRole(['Admin', 'Manager'])">
-        <div class="dashboard-card bg-[#9a9c9c]">
+        <div class="dashboard-card bg-[#494949]">
           <div class="card-content">
             <div class="icon-container">
               <img
@@ -144,10 +144,9 @@
               />
             </div>
             <div class="text-container">
-              <p class="title">Colors</p>
+              <p class="title">Base</p>
               <p class="description">
-                Easily manage product color options to keep inventory accurate
-                and ensure customers can select their preferred variations.
+                Designed to offer convenience, quality, and a taste of local culture, the food base ensures an enjoyable dining experience for every guest
               </p>
             </div>
           </div>
