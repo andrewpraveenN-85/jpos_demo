@@ -377,7 +377,7 @@
     :products="selectedTable.products"
     :cashier="loggedInUser"
     :customer="customer"
-    :orderId="orderId"
+    :orderId="selectedTable.orderId"
     :cash="selectedTable.cash"
     :balance="balance"
     :subTotal="subtotal"
