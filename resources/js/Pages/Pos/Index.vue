@@ -183,9 +183,10 @@
                 />
               </div>
               <div class="flex flex-col justify-start w-4/6">
-                <p class="text-3xl text-black">
+                <p class="text-3xl text-black ">
                   {{ item.name }}
                 </p>
+                <p class="text-lg leading-tight mb-4 font-bold">{{ item.selling_price }} LKR</p>
                 <div class="flex items-end justify-between w-full">
                   <div class="flex space-x-4">
                     <p
@@ -234,7 +235,7 @@
                         Remove {{ item.discount }}% Off
                       </p>
                       <p class="text-2xl font-bold text-black text-right">
-                        {{ item.selling_price }}
+                        {{ item.selling_price * item.quantity }}
                         LKR
                       </p>
                     </div>
