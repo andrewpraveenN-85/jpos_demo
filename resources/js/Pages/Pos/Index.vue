@@ -183,10 +183,12 @@
                 />
               </div>
               <div class="flex flex-col justify-start w-4/6">
-                <p class="text-3xl text-black ">
+                <p class="text-3xl text-black">
                   {{ item.name }}
                 </p>
-                <p class="text-lg leading-tight mb-4 font-bold">{{ item.selling_price }} LKR</p>
+                <p class="text-lg leading-tight mb-4 font-bold">
+                  {{ item.selling_price }} LKR
+                </p>
                 <div class="flex items-end justify-between w-full">
                   <div class="flex space-x-4">
                     <p
@@ -660,7 +662,7 @@ const submitOrder = async () => {
     message.value = "Cash is not enough";
     return;
   }
-  
+
   try {
     const response = await axios.post("/pos/submit", {
       customer: customer.value,
@@ -671,6 +673,12 @@ const submitOrder = async () => {
       orderId: orderId.value,
     });
     isSuccessModalOpen.value = true;
+    customer.value = {
+      name: "",
+      countryCode: "",
+      contactNumber: "",
+      email: "",
+    };
     // console.log(response.data); // Handle success
   } catch (error) {
     if (error.response.status === 423) {

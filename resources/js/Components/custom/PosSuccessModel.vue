@@ -340,7 +340,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.email)
             </div>
         </div>
         <div class="footer">
-            <p>THANK YOU COME AGAIN</p>
+            <p>ENJOY YOUR MEAL</p>
             <p class="italic">Let the quality define its own standards</p>
             <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
             <p>${new Date().toLocaleTimeString()} </p>
