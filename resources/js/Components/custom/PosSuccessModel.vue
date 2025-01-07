@@ -250,6 +250,7 @@ const handlePrintReceipt = () => {
       <div class="receipt-container">
                 <div class="header">
            ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
+           <p>ගල් වැලි, සිමෙන්ති, බ්ලොක් ගල්, මෙටල්, අස්බැස්ටර්ස් ශීට්, ගල් කුඩු, චිප්ගල්, කළුගල් සහ ප්‍රවාහන පහසුකම් සපයන්නෝ</p>
   ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
   ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email)
             ? `<p>${companyInfo.value.phone || ''} | ${companyInfo.value.phone2 || ''}  ${companyInfo.value.email || ''}</p>`
@@ -284,8 +285,8 @@ const handlePrintReceipt = () => {
                   
               </div>
               <div>
-                    <p style="font-weight: bold; border: 1px solid black; padding: 2px; font-size: 15px; text-align: center; display: flex; justify-content: center; align-items: center;">${props.selectedType === 'credit' ? 'Credit Bill' : ''}</p>
-                  </div>
+                    <p style="font-weight: bold;  ${props.selectedType === 'credit' ? 'border: 1px solid black;' : ''}, padding: 2px; font-size: 15px; text-align: center; display: flex; justify-content: center; align-items: center;">${props.selectedType === 'credit' ? 'Credit Bill' : ''}</p>
+              </div>
           </div>
           <div class="section">
               <table>
@@ -329,10 +330,10 @@ const handlePrintReceipt = () => {
           </div>
           <div class="footer">
               <p>THANK YOU COME AGAIN</p>
-              <p class="italic">Let the quality define its own standards</p>
+             <p style="font-weight: bold;">විකුණන ලද භාණ්ඩ මාරු කිරීමේදී මුදල් ආපසු දෙනු නොලැබේ.</p>
                <p style="font-weight: bold;">Powered by JAAN Network Ltd.</p>
                <p>${new Date().toLocaleTimeString()} </p>
-
+               
           </div>
       </div>
   </body>
