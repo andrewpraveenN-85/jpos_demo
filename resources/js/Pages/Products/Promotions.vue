@@ -143,7 +143,7 @@
                 }}</span>
               </div>
 
-              <div>
+              <!--<div>
                 <label class="block text-sm font-medium text-black-300"
                   >Bar code:</label
                 >
@@ -157,7 +157,7 @@
                 <span v-if="form.errors.barcode" class="mt-4 text-red-500">{{
                   form.errors.barcode
                 }}</span>
-              </div>
+              </div>-->
 
               <div>
                 <div class="flex items-center gap-8">
@@ -180,7 +180,7 @@
                   </div>
 
                   <!-- Second select box with label and error -->
-                  <div class="w-full">
+                 <!-- <div class="w-full">
                     <label class="block text-sm font-medium text-black-300"
                       >Product Code:</label
                     >
@@ -195,7 +195,7 @@
                     <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                       form.errors.code
                     }}</span>
-                  </div>
+                  </div>-->
                 </div>
               </div>
 
