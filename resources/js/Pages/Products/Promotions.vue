@@ -490,8 +490,7 @@ const handleSelectedProducts = (selectedProducts) => {
     }
 
     if (fetchedProduct.cost_price) {
-      alert('dsd')
-      // form.cost_price = (form.cost_price || 0) + fetchedProduct.cost_price;
+      form.cost_price = (Number(form.cost_price || 0) + Number(fetchedProduct.cost_price)).toFixed(2);   
     }
   });
 };
