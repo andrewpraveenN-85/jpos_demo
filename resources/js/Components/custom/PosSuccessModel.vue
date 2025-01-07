@@ -343,6 +343,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.email)
             <p>THANK YOU COME AGAIN</p>
             <p class="italic">Let the quality define its own standards</p>
             <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+            <p>${new Date().toLocaleTimeString()} </p>
         </div>
     </div>
 </body>
