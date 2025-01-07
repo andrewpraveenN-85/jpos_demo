@@ -216,7 +216,7 @@
 
                 <div class="flex items-center gap-8 mt-6">
                   <!-- Cost Price input -->
-                  <!-- <div class="w-full">
+                  <div class="w-full">
                     <label
                       for="cost_price"
                       class="block text-sm font-medium text-gray-300"
@@ -237,7 +237,7 @@
                     >
                       {{ form.errors.cost_price }}
                     </span>
-                  </div> -->
+                  </div>
 
                   <div class="w-full">
                     <label
@@ -459,12 +459,7 @@ const form = useForm({
   description: "",
 });
 
-watch(
-  () => form.selling_price,
-  (newSellingPrice) => {
-    form.cost_price = newSellingPrice;
-  }
-);
+
 
 // Utility function to limit to 2 decimal points
 function limitToTwoDecimals(value) {

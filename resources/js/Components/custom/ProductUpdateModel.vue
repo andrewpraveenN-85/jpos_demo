@@ -184,7 +184,7 @@
 
                 <div class="flex items-center gap-8 mt-6">
                   <!-- Cost Price input -->
-                  <!-- <div class="w-full">
+                  <div class="w-full">
                     <label
                       for="cost_price"
                       class="block text-sm font-medium text-gray-300"
@@ -205,7 +205,7 @@
                     >
                       {{ form.errors.cost_price }}
                     </span>
-                  </div> -->
+                  </div>
 
                   <!-- Selling Price input -->
                   <div class="w-full">
