@@ -236,9 +236,17 @@
                       >
                         Remove {{ item.discount }}% Off
                       </p>
+                      <p></p>
                       <p class="text-2xl font-bold text-black text-right">
-                        {{ item.selling_price * item.quantity }}
-                        LKR
+                        {{
+                          item.apply_discount
+                            ? (item.selling_price *
+                                item.quantity *
+                                (100 - item.discount)) /
+                              100
+                            : item.selling_price * item.quantity
+                        }}
+                        LKR LKR
                       </p>
                     </div>
                   </div>
