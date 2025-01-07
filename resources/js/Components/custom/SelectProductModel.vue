@@ -32,10 +32,12 @@
           >
             <div class="flex flex-col items-center justify-start">
               <div class="w-full flex">
-                <div class="w-6/7 py-12 space-y-16">
-                  <div class="flex items-center space-x-4 justify-start">
-                    <div class="w-full">
-                      <!-- Ensure this is full-width for the input -->
+                <div class="w-full py-12 space-y-16">
+                  <div
+                    class="flex items-center justify-between w-full space-x-4"
+                  >
+                    <!-- Input Section -->
+                    <div class="w-1/6">
                       <input
                         v-model="search"
                         @input="() => fetchProducts()"
@@ -43,6 +45,28 @@
                         placeholder="Search ..."
                         class="w-full custom-input"
                       />
+                    </div>
+
+                    <!-- Top Categories Section -->
+                    <div class="w-5/6 flex items-center justify-end space-x-4">
+                      <p class="text-2xl">Top Categories:</p>
+                      <div
+                        v-for="category in parentCategories"
+                        :key="category.id"
+                        class="cursor-pointer"
+                        @click="selectParentCategory(category)"
+                      >
+                        <p
+                          :class="{
+                            'text-2xl text-blue-600':
+                              selectedParentCategory?.id !== category.id,
+                            'text-2xl text-red-600':
+                              selectedParentCategory?.id === category.id,
+                          }"
+                        >
+                          {{ category.name }}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -56,7 +80,7 @@
                 >
                   <option value="">Filter by Category</option>
                   <option
-                    v-for="category in allcategories"
+                    v-for="category in allcategoriesFiltered"
                     :key="category.id"
                     :value="category.id"
                   >
@@ -135,7 +159,9 @@
                   <div class="overflow-x-auto">
                     <div class="grid grid-flow-col auto-cols-[25%] gap-8">
                       <div
-                        v-for="product in products.data.filter(product => !(hidePromotions && product.is_promotion))"
+                        v-for="product in products.data.filter(
+                          (product) => !(hidePromotions && product.is_promotion)
+                        )"
                         :key="product.id"
                         @click="
                           product.stock_quantity > 0 && selectProduct(product)
@@ -301,6 +327,9 @@ const stockStatus = ref("");
 const sort = ref("");
 const color = ref("");
 const size = ref("");
+const selectedParentCategory = ref(null);
+const parentCategories = ref([]);
+const allcategoriesFiltered = ref(allcategories);
 
 const selectedPromotion = ref(null);
 
@@ -390,12 +419,33 @@ const fetchProducts = async (url = "/api/products") => {
   }
 };
 
+const fetchParentCategories = async (url = "/api/top-categories") => {
+  try {
+    const response = await axios.post(url);
+    parentCategories.value = response.data.categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  } finally {
+    // loading.value = false;
+  }
+};
+
 const fetchPage = (url) => {
   if (url) {
     fetchProducts(url);
   }
 };
 
+const selectParentCategory = (category) => {
+  selectedParentCategory.value = category;
+  allcategoriesFiltered.value = [category, ...(category.children || [])];
+
+  console.log(allcategoriesFiltered.value);
+  selectedCategory.value = category.id;
+  fetchProducts();
+};
+
 // Fetch products on mount
 fetchProducts();
+fetchParentCategories();
 </script>
