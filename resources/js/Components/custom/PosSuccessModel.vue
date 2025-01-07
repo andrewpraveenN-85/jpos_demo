@@ -191,13 +191,21 @@ const handlePrintReceipt = () => {
               font-size: 12px;
               margin-top: 8px;
           }
-          .info-row p {
-              margin: 0;
-              font-weight: bold;
-          }
-          .info-row small {
-              font-weight: normal;
-          }
+          
+          .info-row > div {
+            flex: 1; 
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start; 
+        }
+        .info-row > div:last-child {
+            padding-left: 50px; 
+        }
+
+        .info-row p, .info-row small {
+            margin: 0; 
+            text-align: left; 
+        }
           table {
               width: 100%;
               font-size: 12px;
