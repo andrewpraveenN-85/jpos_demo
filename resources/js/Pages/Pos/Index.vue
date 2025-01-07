@@ -374,7 +374,7 @@
   <PosSuccessModel
     :open="isSuccessModalOpen"
     @update:open="handleModalOpenUpdate"
-    :products="products"
+    :products="selectedTable.products"
     :cashier="loggedInUser"
     :customer="customer"
     :orderId="orderId"
