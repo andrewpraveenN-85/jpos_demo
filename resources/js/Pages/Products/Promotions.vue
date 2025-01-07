@@ -138,9 +138,11 @@
                     }}
                   </option>
                 </select>
-                <span v-if="form.errors.category_id" class="mt-4 text-red-500">{{
-                  form.errors.category_id
-                }}</span>
+                <span
+                  v-if="form.errors.category_id"
+                  class="mt-4 text-red-500"
+                  >{{ form.errors.category_id }}</span
+                >
               </div>
 
               <!--<div>
@@ -426,7 +428,7 @@
     :colors="colors"
     :sizes="sizes"
     @selected-products="handleSelectedProducts"
-    :hidePromotions=true
+    :hidePromotions="true"
   />
   <Footer />
 </template>
@@ -485,6 +487,11 @@ const handleSelectedProducts = (selectedProducts) => {
         quantity: 1,
         apply_discount: false, // Default additional attribute
       });
+    }
+
+    if (fetchedProduct.cost_price) {
+      alert('dsd')
+      // form.cost_price = (form.cost_price || 0) + fetchedProduct.cost_price;
     }
   });
 };
