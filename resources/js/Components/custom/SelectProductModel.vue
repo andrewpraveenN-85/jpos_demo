@@ -92,7 +92,7 @@
                   @change="() => fetchProducts()"
                   class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg cursor-pointer custom-select"
                 >
-                  <option value="">Filter by Color</option>
+                  <option value="">Filter by Base</option>
                   <option
                     v-for="colorOption in colors"
                     :key="colorOption.id"
