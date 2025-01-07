@@ -554,6 +554,7 @@ class ProductController extends Controller
             // Create the product
             $validated['is_promotion'] = true;
             $product = Product::create($validated);
+            $product->update(['code' => 'PROD-' . $product->id]);
             foreach ($products as $key => $promotionItem) {
                 PromotionItem::create([
                     'product_id' => $promotionItem['id'],
