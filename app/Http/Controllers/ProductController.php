@@ -38,12 +38,12 @@ class ProductController extends Controller
         $promotionItems = PromotionItem::where('promotion_id', $productId)
             ->with('product') // Include related product details
             ->get();
-    
+
         // Check if any promotion items are found
         if ($promotionItems->isEmpty()) {
             return response()->json(['error' => 'No promotion items found for this promotion ID.'], 404);
         }
-    
+
         return response()->json([
             'promotion_items' => $promotionItems,
         ]);
@@ -57,6 +57,13 @@ class ProductController extends Controller
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
         $selectedCategory = $request->input('selectedCategory');
+
+        $categoryIds = [];
+
+        // Fetch all descendants of the selected category
+        if ($selectedCategory) {
+            $categoryIds = $this->getAllDescendantCategoryIds($selectedCategory);
+        }
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             ->when($query, function ($queryBuilder) use ($query) {
@@ -85,8 +92,8 @@ class ProductController extends Controller
                     $queryBuilder->where('stock_quantity', '<=', 0);
                 }
             })
-            ->when($selectedCategory, function ($queryBuilder) use ($selectedCategory) {
-                $queryBuilder->where('category_id', $selectedCategory);
+            ->when(!empty($categoryIds), function ($queryBuilder) use ($categoryIds) {
+                $queryBuilder->whereIn('category_id', $categoryIds);
             });
 
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
@@ -94,6 +101,23 @@ class ProductController extends Controller
         return response()->json([
             'products' => $products,
         ]);
+    }
+
+    /**
+     * Recursively fetch all descendant category IDs for a given parent category ID.
+     */
+    private function getAllDescendantCategoryIds($parentId)
+    {
+        $categoryIds = [$parentId]; // Start with the parent category ID
+
+        $children = Category::where('parent_id', $parentId)->get();
+
+        foreach ($children as $child) {
+            // Recursively fetch the descendants of each child
+            $categoryIds = array_merge($categoryIds, $this->getAllDescendantCategoryIds($child->id));
+        }
+
+        return $categoryIds;
     }
 
     /**
@@ -305,7 +329,7 @@ class ProductController extends Controller
             }
 
             // Product::create($validated);
-            
+
             $product = Product::create($validated);
             $product->update(['code' => 'PROD-' . $product->id]);
 
