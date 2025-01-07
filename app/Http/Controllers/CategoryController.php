@@ -32,7 +32,6 @@ class CategoryController extends Controller
                 return [
                     'id' => $category->id,
                     'name' => $category->name,
-                    'is_featured' => $category->is_featured,
                     'parent' => $category->parent ? [
                         'id' => $category->parent->id,
                         'name' => $category->parent->name,
@@ -67,7 +66,6 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
-            'is_featured' => 'boolean',
         ]);
 
         Category::create($validated);
@@ -92,7 +90,6 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
-            'is_featured' => 'boolean',
         ]);
 
         // Check for circular relationship

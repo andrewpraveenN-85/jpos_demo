@@ -80,17 +80,6 @@
                 </div>
               </div>
 
-              <div>
-                <label class="flex items-center space-x-2 mt-4">
-                  <input
-                    v-model="form.is_featured"
-                    type="checkbox"
-                    id="is_featured"
-                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span class="text-sm font-medium text-gray-300">Featured Category</span>
-                </label>
-              </div>
 
 
               <!-- Modal Buttons -->
@@ -153,7 +142,6 @@ const { open, categories, selectedCategory } = defineProps({
 const form = useForm({
   name: "",
   parent_id: "",
-  is_featured: true,
 });
 
 // Computed property to filter categories
@@ -170,8 +158,6 @@ watch(
       console.log(newValue)
       form.name = newValue.name || "";
       form.parent_id = newValue.parent?.id || "";
-      // Convert to number explicitly
-      form.is_featured =newValue.is_featured; // Ensure it's a number
     }
   },
   { immediate: true }
