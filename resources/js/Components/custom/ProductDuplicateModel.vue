@@ -593,7 +593,7 @@ watch(
       form.discount = newValue.discount || 0;
       form.selling_price = newValue.selling_price || null;
       form.discounted_price = newValue.discounted_price || null;
-      form.barcode = newValue.barcode || "";
+      form.barcode = "";
       form.image = newValue.image;
       form.expire_date = newValue.expire_date
         ? new Date(newValue.expire_date).toISOString().split("T")[0]
