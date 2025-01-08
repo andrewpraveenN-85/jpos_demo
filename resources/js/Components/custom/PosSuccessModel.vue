@@ -92,7 +92,11 @@ const page = usePage();
 // Access the companyInfo from the page props
 const companyInfo = computed(() => page.props.companyInfo);
 
-//  console.log(companyInfo.name);
+if (companyInfo.value) {
+  console.log(companyInfo.value);
+} else {
+  console.log("companyInfo is undefined or null");
+}
 
 const handleClose = () => {
   console.log("Modal close prevented");
@@ -118,6 +122,7 @@ const props = defineProps({
   subTotal: String,
   totalDiscount: String,
   total: String,
+  custom_discount: Number,
 });
 
 const handlePrintReceipt = () => {
@@ -127,7 +132,7 @@ const handlePrintReceipt = () => {
       sum + parseFloat(product.selling_price) * product.quantity,
     0
   );
-
+  const customDiscount = Number(props.custom_discount || 0);
   const totalDiscount = props.products
     .reduce((total, item) => {
       // Check if item has a discount
@@ -142,215 +147,239 @@ const handlePrintReceipt = () => {
     .toFixed(2); // Ensures two decimal places
 
   const discount = 0; // Example discount (can be dynamic)
-  const total = subTotal - totalDiscount;
+  const total = subTotal - totalDiscount - customDiscount;
 
   // Generate table rows dynamically using props.products
   const productRows = props.products
     .map((product) => {
-      return `
-      <tr>
-        <td>${product.name}</td>
-        <td>${product.quantity}</td>
-        <td>
-          ${
-            product.discount && product.discount > 0 && product.apply_discount
-              ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
-              : ""
-          }
+      // Determine the price based on discount
+      const price =
+        product.discount > 0 && product.apply_discount
+          ? product.discounted_price // Use discounted price if discount is applied
+          : product.selling_price; // Use selling price if no discount
 
-         <div>${(product.selling_price * product.quantity).toFixed(2)}</div>
-        </td>
-      </tr>
-    `;
+      return `
+        <tr>
+          <td>${product.name}</td>
+          <td style="text-align: center;">${product.quantity}</td>
+          <td>
+            ${
+              product.discount > 0 && product.apply_discount
+                ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
+                : ""
+            }
+            <div>${product.selling_price}</div>
+          </td>
+        </tr>
+      `;
     })
     .join("");
 
   // Generate the receipt HTML
   const receiptHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt</title>
-    <style>
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-                -webkit-print-color-adjust: exact;
-            }
-        }
-        body {
-            background-color: #ffffff;
-            font-size: 12px;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 10px;
-            color: #000;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .header h1 {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0;
-        }
-        .header p {
-            font-size: 10px;
-            margin: 4px 0;
-        }
-        .section {
-            margin-bottom: 16px;
-            padding-top: 8px;
-            border-top: 1px solid #000;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-top: 8px;
-        }
-        .info-row p {
-            margin: 0;
-            font-weight: bold;
-        }
-        .info-row small {
-            font-weight: normal;
-        }
-        table {
-            width: 100%;
-            font-size: 12px;
-            border-collapse: collapse;
-            margin-top: 8px;
-        }
-        table th, table td {
-            padding: 6px 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        table th {
-            text-align: left;
-        }
-        table td {
-            text-align: right;
-        }
-        table td:first-child {
-            text-align: left;
-        }
-        .totals {
-            border-top: 1px solid #000;
-            padding-top: 8px;
-            font-size: 12px;
-        }
-        .totals div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .totals div:nth-child(3) {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 16px;
-        }
-        .footer p {
-            margin: 6px 0;
-        }
-        .footer .italic {
-            font-style: italic;
-        }
-    </style>
-</head>
-<body>
-    <div class="receipt-container">
-              <div class="header">
-              <img src="/images/hipobilllogo.jpg" style="width: 100px; height: 70px;" />
-         ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ""}
-${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ""}
-${
-  companyInfo?.value?.phone || companyInfo?.value?.email
-    ? `<p>${companyInfo.value.phone || ""} | ${
-        companyInfo.value.email || ""
-      }</p>`
-    : ""
-}
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Receipt</title>
+      <style>
+          @media print {
+              body {
+                  margin: 0;
+                  padding: 0;
+                  -webkit-print-color-adjust: exact;
+              }
+          }
+          body {
+              background-color: #ffffff;
+              font-size: 12px;
+              font-family: 'Arial', sans-serif;
+              margin: 0;
+              padding: 10px;
+              color: #000;
+          }
+          .header {
+              text-align: center;
+              margin-bottom: 16px;
+          }
+          .header h1 {
+              font-size: 20px;
+              font-weight: bold;
+              margin: 0;
+          }
+          .header p {
+              font-size: 10px;
+              margin: 4px 0;
+          }
+          .section {
+              margin-bottom: 16px;
+              padding-top: 8px;
+              border-top: 1px solid #000;
+          }
+          .info-row {
+              display: flex;
+              justify-content: space-between;
+              font-size: 12px;
+              margin-top: 8px;
+          }
+          .info-row p {
+              margin: 0;
+              font-weight: bold;
+          }
+          .info-row small {
+              font-weight: normal;
+          }
+          table {
+              width: 100%;
+              font-size: 12px;
+              border-collapse: collapse;
+              margin-top: 8px;
+          }
+          table th, table td {
+              padding: 6px 8px;
+              
+          }
+          table th {
+              text-align: left;
+          }
+          table td {
+              text-align: right;
+          }
+          table td:first-child {
+              text-align: left;
+          }
+          .totals {
+              border-top: 1px solid #000;
+              padding-top: 8px;
+              font-size: 12px;
+          }
+          .totals div {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 8px;
+          }
+          .totals div:nth-child(4) {
+              font-size: 14px;
+              font-weight: bold;
+          }
+          .footer {
+              text-align: center;
+              font-size: 10px;
+              margin-top: 16px;
+          }
+          .footer p {
+              margin: 6px 0;
+          }
+          .footer .italic {
+              font-style: italic;
+          }
 
-        </div>
-    <div class="section">
-            <div class="info-row">
-                <div>
-                    <p>Date:</p>
-                    <small>${new Date().toLocaleDateString()}</small>
-                </div>
-                <div>
-                    <p>Order No:</p>
-                    <small>${props.orderId}</small>
-                </div>
-            </div>
-            <div class="info-row">
-                <div>
-                    <p>Customer:</p>
-                    <small>${props.customer.name}</small>
-                </div>
-                <div>
-                    <p>Cashier:</p>
-                    <small>${props.cashier.name}</small>
-                </div>
-            </div>
-        </div>
-        <div class="section">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th style="text-align: center;">Qty</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${productRows}
-                </tbody>
-            </table>
-        </div>
-        <div class="totals">
-            <div>
-                <span>Sub Total</span>
-                <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
-            </div>
-            <div>
-                <span>Discount</span>
-                <span>${(Number(props.totalDiscount) || 0).toFixed(
-                  2
-                )} LKR</span>
-            </div>
-            <div>
-                <span>Total</span>
-                <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
-            </div>
-            <div>
-                <span>Cash</span>
-                <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
-            </div>
-            <div style="font-weight: bold;">
-                <span>Balance</span>
-                <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
-            </div>
-        </div>
-        <div class="footer">
-            <p>ENJOY YOUR MEAL</p>
-            <p class="italic">Let the quality define its own standards</p>
-            <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
-            <p>${new Date().toLocaleTimeString()} </p>
-        </div>
-    </div>
-</body>
-</html>
-`;
+          
+      </style>
+  </head>
+  <body>
+      <div class="receipt-container">
+                <div class="header">
+                <img src="/images/hipobilllogo.jpg" style="width: 100px; height: 70px;" />
+           ${
+             companyInfo?.value?.name
+               ? `<h1>${companyInfo.value.name}</h1>`
+               : ""
+           }
+  ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ""}
+  ${
+    companyInfo?.value?.phone ||
+    companyInfo?.value?.phone2 ||
+    companyInfo?.value?.email
+      ? `<p>${companyInfo.value.phone || ""} | ${
+          companyInfo.value.phone2 || ""
+        }  ${companyInfo.value.email || ""}</p>`
+      : ""
+  }
+
+          </div>
+
+
+
+
+
+          <div class="section">
+              <div class="info-row">
+                  <div>
+                      <p>Date:</p>
+                      <small>${new Date().toLocaleDateString()} </small>
+                  </div>
+                  <div>
+                      <p>Order No:</p>
+                      <small>${props.orderId}</small>
+                  </div>
+              </div>
+              <div class="info-row">
+                  <div>
+                      <p>Customer:</p>
+                      <small>${props.customer.name}</small>
+                  </div>
+                  <div>
+                      <p>Cashier:</p>
+                      <small>${props.cashier.name}</small>
+                  </div>
+              </div>
+          </div>
+          <div class="section">
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Description</th>
+                          <th style="text-align: center;">Qty</th>
+                          <th style="text-align: right;">Price</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${productRows}
+                  </tbody>
+              </table>
+          </div>
+          <div class="totals">
+              <div>
+                  <span>Sub Total</span>
+                  <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
+              </div>
+              <div>
+                  <span>Discount</span>
+                  <span>${(Number(props.totalDiscount) || 0).toFixed(
+                    2
+                  )} LKR</span>
+              </div>
+              <div>
+                  <span>Custom Discount</span>
+                  <span>${(Number(props.custom_discount) || 0).toFixed(
+                    2
+                  )} LKR</span>
+              </div>
+              <div>
+                  <span>Total</span>
+                  <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
+              </div>
+              <div>
+                  <span>Cash</span>
+                  <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
+              </div>
+              <div style="font-weight: bold;">
+                  <span>Balance</span>
+                  <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
+              </div>
+          </div>
+          <div class="footer">
+              <p>THANK YOU COME AGAIN</p>
+              <p class="italic">Let the quality define its own standards</p>
+               <p style="font-weight: bold;">Powered by JAAN Network Ltd.</p>
+               <p>${new Date().toLocaleTimeString()} </p>
+          </div>
+      </div>
+  </body>
+  </html>
+  `;
 
   // Open a new window
   const printWindow = window.open("", "_blank");

@@ -110,7 +110,7 @@
                   Email
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
-                  Address
+                  Birtday
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   L/Points
@@ -138,7 +138,7 @@
                   {{ customer.email || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-200">
-                  {{ customer.address || "N/A" }}
+                  {{ customer.bdate || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-200">
                   {{ customer.loyalty_points || "N/A" }}

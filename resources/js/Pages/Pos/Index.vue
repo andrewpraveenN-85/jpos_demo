@@ -286,6 +286,15 @@
                 <p class="text-xl">Discount</p>
                 <p class="text-xl">( {{ totalDiscount }} LKR )</p>
               </div>
+              <div
+                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Custom Discount</p>
+                <span>
+                  <CurrencyInput v-model="selectedTable.custom_discount" />
+                  <span class="ml-2">LKR</span>
+                </span>
+              </div>
               <div class="flex items-center justify-between w-full px-16 pt-4">
                 <p class="text-3xl text-black">Total</p>
                 <p class="text-3xl text-black">{{ total }} LKR</p>
@@ -408,6 +417,7 @@
     :subTotal="subtotal"
     :totalDiscount="totalDiscount"
     :total="total"
+    :custom_discount="selectedTable.custom_discount"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -437,6 +447,8 @@ import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
 import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
 import { generateOrderId } from "@/Utils/Other.js";
 
+// const custom_discount = ref(0);
+
 const product = ref(null);
 const error = ref(null);
 const products = ref([]);
@@ -453,8 +465,9 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
     number: 1,
     orderId: generateOrderId(),
     products: [],
-    cash: 0,
+    cash: 0.0,
     balance: 0,
+    custom_discount: 0.0
   },
 ];
 const savedNextTableNumber =
@@ -504,6 +517,7 @@ const addTable = () => {
     products: [],
     cash: 0.0,
     balance: 0.0,
+    custom_discount: 0.0
   };
 
   tables.value.push(newTable);
@@ -545,6 +559,7 @@ const removeSelectedTable = () => {
       products: [],
       cash: 0.0,
       balance: 0.0,
+      custom_discount: 0.0
     };
     // Also update the table in the tables array
     tables.value[index] = selectedTable.value;
@@ -694,6 +709,7 @@ const submitOrder = async () => {
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
       orderId: orderId.value,
+      custom_discount: selectedTable.value.custom_discount,
     });
     isSuccessModalOpen.value = true;
     customer.value = {
@@ -757,9 +773,11 @@ const total = computed(() => {
   // Ensure subtotal and totalDiscount are numbers before performing calculations
   const subtotalValue = parseFloat(subtotal.value);
   const discountValue = parseFloat(totalDiscount.value);
+  const customValue = parseFloat(selectedTable.value.custom_discount);
+  const validCustomValue = isNaN(customValue) ? 0 : customValue;
 
-  // Subtract totalDiscount from subtotal to get the total
-  return (subtotalValue - discountValue).toFixed(2);
+  // Subtract totalDiscount and custom discount from subtotal to get the total
+  return (subtotalValue - discountValue - validCustomValue).toFixed(2);
 });
 
 // const balance = computed(() => {
