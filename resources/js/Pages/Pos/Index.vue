@@ -121,7 +121,15 @@
               </div>
 
               <div class="text-black">
-                <select
+                <div class="text-black">
+                  <input
+                    v-model="customer.bdate"
+                    type="date"
+                    placeholder="Customer Birthdate"
+                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <!-- <select
                   required
                   v-model="employee_id"
                   id="employee_id"
@@ -135,7 +143,7 @@
                   >
                     {{ employee.name }}
                   </option>
-                </select>
+                </select> -->
               </div>
             </div>
           </div>
@@ -581,6 +589,7 @@ const customer = ref({
   countryCode: "",
   contactNumber: "",
   email: "",
+  bdate: "",
 });
 
 const employee_id = ref("");

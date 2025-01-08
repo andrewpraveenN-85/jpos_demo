@@ -142,6 +142,7 @@ class PosController extends Controller
                         'name' => $request->input('customer.name'),
                         'email' => $email,
                         'phone' => $phone,
+                        'bdate' => $request->input('customer.bdate'),
                         'address' => $request->input('customer.address', ''), // Optional address
                         'member_since' => now()->toDateString(), // Current date
                         'loyalty_points' => 0, // Default value

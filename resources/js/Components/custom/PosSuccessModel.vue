@@ -295,7 +295,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.email)
             <div class="info-row">
                 <div>
                     <p>Customer:</p>
-                    <small>${props.customer.name}</small>
+                    <small>User</small>
                 </div>
                 <div>
                     <p>Cashier:</p>
