@@ -269,19 +269,19 @@ const handlePrintReceipt = () => {
 <body>
     <div class="receipt-container">
               <div class="header">
-         ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
-${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
-${(companyInfo?.value?.phone || companyInfo?.value?.email)
-  ? `<p>${companyInfo.value.phone || ''} | ${companyInfo.value.email || ''}</p>`
-  : ''}
+              <img src="/images/hipobilllogo.jpg" style="width: 100px; height: 70px;" />
+         ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ""}
+${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ""}
+${
+  companyInfo?.value?.phone || companyInfo?.value?.email
+    ? `<p>${companyInfo.value.phone || ""} | ${
+        companyInfo.value.email || ""
+      }</p>`
+    : ""
+}
 
         </div>
-
-
-
-
-
-        <div class="section">
+    <div class="section">
             <div class="info-row">
                 <div>
                     <p>Date:</p>
@@ -295,7 +295,7 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.email)
             <div class="info-row">
                 <div>
                     <p>Customer:</p>
-                    <small>User</small>
+                    <small>${props.customer.name}</small>
                 </div>
                 <div>
                     <p>Cashier:</p>
@@ -324,7 +324,9 @@ ${(companyInfo?.value?.phone || companyInfo?.value?.email)
             </div>
             <div>
                 <span>Discount</span>
-                <span>${(Number(props.totalDiscount) || 0).toFixed(2)} LKR</span>
+                <span>${(Number(props.totalDiscount) || 0).toFixed(
+                  2
+                )} LKR</span>
             </div>
             <div>
                 <span>Total</span>
