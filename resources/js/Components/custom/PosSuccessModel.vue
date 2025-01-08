@@ -281,6 +281,7 @@ const handlePrintReceipt = () => {
   <body>
       <div class="receipt-container">
                 <div class="header">
+                <img src="/images/hipobilllogo.jpeg" style="width: 100px; height: 70px;" />
            ${
              companyInfo?.value?.name
                ? `<h1>${companyInfo.value.name}</h1>`
