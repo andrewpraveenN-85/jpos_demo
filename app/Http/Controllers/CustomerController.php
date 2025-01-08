@@ -24,6 +24,22 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function checkCustomer(Request $request)
+    {
+        $request->validate([
+            'contactNumber' => 'required|string',
+        ]);
+
+        // Search for customer by contact number
+        $customer = Customer::where('phone', $request->contactNumber)->first();
+
+        if ($customer) {
+            return response()->json(['customer' => $customer], 200);
+        }
+
+        return response()->json(['message' => 'Customer not found'], 404);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

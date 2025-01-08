@@ -96,12 +96,26 @@
                 />
               </div>
               <div class="flex gap-2 mb-3 text-black">
-                <input
+                <!-- <input
                   v-model="customer.contactNumber"
                   type="text"
                   placeholder="Enter Customer Contact Number"
                   class="flex-grow px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                /> -->
+                <div class="relative w-full">
+                  <input
+                    v-model="customer.contactNumber"
+                    type="text"
+                    placeholder="Enter Customer Contact Number"
+                    class="w-full h-12 px-4 pr-16 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    @click="searchCustomer"
+                    class="absolute top-0 right-0 h-12 px-4 text-white bg-blue-600 rounded-r-md hover:bg-blue-700"
+                  >
+                    Search
+                  </button>
+                </div>
               </div>
               <div class="text-black">
                 <input
@@ -945,5 +959,37 @@ const handleSelectedProducts = (selectedProducts) => {
       });
     }
   });
+};
+
+const searchCustomer = async () => {
+  let contact = customer.value.contactNumber;
+  customer.value = {
+    name: "",
+    countryCode: "",
+    contactNumber: contact,
+    email: "",
+  };
+  try {
+    // Send an Axios request to your API endpoint with the contact number
+    const response = await axios.post("/api/check-customer", {
+      contactNumber: contact,
+    });
+
+    // If a customer is found, autofill the fields
+    if (response.data.customer) {
+      const fetchedCustomer = response.data.customer;
+      customer.value.name = fetchedCustomer.name;
+      customer.value.email = fetchedCustomer.email;
+      customer.value.bdate = fetchedCustomer.bdate; // Ensure this is in a format your date input can handle
+    } else {
+      // If no customer found, optionally reset the fields
+      console.log("Customer not found");
+    }
+  } catch (error) {
+    console.error(
+      "Error fetching customer:",
+      error.response?.data || error.message
+    );
+  }
 };
 </script>

@@ -94,6 +94,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
     Route::post('/api/top-categories', [CategoryController::class, 'topCategories']);
+    Route::post('/api/check-customer', [CustomerController::class, 'checkCustomer']);
+
 
 });
 
