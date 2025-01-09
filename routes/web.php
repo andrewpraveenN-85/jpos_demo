@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\ReturnItemController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CompanyInfoController;
@@ -96,10 +97,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::post('/stock-transition', [PosController::class, 'getProduct'])->name('pos.getProduct');
 
 
-
+    Route::resource('return-bill', ReturnItemController::class);
 
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
+    Route::post('/api/sale/items', [ReturnItemController::class, 'fetchSaleItems'])->name('sale.items');
+
 
 });
 

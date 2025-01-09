@@ -305,7 +305,25 @@
 
 
 
-
+      <Link href="/return-bill" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#7d2cff]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/return-bill.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Return Bill</p>
+              <p class="description">
+                View and manage past orders with details like date, items, total amount, and payment status for easy tracking and reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
 
     </div>
   </div>
