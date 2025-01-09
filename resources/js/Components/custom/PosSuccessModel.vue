@@ -114,6 +114,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+   selectedTable: {
+    type: Object,
+    required: true
+  },
   cashier: Object,
   customer: Object,
   orderId: String,
@@ -325,6 +329,10 @@ const handlePrintReceipt = () => {
                       <small>${props.cashier.name}</small>
                   </div>
               </div>
+              <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px;  margin: 8px 0;">
+                <small style="display: block;">${props.selectedTable?.id === "default" ? "Takeaway" : "Dining"}</small>
+              </div>
+              
           </div>
           <div class="section">
               <table>

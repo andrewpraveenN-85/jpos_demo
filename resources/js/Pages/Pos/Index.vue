@@ -418,6 +418,7 @@
     :totalDiscount="totalDiscount"
     :total="total"
     :custom_discount="selectedTable.custom_discount"
+     :selectedTable="selectedTable"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
