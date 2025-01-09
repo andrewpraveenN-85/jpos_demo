@@ -373,6 +373,18 @@
               </div>
             </div>
 
+            <div class="w-full my-1">
+              <div class="relative flex items-center">
+                <input
+                  id="coupon"
+                  v-model="selectedTable.kitchen_note"
+                  type="text"
+                  placeholder="Kitchen Note"
+                  class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+
             <div class="flex flex-col w-full space-y-8">
               <div
                 class="flex items-center justify-center w-full pt-8 space-x-8"
@@ -439,6 +451,7 @@
     :total="total"
     :custom_discount="customDiscCalculated"
     :selectedTable="selectedTable"
+    :kitchen_note="selectedTable.kitchen_note"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -490,6 +503,7 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
     balance: 0,
     custom_discount: 0.0,
     custom_discount_type: "percent",
+    kitchen_note: "",
   },
 ];
 
@@ -542,6 +556,7 @@ const addTable = () => {
     balance: 0.0,
     custom_discount: 0.0,
     custom_discount_type: "percent",
+    kitchen_note: "",
   };
 
   tables.value.push(newTable);
@@ -585,6 +600,7 @@ const removeSelectedTable = () => {
       balance: 0.0,
       custom_discount: 0.0,
       custom_discount_type: "percent",
+      kitchen_note: "",
     };
     // Also update the table in the tables array
     tables.value[index] = selectedTable.value;

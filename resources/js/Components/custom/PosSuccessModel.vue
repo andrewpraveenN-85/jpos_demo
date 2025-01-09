@@ -128,6 +128,7 @@ const props = defineProps({
   total: String,
   custom_discount: Number,
   custom_discount_type: String,
+  kitchen_note: String,
 });
 
 const handlePrintReceipt = () => {
@@ -336,7 +337,7 @@ const handlePrintReceipt = () => {
                     ? "Takeaway"
                     : "Dining-IN"
                 }</small>
-            </div>
+              </div>
                           
           </div>
           <div class="section">
@@ -382,6 +383,11 @@ const handlePrintReceipt = () => {
                   <span>Balance</span>
                   <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
               </div>
+
+              ${props.kitchen_note ? `
+              <div style="font-weight: bold; text-align: center;">
+                <small style="display: block; text-align: center;">Note: ${props.kitchen_note}</small>
+              </div>` : ''}
           </div>
           <div class="footer">
               <p>THANK YOU COME AGAIN</p>
