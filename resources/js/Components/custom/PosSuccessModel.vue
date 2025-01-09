@@ -218,8 +218,8 @@ const handlePrintReceipt = () => {
           }
           .section {
               margin-bottom: 16px;
-              padding-top: 8px;
-              border-top: 1px solid #000;
+               margin: 8px 0;
+             
           }
           .info-row {
               display: flex;
@@ -329,10 +329,10 @@ const handlePrintReceipt = () => {
                       <small>${props.cashier.name}</small>
                   </div>
               </div>
-              <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px;  margin: 8px 0;">
-                <small style="display: block;">${props.selectedTable?.id === "default" ? "Takeaway" : "Dining"}</small>
-              </div>
-              
+              <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px; margin: 8px 0;">
+                <small style="display: block;">${props.selectedTable?.id === "default" ? "Takeaway" : "Dining-IN"}</small>
+            </div>
+                          
           </div>
           <div class="section">
               <table>
