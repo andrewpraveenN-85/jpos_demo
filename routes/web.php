@@ -15,6 +15,7 @@ use App\Http\Controllers\SizeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\TransactionHistoryController;
+use App\Http\Controllers\ManualPosController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -88,6 +89,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::resource('transactionHistory', TransactionHistoryController::class );
     Route::resource('stock-transition', StockTransactionController::class);
+    Route::resource('manualpos', ManualPosController::class);
+    
 
 
     // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');

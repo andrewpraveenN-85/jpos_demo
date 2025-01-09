@@ -176,11 +176,7 @@
               </p>
             </div>
 
-            <div
-              class="flex items-center w-full py-4 border-b border-black"
-              v-for="item in products"
-              :key="item.id"
-            >
+            <div class="flex items-center w-full py-4 border-b border-black"  v-for="item in products"  :key="item.id"  >
               <div class="flex w-1/6">
                 <img
                   :src="
@@ -537,6 +533,7 @@ const submitOrder = async () => {
       orderId: orderId.value,
       cash: cash.value,
       custom_discount: custom_discount.value,
+      appliedCoupon: appliedCoupon.value,
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success

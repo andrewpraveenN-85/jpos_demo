@@ -99,7 +99,7 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
             ? ''
             : 'You do not have permission to add more Color'"
 >
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Color
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Colors
 </p>
 
 
@@ -118,7 +118,7 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
             <tr
                 class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700"
               >
-              <th class="p-4 font-semibold tracking-wide   uppercase">#</th>
+              <th class="p-4 font-semibold tracking-wide   uppercase">Color ID</th>
               <th class="p-4 font-semibold tracking-wide   uppercase">Name</th>
               <th class="p-4 font-semibold tracking-wide  uppercase">Actions</th>
             </tr>

@@ -91,7 +91,7 @@ class CategoryController extends Controller
 
 
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:191|unique:categories,name',
                 'parent_id' => 'nullable|exists:categories,id',
             ]);
 
@@ -105,7 +105,7 @@ class CategoryController extends Controller
         if ($request->has('name')) {
             // Validate name directly
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/|unique:categories,name',
                  'parent_id' => 'nullable|exists:categories,id',
             ]);
 
@@ -137,7 +137,7 @@ class CategoryController extends Controller
             abort(403, 'Unauthorized');
         }
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/|unique:categories,name',
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 

@@ -31,8 +31,8 @@ class CouponController extends Controller
         }
 
         $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:coupons,code',
-            'discount' => 'required|string|max:255',
+            'code' => 'required|string|max:191|unique:coupons,code',
+            'discount' => 'required|numeric',
         ]);
 
         Coupon::create($validated);
@@ -48,8 +48,8 @@ class CouponController extends Controller
             abort(403, 'Unauthorized');
         }
         $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:coupons,code,' . $coupon->id,
-            'discount' => 'required|string|max:255',
+            'code' => 'required|string|max:191|unique:coupons,code,' . $coupon->id,
+            'discount' => 'required|numeric|max:255',
         ]);
 
         $coupon->update($validated);

@@ -50,7 +50,7 @@ class ColorController extends Controller
 
 
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/',
             ]);
 
 
@@ -63,7 +63,7 @@ class ColorController extends Controller
         if ($request->has('name')) {
             // Validate name directly
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/',
             ]);
 
 
@@ -88,7 +88,7 @@ class ColorController extends Controller
             abort(403, 'Unauthorized');
         }
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:191|regex:/^[a-zA-Z\s]+$/',
         ]);
 
         $color->update($validated);
