@@ -114,9 +114,9 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-   selectedTable: {
+  selectedTable: {
     type: Object,
-    required: true
+    required: true,
   },
   cashier: Object,
   customer: Object,
@@ -127,7 +127,7 @@ const props = defineProps({
   totalDiscount: String,
   total: String,
   custom_discount: Number,
-  custom_discount_type: String
+  custom_discount_type: String,
 });
 
 const handlePrintReceipt = () => {
@@ -331,7 +331,11 @@ const handlePrintReceipt = () => {
                   </div>
               </div>
               <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px; margin: 8px 0;">
-                <small style="display: block;">${props.selectedTable?.id === "default" ? "Takeaway" : "Dining-IN"}</small>
+                <small style="display: block;">${
+                  props.selectedTable?.id === "default"
+                    ? "Takeaway"
+                    : "Dining-IN"
+                }</small>
             </div>
                           
           </div>
@@ -363,9 +367,7 @@ const handlePrintReceipt = () => {
               <div>
                   <span>Custom Discount</span>
                   <span>
-                    ${(Number(props.custom_discount) || 0).toFixed(2)}
-                    ${props.custom_discount_type === 'percent' ? '%' :
-                    props.custom_discount_type === 'fixed' ? 'LKR' : ''}
+                    ${(Number(props.custom_discount) || 0).toFixed(2)} LKR
                   </span>
               </div>
               <div>

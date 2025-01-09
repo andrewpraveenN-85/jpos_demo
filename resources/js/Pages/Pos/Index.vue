@@ -437,9 +437,8 @@
     :subTotal="subtotal"
     :totalDiscount="totalDiscount"
     :total="total"
-    :custom_discount="selectedTable.custom_discount"
+    :custom_discount="customDiscCalculated"
     :selectedTable="selectedTable"
-    :custom_discount_type="selectedTable.custom_discount_type"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -734,8 +733,8 @@ const submitOrder = async () => {
       employee_id: employee_id.value,
       paymentMethod: selectedPaymentMethod.value,
       userId: props.loggedInUser.id,
-      orderId: orderId.value,
-      custom_discount: selectedTable.value.custom_discount,
+      orderId: selectedTable.value.orderId,
+      custom_discount: customDiscCalculated.value,
     });
     isSuccessModalOpen.value = true;
     customer.value = {
@@ -801,12 +800,22 @@ const total = computed(() => {
   const discountValue = parseFloat(totalDiscount.value) || 0;
   const customDiscount = parseFloat(selectedTable.value.custom_discount) || 0;
 
-  //   const customValue = parseFloat(selectedTable.value.custom_discount) || 0;
-  //   const validCustomValue = isNaN(customValue) ? 0 : customValue;
+  let customValue = 0;
 
-  //    const subtotalValue = parseFloat(subtotal.value) || 0;
-  //     const discountValue = parseFloat(totalDiscount.value) || 0;
-  //     const customDiscount = parseFloat(custom_discount.value) || 0;
+  if (selectedTable.value.custom_discount_type === "percent") {
+    customValue = (subtotalValue * customDiscount) / 100;
+  } else if (selectedTable.value.custom_discount_type === "fixed") {
+    customValue = customDiscount;
+  }
+  //   return (subtotalValue - discountValue - customValue).toFixed(2);
+
+  // Subtract totalDiscount and custom discount from subtotal to get the total
+  return (subtotalValue - discountValue - customValue).toFixed(2);
+});
+
+const customDiscCalculated = computed(() => {
+  const subtotalValue = parseFloat(subtotal.value) || 0;
+  const customDiscount = parseFloat(selectedTable.value.custom_discount) || 0;
 
   let customValue = 0;
 
@@ -815,10 +824,8 @@ const total = computed(() => {
   } else if (selectedTable.value.custom_discount_type === "fixed") {
     customValue = customDiscount;
   }
-//   return (subtotalValue - discountValue - customValue).toFixed(2);
 
-  // Subtract totalDiscount and custom discount from subtotal to get the total
-  return (subtotalValue - discountValue - customValue).toFixed(2);
+  return customValue.toFixed(2);
 });
 
 // const balance = computed(() => {
