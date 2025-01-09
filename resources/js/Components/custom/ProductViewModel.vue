@@ -201,74 +201,27 @@
                 </div>
               </div>
 
-              <div class="w-full">
-                <!-- Hidden container for printing -->
-                <div
-                  :class="{ hidden: !isVisible }"
-                  class="relative print-container"
-                  id="printContainer"
-                >
-                  <div
-                    class="flex items-center justify-center w-full space-x-4"
-                  >
-                    <p
-                      v-if="!isSmallStickers"
-                      class="text-md font-bold text-black"
-                    >
+              <!-- Hidden container for printing -->
+              <div
+                :class="{ hidden: !isVisible }"
+                id="printContainer"
+                class="print-container"
+              >
+                <div class="print-content">
+                  <div class="product-details">
+                    <p class="product-category">
                       {{ selectedProduct.category?.name || "N/A" }}
                     </p>
-                    <p class="text-md font-bold text-black">
-                      {{ selectedProduct?.selling_price ?? "N/A" }}
-                      LKR
+                    <p class="product-price">
+                      {{ selectedProduct?.selling_price ?? "N/A" }} LKR
                     </p>
                   </div>
-                  <!-- <div
-                    class="absolute top-0 left-0 z-10 font-bold"
-                    style="padding: 5px; color: #000; font-size: 12px"
-                  >
-                    {{ selectedProduct.category.name }}
-                  </div>
-
-                  <div
-                    class="absolute top-0 right-0 z-10 font-bold"
-                    style="
-                      padding: 5px;
-                      color: #000;
-                      font-size: 12px;
-                      margin-right: 25px;
-                    "
-                  >
-                    {{ selectedProduct.selling_price }} LKR
-                  </div> -->
-
-                  <svg id="barcodePrint"></svg>
 
                   <!-- Barcode -->
+                  <svg id="barcodePrint"></svg>
 
-                  <p
-                    v-if="!isSmallStickers"
-                    style="
-                      color: #000;
-                      text-align: center;
-                      width: 100%;
-                      padding-bottom: 5px;
-                    "
-                  >
+                  <p class="product-code">
                     {{ selectedProduct?.code ?? "N/A" }}
-                  </p>
-
-                  <p
-                    v-if="!isSmallStickers"
-                    style="color: #000; text-align: center; width: 100%"
-                  >
-                    [{{ selectedProduct.size?.name || "N/A" }}] -
-                    {{ selectedProduct.color?.name || "N/A" }}
-                  </p>
-                  <p
-                    v-if="!isSmallStickers"
-                    style="color: #000; text-align: center; width: 100%"
-                  >
-                    {{ selectedProduct?.name ?? "N/A" }}
                   </p>
                 </div>
               </div>
@@ -295,7 +248,6 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import { HasRole } from "@/Utils/Permissions";
-const isSmallStickers = import.meta.env.VITE_SMALL_STICKERS === "true";
 
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -348,34 +300,14 @@ function generateAndPrintBarcode() {
     return;
   }
 
-  if (isSmallStickers) {
-    JsBarcode(barcodePrintElement, input, {
-      format: "CODE128", // Code 128 is compact and ideal for small labels
-      lineColor: "#000", // Black lines for high contrast
-      width: 1.1, // Narrower lines to fit more content within the label
-      height: 50, // Shorter height to fit within the 30mm space
-      displayValue: false, // Disable text display if it overlaps with the barcode
-      margin: 10, // Remove default margins to maximize space usage
-    });
-  } else {
-    JsBarcode(barcodePrintElement, input, {
-      format: "CODE128", // Code 128 is compact and ideal for small labels
-      lineColor: "#000", // Black lines for high contrast
-      width: 1.3, // Narrower lines to fit more content within the label
-      height: 60, // Shorter height to fit within the 30mm space
-      displayValue: false, // Disable text display if it overlaps with the barcode
-      margin: 0, // Remove default margins to maximize space usage
-    });
-  }
-
-  // JsBarcode(barcodePrintElement, input, {
-  //   format: "CODE128",
-  //   // format: "EAN13",
-  //   lineColor: "#000",
-  //   width: 1.25,
-  //   height: 100,
-  //   displayValue: false,
-  // });
+  JsBarcode(barcodePrintElement, input, {
+    format: "CODE128", // Code 128 is compact and ideal for small labels
+    lineColor: "#000", // Black lines for high contrast
+    width: 1.4, // Wider bars to fill the label width
+    height: 50, // Barcode height adjusted for the label
+    displayValue: false, // Disable text display
+    margin: 0, // Remove default margins
+  });
 
   const printContents = document.getElementById("printContainer").innerHTML;
   const originalContents = document.body.innerHTML;
@@ -388,28 +320,64 @@ function generateAndPrintBarcode() {
 }
 </script>
 
-
-
 <style>
 @media print {
-  #barcodePrint {
-    display: block;
-    /* Ensure the SVG behaves like a block-level element */
-    margin: 0 auto;
-    /* Horizontally center using auto margins */
-    /* margin-top: 10px; */
-  }
-
-  .print-container {
+  /* Label container */
+  #printContainer {
     display: flex;
     justify-content: center;
-    /* Horizontally center content inside the container */
     align-items: center;
-    /* Vertically center content inside the container */
+    width: 100%;
     height: 100%;
-    /* Ensure container takes full height for vertical centering */
+    margin-top: 0;
+  }
+
+  /* Print content */
+  .print-content {
     text-align: center;
-    /* Center text within the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    margin-top: 2mm;
+  }
+
+  /* Barcode centered and full width */
+  #barcodePrint {
+    width: 100%;
+    margin-left: 12mm;
+  }
+
+  /* Product details */
+  .product-details {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    font-size: 8px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-left: 15mm;
+  }
+
+  .product-category,
+  .product-price {
+    color: #000;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Product code */
+  .product-code {
+    color: #000;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-left: 10mm;
   }
 }
 </style>
+
