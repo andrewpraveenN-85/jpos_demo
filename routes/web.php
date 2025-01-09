@@ -98,6 +98,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
+    Route::post('/api/sale/items', [ReturnItemController::class, 'fetchSaleItems'])->name('sale.items');
+
 
 });
 

@@ -17,7 +17,7 @@ class ReturnItemController extends Controller
      */
     public function index()
     {
-        if (!Gate::allows('hasRole', ['Admin','Manager'])) {
+        if (!Gate::allows('hasRole', ['Admin', 'Manager'])) {
             abort(403, 'Unauthorized');
         }
 
@@ -32,9 +32,21 @@ class ReturnItemController extends Controller
             'saleItems' => $saleItems,
 
         ]);
-
-
     }
+
+    public function fetchSaleItems(Request $request)
+    {
+        $request->validate([
+            'sale_id' => 'required|exists:sales,id',
+        ]);
+
+        $saleItems = SaleItem::with('product') // Load the related product
+            ->where('sale_id', $request->input('sale_id'))
+            ->get();
+
+        return response()->json($saleItems);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -51,17 +63,17 @@ class ReturnItemController extends Controller
 
 
 
-     public function store(Request $request)
-     {
-         // Debug the incoming data
-         if ($request->isJson()) {
-             $data = $request->json()->all();
-             dd($data); // Inspect the parsed data
-         }
+    public function store(Request $request)
+    {
+        // Debug the incoming data
+        if ($request->isJson()) {
+            $data = $request->json()->all();
+            dd($data); // Inspect the parsed data
+        }
 
-         // If data is not JSON, inspect it in other formats
-         dd($request->all());
-     }
+        // If data is not JSON, inspect it in other formats
+        dd($request->all());
+    }
 
 
 

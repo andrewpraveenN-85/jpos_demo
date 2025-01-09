@@ -35,7 +35,7 @@
                         <div v-if="selectedSale" class="mt-6 p-4 border rounded-lg bg-gray-50">
                             <p class="text-lg font-medium">Selected Order Details:</p>
                             <div class="mt-4 space-y-2">
-                                <p><span class="font-bold"> ID:</span> {{ selectedSale.id }}</p>
+                                <!-- <p><span class="font-bold"> ID:</span> {{ selectedSale.id }}</p> -->
                                 <p><span class="font-bold">Order ID:</span> {{ selectedSale.order_id }}</p>
                                 <p><span class="font-bold">Customer Name:</span> {{ selectedSale?.customer?.name ||
                                     'N/A' }}</p>
@@ -140,6 +140,33 @@ watch(
     }
 );
 
+import axios from "axios";
+
+// watch(
+//     () => form.order_id,
+//     async (newValue) => {
+//         if (!newValue) {
+//             saleItemsState.value = [];
+//             return;
+//         }
+
+//         try {
+//             const response = await axios.post(route('sale.items'), { sale_id: newValue });
+//             saleItemsState.value = response.data.map((item) => ({
+//                 ...item,
+//                 reason: "",
+//                 return_date: "",
+//             }));
+//         } catch (error) {
+//             console.error("Failed to fetch sale items:", error);
+//             alert("Failed to load sale items. Please try again.");
+//         } finally {
+//             // isLoading.value = false;
+//         }
+//     }
+// );
+
+
 // Props from backend
 const props = defineProps({
     sales: { type: Array, required: true },
@@ -174,22 +201,22 @@ const submit = () => {
 
     form.items = saleItemsState.value;
 
-    const payload = {
-        sale_id: selectedSale.value.id,
-        total_amount: selectedSale.value.total_amount,
-        customer_name: selectedSale.value.customer?.name || "Unknown",
-        discount: selectedSale.value.discount || 0,
-        payment_method: selectedSale.value.payment_method || "",
-        sale_date: selectedSale.value.sale_date || "",
-        items: filteredSaleItems.value.map((item) => ({
-            product_id: item.product?.id || null,
-            quantity: item.quantity || 0,
-            reason: item.reason || "",
-            return_date: item.return_date || "",
-        })),
-    };
+    // const payload = {
+    //     sale_id: selectedSale.value.id,
+    //     total_amount: selectedSale.value.total_amount,
+    //     customer_name: selectedSale.value.customer?.name || "Unknown",
+    //     discount: selectedSale.value.discount || 0,
+    //     payment_method: selectedSale.value.payment_method || "",
+    //     sale_date: selectedSale.value.sale_date || "",
+    //     items: filteredSaleItems.value.map((item) => ({
+    //         product_id: item.product?.id || null,
+    //         quantity: item.quantity || 0,
+    //         reason: item.reason || "",
+    //         return_date: item.return_date || "",
+    //     })),
+    // };
 
-    console.log("Payload:", payload);
+    // console.log("Payload:", payload);
 
     form.post(route("return-bill.store"), {
         onSuccess: () => {
