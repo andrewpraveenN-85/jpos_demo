@@ -124,6 +124,7 @@ const selectedSale = computed(() => {
 const form = useForm({
     order_id: "",
     discount: 0,
+    items: [],
 });
 
 watch(
@@ -171,6 +172,8 @@ const submit = () => {
         return;
     }
 
+    form.items = saleItemsState.value;
+
     const payload = {
         sale_id: selectedSale.value.id,
         total_amount: selectedSale.value.total_amount,
@@ -189,10 +192,6 @@ const submit = () => {
     console.log("Payload:", payload);
 
     form.post(route("return-bill.store"), {
-        data: payload,
-        headers: {
-            "Content-Type": "application/json"
-        },
         onSuccess: () => {
             alert("Return submitted successfully!");
             form.reset();
