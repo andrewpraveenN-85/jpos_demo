@@ -94,7 +94,7 @@ const props = defineProps({
     totalDiscount: String,
     total: String,
     custom_discount: Number,
-
+    custom_discount_type: String
 });
 
 const handlePrintReceipt = () => {
@@ -311,7 +311,11 @@ const handlePrintReceipt = () => {
               </div>
               <div>
                   <span>Custom Discount</span>
-                  <span>${(Number(props.custom_discount) || 0).toFixed(2)} LKR</span>
+                  <span>
+                    ${(Number(props.custom_discount) || 0).toFixed(2)}
+                    ${props.custom_discount_type === 'percent' ? '%' :
+                    props.custom_discount_type === 'fixed' ? 'LKR' : ''}
+                  </span>
               </div>
               <div>
                   <span>Total</span>
