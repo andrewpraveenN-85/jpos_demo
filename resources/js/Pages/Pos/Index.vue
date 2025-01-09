@@ -286,13 +286,33 @@
                 <p class="text-xl">Discount</p>
                 <p class="text-xl">( {{ totalDiscount }} LKR )</p>
               </div>
-              <div
+              <!-- <div
                 class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
               >
                 <p class="text-xl text-black">Custom Discount</p>
                 <span>
                   <CurrencyInput v-model="selectedTable.custom_discount" />
                   <span class="ml-2">LKR</span>
+                </span>
+              </div> -->
+
+              <div
+                class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Custom Discount</p>
+                <span class="flex items-center">
+                  <CurrencyInput
+                    v-model="selectedTable.custom_discount"
+                    placeholder="Enter value"
+                    class="rounded-md px-2 py-1 text-black text-md"
+                  />
+                  <select
+                    v-model="selectedTable.custom_discount_type"
+                    class="ml-2 px-8 border-black rounded-md text-black py-1 text-md"
+                  >
+                    <option value="percent">%</option>
+                    <option value="fixed">Rs</option>
+                  </select>
                 </span>
               </div>
               <div class="flex items-center justify-between w-full px-16 pt-4">
@@ -418,7 +438,8 @@
     :totalDiscount="totalDiscount"
     :total="total"
     :custom_discount="selectedTable.custom_discount"
-     :selectedTable="selectedTable"
+    :selectedTable="selectedTable"
+    :custom_discount_type="selectedTable.custom_discount_type"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -468,9 +489,11 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
     products: [],
     cash: 0.0,
     balance: 0,
-    custom_discount: 0.0
+    custom_discount: 0.0,
+    custom_discount_type: "percent",
   },
 ];
+
 const savedNextTableNumber =
   JSON.parse(localStorage.getItem("nextTableNumber")) || 2;
 const savedSelectedTable =
@@ -518,7 +541,8 @@ const addTable = () => {
     products: [],
     cash: 0.0,
     balance: 0.0,
-    custom_discount: 0.0
+    custom_discount: 0.0,
+    custom_discount_type: "percent",
   };
 
   tables.value.push(newTable);
@@ -560,7 +584,8 @@ const removeSelectedTable = () => {
       products: [],
       cash: 0.0,
       balance: 0.0,
-      custom_discount: 0.0
+      custom_discount: 0.0,
+      custom_discount_type: "percent",
     };
     // Also update the table in the tables array
     tables.value[index] = selectedTable.value;
@@ -772,13 +797,28 @@ const totalDiscount = computed(() => {
 
 const total = computed(() => {
   // Ensure subtotal and totalDiscount are numbers before performing calculations
-  const subtotalValue = parseFloat(subtotal.value);
-  const discountValue = parseFloat(totalDiscount.value);
-  const customValue = parseFloat(selectedTable.value.custom_discount);
-  const validCustomValue = isNaN(customValue) ? 0 : customValue;
+  const subtotalValue = parseFloat(subtotal.value) || 0;
+  const discountValue = parseFloat(totalDiscount.value) || 0;
+  const customDiscount = parseFloat(selectedTable.value.custom_discount) || 0;
+
+  //   const customValue = parseFloat(selectedTable.value.custom_discount) || 0;
+  //   const validCustomValue = isNaN(customValue) ? 0 : customValue;
+
+  //    const subtotalValue = parseFloat(subtotal.value) || 0;
+  //     const discountValue = parseFloat(totalDiscount.value) || 0;
+  //     const customDiscount = parseFloat(custom_discount.value) || 0;
+
+  let customValue = 0;
+
+  if (selectedTable.value.custom_discount_type === "percent") {
+    customValue = (subtotalValue * customDiscount) / 100;
+  } else if (selectedTable.value.custom_discount_type === "fixed") {
+    customValue = customDiscount;
+  }
+//   return (subtotalValue - discountValue - customValue).toFixed(2);
 
   // Subtract totalDiscount and custom discount from subtotal to get the total
-  return (subtotalValue - discountValue - validCustomValue).toFixed(2);
+  return (subtotalValue - discountValue - customValue).toFixed(2);
 });
 
 // const balance = computed(() => {
