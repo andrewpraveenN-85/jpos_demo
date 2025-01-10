@@ -68,5 +68,9 @@ class FortifyServiceProvider extends ServiceProvider
                 'identity' => [__('The provided credentials are incorrect.')],
             ]);
         });
+
+        Fortify::registerView(function () {
+            abort(404); // Or redirect to another page
+        });
     }
 }
