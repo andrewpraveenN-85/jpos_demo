@@ -355,7 +355,7 @@ function generateAndPrintBarcode() {
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: bold;
     margin-bottom: 5px;
     margin-left: 15mm;
@@ -373,7 +373,7 @@ function generateAndPrintBarcode() {
   /* Product code */
   .product-code {
     color: #000;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: bold;
     margin-top: 5px;
     margin-left: 10mm;
