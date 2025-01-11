@@ -189,11 +189,12 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => [
-                'string',
-                'max:50',
-                Rule::unique('products')->whereNull('deleted_at'),
-            ],
+            'code' => 'nullable|max:50',
+            // 'code' => [
+            //     'string',
+            //     'max:50',
+            //     Rule::unique('products')->whereNull('deleted_at'),
+            // ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -233,6 +234,7 @@ class ProductController extends Controller
 
             // Create the product
             $product = Product::create($validated);
+            $product->update(['code' => 'PROD-' . $product->id]);
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
@@ -303,6 +305,7 @@ class ProductController extends Controller
             }
 
             $product = Product::create($validated);
+            $product->update(['code' => 'PROD-' . $product->id]);
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
@@ -398,7 +401,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
-            'code' => 'nullable|string|max:50',
+            // 'code' => 'nullable|string|max:50',
             // 'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
