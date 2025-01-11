@@ -225,7 +225,7 @@
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
                 <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
-                        Total Selling Price In Stock:  
+                        Total Selling Price In Stock:
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
@@ -353,7 +353,7 @@
               Top Products Stock Chart
             </h2>
             <button
-              @click="downloadPDF4"
+              @click="downloadTopProductsStockPDF"
               class="w-full mt-6 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
             >
               Download PDF
@@ -366,11 +366,20 @@
 
       <!-- Chart 3 -->
       <div class="bg-white border-4 border-black rounded-xl h-[500px]">
+
+
         <h2
           class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2"
         >
           Top Products Stock Table
         </h2>
+
+
+
+
+
+
+
         <div class="overflow-x-auto overflow-y-auto max-h-[400px]">
           <table
             id="stockQtyTbl"
@@ -587,7 +596,7 @@ const productQuantities = computed(() => {
   const quantities = {};
   props.sales.forEach((sale) => {
     sale.sale_items.forEach((item) => {
-      const productName = item.product.name;
+      const productName = item.product && item.product.name ? item.product.name : "N/A";
       quantities[productName] = (quantities[productName] || 0) + item.quantity;
     });
   });
@@ -831,6 +840,21 @@ const sortedProductsStock = computed(() => {
   }, {});
 });
 
+
+
+const sortedProductsStock2 = computed(() => {
+  return props.products.map((product) => ({
+    name: product.name,
+    stock: product.stock_quantity,
+    costPrice: product.cost_price,
+    sellingPrice: product.selling_price,
+    createdAt: product.created_at,
+  }));
+});
+
+
+
+
 // Doughnut Chart Data
 const chartData5 = computed(() => ({
   labels: Object.keys(sortedProductsStock.value), // Product names
@@ -909,6 +933,61 @@ const downloadPDF4 = () => {
   // Step 4: Save the PDF
   doc.save("ProductStockQuantities.pdf");
 };
+
+
+
+
+
+const downloadTopProductsStockPDF = () => {
+  const doc = new jsPDF();
+
+  // Title for the PDF
+  doc.text("Top Products Stock Table", 14, 10);
+
+  // Table Headings
+  const tableColumn = [
+    "#",
+    "Name",
+    "QTY",
+    "Selling Price (LKR)",
+    "Cost Price (LKR)",
+  ];
+
+  // Prepare data for the table rows
+  const tableRows = [];
+  products.value.forEach((product, index) => {
+    tableRows.push([
+      index + 1, // Serial number
+      product.name || "N/A",
+      product.stock_quantity || "N/A",
+      product.selling_price || "N/A",
+      product.cost_price || "N/A",
+
+    ]);
+  });
+
+  // Add table to PDF
+  doc.autoTable({
+    head: [tableColumn],
+    body: tableRows,
+    startY: 20,
+    theme: "striped",
+    headStyles: { fillColor: [30, 144, 255] }, // Blue heading
+    margin: { top: 10 },
+  });
+
+  // Save the PDF
+  doc.save("TopProductsStockTable.pdf");
+};
+
+
+
+
+
+
+
+
+
 
 $(document).ready(function () {
   let table = $("#stockQtyTbl").DataTable({
