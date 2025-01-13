@@ -222,7 +222,7 @@
 
 
 
-                            <div class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
+                            <div v-if="!AppConfig.isDressHub" class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Custom Discount</p>
                                 <span class="flex items-center">
                                     <CurrencyInput v-model="custom_discount" @blur="validateCustomDiscount"
@@ -327,7 +327,7 @@
         :employee="employee" :cashier="loggedInUser" :customer="customer" :orderId="orderId" :cash="cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
         :custom_discount_type="custom_discount_type"
-        :custom_discount="custom_discount" />
+        :custom_discount="customDiscCalculated" />
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
     <SelectProductModel v-model:open="isSelectModalOpen" :allcategories="allcategories" :colors="colors" :sizes="sizes"
@@ -348,6 +348,7 @@ import axios from "axios";
 import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
 import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
+import { AppConfig } from '@/Config/AppConfig';
 
 const product = ref(null);
 const error = ref(null);
@@ -361,7 +362,7 @@ const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
 const custom_discount_type = ref('percent');
 
-
+const isDressHub = computed(() => import.meta.env.VITE_APP_NAME === "DressHub");
 // const balance = ref(0);
 
 const handleModalOpenUpdate = (newValue) => {
@@ -452,7 +453,7 @@ const submitOrder = async () => {
             userId: props.loggedInUser.id,
             orderId: orderId.value,
             cash: cash.value,
-            custom_discount: custom_discount.value,
+            custom_discount: customDiscCalculated.value,
         });
         isSuccessModalOpen.value = true;
         console.log(response.data); // Handle success
@@ -518,6 +519,21 @@ const total = computed(() => {
     }
 
     return (subtotalValue - discountValue - customValue).toFixed(2);
+});
+
+const customDiscCalculated = computed(() => {
+  const subtotalValue = parseFloat(subtotal.value) || 0;
+  const customDiscount = parseFloat(custom_discount.value) || 0;
+
+  let customValue = 0;
+
+  if (custom_discount_type.value === "percent") {
+    customValue = (subtotalValue * customDiscount) / 100;
+  } else if (custom_discount_type.value === "fixed") {
+    customValue = customDiscount;
+  }
+
+  return customValue.toFixed(2);
 });
 
 const balance = computed(() => {
