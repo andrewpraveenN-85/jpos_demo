@@ -308,7 +308,7 @@ function generateAndPrintBarcode() {
   JsBarcode(barcodePrintElement, input, {
     format: "CODE128", // Code 128 is compact and ideal for small labels
     lineColor: "#000", // Black lines for high contrast
-    width: 1.4, // Wider bars to fill the label width
+    width: 1.2, // Wider bars to fill the label width
     height: 50, // Barcode height adjusted for the label
     displayValue: false, // Disable text display
     margin: 0, // Remove default margins
