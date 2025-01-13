@@ -210,7 +210,7 @@
                 <div class="print-content">
                   <div class="product-details">
                     <p class="product-category">
-                      {{ selectedProduct.category?.name || "N/A" }}
+                      {{ selectedProduct?.name || "N/A" }}
                     </p>
                     <p class="product-price">
                       {{ selectedProduct?.selling_price ?? "N/A" }} LKR
