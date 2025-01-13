@@ -208,20 +208,25 @@
                 class="print-container"
               >
                 <div class="print-content">
-                  <div class="product-details">
+                  <!-- <div class="product-details">
                     <p class="product-category">
-                      {{ selectedProduct?.name || "N/A" }}
+                      {{ selectedProduct.category?.name || "N/A" }}
                     </p>
                     <p class="product-price">
                       {{ selectedProduct?.selling_price ?? "N/A" }} LKR
                     </p>
-                  </div>
+                  </div> -->
+
+                  <p class="product-code">
+                    {{ selectedProduct?.name || "N/A" }}
+                  </p>
 
                   <!-- Barcode -->
                   <svg id="barcodePrint"></svg>
 
                   <p class="product-code">
-                    {{ selectedProduct?.code ?? "N/A" }}
+                    <!-- {{ selectedProduct?.code ?? "N/A" }} -->
+                    {{ selectedProduct?.selling_price ?? "N/A" }} LKR
                   </p>
                 </div>
               </div>
