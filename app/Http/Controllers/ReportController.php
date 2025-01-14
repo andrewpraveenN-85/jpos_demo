@@ -41,7 +41,7 @@ class ReportController extends Controller
          $categorySales = [];
          foreach ($sales as $sale) {
              foreach ($sale->saleItems as $item) {
-                 $categoryName = $item->product->category->name;
+                 $categoryName = $item->product->category->name ?? 'No Category';
                  $totalAmount = $sale->total_amount;
                  
                  if (!isset($categorySales[$categoryName])) {
