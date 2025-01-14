@@ -58,14 +58,14 @@
   <Head title="Customers" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-8"
   >
     <!-- Include the Header -->
     <Header />
 
     <!-- Main Content -->
-    <div class="w-5/6 py-12 space-y-24">
-      <div class="flex items-center justify-between">
+    <div class="md:w-5/6 w-full py-12 md:space-y-24 space-y-8">
+      <div class="flex md:flex-row flex-col md:items-center justify-between space-y-8">
         <!-- Back Button and Title -->
         <div class="flex items-center space-x-4">
           <Link

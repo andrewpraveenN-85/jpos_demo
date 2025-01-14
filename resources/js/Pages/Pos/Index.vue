@@ -2,11 +2,11 @@
 
     <Head title="POS" />
     <Banner />
-    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36">
+    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 md:px-36">
         <!-- Include the Header -->
         <Header />
 
-        <div class="w-5/6 py-12 space-y-16">
+        <div class="md:w-5/6 py-12 space-y-16 w-full md:px-0 px-8">
             <div class="flex items-center justify-between space-x-4">
                 <div class="flex w-full space-x-4">
                     <Link href="/">
@@ -17,7 +17,7 @@
                     </p>
                 </div>
                 <div class="flex items-center justify-between w-full space-x-4">
-                    <p class="text-3xl font-bold tracking-wide text-black">
+                    <p class="md:text-3xl text-xl font-bold tracking-wide text-black">
                         Order ID : #{{ orderId }}
                     </p>
                     <p class="text-3xl text-black cursor-pointer">
@@ -25,8 +25,8 @@
                     </p>
                 </div>
             </div>
-            <div class="flex w-full gap-4">
-                <div class="flex flex-col w-1/2">
+            <div class="flex md:flex-row flex-col w-full gap-4 md:px-0 px-4">
+                <div class="flex flex-col md:w-1/2 w-full">
                     <div class="flex flex-col w-full">
                         <div class="p-16 space-y-8 bg-black shadow-lg rounded-3xl">
                             <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
@@ -70,8 +70,8 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
-                    <div class="flex flex-col items-start justify-center w-full px-12">
+                <div class="flex md:w-1/2 w-full p-8 border-4 border-black rounded-3xl">
+                    <div class="flex flex-col items-start justify-center w-full md:px-12">
                         <div class="flex items-center justify-between w-full">
                             <h2 class="text-5xl font-bold text-black">Billing Details</h2>
                             <span class="flex cursor-pointer" @click="isSelectModalOpen = true">

@@ -23,11 +23,11 @@
   <Head title="Products" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-8"
   >
     <!-- Include the Header -->
     <Header />
-    <div class="w-5/6 py-12 space-y-16">
+    <div class="md:w-5/6 w-full py-12 space-y-16">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4"></div>
         <p class="text-3xl italic font-bold text-black">
@@ -37,8 +37,8 @@
           <span class="text-xl">/ Total Products</span>
         </p>
       </div>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center justify-center space-x-4">
+      <div class="flex md:flex-row flex-col md:items-center md:justify-between md:space-y-0 space-y-4">
+        <div class="flex items-center md:justify-center justify-start space-x-4">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
@@ -89,7 +89,7 @@
 
       <div class="flex items-center space-x-4">
         <!-- Search Input on the Left -->
-        <div class="w-1/4">
+        <div class="md:w-1/4 w-1/2">
           <input
             v-model="search"
             @input="performSearch"
@@ -196,7 +196,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-4 gap-4 md:px-0 px-8">
         <template v-if="products.data.length > 0">
           <div
             v-for="product in products.data"
