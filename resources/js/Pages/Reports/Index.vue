@@ -587,7 +587,7 @@ const productQuantities = computed(() => {
   const quantities = {};
   props.sales.forEach((sale) => {
     sale.sale_items.forEach((item) => {
-      const productName = item.product.name;
+      const productName = item.product?.name || 'No Product';
       quantities[productName] = (quantities[productName] || 0) + item.quantity;
     });
   });
