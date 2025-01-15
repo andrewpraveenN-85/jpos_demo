@@ -268,7 +268,7 @@
                   v-if="product.stock_quantity > 0"
                   class="text-xl font-bold tracking-wider text-green-500"
                 >
-                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock
+                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock ({{ product.stock_quantity }})
                 </p>
                 <p v-else class="text-xl font-bold tracking-wider text-red-500">
                   <i class="ri-checkbox-blank-circle-fill"></i> Out of Stock
