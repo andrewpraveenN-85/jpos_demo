@@ -224,10 +224,18 @@
                   <!-- Barcode -->
                   <svg id="barcodePrint"></svg>
 
-                  <p class="product-code">
-                    <!-- {{ selectedProduct?.code ?? "N/A" }} -->
-                    {{ selectedProduct?.selling_price ?? "N/A" }} LKR
-                  </p>
+                  <!-- <p class="product-code">
+                    {{ selectedProduct?.code ?? "N/A" }}
+                  </p> -->
+
+                  <div class="product-details">
+                    <p class="product-category">
+                      {{ selectedProduct?.code ?? "N/A" }}
+                    </p>
+                    <p class="product-price">
+                      {{ selectedProduct?.selling_price ?? "N/A" }} LKR
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -363,7 +371,7 @@ function generateAndPrintBarcode() {
     font-size: 10px;
     font-weight: bold;
     margin-bottom: 5px;
-    margin-left: 15mm;
+    margin-left: 12mm;
   }
 
   .product-category,
