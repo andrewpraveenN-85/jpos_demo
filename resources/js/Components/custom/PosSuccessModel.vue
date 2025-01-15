@@ -57,6 +57,7 @@ import {
 import { computed } from "vue";
 import { ref } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
+import { AppConfig } from '@/Config/AppConfig';
 
 const page = usePage();
 
@@ -95,7 +96,7 @@ const props = defineProps({
     total: String,
     custom_discount: Number,
     selectedType: String,
-
+    custom_discount_type: String
 });
 
 const handlePrintReceipt = () => {
@@ -319,10 +320,14 @@ const handlePrintReceipt = () => {
                   <span>Discount</span>
                   <span>${(Number(props.totalDiscount) || 0).toFixed(2)} LKR</span>
               </div>
-              <div>
-                  <span>Custom Discount</span>
-                  <span>${(Number(props.custom_discount) || 0).toFixed(2)} LKR</span>
-              </div>
+              ${
+                props.custom_discount && props.custom_discount > 0
+                    ? `<div>
+                         <span>Custom Discount</span>
+                         <span>${(Number(props.custom_discount) || 0).toFixed(2)} LKR</span>
+                       </div>`
+                    : ""
+     }
               <div>
                   <span>Total</span>
                   <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>

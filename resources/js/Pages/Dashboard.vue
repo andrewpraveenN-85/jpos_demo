@@ -1,12 +1,9 @@
 <template>
   <Head title="Dashboard" />
-  <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
-  >
+  <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-8">
     <!-- Include the Header -->
     <Header />
-
-    <div class="grid w-full h-full grid-cols-4 gap-8 auto-rows-fr">
+    <div class="grid w-full h-full md:grid-cols-4 md:gap-8 grid-cols-1 gap-4 auto-rows-fr">
       <Link href="/pos" v-if="HasRole(['Admin', 'Cashier'])">
         <div class="dashboard-card bg-[#4d7c0f]">
           <div class="card-content">
@@ -305,7 +302,25 @@
 
 
 
-
+      <Link href="/return-bill" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#7d2cff]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/return-bill.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Return Bill</p>
+              <p class="description">
+                View and manage past orders with details like date, items, total amount, and payment status for easy tracking and reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
 
     </div>
   </div>

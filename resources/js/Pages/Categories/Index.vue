@@ -54,10 +54,10 @@
   <Head title="Categories" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-8"
   >
     <Header />
-    <div class="w-5/6 py-12 space-y-24">
+    <div class="md:w-5/6 w-full py-12 space-y-24">
       <div class="flex items-center justify-between float-end">
         <p class="text-3xl italic font-bold text-black">
           <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
@@ -67,7 +67,7 @@
         </p>
       </div>
 
-      <div class="flex w-full">
+      <div class="flex md:flex-row flex-col w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />

@@ -414,8 +414,11 @@ class ProductController extends Controller
 
         // Handle image update
         if ($request->hasFile('image')) {
+            $imageUsageCount = Product::where('image', $product->image)
+                ->where('id', '!=', $product->id)
+                ->count();
             // Delete the old image if it exists
-            if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+            if ($imageUsageCount === 0 && $product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
             }
 
