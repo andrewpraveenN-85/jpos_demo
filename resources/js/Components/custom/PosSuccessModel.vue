@@ -129,8 +129,10 @@ const handlePrintReceipt = () => {
 
             return `
         <tr>
-          <td>${product.name}</td>
-          <td style="text-align: center;">${product.selling_price}</td>
+          <td>${product.name}<br>
+          <span style="font-size: 9px;font-weight: bold; font-style: italic;"> (${product.selling_price} LKR)</span>
+          </td>
+       
           <td style="text-align: center;">${product.quantity}</td>
           <td>
             ${product.discount > 0 && product.apply_discount
@@ -260,7 +262,7 @@ const handlePrintReceipt = () => {
       <div class="receipt-container">
                 <div class="header">
            ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
-           <p>ගල් වැලි, සිමෙන්ති, බ්ලොක් ගල්, මෙටල්, අස්බැස්ටර්ස් ශීට්, ගල් කුඩු, චිප්ගල්, කළුගල් සහ ප්‍රවාහන පහසුකම් සපයන්නෝ</p>
+  
   ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
   ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email)
             ? `<p>${companyInfo.value.phone || ''} | ${companyInfo.value.phone2 || ''}  ${companyInfo.value.email || ''}</p>`
@@ -303,7 +305,7 @@ const handlePrintReceipt = () => {
                   <thead>
                       <tr>
                           <th>Product</th>
-                          <th style="text-align: center;">Unit</th>
+                        
                           <th style="text-align: center;">Qty</th>
                           <th style="text-align: right;">Price</th>
                       </tr>
