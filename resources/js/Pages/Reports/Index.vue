@@ -509,15 +509,31 @@ const totalQty = computed(() => {
 });
 const totalSellingPrice = computed(() => {
   return products.value.reduce((sum, product) => {
-    return sum + (parseFloat(product.selling_price) || 0);
+    const stockQuantity = product.stock_quantity || 0;
+    const sellingPrice = parseFloat(product.selling_price) || 0;
+    return sum + stockQuantity * sellingPrice;
   }, 0);
 });
+
+
 const totalRetailValue = computed(() => {
-    // Ensure products are valid and sum up cost_price
-    return products.value.reduce((total, product) => {
-        return total + (parseFloat(product.cost_price) || 0); // Handle cases where cost_price might not be valid
-    }, 0);
+  return products.value.reduce((sum, product) => {
+    const stockQuantity = product.stock_quantity || 0;
+    const costPrice = parseFloat(product.cost_price) || 0;
+    return sum + stockQuantity * costPrice;
+  }, 0);
 });
+
+
+
+
+
+// const totalRetailValue = computed(() => {
+
+//     return products.value.reduce((total, product) => {
+//         return total + (parseFloat(product.c) || 0);
+//     }, 0);
+// });
 
 
 
