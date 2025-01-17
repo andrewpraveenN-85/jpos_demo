@@ -130,13 +130,14 @@ const handlePrintReceipt = () => {
             return `
         <tr>
           <td>${product.name}</td>
+          <td style="text-align: center;">${product.selling_price}</td>
           <td style="text-align: center;">${product.quantity}</td>
           <td>
             ${product.discount > 0 && product.apply_discount
                     ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
                     : ""
                 }
-            <div>${product.selling_price}</div>
+            <div>${(product.selling_price * product.quantity).toFixed(2)}</div>
           </td>
         </tr>
       `;
@@ -301,7 +302,8 @@ const handlePrintReceipt = () => {
               <table>
                   <thead>
                       <tr>
-                          <th>Description</th>
+                          <th>Product</th>
+                          <th style="text-align: center;">Unit</th>
                           <th style="text-align: center;">Qty</th>
                           <th style="text-align: right;">Price</th>
                       </tr>
