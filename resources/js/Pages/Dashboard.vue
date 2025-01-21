@@ -261,7 +261,25 @@
         </div>
       </Link>
 
-
+      <Link href="/transactionHistory" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#FFBF00]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/history.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Order History</p>
+              <p class="description">
+                View and manage past orders with details like date, items, total amount, and payment status for easy tracking and reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
 
 
 

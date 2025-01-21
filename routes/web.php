@@ -12,6 +12,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\TransactionHistoryController;
 use App\Http\Controllers\StockTransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('sizes', SizeController::class);
     Route::resource('employees', EmployeeController::class);
     Route::resource('stock-transition', StockTransactionController::class);
+    Route::resource('transactionHistory', TransactionHistoryController::class );
 
 
     // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');
