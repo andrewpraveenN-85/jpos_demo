@@ -89,8 +89,7 @@ class PosController extends Controller
     }
 
     public function submit(Request $request)
-    {
-
+    {  
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
@@ -163,6 +162,8 @@ class PosController extends Controller
                 'sale_date' => now()->toDateString(), // Current date
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
+                'delivery_charge' => $request->input('delivery_charge'),
+                'kitchen_note' => $request->input('kitchen_note'),
             ]);
 
             foreach ($products as $product) {

@@ -129,6 +129,7 @@ const props = defineProps({
   custom_discount: Number,
   custom_discount_type: String,
   kitchen_note: String,
+  delivery_charge : String,
 });
 
 const handlePrintReceipt = () => {
@@ -265,7 +266,7 @@ const handlePrintReceipt = () => {
               justify-content: space-between;
               margin-bottom: 8px;
           }
-          .totals div:nth-child(4) {
+          .totals div:nth-child(5) {
               font-size: 14px;
               font-weight: bold;
           }
@@ -361,14 +362,20 @@ const handlePrintReceipt = () => {
               </div>
               <div>
                   <span>Discount</span>
-                  <span>${(Number(props.totalDiscount) || 0).toFixed(
+                  <span>(${(Number(props.totalDiscount) || 0).toFixed(
                     2
-                  )} LKR</span>
+                  )}) LKR</span>
               </div>
               <div>
                   <span>Custom Discount</span>
                   <span>
-                    ${(Number(props.custom_discount) || 0).toFixed(2)} LKR
+                    (${(Number(props.custom_discount) || 0).toFixed(2)}) LKR
+                  </span>
+              </div>
+              <div>
+                  <span>Delivery Charge</span>
+                  <span>
+                    ${(Number(props.delivery_charge) || 0).toFixed(2)} LKR
                   </span>
               </div>
               <div>
@@ -383,12 +390,12 @@ const handlePrintReceipt = () => {
                   <span>Balance</span>
                   <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
               </div>
-
-              ${props.kitchen_note ? `
-              <div style="font-weight: bold; text-align: center;">
-                <small style="display: block; text-align: center;">Note: ${props.kitchen_note}</small>
-              </div>` : ''}
           </div>
+          ${props.kitchen_note ? `
+              <div style="font-weight: bold; text-align: left; border-top: 1px solid black; 
+              border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
+                <small style="display: block; text-align: left;">Note: ${props.kitchen_note}</small>
+              </div>` : ''}
           <div class="footer">
               <p>THANK YOU COME AGAIN</p>
               <p class="italic">Let the quality define its own standards</p>

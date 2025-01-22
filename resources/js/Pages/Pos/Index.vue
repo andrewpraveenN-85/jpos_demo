@@ -174,6 +174,22 @@
                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
+              <div class="w-full px-12">
+                <div v-if="selectedTable?.id === 'default'" class="w-full flex justify-center items-center mb-4 space-x-4">
+              
+              <select
+                id="deliveryOption"
+                v-model="deliveryOption"
+                class="w-full text-center p-2 border-2 border-black rounded cursor-pointer"
+              >
+              <option value="">Takeaway</option>
+                <option value="pickup" selected>Delivery</option>
+               
+              </select>
+            </div>
+              </div>
+            
+
             <div
               class="w-full text-center"
               v-if="!selectedTable || selectedTable.products.length === 0"
@@ -315,6 +331,22 @@
                   </select>
                 </span>
               </div>
+              <div
+                v-if="deliveryOption === 'pickup'"
+                class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
+              >
+                <p class="text-xl text-black">Delivery Charge</p>
+                <span>
+                  <CurrencyInput
+                    v-if="selectedTable"
+                    v-model="selectedTable.delivery_charge"
+                    :options="{ currency: 'EUR' }"
+                  />
+                  <span class="ml-2">LKR</span>
+                </span>
+              </div>
+
+
               <div class="flex items-center justify-between w-full px-16 pt-4">
                 <p class="text-3xl text-black">Total</p>
                 <p class="text-3xl text-black">{{ total }} LKR</p>
@@ -450,6 +482,7 @@
     :totalDiscount="totalDiscount"
     :total="total"
     :custom_discount="customDiscCalculated"
+    :delivery_charge="selectedTable.delivery_charge"
     :selectedTable="selectedTable"
     :kitchen_note="selectedTable.kitchen_note"
   />
@@ -492,6 +525,9 @@ const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
 const isSelectModalOpen = ref(false);
+const deliveryOption = ref(""); 
+const kitchen_note = ref("");
+
 // Load initial state from localStorage or use default values
 const savedTables = JSON.parse(localStorage.getItem("tables")) || [
   {
@@ -499,13 +535,13 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
     number: 1,
     orderId: generateOrderId(),
     products: [],
-    cash: 0.0,
     balance: 0,
     custom_discount: 0.0,
     custom_discount_type: "percent",
     kitchen_note: "",
   },
 ];
+
 
 const savedNextTableNumber =
   JSON.parse(localStorage.getItem("nextTableNumber")) || 2;
@@ -751,6 +787,10 @@ const submitOrder = async () => {
       userId: props.loggedInUser.id,
       orderId: selectedTable.value.orderId,
       custom_discount: customDiscCalculated.value,
+      cash: selectedTable.value.cash,
+      delivery_charge: selectedTable.value.delivery_charge,
+      kitchen_note: selectedTable.value.kitchen_note,
+      
     });
     isSuccessModalOpen.value = true;
     customer.value = {
@@ -800,7 +840,7 @@ const totalDiscount = computed(() => {
         item.quantity;
       return total + discountAmount;
     }
-    return total; // If no discount, return total as-is
+    return total; 
   }, 0);
 
   const couponDiscount = appliedCoupon.value
@@ -815,6 +855,7 @@ const total = computed(() => {
   const subtotalValue = parseFloat(subtotal.value) || 0;
   const discountValue = parseFloat(totalDiscount.value) || 0;
   const customDiscount = parseFloat(selectedTable.value.custom_discount) || 0;
+  const deliveryCharge = parseFloat(selectedTable.value.delivery_charge) || 0;
 
   let customValue = 0;
 
@@ -826,7 +867,7 @@ const total = computed(() => {
   //   return (subtotalValue - discountValue - customValue).toFixed(2);
 
   // Subtract totalDiscount and custom discount from subtotal to get the total
-  return (subtotalValue - discountValue - customValue).toFixed(2);
+  return (subtotalValue - discountValue - customValue + deliveryCharge).toFixed(2);
 });
 
 const customDiscCalculated = computed(() => {
