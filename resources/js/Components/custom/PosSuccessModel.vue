@@ -222,7 +222,7 @@ const handlePrintReceipt = () => {
           .section {
               margin-bottom: 16px;
                margin: 8px 0;
-             
+
           }
           .info-row {
               display: flex;
@@ -245,7 +245,7 @@ const handlePrintReceipt = () => {
           }
           table th, table td {
               padding: 6px 8px;
-              
+
           }
           table th {
               text-align: left;
@@ -282,13 +282,13 @@ const handlePrintReceipt = () => {
               font-style: italic;
           }
 
-          
+
       </style>
   </head>
   <body>
       <div class="receipt-container">
                 <div class="header">
-                <img src="/images/hipobilllogo.jpeg" style="width: 100px; height: 70px;" />
+
            ${
              companyInfo?.value?.name
                ? `<h1>${companyInfo.value.name}</h1>`
@@ -339,7 +339,7 @@ const handlePrintReceipt = () => {
                     : "Dining-IN"
                 }</small>
               </div>
-                          
+
           </div>
           <div class="section">
               <table>
@@ -356,43 +356,74 @@ const handlePrintReceipt = () => {
               </table>
           </div>
           <div class="totals">
-              <div>
-                  <span>Sub Total</span>
-                  <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
-              </div>
-              <div>
-                  <span>Discount</span>
-                  <span>(${(Number(props.totalDiscount) || 0).toFixed(
-                    2
-                  )}) LKR</span>
-              </div>
-              <div>
-                  <span>Custom Discount</span>
-                  <span>
-                    (${(Number(props.custom_discount) || 0).toFixed(2)}) LKR
-                  </span>
-              </div>
-              <div>
-                  <span>Delivery Charge</span>
-                  <span>
-                    ${(Number(props.delivery_charge) || 0).toFixed(2)} LKR
-                  </span>
-              </div>
-              <div>
-                  <span>Total</span>
-                  <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
-              </div>
-              <div>
-                  <span>Cash</span>
-                  <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
-              </div>
-              <div style="font-weight: bold;">
-                  <span>Balance</span>
-                  <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
-              </div>
+               ${Number(props.subTotal) === 0
+  ? ""
+  : `<div>
+      <span>Sub Total</span>
+      <span>(${(Number(props.subTotal) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+    ${Number(props.totalDiscount) === 0
+  ? ""
+  : `<div>
+      <span>Discount</span>
+      <span>(${(Number(props.totalDiscount) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+  ${Number(props.custom_discount) === 0
+  ? ""
+  : `<div>
+      <span>Custom Discount</span>
+      <span>(${(Number(props.custom_discount) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+    ${!props.delivery_charge
+    ? ""
+    : `<div>
+        <span>Delivery Charge</span>
+        <span>(${(Number(props.delivery_charge) || 0).toFixed(2)}) LKR</span>
+      </div>`}
+
+
+
+ ${Number(props.total) === 0
+  ? ""
+  : `<div>
+      <span>Total</span>
+      <span>(${(Number(props.total) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+ ${Number(props.cash) === 0
+  ? ""
+  : `<div>
+      <span>Cash</span>
+      <span>(${(Number(props.cash) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+
+
+
+ ${Number(props.balance) === 0
+  ? ""
+  : ` <div style="font-weight: bold;">
+      <span>Balance</span>
+      <span>(${(Number(props.balance) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
           </div>
           ${props.kitchen_note ? `
-              <div style="font-weight: bold; text-align: left; border-top: 1px solid black; 
+              <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
               border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
                 <small style="display: block; text-align: left;">Note: ${props.kitchen_note}</small>
               </div>` : ''}
