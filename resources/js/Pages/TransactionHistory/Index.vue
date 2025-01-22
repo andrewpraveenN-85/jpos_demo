@@ -89,6 +89,7 @@
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Oredr ID</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Total Amount</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Discount</th>
+
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Payment Method</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Sale Date</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Print</th>
@@ -102,9 +103,19 @@
                         >
                             <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.order_id || "N/A" }}</td>
-                            <td class="p-4 font-bold border-gray-200">{{ parseFloat(history.total_amount) + parseFloat(history.delivery_charge) - (history.discount || 0) - (history.custom_discount || 0) || "N/A" }}
+                            <td class="p-4 font-bold border-gray-200">
+
+                                {{ history.delivery_charge != null
+    ? ((parseFloat(history.total_amount) + parseFloat(history.delivery_charge) - (history.discount || 0) - (history.custom_discount || 0)) || 0).toFixed(2) + " LKR"
+    : ((parseFloat(history.total_amount) - (history.discount || 0) - (history.custom_discount || 0)) || 0).toFixed(2) + " LKR"
+}}
 </td>
-                             <td class="p-4 font-bold border-gray-200">{{((parseFloat(history.discount) || 0) + (parseFloat(history.custom_discount) || 0)).toLocaleString()}}</td>
+
+
+
+                             <td class="p-4 font-bold border-gray-200">{{((parseFloat(history.discount) || 0) + (parseFloat(history.custom_discount) || 0)).toLocaleString()}} LKR</td>
+
+
                             <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">
@@ -137,7 +148,8 @@
 <script setup>
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import { Head, Link } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
+import { Head } from '@inertiajs/vue3';
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
@@ -146,7 +158,7 @@ import { HasRole } from "@/Utils/Permissions";
 const props = defineProps({
   allhistoryTransactions: Array,
   totalhistoryTransactions: Number,
-  companyInfo: Array
+
 });
 const form = useForm({});
 
@@ -369,7 +381,7 @@ const getSafeValue = (obj, path) => {
                 <span>Delivery Charge</span>
                 <span>${history.delivery_charge || 0} LKR</span>
             </div>
-           
+
             <div>
                 <span>Total</span>
                 <span>

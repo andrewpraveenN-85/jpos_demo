@@ -176,7 +176,7 @@
             </div>
               <div class="w-full px-12">
                 <div v-if="selectedTable?.id === 'default'" class="w-full flex justify-center items-center mb-4 space-x-4">
-              
+
               <select
                 id="deliveryOption"
                 v-model="deliveryOption"
@@ -184,11 +184,11 @@
               >
               <option value="">Takeaway</option>
                 <option value="pickup" selected>Delivery</option>
-               
+
               </select>
             </div>
               </div>
-            
+
 
             <div
               class="w-full text-center"
@@ -276,7 +276,7 @@
                               100
                             : item.selling_price * item.quantity
                         }}
-                        LKR LKR
+                        LKR 
                       </p>
                     </div>
                   </div>
@@ -525,7 +525,7 @@ const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
 const isSelectModalOpen = ref(false);
-const deliveryOption = ref(""); 
+const deliveryOption = ref("");
 const kitchen_note = ref("");
 
 // Load initial state from localStorage or use default values
@@ -790,7 +790,7 @@ const submitOrder = async () => {
       cash: selectedTable.value.cash,
       delivery_charge: selectedTable.value.delivery_charge,
       kitchen_note: selectedTable.value.kitchen_note,
-      
+
     });
     isSuccessModalOpen.value = true;
     customer.value = {
@@ -840,7 +840,7 @@ const totalDiscount = computed(() => {
         item.quantity;
       return total + discountAmount;
     }
-    return total; 
+    return total;
   }, 0);
 
   const couponDiscount = appliedCoupon.value

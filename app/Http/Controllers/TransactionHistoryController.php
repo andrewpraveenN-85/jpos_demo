@@ -17,12 +17,12 @@ class TransactionHistoryController extends Controller
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $companyInfo = CompanyInfo::all();
+
 
     return Inertia::render('TransactionHistory/Index', [
         'allhistoryTransactions' => $allhistoryTransactions,
         'totalhistoryTransactions' => $allhistoryTransactions->count(),
-        'companyInfo' => $companyInfo,
+
     ]);
 }
 
