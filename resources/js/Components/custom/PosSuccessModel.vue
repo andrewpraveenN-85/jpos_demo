@@ -377,7 +377,7 @@ const handlePrintReceipt = () => {
   ${Number(props.custom_discount) === 0
   ? ""
   : `<div>
-      <span>Custom Discount</span>
+      <span>Customer Discount</span>
       <span>(${(Number(props.custom_discount) || 0).toFixed(2)}) LKR</span>
     </div>`}
 

@@ -367,18 +367,39 @@ const getSafeValue = (obj, path) => {
                 <span>Sub Total</span>
                 <span>${history.total_amount || 0} LKR</span>
             </div>
-            <div>
-                <span>Discount</span>
-                <span>(${history.discount || 0}) LKR</span>
-            </div>
-             <div>
-                <span>Custome Discount</span>
-                <span>(${history.custom_discount || 0}) LKR</span>
-            </div>
-            <div>
-                <span>Delivery Charge</span>
-                <span>${history.delivery_charge || 0} LKR</span>
-            </div>
+
+
+
+
+      ${Number(history.discount) === 0
+  ? ""
+  : `<div>
+      <span>Discount</span>
+      <span>(${(Number(history.discount) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+   ${Number(history.custom_discount) === 0
+  ? ""
+  : `<div>
+      <span>Customer Discount</span>
+      <span>(${(Number(history.custom_discount) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+
+
+  ${!history.delivery_charge
+    ? ""
+    : `<div>
+        <span>Delivery Charge</span>
+        <span>(${(Number(history.delivery_charge) || 0).toFixed(2)}) LKR</span>
+      </div>`}
+
+
+
+
 
             <div>
                 <span>Total</span>
@@ -393,10 +414,25 @@ const getSafeValue = (obj, path) => {
                     } LKR
                 </span>
             </div>
-            <div>
-                <span>Cash</span>
-                <span>${history.cash || 0} LKR</span>
-            </div>
+
+
+
+   ${Number(history.cash) === 0
+  ? ""
+  : `<div>
+      <span>Cash</span>
+      <span>(${(Number(history.cash) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+
+
+
+
+
+
+
             <div>
                 <span>Balance</span>
                 <span>
