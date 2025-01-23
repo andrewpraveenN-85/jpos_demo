@@ -427,13 +427,9 @@ const getSafeValue = (obj, path) => {
 
 
 
-
-
-
-
-
-
-            <div>
+  ${Number(history.cash) === 0
+  ? ""
+  : `  <div>
                 <span>Balance</span>
                 <span>
                     ${
@@ -448,7 +444,13 @@ const getSafeValue = (obj, path) => {
                     ).toFixed(2)
                     } LKR
                 </span>
-            </div>
+            </div>`}
+
+
+
+
+
+
         </div>
 
         <div class="footer">
