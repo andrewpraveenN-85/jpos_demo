@@ -363,10 +363,20 @@ const getSafeValue = (obj, path) => {
 
 
         <div class="totals">
-            <div>
-                <span>Sub Total</span>
-                <span>${history.total_amount || 0} LKR</span>
-            </div>
+
+${
+  (
+    (parseFloat(history.total_amount) || 0) +
+    (parseFloat(history.delivery_charge) || 0) -
+    (parseFloat(history.discount) || 0) -
+    (parseFloat(history.custom_discount) || 0)
+  ) !== (parseFloat(history.total_amount) || 0)
+    ? `<div>
+        <span>Sub Total</span>
+        <span>${history.total_amount || 0} LKR</span>
+      </div>`
+    : ''
+}
 
 
 
@@ -427,24 +437,34 @@ const getSafeValue = (obj, path) => {
 
 
 
-  ${Number(history.cash) === 0
-  ? ""
-  : `  <div>
-                <span>Balance</span>
-                <span>
-                    ${
-                    (
-                        (parseFloat(history.cash) || 0) -
-                        (
-                        (parseFloat(history.total_amount) || 0) +
-                        (parseFloat(history.delivery_charge) || 0) -
-                        (parseFloat(history.discount) || 0) -
-                        (parseFloat(history.custom_discount) || 0)
-                        )
-                    ).toFixed(2)
-                    } LKR
-                </span>
-            </div>`}
+${
+  (
+    (parseFloat(history.cash) || 0) -
+    (
+      (parseFloat(history.total_amount) || 0) +
+      (parseFloat(history.delivery_charge) || 0) -
+      (parseFloat(history.discount) || 0) -
+      (parseFloat(history.custom_discount) || 0)
+    )
+  ) > 0
+    ? `<div>
+        <span>Balance</span>
+        <span>
+          ${
+            (
+              (parseFloat(history.cash) || 0) -
+              (
+                (parseFloat(history.total_amount) || 0) +
+                (parseFloat(history.delivery_charge) || 0) -
+                (parseFloat(history.discount) || 0) -
+                (parseFloat(history.custom_discount) || 0)
+              )
+            ).toFixed(2)
+          } LKR
+        </span>
+      </div>`
+    : ''
+}
 
 
 

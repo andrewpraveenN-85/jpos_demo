@@ -356,12 +356,17 @@ const handlePrintReceipt = () => {
               </table>
           </div>
           <div class="totals">
-               ${Number(props.subTotal) === 0
-  ? ""
-  : `<div>
-      <span>Sub Total</span>
-      <span>(${(Number(props.subTotal) || 0).toFixed(2)}) LKR</span>
-    </div>`}
+
+${Number(props.subTotal) !== Number(props.total)
+  ? (Number(props.subTotal) === 0
+    ? ""
+    : `<div>
+        <span>Sub Total</span>
+        <span>(${(Number(props.subTotal) || 0).toFixed(2)}) LKR</span>
+      </div>`)
+  : ""}
+
+
 
 
 
