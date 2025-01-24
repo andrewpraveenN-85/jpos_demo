@@ -88,7 +88,7 @@ class PosController extends Controller
     }
 
     public function submit(Request $request)
-    { 
+    {
 
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
@@ -114,12 +114,12 @@ class PosController extends Controller
             }
             return $carry;
         }, 0);
-    
+
         // Get coupon discount if applied
-        $couponDiscount = isset($request->input('appliedCoupon')['discount']) ? 
+        $couponDiscount = isset($request->input('appliedCoupon')['discount']) ?
             floatval($request->input('appliedCoupon')['discount']) : 0;
-    
-    
+
+
         // Calculate total combined discount
         $totalDiscount = $productDiscounts + $couponDiscount ;
 
@@ -169,7 +169,7 @@ class PosController extends Controller
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
 
-            ]); 
+            ]);
 
             foreach ($products as $product) {
                 // Check stock before saving sale items

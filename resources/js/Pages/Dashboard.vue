@@ -325,6 +325,35 @@
         </div>
       </Link>
 
+
+
+
+
+
+
+
+      <Link href="/quotation" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#216b85]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/return-bill.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Create Quotations</p>
+              <p class="description">
+                Track and organize previous transactions with a detailed overview including date, items purchased, total cost, and payment status, ensuring effortless order management and quick reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
     </div>
   </div>
 

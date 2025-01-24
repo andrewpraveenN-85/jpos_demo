@@ -12,6 +12,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SizeController;
+
+use App\Http\Controllers\QuotationController;
+
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\TransactionHistoryController;
@@ -20,6 +23,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Gate;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +94,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('transactionHistory', TransactionHistoryController::class );
     Route::resource('stock-transition', StockTransactionController::class);
     Route::resource('manualpos', ManualPosController::class);
-    
+
+
+
+    Route::resource('/quotation', QuotationController::class);
+    // Route::get('/quotation', [QuotationController::class, 'index']);
+
+
 
 
     // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');
@@ -99,6 +109,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('return-bill', ReturnItemController::class);
 
+
+    
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
     Route::post('/api/sale/items', [ReturnItemController::class, 'fetchSaleItems'])->name('sale.items');
