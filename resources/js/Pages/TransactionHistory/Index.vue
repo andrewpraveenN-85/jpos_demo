@@ -90,6 +90,8 @@
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Total Amount</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Discount</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Payment Method</th>
+
+                        <th class="p-4 font-semibold tracking-wide text-left uppercase">Order Type</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Sale Date</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Print</th>
                     </tr>
@@ -112,10 +114,34 @@
 
 
 
-<td class="p-4 font-bold border-gray-200">{{((parseFloat(history.discount) || 0) + (parseFloat(history.custom_discount) || 0)).toLocaleString()}} LKR</td>
+<td class="p-4 font-bold border-gray-200">
+  {{
+    (
+      (parseFloat(history.discount) || 0) +
+      (parseFloat(history.custom_discount) || 0)
+    ).toFixed(2).toLocaleString()
+  }} LKR
+</td>
 
 
-                            <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
+
+<td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
+
+
+<td class="p-4 font-bold border-gray-200">
+  <span v-if="history.order_type === 'takeaway'">Takeaway</span>
+  <span v-else-if="history.order_type === 'pickup'">
+    Delivery<br />
+    <span v-if="history.delivery_charge">
+      ({{ history.delivery_charge }} LKR)
+    </span>
+    <span v-else>
+      (No charge)
+    </span>
+  </span>
+  <span v-else>Dine In</span>
+</td>
+
                             <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">
                                 <button
@@ -288,10 +314,7 @@ const getSafeValue = (obj, path) => {
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .totals div:nth-child(5) {
-            font-size: 14px;
-            font-weight: bold;
-        }
+
         .footer {
             text-align: center;
             font-size: 10px;
@@ -316,6 +339,23 @@ const getSafeValue = (obj, path) => {
         <p>${companyData.address}</p>
         <p>${companyData.phone} | ${companyData.phone2} | ${companyData.email}</p>
       </div>
+
+
+
+        <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px; margin: 8px 0;">
+                <small style="display: block;">
+
+
+
+ Order Type: ${ history.order_type === 'takeaway'
+      ? 'Takeaway'
+      : history.order_type === 'pickup'
+        ? 'Delivery'
+        : 'Dine In' }
+
+
+                </small>
+              </div>
 
         <div class="section">
             <div class="info-row">
@@ -399,7 +439,6 @@ ${
 
 
 
-
   ${!history.delivery_charge
     ? ""
     : `<div>
@@ -411,7 +450,7 @@ ${
 
 
 
-            <div>
+            <div style="font-weight: bold;">
                 <span>Total</span>
                 <span>
                     ${

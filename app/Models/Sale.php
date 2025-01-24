@@ -22,7 +22,8 @@ class Sale extends Model
         'custom_discount',
         'kitchen_note',
         'delivery_charge',
-        'cash'
+        'cash',
+        'order_type',
     ];
 
 
@@ -31,6 +32,13 @@ class Sale extends Model
     public function sale()
     {
         return $this->belongsTo(Sale::class, 'sale_id','id');
+    }
+
+
+
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class, 'delivery_charge','id');
     }
 
     public function saleItem()

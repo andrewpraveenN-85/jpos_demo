@@ -130,6 +130,7 @@ const props = defineProps({
   custom_discount_type: String,
   kitchen_note: String,
   delivery_charge : String,
+  order_type : String,
 });
 
 const handlePrintReceipt = () => {
@@ -266,10 +267,7 @@ const handlePrintReceipt = () => {
               justify-content: space-between;
               margin-bottom: 8px;
           }
-          .totals div:nth-child(5) {
-              font-size: 14px;
-              font-weight: bold;
-          }
+
           .footer {
               text-align: center;
               font-size: 10px;
@@ -333,11 +331,17 @@ const handlePrintReceipt = () => {
                   </div>
               </div>
               <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px; margin: 8px 0;">
-                <small style="display: block;">${
-                  props.selectedTable?.id === "default"
-                    ? "Takeaway"
-                    : "Dining-IN"
-                }</small>
+                <small style="display: block;">
+
+
+Order Type: ${ props.order_type === 'takeaway'
+  ? 'Takeaway'
+  : props.order_type === 'pickup'
+    ? 'Delivery'
+    : 'Dine In' }
+
+
+                </small>
               </div>
 
           </div>
@@ -399,7 +403,7 @@ ${Number(props.subTotal) !== Number(props.total)
 
  ${Number(props.total) === 0
   ? ""
-  : `<div>
+  : `<div style="font-weight: bold;">
       <span>Total</span>
       <span>(${(Number(props.total) || 0).toFixed(2)}) LKR</span>
     </div>`}

@@ -283,6 +283,30 @@
 
 
 
+      <Link href="/delivery" v-if="HasRole(['Admin', 'Manager'])">
+        <div class="dashboard-card bg-[#ff7f35]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/delivery.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Delivery Charge</p>
+              <p class="description">
+                View and manage past orders with details like date, items, total amount, and payment status for easy tracking and reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
+
+
 
     </div>
   </div>

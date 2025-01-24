@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Delivery;
 use App\Models\Color;
 use App\Models\Coupon;
 use App\Models\Customer;
@@ -33,6 +34,7 @@ class PosController extends Controller
         });
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
+        $delivery = Delivery::orderBy('created_at', 'desc')->get();
         $allemployee = Employee::orderBy('created_at', 'desc')->get();
 
 
@@ -44,6 +46,7 @@ class PosController extends Controller
             'allcategories' => $allcategories,
             'allemployee' => $allemployee,
             'colors' => $colors,
+            'delivery' => $delivery,
             'sizes' => $sizes,
         ]);
     }
@@ -89,7 +92,8 @@ class PosController extends Controller
     }
 
     public function submit(Request $request)
-    {  
+    {
+      
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
@@ -164,6 +168,7 @@ class PosController extends Controller
                 'custom_discount' => $request->input('custom_discount'),
                 'delivery_charge' => $request->input('delivery_charge'),
                 'kitchen_note' => $request->input('kitchen_note'),
+                'order_type' => $request->input('order_type'),
             ]);
 
             foreach ($products as $product) {
@@ -191,7 +196,7 @@ class PosController extends Controller
                         'total_price' => $product['quantity'] * $product['selling_price'],
                     ]);
 
-                    
+
 
                     if($productModel->is_promotion){
                         $promotionItems = PromotionItem::where('promotion_id', $productModel->id)->get();
@@ -202,7 +207,7 @@ class PosController extends Controller
                             if ($newITemStockQuantity < 0) {
                                 DB::rollBack();
                                 return response()->json([
-                                    'message' => "Insufficient stock for product: {$productModel->name} 
+                                    'message' => "Insufficient stock for product: {$productModel->name}
                                     ({$productModel->stock_quantity} available) (Product inside Promotion)",
                                 ], 423);
                             }
