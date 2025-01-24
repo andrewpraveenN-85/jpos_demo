@@ -50,17 +50,25 @@
               </div>
             </div>
             <div class="flex justify-center items-center space-x-4 pt-4 mt-4">
-              <p
-                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
+              <!-- <p
+                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl   py-4 rounded-xl"
               >
                 Send Reciept To Email
-              </p>
+              </p> -->
               <p
                 @click="handlePrintReceipt"
-                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
+                class="cursor-pointer bg-blue-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl   py-4 rounded-xl"
               >
                 Print Receipt
               </p>
+              <p
+                @click="handleKOTPrintReceipt"
+                class="cursor-pointer bg-orange-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl   py-4 rounded-xl"
+              >
+                KOT Receipt
+              </p>
+
+
               <p
                 @click="$emit('update:open', false)"
                 class="cursor-pointer bg-red-600 text-white font-bold uppercase tracking-wider px-4 shadow-xl rounded py-4 rounded-xl"
@@ -466,4 +474,245 @@ ${Number(props.subTotal) !== Number(props.total)
     printWindow.close();
   };
 };
+
+
+
+
+
+
+const handleKOTPrintReceipt = () => {
+  // Calculate totals from props.products
+  const subTotal = props.products.reduce(
+    (sum, product) =>
+      sum + parseFloat(product.selling_price) * product.quantity,
+    0
+  );
+  const customDiscount = Number(props.custom_discount || 0);
+  const totalDiscount = props.products
+    .reduce((total, item) => {
+      // Check if item has a discount
+      if (item.discount && item.discount > 0 && item.apply_discount == true) {
+        const discountAmount =
+          (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+          item.quantity;
+        return total + discountAmount;
+      }
+      return total; // If no discount, return total as-is
+    }, 0)
+    .toFixed(2); // Ensures two decimal places
+
+  const discount = 0; // Example discount (can be dynamic)
+  const total = subTotal - totalDiscount - customDiscount;
+
+  // Generate table rows dynamically using props.products
+  const productRows = props.products
+    .map((product) => {
+      // Determine the price based on discount
+      const price =
+        product.discount > 0 && product.apply_discount
+          ? product.discounted_price // Use discounted price if discount is applied
+          : product.selling_price; // Use selling price if no discount
+
+      return `
+        <tr>
+          <td>${product.name}</td>
+          <td style="text-align: center;">${product.quantity}</td>
+
+        </tr>
+      `;
+    })
+    .join("");
+
+  // Generate the receipt HTML
+  const receiptHTML = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Receipt</title>
+      <style>
+          @media print {
+              body {
+                  margin: 0;
+                  padding: 0;
+                  -webkit-print-color-adjust: exact;
+              }
+          }
+          body {
+              background-color: #ffffff;
+              font-size: 12px;
+              font-family: 'Arial', sans-serif;
+              margin: 0;
+              padding: 10px;
+              color: #000;
+          }
+
+          .section {
+              margin-bottom: 16px;
+               margin: 8px 0;
+
+          }
+          .info-row {
+              display: flex;
+              justify-content: space-between;
+              font-size: 12px;
+              margin-top: 8px;
+          }
+          .info-row p {
+              margin: 0;
+              font-weight: bold;
+          }
+          .info-row small {
+              font-weight: normal;
+          }
+          table {
+              width: 100%;
+              font-size: 12px;
+              border-collapse: collapse;
+              margin-top: 8px;
+          }
+          table th, table td {
+              padding: 6px 8px;
+
+          }
+          table th {
+              text-align: left;
+          }
+          table td {
+              text-align: right;
+          }
+          table td:first-child {
+              text-align: left;
+          }
+          .totals {
+              border-top: 1px solid #000;
+              padding-top: 8px;
+              font-size: 12px;
+          }
+          .totals div {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 8px;
+          }
+
+          .footer {
+              text-align: center;
+              font-size: 10px;
+              margin-top: 16px;
+          }
+          .footer p {
+              margin: 6px 0;
+          }
+          .footer .italic {
+              font-style: italic;
+          }
+
+
+      </style>
+  </head>
+  <body>
+      <div class="receipt-container">
+
+
+<h1 style="text-align:center">KOT Note</h1>
+
+   <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px; margin: 8px 0;">
+                <small style="display: block;">
+
+
+
+ Order Type: ${ props.order_type === 'takeaway'
+      ? 'Takeaway'
+      : props.order_type === 'pickup'
+        ? 'Delivery'
+        : 'Dine In' }
+
+
+                </small>
+              </div>
+
+          <div class="section">
+              <div class="info-row">
+                  <div>
+                      <p>Date:</p>
+                      <small>${new Date().toLocaleDateString()} </small>
+                  </div>
+                  <div>
+                      <p>Order No:</p>
+                      <small>${props.orderId}</small>
+                  </div>
+              </div>
+              <div class="info-row">
+                  <div>
+                      <p>Customer:</p>
+                      <small>${props.customer.name}</small>
+                  </div>
+                  <div>
+                      <p>Cashier:</p>
+                      <small>${props.cashier.name}</small>
+                  </div>
+              </div>
+
+
+          </div>
+          <div class="section">
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Product Name</th>
+                          <th style="text-align: center;">Qty</th>
+
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${productRows}
+                  </tbody>
+              </table>
+          </div>
+
+          ${props.kitchen_note ? `
+              <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
+              border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
+                <small style="display: block; text-align: left;">Note: ${props.kitchen_note}</small>
+              </div>` : ''}
+
+      </div>
+  </body>
+  </html>
+  `;
+
+  // Open a new window
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("Failed to open print window. Please check your browser settings.");
+    return;
+  }
+
+  // Write the content to the new window
+  printWindow.document.open();
+  printWindow.document.write(receiptHTML);
+  printWindow.document.close();
+
+  // Wait for the content to load before triggering print
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
