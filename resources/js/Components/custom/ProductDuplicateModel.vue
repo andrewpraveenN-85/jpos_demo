@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
-                  <div class="w-full">
+                  <!-- <div class="w-full">
                     <div>
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Code:</label
@@ -78,7 +78,7 @@
                         form.errors.code
                       }}</span>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- Cost Price input -->
                   <div class="w-full">
                     <!-- Category Name -->
@@ -98,7 +98,13 @@
                           :key="category.id"
                           :value="category.id"
                         >
-                          {{ category.name }}
+                          {{
+                            category.hierarchy_string
+                              ? category.hierarchy_string +
+                                " ----> " +
+                                category.name
+                              : category.name
+                          }}
                         </option>
                       </select>
                       <span v-if="form.errors.name" class="mt-4 text-red-500">{{
@@ -118,7 +124,6 @@
                         >Size:</label
                       >
                       <select
-                        required
                         v-model="form.size_id"
                         id="parent_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
@@ -145,15 +150,14 @@
                       <label
                         for="sub_id"
                         class="block text-sm font-medium text-gray-300"
-                        >Color:</label
+                        >Base :</label
                       >
                       <select
-                        required
                         v-model="form.color_id"
                         id="sub_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
-                        <option value="">Select a Color</option>
+                        <option value="">Select a Base</option>
                         <option
                           v-for="color in colors"
                           :key="color.id"
@@ -201,7 +205,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Selling Price:</label
                     >
-                     <input
+                    <input
                       type="text"
                       id="selling_price"
                       v-model="form.selling_price"
@@ -227,7 +231,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Discount (%):</label
                     >
-                     <input
+                    <input
                       type="text"
                       id="discount"
                       v-model="form.discount"
@@ -285,7 +289,7 @@
                     />
                   </div>
 
-                  <div class="w-full">
+                  <!-- <div class="w-full">
                     <label
                       for="image"
                       class="block text-sm font-medium text-gray-300"
@@ -308,6 +312,27 @@
                     </select>
                     <span v-if="form.errors.sub_id" class="mt-4 text-red-500">
                       {{ form.errors.sub_id }}
+                    </span>
+                  </div> -->
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300">
+                      Description:
+                    </label>
+                    <textarea
+                      v-model="form.description"
+                      id="description"
+                      placeholder="Enter Description"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      rows="2"
+                    ></textarea>
+                    <span
+                      v-if="form.errors.description"
+                      class="mt-4 text-red-500"
+                    >
+                      {{ form.errors.description }}
                     </span>
                   </div>
                 </div>
@@ -449,6 +474,7 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  description: "",
 });
 
 // Handle file upload for images

@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
-                  <div class="w-full">
+                  <!-- <div class="w-full">
                     <div>
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Code:</label
@@ -84,7 +84,7 @@
                         form.errors.code
                       }}</span>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- Cost Price input -->
                   <div class="w-full">
                     <!-- Category Name -->
@@ -104,7 +104,13 @@
                           :key="category.id"
                           :value="category.id"
                         >
-                          {{ category.name }}
+                          {{
+                            category.hierarchy_string
+                              ? category.hierarchy_string +
+                                " ----> " +
+                                category.name
+                              : category.name
+                          }}
                         </option>
                       </select>
                       <span v-if="form.errors.name" class="mt-4 text-red-500">{{
@@ -124,7 +130,6 @@
                         >Size:</label
                       >
                       <select
-                        required
                         v-model="form.size_id"
                         id="size_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
@@ -151,15 +156,14 @@
                       <label
                         for="color_id"
                         class="block text-sm font-medium text-gray-300"
-                        >Color:</label
+                        >Base :</label
                       >
                       <select
-                        required
                         v-model="form.color_id"
                         id="color_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
-                        <option value="">Select a Color</option>
+                        <option value="">Select a Base</option>
                         <option
                           v-for="color in colors"
                           :key="color.id"
@@ -168,7 +172,10 @@
                           {{ color.name }}
                         </option>
                       </select>
-                      <span v-if="form.errors.color_id" class="mt-2 text-red-500">
+                      <span
+                        v-if="form.errors.color_id"
+                        class="mt-2 text-red-500"
+                      >
                         {{ form.errors.color_id }}
                       </span>
                     </div>
@@ -298,7 +305,7 @@
                     />
                   </div>
 
-                  <div class="w-full">
+                  <!-- <div class="w-full">
                     <label
                       for="image"
                       class="block text-sm font-medium text-gray-300"
@@ -321,6 +328,27 @@
                     </select>
                     <span v-if="form.errors.sub_id" class="mt-4 text-red-500">
                       {{ form.errors.sub_id }}
+                    </span>
+                  </div> -->
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300">
+                      Description:
+                    </label>
+                    <textarea
+                      v-model="form.description"
+                      id="description"
+                      placeholder="Enter Description"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      rows="2"
+                    ></textarea>
+                    <span
+                      v-if="form.errors.description"
+                      class="mt-4 text-red-500"
+                    >
+                      {{ form.errors.description }}
                     </span>
                   </div>
                 </div>
@@ -486,6 +514,7 @@ const form = useForm({
   discounted_price: null,
   barcode: "",
   image: null,
+  description: "",
 });
 
 // Handle file upload for images
@@ -493,15 +522,12 @@ const handleImageUpload = (event) => {
   form.image = event.target.files[0];
 };
 
-
 function limitToTwoDecimals(value) {
   if (value === null || value === undefined) return value;
   const strValue = value.toString();
   const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
   return match ? parseFloat(match[0]) : value;
 }
-
-
 
 // Function to update discounted price based on selling price and discount
 function updateDiscountedPrice() {
@@ -576,6 +602,7 @@ watch(
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
       form.image = newValue.image || null;
+      form.description = newValue.description || "";
     }
   },
   { immediate: true }

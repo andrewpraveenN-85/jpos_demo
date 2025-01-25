@@ -54,6 +54,7 @@
                   </span>
                 </div>
 
+
                 <!-- Parent Category Dropdown -->
                 <div>
                   <label class="block text-sm font-medium text-gray-300">
@@ -78,6 +79,8 @@
                   </span>
                 </div>
               </div>
+
+
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
@@ -147,15 +150,17 @@ const filteredCategories = computed(() =>
 );
 
 // Watch for selectedCategory changes
+
 watch(
   () => selectedCategory,
   (newValue) => {
     if (newValue) {
-      form.name = newValue.name || ""; // Populate name
-      form.parent_id = newValue.parent?.id || "" // Populate parent_id
+      console.log(newValue)
+      form.name = newValue.name || "";
+      form.parent_id = newValue.parent?.id || "";
     }
   },
-  { immediate: true } // Run immediately when the component is mounted
+  { immediate: true }
 );
 
 // Submit form
@@ -165,6 +170,7 @@ const submit = () => {
       form.reset();
       emit("update:open", false); // Close the modal
     },
+    preserveState: true, 
   });
 };
 </script>

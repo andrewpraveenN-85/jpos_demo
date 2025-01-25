@@ -93,7 +93,11 @@
                     >{{ form.errors.parent_id }}</span
                   >
                 </div>
+
+                
               </div>
+
+              
 
               <!-- Modal Buttons -->
               <div class="mt-6 space-x-4">
@@ -165,7 +169,12 @@ const form = useForm({
 });
 
 const submit = () => {
+  const formData = {
+    ...form.data(),
+  };
+  
   form.post("/categories", {
+    data: formData,
     onSuccess: () => {
       form.reset();
       emit("update:open", false);

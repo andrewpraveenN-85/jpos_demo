@@ -30,7 +30,7 @@
             >
               <!-- Confirmation Message -->
               <p class="text-[15px] text-center text-gray-700">
-                Are you sure you want to delete this Color? This action cannot
+                Are you sure you want to delete this Base? This action cannot
                 be undone.
               </p>
 

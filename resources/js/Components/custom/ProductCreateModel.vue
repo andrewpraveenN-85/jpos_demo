@@ -62,7 +62,13 @@
                       :key="category.id"
                       :value="category.id"
                     >
-                      {{ category.name }}
+                      {{
+                        category.hierarchy_string
+                          ? category.hierarchy_string +
+                            " ----> " +
+                            category.name
+                          : category.name
+                      }}
                     </option>
                   </select>
                   <span v-if="form.errors.name" class="mt-4 text-red-500">{{
@@ -70,7 +76,7 @@
                   }}</span>
                 </div>
 
-                <div>
+                <!-- <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Supplier Name:</label
                   >
@@ -91,7 +97,23 @@
                   <span v-if="form.errors.name" class="mt-4 text-red-500">{{
                     form.errors.name
                   }}</span>
-                </div>
+                </div> -->
+
+                <!-- <div>
+                  <label class="block text-sm font-medium text-gray-300"
+                    >Bar code:</label
+                  >
+                  <input
+                    v-model="form.barcode"
+                    type="text"
+                    id="barcode"
+                    placeholder="Enter Barcode"
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <span v-if="form.errors.barcode" class="mt-4 text-red-500">{{
+                    form.errors.barcode
+                  }}</span>
+                </div> -->
 
                 <div>
                   <div class="flex items-center gap-8">
@@ -114,7 +136,7 @@
                     </div>
 
                     <!-- Second select box with label and error -->
-                    <div class="w-full">
+                    <!-- <div class="w-full">
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Code:</label
                       >
@@ -129,7 +151,7 @@
                       <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                         form.errors.code
                       }}</span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
 
@@ -143,7 +165,6 @@
                         >Size:</label
                       >
                       <select
-                        required
                         v-model="form.size_id"
                         id="parent_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
@@ -170,15 +191,14 @@
                       <label
                         for="sub_id"
                         class="block text-sm font-medium text-gray-300"
-                        >Color:</label
+                        >Base:</label
                       >
                       <select
-                        required
                         v-model="form.color_id"
                         id="sub_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
-                        <option value="">Select a Color</option>
+                        <option value="">Select a Base</option>
                         <option
                           v-for="color in colors"
                           :key="color.id"
@@ -302,6 +322,25 @@
                   </div>
                 </div>
 
+                <div>
+                  <label class="block text-sm font-medium text-gray-300">
+                    Description:
+                  </label>
+                  <textarea
+                    v-model="form.description"
+                    id="description"
+                    placeholder="Enter Description"
+                    class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    rows="2"
+                  ></textarea>
+                  <span
+                    v-if="form.errors.description"
+                    class="mt-4 text-red-500"
+                  >
+                    {{ form.errors.description }}
+                  </span>
+                </div>
+
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
@@ -343,6 +382,7 @@
                       emit('update:open', false);
                     }
                   "
+                  type="button"
                 >
                   Cancel
                 </button>
@@ -363,7 +403,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const playClickSound = () => {
@@ -416,7 +456,10 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  description: "",
 });
+
+
 
 // Utility function to limit to 2 decimal points
 function limitToTwoDecimals(value) {
@@ -425,8 +468,6 @@ function limitToTwoDecimals(value) {
   const match = strValue.match(/^(\d+)(\.\d{0,2})?/); // Match up to 2 decimal places
   return match ? parseFloat(match[0]) : value;
 }
-
-
 
 // Function to update discounted price based on selling price and discount
 function updateDiscountedPrice() {

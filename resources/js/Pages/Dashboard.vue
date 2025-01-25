@@ -7,7 +7,6 @@
     <Header />
 
     <div class="grid w-full h-full grid-cols-4 gap-8 auto-rows-fr">
-
       <Link href="/pos" v-if="HasRole(['Admin', 'Cashier'])">
         <div class="dashboard-card bg-[#4d7c0f]">
           <div class="card-content">
@@ -28,7 +27,6 @@
           </div>
         </div>
       </Link>
-
 
       <Link href="/categories" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#003161]">
@@ -136,7 +134,7 @@
       </Link>
 
       <Link href="/colors" v-if="HasRole(['Admin', 'Manager'])">
-        <div class="dashboard-card bg-[#9a9c9c]">
+        <div class="dashboard-card bg-[#494949]">
           <div class="card-content">
             <div class="icon-container">
               <img
@@ -146,10 +144,9 @@
               />
             </div>
             <div class="text-container">
-              <p class="title">Colors</p>
+              <p class="title">Base</p>
               <p class="description">
-                Easily manage product color options to keep inventory accurate
-                and ensure customers can select their preferred variations.
+                Designed to offer convenience, quality, and a taste of local culture, the food base ensures an enjoyable dining experience for every guest
               </p>
             </div>
           </div>
@@ -177,21 +174,116 @@
         </div>
       </Link>
 
-     <Link href="/stock-transition" v-if="HasRole(['Admin'])">
-            <div class="dashboard-card bg-[#3426ff]">
-                <div class="card-content">
-                    <div class="icon-container">
-                        <img src="/images/dashboard/stock_transtion.png" class="icon" alt="dresshub.lk" />
-                    </div>
-                    <div class="text-container">
-                        <p class="title">Stock Transition</p>
-                        <p class="description">
-                            View and manage stock changes, including additions, deductions, and returns, all in one place.
-                        </p>
-                    </div>
-                </div>
+      <Link href="/stock-transition" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#3426ff]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/stock_transtion.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
             </div>
-            </Link>
+            <div class="text-container">
+              <p class="title">Stock Transition</p>
+              <p class="description">
+                View and manage stock changes, including additions, deductions,
+                and returns, all in one place.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+      <Link href="/coupons" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#FF1744]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/coupons.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Coupons</p>
+              <p class="description">
+                Effortlessly manage coupons with options for additions, deductions, and returns—all
+                in one centralized platform.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
+
+      <Link href="/company-info" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#76e02f]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/building.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Company Info</p>
+              <p class="description">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+      <Link href="/employees" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#e02f82]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/employee.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Employees</p>
+              <p class="description">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+<Link href="/transactionHistory" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#FFBF00]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/history.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Order History</p>
+              <p class="description">
+                View and manage past orders with details like date, items, total amount, and payment status for easy tracking and reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
+
     </div>
   </div>
 

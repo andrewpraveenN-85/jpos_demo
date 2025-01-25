@@ -28,7 +28,7 @@
           leave-to="opacity-0 scale-95"
         >
           <DialogPanel
-            class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-3/6 p-6"
+            class="bg-white text-black border-4 border-blue-600 rounded-[20px] shadow-xl w-5/6 lg:w-4/6 p-6"
           >
             <div
               class="flex flex-col items-start justify-start w-full h-full px-2 pt-4"
@@ -53,7 +53,7 @@
                 <div class="flex flex-col justify-between w-1/2 h-full">
                   <div class="flex items-center justify-between">
                     <!-- Product Name -->
-                    <p class="text-3xl font-bold text-black">
+                    <p class="text-3xl font-bold text-black w-full break-words">
                       {{ selectedProduct.name }}
 
                       <span
@@ -73,22 +73,28 @@
                   <p
                     class="pb-6 mt-2 text-[#00000099] text-xl font-normal italic"
                   >
- 
-                    {{ selectedProduct.category?.name ?? 'No Category' }}
-
+                    {{ selectedProduct.category?.name ?? "No Category" }}
                   </p>
 
-                  <p class="pb-6 text-2xl font-bold text-black">
+                  <!-- <p class="pb-6 text-2xl font-bold text-black">
                     <span class="text-[#00000099] font-normal">Supplier : </span
                     >{{ selectedProduct.supplier?.name || "N/A" }}
+                  </p> -->
+
+                  <p class="pb-6 text-2xl font-bold text-black">
+                    <span class="text-[#00000099] font-normal"
+                      >Product Code :
+                    </span>
+
+                    {{ selectedProduct?.code ?? "N/A" }}
                   </p>
 
                   <p class="pb-6 text-2xl font-bold text-black">
                     <span class="text-[#00000099] font-normal"
-                      >Product Code : </span
-                    >
+                      >Product Description :
+                    </span>
 
-                    {{ selectedProduct?.code ?? 'N/A' }}
+                    {{ selectedProduct?.description ?? "N/A" }}
                   </p>
 
                   <div
@@ -98,13 +104,10 @@
                       <p
                         class="text-justify text-[#00000099] text-2xl flex items-center pb-6"
                       >
-                        Color :
+                        Base :
 
                         <span class="font-bold text-black">
-
-                          {{ selectedProduct?.color?.name ?? 'N/A' }}
-
-
+                          {{ selectedProduct?.color?.name ?? "N/A" }}
                         </span>
                       </p>
                     </div>
@@ -119,9 +122,7 @@
                         <span
                           class="px-2 py-2 font-bold text-black border-2 border-gray-800 rounded-xl"
                         >
-                        {{ selectedProduct?.size?.name ?? 'N/A' }}
-
-
+                          {{ selectedProduct?.size?.name ?? "N/A" }}
                         </span>
                       </p>
                     </div>
@@ -133,21 +134,18 @@
                     <div class="flex flex-col w-full">
                       <p class="text-[#00000099]">Selling Price :</p>
                       <p class="font-bold text-black">
-
-
-                        {{ selectedProduct?.selling_price ?? 'N/A' }}
+                        {{ selectedProduct?.selling_price ?? "N/A" }}
                         LKR
                       </p>
                     </div>
-                    <div class="flex flex-col w-full">
+                    <!-- <div class="flex flex-col w-full">
                       <p class="text-[#00000099]">Cost Price :</p>
                       <p class="font-bold text-black">
-
-                        {{ selectedProduct?.cost_price ?? 'N/A' }}
+                        {{ selectedProduct?.cost_price ?? "N/A" }}
 
                         LKR
                       </p>
-                    </div>
+                    </div> -->
                   </div>
 
                   <div
@@ -179,8 +177,7 @@
                     <div class="flex flex-col w-full">
                       <p class="text-[#00000099]">Quantity :</p>
                       <p class="font-bold text-black">
-
-                        {{ selectedProduct?.stock_quantity ?? 'N/A' }}
+                        {{ selectedProduct?.stock_quantity ?? "N/A" }}
                       </p>
                     </div>
                   </div>
@@ -192,7 +189,7 @@
                     {{ formattedDate }}
                   </p>
 
-                  <div class="mt-2">
+                  <!-- <div class="mt-2">
                     <input
                       hidden
                       type="text"
@@ -208,7 +205,8 @@
                     >
                       Print Bar Code
                     </button>
-                  </div>
+                  </div> -->
+
                 </div>
               </div>
 
@@ -223,12 +221,10 @@
                     class="flex items-center justify-center w-full space-x-4"
                   >
                     <p class="text-md font-bold text-black">
-
                       {{ selectedProduct.category?.name || "N/A" }}
                     </p>
                     <p class="text-md font-bold text-black">
-
-                         {{ selectedProduct?.selling_price ?? 'N/A' }}
+                      {{ selectedProduct?.selling_price ?? "N/A" }}
                       LKR
                     </p>
                   </div>
@@ -263,8 +259,7 @@
                       padding-bottom: 5px;
                     "
                   >
-
-                    {{ selectedProduct?.code ?? 'N/A' }}
+                    {{ selectedProduct?.code ?? "N/A" }}
                   </p>
 
                   <p style="color: #000; text-align: center; width: 100%">
@@ -272,8 +267,7 @@
                     {{ selectedProduct.color?.name || "N/A" }}
                   </p>
                   <p style="color: #000; text-align: center; width: 100%">
-
-                    {{ selectedProduct?.name ?? 'N/A' }}
+                    {{ selectedProduct?.name ?? "N/A" }}
                   </p>
                 </div>
               </div>
@@ -353,13 +347,22 @@ function generateAndPrintBarcode() {
   }
 
   JsBarcode(barcodePrintElement, input, {
-    format: "CODE128",
-    // format: "EAN13",
-    lineColor: "#000",
-    width: 1.25,
-    height: 100,
-    displayValue: false,
+    format: "CODE128", // Code 128 is compact and ideal for small labels
+    lineColor: "#000", // Black lines for high contrast
+    width: 1.3, // Narrower lines to fit more content within the label
+    height: 60, // Shorter height to fit within the 30mm space
+    displayValue: false, // Disable text display if it overlaps with the barcode
+    margin: 0, // Remove default margins to maximize space usage
   });
+
+  // JsBarcode(barcodePrintElement, input, {
+  //   format: "CODE128",
+  //   // format: "EAN13",
+  //   lineColor: "#000",
+  //   width: 1.25,
+  //   height: 100,
+  //   displayValue: false,
+  // });
 
   const printContents = document.getElementById("printContainer").innerHTML;
   const originalContents = document.body.innerHTML;

@@ -32,7 +32,7 @@
           >
               <!-- Modal Title -->
               <DialogTitle class="text-xl font-bold text-white">
-                Edit Color
+                Edit Base
               </DialogTitle>
               <form @submit.prevent="submit">
                 <!-- Modal Form -->
@@ -41,7 +41,7 @@
                     <div class="w-full">
                       <div>
                         <label class="block text-sm font-medium text-gray-300">
-                          Color  Name:
+                          Base  Name:
                         </label>
                         <input
                           v-model="form.name"

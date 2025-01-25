@@ -68,7 +68,6 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
-
         Category::create($validated);
 
         return redirect()->route('categories.index')->banner('Category created successfully.');
@@ -120,5 +119,31 @@ class CategoryController extends Controller
         }
         $category->delete();
         return redirect()->route('categories.index')->banner('Category Deleted successfully.');
+    }
+
+    public function topCategories(Request $request)
+    {
+        $categories = Category::whereNull('parent_id')
+            ->with('children')
+            ->get() // Get the collection
+            ->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'hierarchy_string' => $category->hierarchy_string, // Include hierarchy_string for parent
+                    'children' => $category->children->map(function ($child) {
+                        return [
+                            'id' => $child->id,
+                            'name' => $child->name,
+                            'hierarchy_string' => $child->hierarchy_string, // Include hierarchy_string for children
+                        ];
+                    }),
+                ];
+            });
+
+        // Return the categories as a JSON response
+        return response()->json([
+            'categories' => $categories,
+        ]);
     }
 }

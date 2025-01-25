@@ -63,28 +63,44 @@
         >
           <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
         </p> -->
-
-        <p
-          @click="
-            () => {
-              if (HasRole(['Admin'])) {
-                isCreateModalOpen = true;
+        <div class="flex space-x-4">
+          <!-- <Link
+            href="/add_promotion"
+            :class="
+              HasRole(['Admin'])
+                ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+                : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
+            "
+            :title="
+              HasRole(['Admin'])
+                ? ''
+                : 'You do not have permission to add more Products'
+            "
+          >
+            <i class="pr-4 ri-add-circle-fill"></i> Add Promotion
+          </Link> -->
+          <p
+            @click="
+              () => {
+                if (HasRole(['Admin'])) {
+                  isCreateModalOpen = true;
+                }
               }
-            }
-          "
-          :class="
-            HasRole(['Admin'])
-              ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-              : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
-          "
-          :title="
-            HasRole(['Admin'])
-              ? ''
-              : 'You do not have permission to add more Productss'
-          "
-        >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
-        </p>
+            "
+            :class="
+              HasRole(['Admin'])
+                ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+                : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
+            "
+            :title="
+              HasRole(['Admin'])
+                ? ''
+                : 'You do not have permission to add more Products'
+            "
+          >
+            <i class="pr-4 ri-add-circle-fill"></i> Add More Products
+          </p>
+        </div>
       </div>
 
       <div class="flex items-center space-x-4">
@@ -125,7 +141,11 @@
               :key="category.id"
               :value="category.id"
             >
-              {{ category.name }}
+              {{
+                category.hierarchy_string
+                  ? category.hierarchy_string + " ----> " + category.name
+                  : category.name
+              }}
             </option>
           </select>
 
@@ -157,7 +177,7 @@
             @change="applyFilters"
             class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
           >
-            <option value="">Select Color</option>
+            <option value="">Select Base</option>
             <option
               v-for="colorOption in props.colors"
               :key="colorOption.id"
@@ -223,7 +243,7 @@
                 class="object-cover w-full h-64"
               />
             </div>
-            <div class="px-4 py-4 space-y-4">
+            <div class="px-2 py-4 space-y-4">
               <div
                 class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide"
               >
@@ -235,22 +255,22 @@
                 </p>
               </div>
 
-              <div class="flex items-center justify-center w-full space-x-4">
-                <p
-                  class="flex items-center space-x-2 text-justify text-gray-400"
-                >
-                  Color :
+              <div class="flex justify-center space-x-2 items-start w-full">
+                <div class="flex space-x-1 text-gray-400">
+                  <p class="font-bold">Base:</p>
 
-                  <b> &nbsp; {{ product.color?.name || "N/A" }} </b>
-                </p>
+                  <p>{{ product.color?.name || "N/A" }}</p>
+                </div>
 
-                <p class="text-justify text-gray-400">
-                  Size :
-                  <b> {{ product.size?.name || "N/A" }} </b>
-                </p>
+                <div class="flex space-x-1 text-gray-400">
+                  <p class="font-bold">Size:</p>
+                  <p>
+                    {{ product.size?.name || "N/A" }}
+                  </p>
+                </div>
               </div>
 
-              <div class="flex items-center justify-center w-full space-x-4">
+              <!-- <div class="flex items-center justify-center w-full space-x-4">
                 <p
                   class="flex items-center space-x-2 text-justify text-gray-400"
                 >
@@ -258,7 +278,7 @@
 
                   <b> &nbsp; {{ product.supplier?.name || "N/A" }} </b>
                 </p>
-              </div>
+              </div> -->
               <div class="flex items-center justify-between">
                 <p
                   v-if="product.stock_quantity > 0"
@@ -334,7 +354,7 @@
         <template v-else>
           <div class="col-span-4 text-center text-gray-500">
             <p class="text-center text-red-500 text-[17px]">
-              No products available
+              No Products Available
             </p>
           </div>
         </template>
@@ -508,7 +528,7 @@ const applyFilters = (page) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     { preserveState: true }
   );
@@ -555,7 +575,7 @@ const navigateTo = (url) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     {
       preserveState: true, // Maintain the current state

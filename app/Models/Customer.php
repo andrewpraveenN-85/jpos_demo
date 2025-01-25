@@ -16,6 +16,7 @@ class Customer extends Model
         'address',
         'member_since',
         'loyalty_points',
+        'bdate',
     ];
 
 

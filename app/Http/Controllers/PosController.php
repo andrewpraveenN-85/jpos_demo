@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Coupon;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\Size;
 use App\Models\StockTransaction;
+use App\Models\Employee;
+use App\Models\PromotionItem;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 
 class PosController extends Controller
 {
@@ -21,13 +27,46 @@ class PosController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $allcategories = Category::with('parent')->get()->map(function ($category) {
+            $category->hierarchy_string = $category->hierarchy_string; // Access it
+            return $category;
+        });
+        $colors = Color::orderBy('created_at', 'desc')->get();
+        $sizes = Size::orderBy('created_at', 'desc')->get();
+        $allemployee = Employee::orderBy('created_at', 'desc')->get();
+
+
         // Render the page for GET requests
         return Inertia::render('Pos/Index', [
             'product' => null,
             'error' => null,
             'loggedInUser' => Auth::user(),
+            'allcategories' => $allcategories,
+            'allemployee' => $allemployee,
+            'colors' => $colors,
+            'sizes' => $sizes,
         ]);
     }
+
+    public function getPendingOrders()
+    {
+        $orders = Sale::where('status', 0)->get(['order_id']); // Fetch only orders with status = 0
+        return response()->json($orders);
+    }
+
+    public function getOrderDetails($order_id)
+    {
+        try {
+            $order = Sale::with('saleItems.product')->where('order_id', $order_id)->firstOrFail();
+
+            return response()->json($order, 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Order not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch order details'], 500);
+        }
+    }
+    
 
     public function getProduct(Request $request)
     {
@@ -39,7 +78,9 @@ class PosController extends Controller
             'barcode' => 'required',
         ]);
 
-        $product = Product::where('barcode', $request->barcode)->first();
+        $product = Product::where('barcode', $request->barcode)
+            ->orWhere('code', $request->barcode)
+            ->first();
 
         return response()->json([
             'product' => $product,
@@ -47,18 +88,39 @@ class PosController extends Controller
         ]);
     }
 
+    public function getCoupon(Request $request)
+    {
+        $request->validate(
+            ['code' => 'required|string'],
+            ['code.required' => 'The coupon code missing.', 'code.string' => 'The coupon code must be a valid string.']
+        );
+
+        $coupon = Coupon::where('code', $request->code)->first();
+
+        if (!$coupon) {
+            return response()->json(['error' => 'Invalid coupon code.']);
+        }
+
+        if (!$coupon->isValid()) {
+            return response()->json(['error' => 'Coupon is expired or has been fully used.']);
+        }
+
+        return response()->json(['success' => 'Coupon applied successfully.', 'coupon' => $coupon]);
+    }
+
+
 
 
     public function submit(Request $request)
     {
+
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
         // Combine countryCode and contactNumber to create the phone field
-        $phone = $request->input('countryCode') . $request->input('contactNumber');
 
         $customer = null;
-        
+
         $products = $request->input('products');
         $totalAmount = collect($products)->reduce(function ($carry, $product) {
             return $carry + ($product['quantity'] * $product['selling_price']);
@@ -77,55 +139,70 @@ class PosController extends Controller
             return $carry;
         }, 0);
 
-        DB::beginTransaction(); // Start a transaction
+        DB::beginTransaction(); 
 
         try {
-            // Save the customer data to the database
-            if ($request->input('customer.name')) {
+            if ($request->input('customer.contactNumber') || $request->input('customer.name') || $request->input('customer.email')) {
 
+                $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
                 $customer = Customer::where('email', $request->input('customer.email'))->first();
+                $customer1 = Customer::where('phone', $phone)->first();
 
-                if (!$customer) {
+                if ($customer) {
+                    $email = '';
+                } else {
+                    $email = $request->input('customer.email');
+                }
+
+                if ($customer1) {
+                    $phone = '';
+                }
+
+                if (!empty($phone) || !empty($email) || !empty($request->input('customer.name'))) {
                     $customer = Customer::create([
                         'name' => $request->input('customer.name'),
-                        'email' => $request->input('customer.email'),
+                        'email' => $email,
                         'phone' => $phone,
-                        'address' => $request->input('customer.address', ''), // Optional address
-                        'member_since' => now()->toDateString(), // Current date
-                        'loyalty_points' => 0, // Default value
+                        'bdate' => $request->input('customer.bdate'),
+                        'address' => $request->input('customer.address', ''), 
+                        'member_since' => now()->toDateString(), 
+                        'loyalty_points' => 0, 
                     ]);
                 }
             }
 
             // Create the sale record
             $sale = Sale::create([
-                'customer_id' => $customer ? $customer->id : null, // Nullable customer_id
-                'user_id' => $request->input('userId'), // Logged-in user ID
-                'order_id' => $request->input('orderId'),
-                'total_amount' => $totalAmount, // Total amount of the sale
-                'discount' => $totalDiscount, // Default discount to 0 if not provided
+                'customer_id' => $customer ? $customer->id : null, 
+                'employee_id' => $request->input('employee_id'),
+                'user_id' => $request->input('userId'),
+                'order_id' => $request->input('order_id'),
+                'total_amount' => $totalAmount, 
+                'discount' => $totalDiscount, 
                 'total_cost' => $totalCost,
-                'payment_method' => $request->input('paymentMethod'), // Payment method from the request
-                'sale_date' => now()->toDateString(), // Current date
+                'payment_method' => $request->input('paymentMethod'), 
+                'sale_date' => now()->toDateString(), 
+                'cash' => $request->input('cash'),
+                'custom_discount' => $request->input('custom_discount'),
+                'kitchen_note' => $request->input('kitchen_note'),
+                'status' => $request->input('status'),
+                'job_id' => $request->input('jobId'),
+
             ]);
 
             foreach ($products as $product) {
-                // Check stock before saving sale items
                 $productModel = Product::find($product['id']);
                 if ($productModel) {
                     $newStockQuantity = $productModel->stock_quantity - $product['quantity'];
 
-                    // Prevent stock from going negative
                     if ($newStockQuantity < 0) {
-                        // Rollback transaction and return error
                         DB::rollBack();
                         return response()->json([
-                            'message' => "Insufficient stock for product: {$productModel->name} 
+                            'message' => "Insufficient stock for product: {$productModel->name}
                             ({$productModel->stock_quantity} available)",
                         ], 423);
                     }
 
-                    // Create sale item
                     SaleItem::create([
                         'sale_id' => $sale->id,
                         'product_id' => $product['id'],
@@ -134,6 +211,36 @@ class PosController extends Controller
                         'total_price' => $product['quantity'] * $product['selling_price'],
                     ]);
 
+
+
+                    if($productModel->is_promotion){
+                        $promotionItems = PromotionItem::where('promotion_id', $productModel->id)->get();
+                        foreach($promotionItems as $promotionItem){
+                            $promoProduct = Product::find($promotionItem->product_id);
+
+                            $newITemStockQuantity = $promoProduct->stock_quantity - ($product['quantity'] * $promotionItem->quantity);
+                            if ($newITemStockQuantity < 0) {
+                                DB::rollBack();
+                                return response()->json([
+                                    'message' => "Insufficient stock for product: {$productModel->name}
+                                    ({$productModel->stock_quantity} available) (Product inside Promotion)",
+                                ], 423);
+                            }
+
+                            StockTransaction::create([
+                                'product_id' => $promoProduct->id,
+                                'transaction_type' => 'Sold',
+                                'quantity' => $product['quantity'] * $promotionItem->quantity,
+                                'transaction_date' => now(),
+                                'supplier_id' => $productModel->supplier_id ?? null,
+                            ]);
+
+                            $promoProduct->update([
+                                'stock_quantity' => $newITemStockQuantity,
+                            ]);
+                        }
+                    }
+
                     StockTransaction::create([
                         'product_id' => $product['id'],
                         'transaction_type' => 'Sold',
@@ -141,7 +248,6 @@ class PosController extends Controller
                         'transaction_date' => now(),
                         'supplier_id' => $productModel->supplier_id ?? null,
                     ]);
-
                     // Update stock quantity
                     $productModel->update([
                         'stock_quantity' => $newStockQuantity,
@@ -168,4 +274,42 @@ class PosController extends Controller
             'data' => $customer,
         ], 201);
     }
+
+
+    public function updateOrder(Request $request, $order_id)
+{
+    try {
+        $sale = Sale::where('order_id', $order_id)->firstOrFail();
+
+        // Update sale details
+        $sale->update([
+            'customer_id' => $request->input('customer_id'),
+            'employee_id' => $request->input('employee_id'),
+            'payment_method' => $request->input('paymentMethod'),
+            'cash' => $request->input('cash'),
+            'custom_discount' => $request->input('custom_discount'),
+            'status' => $request->input('status'),
+            'kitchen_note' => $request->input('kitchen_note'),
+        ]);
+
+        // Update sale items (optional logic for handling changes)
+        SaleItem::where('sale_id', $sale->id)->delete();
+        foreach ($request->input('products') as $product) {
+            SaleItem::create([
+                'sale_id' => $sale->id,
+                'product_id' => $product['id'],
+                'quantity' => $product['quantity'],
+                'unit_price' => $product['selling_price'],
+                'total_price' => $product['quantity'] * $product['selling_price'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Order updated successfully!'], 200);
+    } catch (ModelNotFoundException $e) {
+        return response()->json(['error' => 'Order not found'], 404);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
 }
