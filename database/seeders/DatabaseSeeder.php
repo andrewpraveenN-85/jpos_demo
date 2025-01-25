@@ -16,40 +16,41 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         if (!\App\Models\User::where('email', 'admin@admin.com')->exists()) {
-            \App\Models\User::factory()->create([
-                'name' => 'admin',
-                'email' => 'admin@admin.com',
-                'role_type' => 'Admin',
-                'password' => Hash::make('Mn2#yx4'),
-            ]);
-        }
+    \App\Models\User::factory()->create([
+        'name' => 'admin',
+        'email' => 'admin@admin.com',
+        'role_type' => 'Admin',
+        'password' => Hash::make('R@nd0mP@55w0rd1!'),
+    ]);
+}
 
-        if (!\App\Models\User::where('email', 'manager@manager.com')->exists()) {
-            \App\Models\User::factory()->create([
-                'name' => 'manager',
-                'email' => 'manager@manager.com',
-                'role_type' => 'Manager',
-                'password' => Hash::make('JvP0sMgr'),
-            ]);
-        }
+if (!\App\Models\User::where('email', 'manager@manager.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'manager',
+        'email' => 'manager@manager.com',
+        'role_type' => 'Manager',
+        'password' => Hash::make('Str0ngM@nagerP@55!'),
+    ]);
+}
 
-        if (!\App\Models\User::where('email', 't1@cashier.com')->exists()) {
-            \App\Models\User::factory()->create([
-                'name' => 't1',
-                'email' => 't1@cashier.com',
-                'role_type' => 'Cashier',
-                'password' => Hash::make('JvP0sT1'),
-            ]);
-        }
+if (!\App\Models\User::where('email', 't1@cashier.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 't1',
+        'email' => 't1@cashier.com',
+        'role_type' => 'Cashier',
+        'password' => Hash::make('C@sh1erR@ndom!1'),
+    ]);
+}
 
-        if (!\App\Models\User::where('email', 'demo@demo.com')->exists()) {
-            \App\Models\User::factory()->create([
-                'name' => 'demo',
-                'email' => 'demo@demo.com',
-                'role_type' => 'Admin',
-                'password' => Hash::make('demo'),
-            ]);
-        }
+if (!\App\Models\User::where('email', 'demo@demo.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'demo',
+        'email' => 'demo@demo.com',
+        'role_type' => 'Admin',
+        'password' => Hash::make('D3moStr0ngP@ss!'),
+    ]);
+}
+
 
         
         
