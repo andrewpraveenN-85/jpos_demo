@@ -156,14 +156,14 @@
                       <label
                         for="color_id"
                         class="block text-sm font-medium text-gray-300"
-                        >Base :</label
+                        >Model :</label
                       >
                       <select
                         v-model="form.color_id"
                         id="color_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       >
-                        <option value="">Select a Base</option>
+                        <option value="">Select a Model</option>
                         <option
                           v-for="color in colors"
                           :key="color.id"

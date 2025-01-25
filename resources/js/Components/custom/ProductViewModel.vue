@@ -104,7 +104,7 @@
                       <p
                         class="text-justify text-[#00000099] text-2xl flex items-center pb-6"
                       >
-                        Base :
+                        Model :
 
                         <span class="font-bold text-black">
                           {{ selectedProduct?.color?.name ?? "N/A" }}

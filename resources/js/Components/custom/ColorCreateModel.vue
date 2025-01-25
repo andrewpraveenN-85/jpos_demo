@@ -40,7 +40,7 @@
 
               <!-- Modal Title -->
               <DialogTitle class="text-xl font-bold text-white"
-                >Add Base</DialogTitle
+                >Add Model</DialogTitle
               >
               <form @submit.prevent="submit">
                 <!-- Modal Form -->
@@ -48,7 +48,7 @@
                   <!-- Category Name -->
                   <div>
                     <label class="block text-sm font-medium text-gray-300"
-                      >Base Name:</label
+                      >Model Name:</label
                     >
                     <input
                       v-model="form.name"
