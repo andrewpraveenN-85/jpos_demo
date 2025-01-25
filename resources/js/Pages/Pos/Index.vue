@@ -31,30 +31,33 @@
         <div class="flex flex-col w-full">
             <div class="flex flex-col items-center justify-center w-full pb-4 space-y-8"> 
             <div class="flex flex-col items-center justify-center w-full space-y-8 border-4 border-black rounded-3xl p-4">
-                <p class="text-3xl font-bold text-black ">Pending Orders</p>
-                <button
+                <p class="text-4xl font-bold text-black ">Pending Orders
+                  <button
                   @click="resetToLiveBill"
-                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 ml-56"
                 >
                   Live Bill
                 </button>
+                </p>
+                
                 <div v-if="pendingOrders.length === 0" class="text-red-500 ">
                     No pending orders found.
                 </div>
                 <div v-else>
                 <div
                   class="grid grid-cols-4 gap-4 w-full h-[400px] overflow-y-auto"
-                  style="max-height: 120px; border: 2px solid black; padding: 8px;"
+                  style="max-height: 180px; border: 2px solid black; padding: 8px; box-sizing: border-box;"
                 >
                   <div
                     v-for="order in pendingOrders"
                     :key="order.order_id"
                     @click="fetchOrderDetails(order.order_id)"
-                    class="p-8 shadow border-2 border-black text-xl text-center text-blue-600 cursor-pointer"
+                    class="p-4 shadow border-2 bg-gray-300 border-gray-100 text-xl text-center text-blue-600 cursor-pointer flex items-center justify-center"
                   >
                     Order ID: {{ order.order_id }}
                   </div>
                 </div>
+
               </div>
 
 
@@ -127,8 +130,8 @@
             </p>
           </div>
         </div>
-        <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
-          <div class="flex flex-col items-start justify-center w-full px-12">
+        <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl ">
+          <div class="flex flex-col items-start justify-center w-full px-12 pb-0" style="margin-top: -100px;" >
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">{{headingTitle}}</h2>
               <span
@@ -328,7 +331,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col w-full space-y-8">
+            <div class="flex flex-col w-full space-y-4">
               <div
                 class="flex items-center justify-center w-full pt-8 space-x-8"
               >
