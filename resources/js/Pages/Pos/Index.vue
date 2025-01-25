@@ -157,14 +157,14 @@
                   class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                   autofocus
                 />
-                <div class="flex items-end justify-end w-1/4">
+
                 <button
                   @click="submitBarcode"
-                  class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-r-xl"
+                  class="px-12 py-4 text-2xl font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 text-white uppercase bg-blue-600 rounded-r-xl"
                 >
                   Enter
                 </button>
-              </div>
+
               </div>
               
        
