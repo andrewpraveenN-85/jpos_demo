@@ -32,6 +32,12 @@
             <div class="flex flex-col items-center justify-center w-full pb-4 space-y-8"> 
             <div class="flex flex-col items-center justify-center w-full space-y-8 border-4 border-black rounded-3xl p-4">
                 <p class="text-3xl font-bold text-black ">Pending Orders</p>
+                <button
+                  @click="resetToLiveBill"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Live Bill
+                </button>
                 <div v-if="pendingOrders.length === 0" class="text-red-500 ">
                     No pending orders found.
                 </div>
@@ -124,7 +130,7 @@
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
           <div class="flex flex-col items-start justify-center w-full px-12">
             <div class="flex items-center justify-between w-full">
-              <h2 class="text-5xl font-bold text-black">Jobs</h2>
+              <h2 class="text-5xl font-bold text-black">{{headingTitle}}</h2>
               <span
                 class="flex cursor-pointer"
                 @click="isSelectModalOpen = true"
@@ -433,6 +439,10 @@ const serviceNote = ref("");
 const pendingOrders = ref([]);
 const selectedOrder = ref(null);
 
+const headingTitle = computed(() => {
+  return selectedOrder.value ? "Jobs" : "Live Bill";
+});
+
 // Fetch pending orders
 const fetchPendingOrders = async () => {
   try {
@@ -492,6 +502,16 @@ watch(selectedOrder, (newOrder) => {
   
   }
 });
+
+const resetToLiveBill = () => {
+  selectedOrder.value = null;
+  products.value = [];
+  cash.value = 0;
+  custom_discount.value = 0;
+  discount.value = 0;
+  selectedStatus.value = "";
+};
+
 
 const handleModalOpenUpdate = (newValue) => {
   isSuccessModalOpen.value = newValue;

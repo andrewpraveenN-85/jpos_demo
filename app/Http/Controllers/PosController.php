@@ -281,6 +281,20 @@ class PosController extends Controller
     try {
         $sale = Sale::where('order_id', $order_id)->firstOrFail();
 
+        // Restore stock for existing sale items
+        $existingItems = SaleItem::where('sale_id', $sale->id)->get();
+        foreach ($existingItems as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->update([
+                    'stock_quantity' => $product->stock_quantity + $item->quantity,
+                ]);
+            }
+        }
+
+        // Delete existing sale items
+        SaleItem::where('sale_id', $sale->id)->delete();
+
         // Update sale details
         $sale->update([
             'customer_id' => $request->input('customer_id'),
@@ -292,16 +306,31 @@ class PosController extends Controller
             'kitchen_note' => $request->input('kitchen_note'),
         ]);
 
-        // Update sale items (optional logic for handling changes)
-        SaleItem::where('sale_id', $sale->id)->delete();
+        // Add updated sale items and adjust stock
         foreach ($request->input('products') as $product) {
-            SaleItem::create([
-                'sale_id' => $sale->id,
-                'product_id' => $product['id'],
-                'quantity' => $product['quantity'],
-                'unit_price' => $product['selling_price'],
-                'total_price' => $product['quantity'] * $product['selling_price'],
-            ]);
+            $productModel = Product::find($product['id']);
+            if ($productModel) {
+                $newStockQuantity = $productModel->stock_quantity - $product['quantity'];
+
+                if ($newStockQuantity < 0) {
+                    return response()->json([
+                        'message' => "Insufficient stock for product: {$productModel->name} ({$productModel->stock_quantity} available)",
+                    ], 423);
+                }
+
+                SaleItem::create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $product['id'],
+                    'quantity' => $product['quantity'],
+                    'unit_price' => $product['selling_price'],
+                    'total_price' => $product['quantity'] * $product['selling_price'],
+                ]);
+
+                // Update product stock
+                $productModel->update([
+                    'stock_quantity' => $newStockQuantity,
+                ]);
+            }
         }
 
         return response()->json(['message' => 'Order updated successfully!'], 200);
@@ -311,5 +340,6 @@ class PosController extends Controller
         return response()->json(['error' => $e->getMessage()], 500);
     }
 }
+
 
 }
