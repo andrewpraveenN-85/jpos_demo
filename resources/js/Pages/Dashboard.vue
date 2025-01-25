@@ -144,7 +144,7 @@
               />
             </div>
             <div class="text-container">
-              <p class="title">Base</p>
+              <p class="title">Model</p>
               <p class="description">
                 Designed to offer convenience, quality, and a taste of local culture, the food base ensures an enjoyable dining experience for every guest
               </p>

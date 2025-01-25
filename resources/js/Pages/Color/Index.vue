@@ -65,7 +65,7 @@
           <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">
             {{ allcolors.length }}
           </span>
-          <span class="text-xl">/ Total Base</span>
+          <span class="text-xl">/ Total Model</span>
         </p>
       </div>
       <div class="flex w-full">
@@ -74,7 +74,7 @@
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
           <p class="text-4xl font-bold tracking-wide text-black uppercase">
-            Base
+            Model
           </p>
         </div>
         <div class="flex justify-end w-full">
@@ -99,7 +99,7 @@ class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue
             ? ''
             : 'You do not have permission to add more Color'"
 >
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Base
+  <i class="pr-4 ri-add-circle-fill"></i> Add More Model
 </p>
 
 

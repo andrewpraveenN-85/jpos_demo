@@ -177,7 +177,7 @@
             @change="applyFilters"
             class="px-6 py-3 text-xl font-normal tracking-wider text-blue-600 bg-white rounded-lg custom-select"
           >
-            <option value="">Select Base</option>
+            <option value="">Select Model</option>
             <option
               v-for="colorOption in props.colors"
               :key="colorOption.id"
@@ -257,7 +257,7 @@
 
               <div class="flex justify-center space-x-2 items-start w-full">
                 <div class="flex space-x-1 text-gray-400">
-                  <p class="font-bold">Base:</p>
+                  <p class="font-bold">Model:</p>
 
                   <p>{{ product.color?.name || "N/A" }}</p>
                 </div>
