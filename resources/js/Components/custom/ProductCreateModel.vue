@@ -99,7 +99,7 @@
                   }}</span>
                 </div> -->
 
-                <!-- <div>
+                <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Bar code:</label
                   >
@@ -113,7 +113,7 @@
                   <span v-if="form.errors.barcode" class="mt-4 text-red-500">{{
                     form.errors.barcode
                   }}</span>
-                </div> -->
+                </div>
 
                 <div>
                   <div class="flex items-center gap-8">

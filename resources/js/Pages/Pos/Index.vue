@@ -121,6 +121,7 @@
           <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
+            
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -131,7 +132,7 @@
           </div>
         </div>
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl ">
-          <div class="flex flex-col items-start justify-center w-full px-12 pb-0" style="margin-top: -100px;" >
+          <div class="flex flex-col items-start justify-center w-full px-12 pb-0"  style="margin-top: -50px;">
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">{{headingTitle}}</h2>
               <span
@@ -142,6 +143,31 @@
                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
               </span>
             </div>
+
+            <div class="flex items-center justify-center w-full mt-4 mb-4">
+                <label
+                  for="search"
+                  class="text-xl font-medium text-gray-800"
+                ></label>
+                <input
+                  v-model="form.barcode"
+                  id="search"
+                  type="text"
+                  placeholder="Enter BarCode Here!"
+                  class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autofocus
+                />
+                <div class="flex items-end justify-end w-1/4">
+                <button
+                  @click="submitBarcode"
+                  class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-r-xl"
+                >
+                  Enter
+                </button>
+              </div>
+              </div>
+              
+       
  
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
@@ -744,12 +770,10 @@ const submitCoupon = async () => {
   }
 };
 
-// Automatically submit the barcode to the backend
 const submitBarcode = async () => {
   try {
-    // Send POST request to the backend
     const response = await axios.post(route("pos.getProduct"), {
-      barcode: form.barcode, // Send the barcode field
+      barcode: form.barcode, 
     });
 
     // Extract the response data
