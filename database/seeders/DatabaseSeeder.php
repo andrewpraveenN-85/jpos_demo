@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'admin',
                 'email' => 'admin@admin.com',
                 'role_type' => 'Admin',
-                'password' => Hash::make('Mn2#yx4'),
+                'password' => Hash::make('Admin@kaumas66r'),
             ]);
         }
 
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'manager',
                 'email' => 'manager@manager.com',
                 'role_type' => 'Manager',
-                'password' => Hash::make('JvP0sMgr'),
+                'password' => Hash::make('Mgr@kaumaa6r'),
             ]);
         }
 
@@ -38,21 +38,9 @@ class DatabaseSeeder extends Seeder
                 'name' => 't1',
                 'email' => 't1@cashier.com',
                 'role_type' => 'Cashier',
-                'password' => Hash::make('JvP0sT1'),
+                'password' => Hash::make('T1@kaumas66r'),
             ]);
         }
-
-        if (!\App\Models\User::where('email', 'demo@demo.com')->exists()) {
-            \App\Models\User::factory()->create([
-                'name' => 'demo',
-                'email' => 'demo@demo.com',
-                'role_type' => 'Admin',
-                'password' => Hash::make('demo'),
-            ]);
-        }
-
-        
-        
         // $this->call([
         //     ColorSeeder::class,
         //     SizeSeeder::class,
