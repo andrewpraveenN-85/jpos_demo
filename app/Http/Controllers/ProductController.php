@@ -248,6 +248,9 @@ class ProductController extends Controller
             'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
+            'warranty_start' => ['nullable', 'date', 'before_or_equal:warranty_end'],
+            'warranty_end' => ['nullable', 'date', 'after_or_equal:warranty_start'],
+
         ]);
 
         try {
@@ -312,6 +315,8 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
             'description' => 'nullable|string',
+            'warranty_start' => ['nullable', 'date', 'before_or_equal:warranty_end'],
+            'warranty_end' => ['nullable', 'date', 'after_or_equal:warranty_start'],
         ]);
 
         if (empty($validated['barcode'])) {
@@ -432,6 +437,8 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
             'description' => 'nullable|string',
+            'warranty_start' => ['nullable', 'date', 'before_or_equal:warranty_end'],
+            'warranty_end' => ['nullable', 'date', 'after_or_equal:warranty_start'],
         ]);
 
         // Handle image update

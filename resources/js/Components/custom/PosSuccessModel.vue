@@ -91,8 +91,8 @@ const props = defineProps({
     },
     status: {
     type: Number,
-    required: true, 
-    default: 0, 
+    required: true,
+    default: 0,
     },
     cashier: Object,
     customer: Object,
@@ -142,7 +142,14 @@ const handlePrintReceipt = () => {
 
             return `
         <tr>
-          <td>${product.name}</td>
+          <td>${product.name}<br>
+
+<b>Warranty end - ${product.warranty_end}</b>
+
+
+
+
+            </td>
           <td style="text-align: center;">${product.quantity}</td>
           <td>
             ${product.discount > 0 && product.apply_discount

@@ -148,6 +148,45 @@
                     </div> -->
                   </div>
 
+
+
+
+
+                  <div class="flex items-center justify-between w-full pb-6 text-2xl">
+  <div class="flex flex-col w-full">
+    <p class="text-[#00000099]">Warranty Start:</p>
+    <p class="font-bold text-black">
+      {{ selectedProduct?.warranty_start
+        ? dayjs(selectedProduct.warranty_start).format("Do MMM YYYY")
+        : "N/A" }}
+    </p>
+  </div>
+  <div class="flex flex-col w-full">
+    <p class="text-[#00000099]">Warranty End:</p>
+    <p class="font-bold text-black">
+      {{ selectedProduct?.warranty_end
+        ? dayjs(selectedProduct.warranty_end).format("Do MMM YYYY")
+        : "N/A" }}
+    </p>
+  </div>
+</div>
+
+<div class="flex items-center justify-between w-full pb-6 text-2xl">
+  <div class="flex flex-col w-full">
+    <p class="text-[#00000099]">Warranty Duration:</p>
+    <p class="font-bold text-black">
+      {{ warrantyDayCount !== null ? warrantyDayCount + " Days" : "N/A" }}
+    </p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
                   <div
                     class="flex items-center justify-between w-full pb-6 text-2xl"
                   >
@@ -336,6 +375,26 @@ const formattedDate = computed(() =>
     ? dayjs(selectedProduct.created_at).format("Do MMMM YYYY")
     : ""
 );
+
+
+
+
+const warrantyDayCount = computed(() => {
+  if (selectedProduct?.warranty_start && selectedProduct?.warranty_end) {
+    const start = dayjs(selectedProduct.warranty_start);
+    const end = dayjs(selectedProduct.warranty_end);
+    return end.diff(start, "day") + 1; // Include the start and end date
+  }
+  return null;
+});
+
+
+
+
+
+
+
+
 
 function generateAndPrintBarcode() {
   const input = document.getElementById("barcodeInput").value;

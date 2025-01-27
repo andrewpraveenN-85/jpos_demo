@@ -24,6 +24,8 @@ class Product extends Model
         'stock_quantity',
         'barcode',
         'image',
+        'warranty_start',
+        'warranty_end',
         'description',
         'is_promotion',
     ];

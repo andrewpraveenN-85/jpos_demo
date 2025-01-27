@@ -50,7 +50,7 @@ class PosController extends Controller
 
     public function getPendingOrders()
     {
-        $orders = Sale::where('status', 0)->get(['order_id']); // Fetch only orders with status = 0
+        $orders = Sale::with('saleItem.product')->where('status', 0)->get(['order_id']); // Fetch only orders with status = 0
         return response()->json($orders);
     }
 
@@ -66,7 +66,7 @@ class PosController extends Controller
             return response()->json(['error' => 'Failed to fetch order details'], 500);
         }
     }
-    
+
 
     public function getProduct(Request $request)
     {
@@ -139,7 +139,7 @@ class PosController extends Controller
             return $carry;
         }, 0);
 
-        DB::beginTransaction(); 
+        DB::beginTransaction();
 
         try {
             if ($request->input('customer.contactNumber') || $request->input('customer.name') || $request->input('customer.email')) {
@@ -164,24 +164,24 @@ class PosController extends Controller
                         'email' => $email,
                         'phone' => $phone,
                         'bdate' => $request->input('customer.bdate'),
-                        'address' => $request->input('customer.address', ''), 
-                        'member_since' => now()->toDateString(), 
-                        'loyalty_points' => 0, 
+                        'address' => $request->input('customer.address', ''),
+                        'member_since' => now()->toDateString(),
+                        'loyalty_points' => 0,
                     ]);
                 }
             }
 
             // Create the sale record
             $sale = Sale::create([
-                'customer_id' => $customer ? $customer->id : null, 
+                'customer_id' => $customer ? $customer->id : null,
                 'employee_id' => $request->input('employee_id'),
                 'user_id' => $request->input('userId'),
                 'order_id' => $request->input('order_id'),
-                'total_amount' => $totalAmount, 
-                'discount' => $totalDiscount, 
+                'total_amount' => $totalAmount,
+                'discount' => $totalDiscount,
                 'total_cost' => $totalCost,
-                'payment_method' => $request->input('paymentMethod'), 
-                'sale_date' => now()->toDateString(), 
+                'payment_method' => $request->input('paymentMethod'),
+                'sale_date' => now()->toDateString(),
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
                 'kitchen_note' => $request->input('kitchen_note'),

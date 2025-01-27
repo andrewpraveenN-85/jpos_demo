@@ -29,7 +29,7 @@
       <div class="flex w-full gap-4">
         <div class="flex flex-col w-1/2">
         <div class="flex flex-col w-full">
-            <div class="flex flex-col items-center justify-center w-full pb-4 space-y-8"> 
+            <div class="flex flex-col items-center justify-center w-full pb-4 space-y-8">
             <div class="flex flex-col items-center justify-center w-full space-y-8 border-4 border-black rounded-3xl p-4">
                 <p class="text-4xl font-bold text-black ">Pending Orders
                   <button
@@ -39,7 +39,7 @@
                   Live Bill
                 </button>
                 </p>
-                
+
                 <div v-if="pendingOrders.length === 0" class="text-red-500 ">
                     No pending orders found.
                 </div>
@@ -121,7 +121,7 @@
           <div
             class="flex flex-col items-center justify-center w-full pt-32 space-y-8"
           >
-            
+
             <img
               src="/images/Fading wheel.gif"
               class="object-cover w-32 h-32 rounded-full"
@@ -166,9 +166,9 @@
                 </button>
 
               </div>
-              
-       
- 
+
+
+
             <div class="w-full text-center">
               <p v-if="products.length === 0" class="text-2xl text-red-500">
                 No Products to show
@@ -187,7 +187,15 @@
               </div>
               <div class="flex flex-col justify-between w-5/6">
                 <p class="text-xl text-black">
-                  {{ item.name }}
+
+
+
+                  {{ item.name }}<br/>
+                 <span class="text-red-600 font-bold ">( Warranty End -  {{ item.warranty_end || "" }})</span><br/>
+
+                 <span class="text-green-600 font-bold">
+  {{ item.warranty_start || "" }} - {{ item.warranty_end || "" }}
+</span>
                 </p>
                 <div class="flex items-center justify-between w-full">
                   <div class="flex space-x-4">
@@ -271,7 +279,7 @@
                   <CurrencyInput
                     v-model="custom_discount"
                   />
-                  
+
                 </span>
               </div>
               <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
@@ -287,7 +295,7 @@
                 <p class="text-3xl text-black">Total</p>
                 <p class="text-3xl text-black">{{ total }} LKR</p>
               </div>
-          
+
               <div
                 class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
               >
@@ -349,7 +357,7 @@
                 <label for="service_note" class="sr-only">Service Note</label>
                 <input
                   id="service_note"
-                  v-model="serviceNote" 
+                  v-model="serviceNote"
                   type="text"
                   :placeholder="selectedOrder?.kitchen_note || 'Enter Service Note'"
                   class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -422,6 +430,7 @@
     :subTotal="subtotal"
     :totalDiscount="totalDiscount"
     :total="total"
+    :warranty_end="warranty_end"
     :custom_discount= "custom_discount"
     :selectedType="selectedType"
     :status="Number(selectedStatus)"
@@ -462,8 +471,8 @@ const appliedCoupon = ref(null);
 const cash = ref(0);
 const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
-const selectedType = ref(""); 
-const selectedStatus = ref("1"); 
+const selectedType = ref("");
+const selectedStatus = ref("1");
 const serviceNote = ref("");
 const pendingOrders = ref([]);
 const selectedOrder = ref(null);
@@ -475,9 +484,9 @@ const headingTitle = computed(() => {
 // Fetch pending orders
 const fetchPendingOrders = async () => {
   try {
-    const response = await axios.get("/pending-orders"); 
+    const response = await axios.get("/pending-orders");
     console.log(response.data);
-    pendingOrders.value = response.data; 
+    pendingOrders.value = response.data;
 
   } catch (error) {
     console.error("Error fetching pending orders:", error);
@@ -493,10 +502,12 @@ const fetchOrderDetails = async (orderId) => {
     products.value = response.data.sale_items.map((item) => ({
       id: item.product.id,
       name: item.product.name,
-      image: item.product.image || null, 
+      image: item.product.image || null,
       selling_price: item.unit_price,
+      warranty_start: item.product.warranty_start || "Not Available",
+      warranty_end: item.product.warranty_end || "Not Available",
       quantity: item.quantity,
-      discount: item.product.discount || 0, 
+      discount: item.product.discount || 0,
     }));
 
   } catch (error) {
@@ -520,15 +531,17 @@ watch(selectedOrder, (newOrder) => {
       image: item.product.image || null,
       selling_price: item.unit_price,
       quantity: item.quantity,
+        warranty_start: item.product.warranty_start || "Not Available",
+    warranty_end: item.product.warranty_end || "Not Available",
       discount: item.product.discount || 0,
-      apply_discount: false, 
+      apply_discount: false,
     }));
 
   cash.value = newOrder?.cash || 0;
   custom_discount.value = newOrder?.custom_discount || 0;
   discount.value = newOrder?.discount || 0;
   selectedStatus.value = newOrder?.status?.toString() || "";
-  
+
   }
 });
 
@@ -550,12 +563,12 @@ const handleModalOpenUpdate = (newValue) => {
 };
 
 const props = defineProps({
-  loggedInUser: Object, 
+  loggedInUser: Object,
   allcategories: Array,
   allemployee: Array,
   colors: Array,
   sizes: Array,
-  selectedType: String 
+  selectedType: String
 });
 
 const discount = ref(0);
@@ -573,8 +586,8 @@ const selectedPaymentMethod = ref("cash");
 
 const refreshData = () => {
   router.visit(route("pos.index"), {
-    preserveScroll: false, 
-    preserveState: false, 
+    preserveScroll: false,
+    preserveState: false,
   });
 };
 
@@ -583,8 +596,8 @@ const removeProduct = (id) => {
 };
 
 const removeCoupon = () => {
-  appliedCoupon.value = null; 
-  couponForm.code = ""; 
+  appliedCoupon.value = null;
+  couponForm.code = "";
 };
 
 const incrementQuantity = (id) => {
@@ -631,8 +644,8 @@ const submitOrder = async () => {
       custom_discount: custom_discount.value,
       appliedCoupon: appliedCoupon.value,
       selectedType: selectedType.value,
-      status: selectedStatus.value, 
-      kitchen_note: serviceNote.value, 
+      status: selectedStatus.value,
+      kitchen_note: serviceNote.value,
     });
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
@@ -690,7 +703,7 @@ const subtotal = computed(() => {
       (total, item) => total + parseFloat(item.selling_price) * item.quantity,
       0
     )
-    .toFixed(2); 
+    .toFixed(2);
 });
 
 const totalDiscount = computed(() => {
@@ -701,8 +714,8 @@ const totalDiscount = computed(() => {
         item.quantity;
       return total + discountAmount;
     }
-    return total; 
-  }, 0); 
+    return total;
+  }, 0);
 
   const couponDiscount = appliedCoupon.value
     ? Number(appliedCoupon.value.discount)
@@ -724,7 +737,7 @@ const total = computed(() => {
 
 const balance = computed(() => {
   if (cash.value == null || cash.value === 0) {
-    return 0; 
+    return 0;
   }
   return (parseFloat(cash.value) - parseFloat(total.value)).toFixed(2);
 });
@@ -773,7 +786,7 @@ const submitCoupon = async () => {
 const submitBarcode = async () => {
   try {
     const response = await axios.post(route("pos.getProduct"), {
-      barcode: form.barcode, 
+      barcode: form.barcode,
     });
 
     // Extract the response data

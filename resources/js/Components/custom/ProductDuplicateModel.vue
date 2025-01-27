@@ -316,6 +316,80 @@
                   </div> -->
                 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="flex items-center gap-8 mt-6">
+                  <!-- Cost Price input -->
+                  <div class="w-full">
+                    <label
+                      for="warranty_start"
+                      class="block text-sm font-medium text-gray-300"
+                      >Warranty Start:</label
+                    >
+                    <input
+                      type="date"
+
+                      id="warranty_start"
+                      v-model="form.warranty_start"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      placeholder="Enter warranty start date"
+
+                    />
+                    <span
+                      v-if="form.errors.warranty_start"
+                      class="mt-2 text-red-500"
+                    >
+                      {{ form.errors.warranty_start }}
+                    </span>
+                  </div>
+
+                  <!-- Selling Price input -->
+                  <div class="w-full">
+                    <label
+                      for="warranty_end"
+                      class="block text-sm font-medium text-gray-300"
+                      >Warranty End:</label
+                    >
+                    <input
+                       type="date"
+                      id="warranty_end"
+                      v-model="form.warranty_end"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                       placeholder="Enter warranty end date"
+
+
+                    />
+                    <span
+                      v-if="form.errors.warranty_end"
+                      class="mt-2 text-red-500"
+                    >
+                      {{ form.errors.warranty_end }}
+                    </span>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label class="block text-sm font-medium text-gray-300">
@@ -475,6 +549,8 @@ const form = useForm({
   barcode: "",
   image: null, // For file upload
   description: "",
+  warranty_start: null,
+  warranty_end: null,
 });
 
 // Handle file upload for images
@@ -557,6 +633,8 @@ watch(
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
       form.image = newValue.image;
+      form.warranty_start = newValue.warranty_start || null;
+      form.warranty_end = newValue.warranty_end || null;
     }
   },
   { immediate: true }
