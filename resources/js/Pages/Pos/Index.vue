@@ -141,11 +141,18 @@
                             <div class="flex w-1/6">
                                 <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'
                                     " alt="Supplier Image" class="object-cover w-16 h-16 border border-gray-500" />
+
+
                             </div>
+
                             <div class="flex flex-col justify-between w-5/6">
                                 <p class="text-xl text-black">
                                     {{ item.name }}
                                 </p>
+                                <p class="text-sm font-bold text-black ">
+                                                {{ item.selling_price }}
+                                                LKR
+                                            </p>
                                 <div class="flex items-center justify-between w-full">
                                     <div class="flex space-x-4">
                                         <p @click="incrementQuantity(item.id)"
@@ -186,7 +193,7 @@
                                                 Remove {{ item.discount }}% Off
                                             </p>
                                             <p class="text-2xl font-bold text-black text-right">
-                                                {{ item.selling_price }}
+                                            {{ item.selling_price * item.quantity }}
                                                 LKR
                                             </p>
                                         </div>

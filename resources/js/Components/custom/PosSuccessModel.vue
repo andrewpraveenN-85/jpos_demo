@@ -131,14 +131,20 @@ const handlePrintReceipt = () => {
 
             return `
         <tr>
-          <td>${product.name}</td>
+          <td>${product.name}<br>
+            ${product.selling_price}
+            </td>
           <td style="text-align: center;">${product.quantity}</td>
           <td>
             ${product.discount > 0 && product.apply_discount
                     ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
                     : ""
                 }
-            <div>${product.selling_price}</div>
+            <div>
+
+                   ${ product.selling_price * product.quantity }
+                                                LKR
+                </div>
           </td>
         </tr>
       `;
@@ -209,7 +215,7 @@ const handlePrintReceipt = () => {
           }
           table th, table td {
               padding: 6px 8px;
-              
+
           }
           table th {
               text-align: left;
@@ -246,7 +252,7 @@ const handlePrintReceipt = () => {
               font-style: italic;
           }
 
-          
+
       </style>
   </head>
   <body>
