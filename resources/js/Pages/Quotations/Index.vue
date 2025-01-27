@@ -2,122 +2,135 @@
     <Head title="QUOTATION" />
     <Banner />
     <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36">
-      <!-- Include the Header -->
       <Header />
 
       <div class="w-5/6 py-12 space-y-16">
         <div class="flex items-center justify-between space-x-4">
-          <div class="flex w-full space-x-4">
-            <Link href="/">
-              <img src="/images/back-arrow.png" class="w-14 h-14" />
-            </Link>
-            <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
-              Quotation
-            </p>
-          </div>
-          <div class="flex items-center justify-between w-full space-x-4">
-            <p class="text-3xl font-bold tracking-wide text-black">
-              Order ID : #{{ orderId }}
-            </p>
-            <p class="text-3xl text-black cursor-pointer">
-              <i @click="refreshData" class="ri-restart-line"></i>
-            </p>
-          </div>
+                <div class="flex w-full space-x-4">
+                    <Link href="/">
+                    <img src="/images/back-arrow.png" class="w-14 h-14" />
+                    </Link>
+                    <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
+                        PoS
+                    </p>
+                </div>
+                <div class="flex items-center justify-between w-full space-x-4">
+                    <p class="text-3xl font-bold tracking-wide text-black">
+                        Quotation ID : #{{ orderId }}
+                    </p>
+                    <p class="text-3xl text-black cursor-pointer">
+                        <i @click="refreshData" class="ri-restart-line"></i>
+                    </p>
+                </div>
         </div>
 
         <div class="flex w-full gap-4">
-          <!-- 1st Column -->
-          <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
+          <div class="flex w-3/6 p-8 border-4 border-black rounded-3xl">
             <div class="flex flex-col items-start justify-center w-full px-12">
               <div class="flex items-center justify-between w-full">
-                <h2 class="text-5xl font-bold text-black">Quotation Details</h2>
+                <h2 class="text-5xl font-bold text-black">Quotation </h2>
+                 <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
+                    <p class="text-xl text-blue-600 font-bold">Product Manual</p>
+                    <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
+                </span>
               </div>
+              
 
-              <div class="space-y-6 mt-6 w-full">
-                <div>
-                  <label for="quotation_number" class="block mb-2 text-lg font-medium">Quotation Number:</label>
-                  <input
-                    v-model="form.quotation_number"
-                    id="quotation_number"
-                    type="text"
-                    required
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+              <div class="space-y-6 mt-6 w-full">             
+                 <div class="flex items-center w-full py-4 border-b border-black" v-for="item in products"
+                    :key="item.id">
+                    <div class="flex w-1/6">
+                        <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'
+                            " alt="Supplier Image" class="object-cover w-16 h-16 border border-gray-500" />
+                    </div>
+                    <div class="flex flex-col justify-between w-5/6">
+                        <p class="text-xl text-black">
+                            {{ item.name }}
+                        </p>
+                        <div class="flex items-center justify-between w-full">
+                            <div class="flex space-x-4">
+                                <p @click="incrementQuantity(item.id)"
+                                    class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
+                                    <i class="ri-add-line"></i>
+                                </p>
+                                
+                                <input type="number" v-model="item.quantity" min="0"
+                                    class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center" />
+                                <p @click="decrementQuantity(item.id)"
+                                    class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
+                                    <i class="ri-subtract-line"></i>
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <div>
+                                    <p @click="applyDiscount(item.id)" v-if="
+                                        item.discount &&
+                                        item.discount > 0 &&
+                                        item.apply_discount == false &&
+                                        !appliedCoupon
+                                    "
+                                        class="cursor-pointer py-1 text-center px-4 bg-green-600 rounded-xl font-bold text-white tracking-wider">
+                                        Apply {{ item.discount }}% off
+                                    </p>
+
+                                    <p v-if="
+                                        item.discount &&
+                                        item.discount > 0 &&
+                                        item.apply_discount == true &&
+                                        !appliedCoupon
+                                    " @click="removeDiscount(item.id)"
+                                        class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider">
+                                        Remove {{ item.discount }}% Off
+                                    </p>
+                                    <p class="text-2xl font-bold text-black text-right">
+                                        {{ item.selling_price }}
+                                        LKR
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end w-1/6">
+                        <p @click="removeProduct(item.id)"
+                            class="text-3xl text-black border-2 border-black rounded-full cursor-pointer">
+                            <i class="ri-close-line"></i>
+                        </p>
+                    </div>
                 </div>
 
                 <div>
-                  <label for="productName" class="block mb-2 text-lg font-medium">Product Name:</label>
-                  <div class="relative">
+                    <label for="description" class="block mb-2 text-lg font-medium">Description:</label>
                     <input
-                      v-model="form.productName"
-                      id="productName"
-                      type="text"
-                      @focus="fetchProducts"
-                      @input="filterProducts"
-                      class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    v-model="form.description"
+                    id="description"
+                    name="description"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <ul
-                      v-if="showProductDropdown"
-                      class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-48 overflow-y-auto"
-                    >
-                      <li
-                        v-for="product in filteredProducts"
-                        :key="product.id"
-                        @click="selectProduct(product)"
-                        class="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      >
-                        {{ product.name }}
-                      </li>
-                    </ul>
-                  </div>
                 </div>
-
                 <div>
-                  <label for="product_unit_price" class="block mb-2 text-lg font-medium">Product Unit Price:</label>
-                  <input
-                    v-model="form.product_unit_price"
-                    id="product_unit_price"
-                    type="number"
-                    required
+                    <label for="description_price" class="block mb-2 text-lg font-medium">Price:</label>
+                    <input
+                    v-model="form.description_price"
+                    id="description_price"
+                    name="description_price"
                     class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                    />
                 </div>
 
                 <div>
-                  <label for="quantity" class="block mb-2 text-lg font-medium">Quantity:</label>
-                  <input
-                    v-model="form.quantity"
-                    id="quantity"
-                    type="number"
-                    required
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label for="discount" class="block mb-2 text-lg font-medium">Discount:</label>
-                  <input
-                    v-model="form.discount"
-                    id="discount"
-                    type="number"
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label for="issue_date" class="block mb-2 text-lg font-medium">Issue Date:</label>
-                  <input
-                    v-model="form.issue_date"
-                    id="issue_date"
+                    <label for="valid_date" class="block mb-2 text-lg font-medium">Valid Date:</label>
+                    <input
+                    v-model="form.valid_date"
+                    id="valid_date"
+                    name="valid_date"
                     type="date"
-                    required
                     class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                    />
                 </div>
 
                 <button
                   class="pr-4"
-                  @click="addQuotation"
+                   @click="addQuotation"
                   style="background-color: lightgreen; border: 2px solid #4CAF50; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 15px; transition: opacity 0.3s;"
                 >
                   Add Quotation
@@ -127,24 +140,24 @@
           </div>
 
           <!-- Quotation Report -->
-          <div class="max-w-4xl mx-auto bg-white border border-gray-300 rounded-lg shadow-md p-6">
+          <div id="quotation-content" class="max-w-4xl mx-auto bg-white border border-gray-300 rounded-lg shadow-md p-6">
+            <div>               
             <div class="text-center mb-6">
-              <h1 class="text-4xl font-extrabold text-gray-800">JAAN Network</h1>
+              <h1 class="text-4xl font-extrabold text-gray-800"> {{ companyInfo ? companyInfo.name : 'Company Name' }}</h1>
               <h2 class="text-2xl font-semibold text-gray-600 mt-2">Sales Quotation</h2>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 bg-gray-50 p-4 rounded-lg">
               <div>
-                <p class="text-sm font-medium text-gray-500">Quotation Number:</p>
-                <p class="text-base font-semibold text-gray-800">{{ quotationNumber }}</p>
+                <p class="text-sm font-medium text-gray-500">Quotation ID:</p>
+                <p class="text-base font-semibold text-gray-800">{{ orderId }}</p>
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-500">Quote Date:</p>
-                <p class="text-base font-semibold text-gray-800">{{ quoteDate }}</p>
+                <p class="text-base font-semibold text-gray-800">{{new Date().toISOString().split("T")[0]}}</p>
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-500">Valid Until:</p>
-                <p class="text-base font-semibold text-gray-800">{{ validUntil }}</p>
+                <p class="text-base font-semibold text-gray-800">{{ validUntilDate }}</p>
               </div>
             </div>
 
@@ -161,28 +174,33 @@
                       <th class="px-4 py-2 text-right text-sm font-medium">Sub Total</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr class="border-t" v-for="(product, index) in products" :key="index">
-                      <td class="px-4 py-2 text-gray-800 text-sm">{{ product.productName }}</td>
-                      <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ product.quantity }}</td>
-                      <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ product.product_unit_price }}</td>
-                      <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ product.discount }}</td>
-                      <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ calculateSubTotal(product) }}</td>
-                    </tr>
-                  </tbody>
+                        <tbody>
+                            <tr v-for="(item) in products" :key="item.id">
+                                <td class="px-4 py-2 text-gray-800 text-sm">{{ item.name }}</td>
+                                <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.quantity }}</td>
+                                <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.selling_price }}</td>
+                                <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.discount || 0 }}</td>
+                                <td class="px-4 py-2 text-gray-800 text-right text-sm">
+                                {{ (item.selling_price * item.quantity).toFixed(2) }}
+                                </td>
+                            </tr>
+                            </tbody>
                 </table>
               </div>
             </div>
-
             <div class="bg-gray-50 p-4 rounded-lg mb-6">
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Summary</h3>
               <div class="grid grid-cols-2 gap-4">
+                <p class="text-sm text-gray-500">{{ description || " "}}</p>
+                <p class="text-right text-sm font-semibold text-gray-800">{{ description_price }}</p>
                 <p class="text-sm text-gray-500">Product Total:</p>
-                <p class="text-right text-sm font-semibold text-gray-800">{{ productTotal }}</p>
+                <p class="text-right text-sm font-semibold text-gray-800">{{total}}</p>
                 <p class="text-sm text-gray-500">Discount:</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{ totalDiscount }}</p>
                 <p class="text-sm text-gray-500">Grand Quotation Total:</p>
-                <p class="text-right text-sm font-semibold text-gray-800">{{ grandTotal }}</p>
+                <p class="text-right text-sm font-semibold text-gray-800">{{ totalquotation }}</p>                           
+            
+                             
               </div>
             </div>
 
@@ -196,145 +214,406 @@
               </button>
             </div>
           </div>
+
+          </div>
         </div>
       </div>
     </div>
-  </template>
+    <SelectProductModel
+    v-model:open="isSelectModalOpen"
+    :allcategories="allcategories"
+    :colors="colors"
+    :sizes="sizes"
+    @selected-products="handleSelectedProducts"
+    />
+    <Footer />
+</template>
 
-  <script>
-  import jsPDF from "jspdf";
-  import "jspdf-autotable";
+<script setup>
+import Header from "@/Components/custom/Header.vue";
+import Footer from "@/Components/custom/Footer.vue";
+import Banner from "@/Components/Banner.vue";
+import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
+import AlertModel from "@/Components/custom/AlertModel.vue";
+import { useForm, router } from "@inertiajs/vue3";
+import { ref, onMounted, computed, watch } from "vue";
+import { Head } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
+import axios from "axios";
+import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
+import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
+import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
-  export default {
-    data() {
-      return {
-        form: {
-          quotation_number: "",
-          productName: "",
-          product_unit_price: 0,
-          quantity: 0,
-          discount: 0,
-          issue_date: "",
-          additional_notes: "",
-        },
-        quotationNumber: "", // Separate state for report
-        quoteDate: "", // Separate state for report
-        validUntil: "2025-01-22",
-        products: [],
-        filteredProducts: [], // Filtered products for dropdown
-        showProductDropdown: false, // Controls dropdown visibility
-      };
-    },
-    computed: {
-      productTotal() {
-        return this.products.reduce(
-          (sum, product) => sum + product.product_unit_price * product.quantity,
-          0
-        );
-      },
-      totalDiscount() {
-        return this.products.reduce((sum, product) => sum + product.discount, 0);
-      },
-      grandTotal() {
-        return this.productTotal - this.totalDiscount;
-      },
-    },
-    methods: {
-      calculateSubTotal(product) {
-        return product.product_unit_price * product.quantity - product.discount;
-      },
-      addQuotation() {
-        const newProduct = { ...this.form };
-        if (
-          newProduct.quotation_number &&
-          newProduct.productName &&
-          newProduct.product_unit_price > 0 &&
-          newProduct.quantity > 0 &&
-          newProduct.issue_date
-        ) {
-          this.products.push(newProduct);
-          this.quotationNumber = newProduct.quotation_number; // Persist for report
-          this.quoteDate = newProduct.issue_date; // Persist for report
-          this.resetForm();
-        } else {
-          alert("Please fill all required fields correctly.");
+const product = ref(null);
+const error = ref(null);
+const products = ref([]);
+const isSuccessModalOpen = ref(false);
+const isAlertModalOpen = ref(false);
+const message = ref("");
+const appliedCoupon = ref(null);
+const cash = ref(0);
+const custom_discount = ref(0);
+const isSelectModalOpen = ref(false);
+const custom_discount_type = ref('percent');
+const validUntilDate = ref("");
+const description = ref("");
+const description_price = ref("");
+
+
+
+
+const handleModalOpenUpdate = (newValue) => {
+    isSuccessModalOpen.value = newValue;
+    if (!newValue) {
+        refreshData();
+    }
+};
+
+const props = defineProps({
+    loggedInUser: Object, 
+    allcategories: Array,
+    allemployee: Array,
+    colors: Array,
+    sizes: Array,
+    companyInfo : Array,
+});
+
+const discount = ref(0);
+
+const customer = ref({
+    name: "",
+    countryCode: "",
+    contactNumber: "",
+    email: "",
+});
+
+const employee_id = ref("");
+
+const selectedPaymentMethod = ref("cash");
+
+const refreshData = () => {
+    router.visit(route("quotation.index"), {
+        preserveScroll: false, 
+        preserveState: false, 
+    });
+};
+
+const removeProduct = (id) => {
+    products.value = products.value.filter((item) => item.id !== id);
+};
+
+
+
+const incrementQuantity = (id) => {
+    const product = products.value.find((item) => item.id === id);
+    if (product) {
+        product.quantity += 1;
+    }
+};
+
+const decrementQuantity = (id) => {
+    const product = products.value.find((item) => item.id === id);
+    if (product && product.quantity > 1) {
+        product.quantity -= 1;
+    }
+};
+
+const orderId = computed(() => {
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    return Array.from({ length: 6 }, () =>
+        characters.charAt(Math.floor(Math.random() * characters.length))
+    ).join("");
+});
+
+const submitOrder = async () => {
+    // if (window.confirm("Are you sure you want to confirm the order?")) {
+    console.log(products.value);
+    if (balance.value < 0) {
+        isAlertModalOpen.value = true;
+        message.value = "Cash is not enough";
+        return;
+    }
+    try {
+        const response = await axios.post("/pos/submit", {
+            customer: customer.value,
+            products: products.value,
+            employee_id: employee_id.value,
+            paymentMethod: selectedPaymentMethod.value,
+            userId: props.loggedInUser.id,
+            orderId: orderId.value,
+            cash: cash.value,
+            custom_discount: custom_discount.value,
+        });
+        isSuccessModalOpen.value = true;
+        console.log(response.data); // Handle success
+    } catch (error) {
+        if (error.response.status === 423) {
+            isAlertModalOpen.value = true;
+            message.value = error.response.data.message;
         }
-      },
-      resetForm() {
-        this.form = {
-          quotation_number: "",
-          productName: "",
-          product_unit_price: 0,
-          quantity: 0,
-          discount: 0,
-          issue_date: "",
-          additional_notes: "",
-        };
-      },
-
-
-
-      fetchProducts() {
-        // Mock API call - replace with actual API call
-        this.filteredProducts = [
-          { id: 1, name: "Product A" },
-          { id: 2, name: "Product B" },
-          { id: 3, name: "Product C" },
-        ];
-        this.showProductDropdown = true;
-      },
-
-
-
-      filterProducts() {
-        const searchQuery = this.form.productName.toLowerCase();
-        this.filteredProducts = this.filteredProducts.filter((product) =>
-          product.name.toLowerCase().includes(searchQuery)
+        console.error(
+            "Error submitting customer details:",
+            error.response?.data || error.message
         );
-      },
-      selectProduct(product) {
-        this.form.productName = product.name;
-        this.showProductDropdown = false;
-      },
-      downloadPdf() {
-        const doc = new jsPDF();
-        doc.setFontSize(16);
-        doc.text("JAAN Network - Sales Quotation", 14, 15);
+        // alert("Failed to submit customer details. Please try again.");
+    }
+};
+// };
 
-        doc.text(`Quotation Number: ${this.quotationNumber}`, 14, 25);
-        doc.text(`Quote Date: ${this.quoteDate}`, 14, 35);
-        doc.text(`Valid Until: ${this.validUntil}`, 14, 45);
+const subtotal = computed(() => {
+    return products.value
+        .reduce(
+            (total, item) => total + parseFloat(item.selling_price) * item.quantity,
+            0
+        )
+        .toFixed(2); 
+});
 
-        const tableBody = this.products.map((product) => [
-          product.productName,
-          product.quantity,
-          product.product_unit_price,
-          product.discount,
-          this.calculateSubTotal(product).toFixed(2),
-        ]);
+const totalDiscount = computed(() => {
+    const productDiscount = products.value.reduce((total, item) => {
+        // Check if item has a discount
+        if (item.discount && item.discount > 0 && item.apply_discount == true) {
+            const discountAmount =
+                (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
+                item.quantity;
+            return total + discountAmount;
+        }
+        return total; // If no discount, return total as-is
+    }, 0); // Ensures two decimal places
 
-        doc.autoTable({
-          startY: 55,
-          head: [["Product Name", "Quantity", "Unit Price", "Discount", "Sub Total"]],
-          body: tableBody,
+    const couponDiscount = appliedCoupon.value
+        ? Number(appliedCoupon.value.discount)
+        : 0;
+
+    return (productDiscount + couponDiscount).toFixed(2);
+});
+
+
+
+const total = computed(() => {
+    const subtotalValue = parseFloat(subtotal.value) || 0;
+    const discountValue = parseFloat(totalDiscount.value) || 0;
+    const customDiscount = parseFloat(custom_discount.value) || 0;
+
+    let customValue = 0;
+
+    if (custom_discount_type.value === 'percent') {
+        customValue = (subtotalValue * customDiscount) / 100;
+    } else if (custom_discount_type.value === 'fixed') {
+        customValue = customDiscount;
+    }
+
+    return (subtotalValue - discountValue - customValue).toFixed(2);
+});
+
+const totalquotation = computed(() => {
+    const subtotalValue = parseFloat(subtotal.value) || 0;
+    const discountValue = parseFloat(totalDiscount.value) || 0;
+    const customAdditional = parseFloat(description_price.value) || 0;
+
+    return (subtotalValue + customAdditional - discountValue ).toFixed(2);
+});
+
+
+
+const form = useForm({
+    employee_id: "",
+    barcode: "", // Form field for barcode
+});
+
+const couponForm = useForm({
+    code: "",
+});
+
+// Temporary barcode storage during scanning
+let barcode = "";
+let timeout; // Timeout to detect the end of the scan
+
+const submitCoupon = async () => {
+    try {
+        const response = await axios.post(route("pos.getCoupon"), {
+            code: couponForm.code, // Send the coupon field
         });
 
-        let finalY = doc.lastAutoTable.finalY;
-        doc.text(`Product Total: ${this.productTotal.toFixed(2)}`, 14, finalY + 10);
-        doc.text(`Total Discount: ${this.totalDiscount.toFixed(2)}`, 14, finalY + 20);
-        doc.text(`Grand Total: ${this.grandTotal.toFixed(2)}`, 14, finalY + 30);
+        const { coupon: fetchedCoupon, error: fetchedError } = response.data;
 
-        doc.save(`Quotation+${this.quotationNumber}.pdf`);
-      },
-    },
-  };
-  </script>
+        if (fetchedCoupon) {
+            appliedCoupon.value = fetchedCoupon;
+            products.value.forEach((product) => {
+                product.apply_discount = false;
+            });
+        } else {
+            isAlertModalOpen.value = true;
+            message.value = fetchedError;
+            error.value = fetchedError;
+        }
+    } catch (err) {
+        // console.error(error);
+        if (err.response.status === 422) {
+            isAlertModalOpen.value = true;
+            message.value = err.response.data.message;
+        }
+    }
+};
 
-  <style>
-  button:hover {
-    opacity: 0.8;
+// Automatically submit the barcode to the backend
+const submitBarcode = async () => {
+    try {
+        // Send POST request to the backend
+        const response = await axios.post(route("pos.getProduct"), {
+            barcode: form.barcode, // Send the barcode field
+        });
+
+        // Extract the response data
+        const { product: fetchedProduct, error: fetchedError } = response.data;
+
+        if (fetchedProduct) {
+            if (fetchedProduct.stock_quantity < 1) {
+                isAlertModalOpen.value = true;
+                message.value = "Product is out of stock";
+                return;
+            }
+            // Check if the product already exists in the products array
+            const existingProduct = products.value.find(
+                (item) => item.id === fetchedProduct.id
+            );
+
+            if (existingProduct) {
+                // If it exists, increment the quantity
+                existingProduct.quantity += 1;
+            } else {
+                // If it doesn't exist, add it to the products array with quantity 1
+                products.value.push({
+                    ...fetchedProduct,
+                    quantity: 1,
+                    apply_discount: false, // Add the new attribute
+                });
+            }
+
+            product.value = fetchedProduct; // Update product state for individual display
+            error.value = null; // Clear any previous errors
+            console.log(
+                "Product fetched successfully and added to cart:",
+                fetchedProduct
+            );
+        } else {
+            isAlertModalOpen.value = true;
+            message.value = fetchedError;
+            error.value = fetchedError; // Set the error message
+            console.error("Error:", fetchedError);
+        }
+    } catch (err) {
+        if (err.response.status === 422) {
+            isAlertModalOpen.value = true;
+            message.value = err.response.data.message;
+        }
+
+        console.error("An error occurred:", err.response?.data || err.message);
+        error.value = "An unexpected error occurred. Please try again.";
+    }
+};
+
+// Handle input from the barcode scanner
+const handleScannerInput = (event) => {
+    clearTimeout(timeout); // Clear the timeout for each keypress
+    if (event.key === "Enter") {
+        // Barcode scanning completed
+        form.barcode = barcode; // Set the scanned barcode into the form
+        submitBarcode(); // Automatically submit the barcode
+        barcode = ""; // Reset the barcode for the next scan
+    } else {
+        // Append the pressed key to the barcode
+        barcode += event.key;
+    }
+
+    // Timeout to reset the barcode if scanning is interrupted
+    timeout = setTimeout(() => {
+        barcode = "";
+    }, 100); 
+};
+
+
+onMounted(() => {
+    document.addEventListener("keypress", handleScannerInput);
+    console.log(props.products);
+});
+
+const applyDiscount = (id) => {
+    products.value.forEach((product) => {
+        if (product.id === id) {
+            product.apply_discount = true;
+        }
+    });
+};
+
+const removeDiscount = (id) => {
+    products.value.forEach((product) => {
+        if (product.id === id) {
+            product.apply_discount = false;
+        }
+    });
+};
+
+const handleSelectedProducts = (selectedProducts) => {
+  selectedProducts.forEach((fetchedProduct) => {
+    const existingProduct = products.value.find(
+      (item) => item.id === fetchedProduct.id
+    );
+
+    if (existingProduct) {
+      // If the product exists, increment its quantity
+      existingProduct.quantity += 1;
+    } else {
+      // If the product doesn't exist, add it with a default quantity
+      products.value.push({
+        ...fetchedProduct,
+        quantity: 1,
+        apply_discount: false, // Default additional attribute
+      });
+    }
+  });
+};
+
+const addQuotation = () => {
+  validUntilDate.value = form.valid_date;
+  description.value = form.description;
+  description_price.value = form.description_price;
+
+  const quotationTotal = computed(() => {
+  const totalValue = parseFloat(total.value) || 0;
+  const additionalCharge = parseFloat(description_price.value) || 0;
+
+  return (totalValue + additionalCharge ).toFixed(2);
+});
+};
+
+const downloadPdf = async () => {
+  const element = document.querySelector("#quotation-content"); // Select the element to convert to PDF
+
+  if (!element) {
+    alert("Quotation content not found!");
+    return;
   }
-  </style>
+
+  // Use html2canvas to capture the element as an image
+  const canvas = await html2canvas(element, { scale: 2 });
+  const imageData = canvas.toDataURL("image/png");
+
+  // Create a jsPDF instance
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  // Calculate dimensions for the PDF
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+  // Add the image to the PDF
+  pdf.addImage(imageData, "PNG", 0, 0, pdfWidth, pdfHeight);
 
 
-  
+  pdf.save(`${orderId.value}-quotation.pdf`);
+
+};
+</script>

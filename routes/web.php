@@ -98,7 +98,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::resource('/quotation', QuotationController::class);
-    // Route::get('/quotation', [QuotationController::class, 'index']);
+    Route::post('/api/save-quotation', [QuotationController::class, 'saveQuotationPdf']);
+
+
 
 
 

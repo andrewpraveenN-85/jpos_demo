@@ -337,7 +337,7 @@
           <div class="card-content">
             <div class="icon-container">
               <img
-                src="/images/dashboard/return-bill.png"
+                src="/images/dashboard/quote.png"
                 class="icon"
                 alt="dresshub.lk"
               />
@@ -345,8 +345,7 @@
             <div class="text-container">
               <p class="title">Create Quotations</p>
               <p class="description">
-                Track and organize previous transactions with a detailed overview including date, items purchased, total cost, and payment status, ensuring effortless order management and quick reference.
-              </p>
+                Track and organize transactions with details like date, items, total cost, and payment status for easy management and quick reference.</p>
             </div>
           </div>
         </div>

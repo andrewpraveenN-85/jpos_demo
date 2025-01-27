@@ -13,18 +13,8 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-
-            $table->string('quotation_number')->unique();
-            $table->string('customer_id')->unique();
-            $table->string('product_name');
-            $table->decimal('product_unit_price', 15, 2);
-            $table->integer('product_quantity');
-            $table->date('issue_date');
-            $table->decimal('product_total', 15, 2);
-            $table->decimal('discount', 15, 2);
-            $table->text('additional_notes')->nullable();
-            $table->decimal('grand_total', 15, 2);
-
+            $table->string('order_id')->unique();
+            $table->string('file_path');
             $table->timestamps();
         });
     }
