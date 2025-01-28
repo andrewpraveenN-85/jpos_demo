@@ -50,14 +50,14 @@ class PosController extends Controller
 
     public function getPendingOrders()
     {
-        $orders = Sale::with('saleItem.product','customer')->where('status', 0)->get(['order_id']); // Fetch only orders with status = 0
+        $orders = Sale::with('saleItem.product','customer')->where('status', 0)->get(['order_id']); //
         return response()->json($orders);
     }
 
     public function getOrderDetails($order_id)
     {
         try {
-            $order = Sale::with('saleItems.product')->where('order_id', $order_id)->firstOrFail();
+            $order = Sale::with('saleItems.product','customer')->where('order_id', $order_id)->firstOrFail();
 
             return response()->json($order, 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

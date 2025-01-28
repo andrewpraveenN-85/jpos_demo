@@ -57,30 +57,27 @@
                             </div>
                         </div>
 
+
                         <div class="p-16 space-y-8 bg-black shadow-lg rounded-3xl">
                             <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
 
 
-
                             <div class="mb-3">
-                                <input v-model="customer.name" type="text" placeholder="Enter Customer Name"
+                                <input v-model="customer.name" type="text" :placeholder="selectedOrder?.customer?.name || 'Enter Customer Name'"
                                     class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"  required/>
                             </div>
                             <div class="flex gap-2 mb-3 text-black">
-                                <!-- <select
-                  v-model="customer.countryCode"
-                  class="w-[60px] px-2 py-2 bg-white placeholder-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="+94">+94</option>
-                  <option value="+1">+1</option>
-                  <option value="+44">+44</option>
-                </select> -->
-                                <input v-model="customer.contactNumber" type="text"
-                                    placeholder="Enter Customer Contact Number"
+
+                                <input v-model="customer.phone" type="text"
+                                  :placeholder="selectedOrder?.customer?.phone || 'Enter Customer Contact Number'"
                                     class="flex-grow px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             </div>
                             <div class="text-black">
-                                <input v-model="customer.email" type="email" placeholder="Enter Customer Email"
+                                <input v-model="customer.email" type="email"
+ :placeholder="selectedOrder?.customer?.email || 'Enter Customer Email'"
+
+
+
                                     class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             </div>
 
@@ -220,6 +217,7 @@
                                     <option value="" disabled selected>Select an Employee</option>
                                     <option v-for="employee in allemployee" :key="employee.id" :value="employee.id">
                                         {{ employee.name }}
+
                                     </option>
                                 </select>
                             </div>
@@ -389,8 +387,12 @@ const headingTitle = computed(() => {
 const fetchPendingOrders = async () => {
     try {
         const response = await axios.get("/pending-orders");
-        console.log(response.data);
-        pendingOrders.value = response.data;
+
+        console.log('dhh',response.data);
+        pendingOrders.value = response.data.map((order) => ({
+            ...order,
+            customer_name: order.customer_name || "Guest", // Include customer name
+        }));
 
     } catch (error) {
         console.error("Error fetching pending orders:", error);
@@ -456,6 +458,7 @@ const calculateWarrantyPeriod = (start, end) => {
 const fetchOrderDetails = async (orderId) => {
     try {
         const response = await axios.get(`/order-details/${orderId}`);
+
         selectedOrder.value = response.data;
 
         products.value = response.data.sale_items.map((item) => ({
@@ -468,6 +471,8 @@ const fetchOrderDetails = async (orderId) => {
             quantity: item.quantity,
             discount: item.product.discount || 0,
         }));
+
+
 
     } catch (error) {
         console.error("Error fetching order details:", error);
@@ -482,6 +487,8 @@ onMounted(() => {
 });
 
 watch(selectedOrder, (newOrder) => {
+
+
 
     if (newOrder) {
         products.value = newOrder.sale_items.map((item) => ({
@@ -503,6 +510,7 @@ watch(selectedOrder, (newOrder) => {
         selectedEmployee.value = newOrder?.employee_id?.toString() || "";
         selectedCustomer.value = newOrder?.customer_id?.toString() || "";
 
+
     }
 });
 
@@ -515,6 +523,7 @@ const resetToLiveBill = () => {
     selectedStatus.value = "";
     selectedEmployee.value = "";
     selectedCustomer.value = "";
+
 
 };
 
@@ -540,7 +549,7 @@ const discount = ref(0);
 const customer = ref({
     name: "",
     countryCode: "",
-    contactNumber: "",
+    phone: "",
     email: "",
 });
 
@@ -589,34 +598,6 @@ const order_id = computed(() => {
 });
 
 const submitOrder = async () => {
-
-    if (
-        !customer.value.name.trim() ||
-        !customer.value.contactNumber.trim() ||
-        !customer.value.email.trim()
-    ) {
-        isAlertModalOpen.value = true;
-        message.value = "Please fill in all required customer details.";
-        return;
-    }
-
-
-
-    if (!employee_id.value) {
-        isAlertModalOpen.value = true;
-        message.value = "Please select an employee.";
-        return;
-    }
-    if (balance.value < 0) {
-        isAlertModalOpen.value = true;
-        message.value = "Cash is not enough.";
-        return;
-    }
-
-
-
-
-
 
     if (balance.value < 0) {
         isAlertModalOpen.value = true;
@@ -674,6 +655,7 @@ const updateOrder = async () => {
             products: products.value,
             employee_id: selectedEmployee.value,
             customer_id: selectedCustomer.value,
+
             paymentMethod: selectedPaymentMethod.value,
             cash: cash.value,
             custom_discount: custom_discount.value,
@@ -725,7 +707,7 @@ const total = computed(() => {
     subtotalValue = parseFloat(subtotal.value);
     discountValue = parseFloat(totalDiscount.value);
     customDiscountValue = parseFloat(custom_discount.value);
-    console.log(discountValue);
+
     return (subtotalValue + customDiscountValue - discountValue).toFixed(2);
 
 });
