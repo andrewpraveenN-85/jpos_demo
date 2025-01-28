@@ -191,12 +191,13 @@
             <div class="bg-gray-50 p-4 rounded-lg mb-6">
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Summary</h3>
               <div class="grid grid-cols-2 gap-4">
-                <p class="text-sm text-gray-500">{{ description || " "}}</p>
-                <p class="text-right text-sm font-semibold text-gray-800">{{ description_price }}</p>
+                
                 <p class="text-sm text-gray-500">Product Total:</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{total}}</p>
                 <p class="text-sm text-gray-500">Discount:</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{ totalDiscount }}</p>
+                <p class="text-sm text-gray-500">{{ description || " "}}</p>
+                <p class="text-right text-sm font-semibold text-gray-800">{{ description_price }}</p>
                 <p class="text-sm text-gray-500">Grand Quotation Total:</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{ totalquotation }}</p>                           
             
@@ -590,30 +591,116 @@ const addQuotation = () => {
 });
 };
 
-const downloadPdf = async () => {
-  const element = document.querySelector("#quotation-content"); // Select the element to convert to PDF
-
-  if (!element) {
-    alert("Quotation content not found!");
-    return;
+const downloadPdf = () => {
+  // Create new PDF document
+  const pdf = new jsPDF();
+  
+  // Set default font sizes
+  const titleSize = 18;
+  const subtitleSize = 14;
+  const normalSize = 10;
+  const smallSize = 8;
+  
+  // Add company logo/header
+  pdf.setFontSize(titleSize);
+  pdf.setFont('helvetica', 'bold');
+  const companyName = props.companyInfo ? props.companyInfo.name : 'Company Name';
+  pdf.text(companyName, 105, 20, { align: 'center' });
+  
+  // Add "Sales Quotation" subtitle
+  pdf.setFontSize(subtitleSize);
+  pdf.text('Sales Quotation', 105, 30, { align: 'center' });
+  
+  // Add quotation details
+  pdf.setFontSize(normalSize);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(`Quotation ID: ${orderId.value}`, 15, 45);
+  pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 52);
+  pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 59);
+  
+  // Add product table headers
+  const tableHeaders = ['Product', 'Qty', 'Unit Price', 'Discount', 'Sub Total'];
+  const startY = 75;
+  
+  // Style for table header
+  pdf.setFillColor(240, 240, 240);
+  pdf.rect(15, startY - 5, 180, 8, 'F');
+  pdf.setFont('helvetica', 'bold');
+  
+  // Add table headers
+  pdf.text(tableHeaders[0], 15, startY);
+  pdf.text(tableHeaders[1], 100, startY, { align: 'right' });
+  pdf.text(tableHeaders[2], 130, startY, { align: 'right' });
+  pdf.text(tableHeaders[3], 160, startY, { align: 'right' });
+  pdf.text(tableHeaders[4], 190, startY, { align: 'right' });
+  
+  // Add products
+  let currentY = startY + 10;
+  pdf.setFont('helvetica', 'normal');
+  
+  products.value.forEach((item) => {
+    // Add new page if content exceeds page height
+    if (currentY > 270) {
+      pdf.addPage();
+      currentY = 20;
+    }
+    
+    const itemName = item.name || 'Unnamed Product';
+    const quantity = item.quantity?.toString() || '0';
+    const price = item.selling_price?.toString() || '0';
+    const discount = (item.discount || '0') + '%';
+    const subtotal = (parseFloat(item.selling_price || 0) * parseFloat(quantity)).toFixed(2);
+    
+    pdf.text(itemName, 15, currentY);
+    pdf.text(quantity, 100, currentY, { align: 'right' });
+    pdf.text(price, 130, currentY, { align: 'right' });
+    pdf.text(discount, 160, currentY, { align: 'right' });
+    pdf.text(subtotal, 190, currentY, { align: 'right' });
+    
+    currentY += 8;
+  });
+  
+  // Add summary section
+  currentY += 10;
+  
+  if (currentY > 250) {
+    pdf.addPage();
+    currentY = 20;
   }
+  
+  pdf.setFont('helvetica', 'normal');
+  pdf.text('Summary:', 15, currentY);
+  currentY += 10;
+  
+  let summaryItems = [
+    ['Product Total:', total.value || '0.00'],
+    ['Discount:', totalDiscount.value || '0.00']
+  ];
+  
+  // Add description price only if description exists
+  if (description.value && description_price.value) {
+    summaryItems.push([description.value, description_price.value]);
+  }
+  
+  // Add grand total
+  summaryItems.push(['Grand Total:', totalquotation.value || '0.00']);
+  
+  // Display summary items with left-aligned labels and right-aligned values
+  summaryItems.forEach(([label, value]) => {
+    // Left-aligned label
+    pdf.text(label, 15, currentY);
+    // Right-aligned value with currency
+    pdf.text(`${value} LKR`, 190, currentY, { align: 'right' });
+    currentY += 7;
+  });
+  // Add footer
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(smallSize);
+  pdf.text('Thank you for your business!', 105, 280, { align: 'center' });
+  
+  // Save PDF
 
-  // Use html2canvas to capture the element as an image
-  const canvas = await html2canvas(element, { scale: 2 });
-  const imageData = canvas.toDataURL("image/png");
-
-  // Create a jsPDF instance
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  // Calculate dimensions for the PDF
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  // Add the image to the PDF
-  pdf.addImage(imageData, "PNG", 0, 0, pdfWidth, pdfHeight);
-
-
-  pdf.save(`${orderId.value}-quotation.pdf`);
-
+  pdf.save(`Quotation_${orderId.value}.pdf`);
 };
+
 </script>
