@@ -50,7 +50,7 @@ class PosController extends Controller
 
     public function getPendingOrders()
     {
-        $orders = Sale::with('saleItem.product')->where('status', 0)->get(['order_id']); // Fetch only orders with status = 0
+        $orders = Sale::with('saleItem.product','customer')->where('status', 0)->get(['order_id']); // Fetch only orders with status = 0
         return response()->json($orders);
     }
 

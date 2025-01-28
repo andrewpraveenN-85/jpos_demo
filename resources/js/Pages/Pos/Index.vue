@@ -64,7 +64,7 @@
 
                             <div class="mb-3">
                                 <input v-model="customer.name" type="text" placeholder="Enter Customer Name"
-                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"  required/>
                             </div>
                             <div class="flex gap-2 mb-3 text-black">
                                 <!-- <select
@@ -213,6 +213,25 @@
 
                                 </span>
                             </div>
+
+                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+                                <select required  v-model="selectedEmployee"
+                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="" disabled selected>Select an Employee</option>
+                                    <option v-for="employee in allemployee" :key="employee.id" :value="employee.id">
+                                        {{ employee.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+
+
+
+
+
+
+
+
                             <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Cash</p>
                                 <span>
@@ -317,7 +336,9 @@
         </div>
     </div>
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="products"
-        :employee="employee" :cashier="loggedInUser" :customer="customer" :order_id="order_id" :cash="cash"
+    :employee="allemployee.find(emp => emp.id === employee_id)"
+
+    :cashier="loggedInUser" :customer="customer" :order_id="order_id" :cash="cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
         :warranty_end="warranty_end" :custom_discount="custom_discount" :selectedType="selectedType"
         :status="Number(selectedStatus)" />
@@ -354,6 +375,8 @@ const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
 const selectedType = ref("");
 const selectedStatus = ref("1");
+const selectedEmployee = ref("");
+const selectedCustomer = ref("");
 const serviceNote = ref("");
 const pendingOrders = ref([]);
 const selectedOrder = ref(null);
@@ -477,6 +500,8 @@ watch(selectedOrder, (newOrder) => {
         custom_discount.value = newOrder?.custom_discount || 0;
         discount.value = newOrder?.discount || 0;
         selectedStatus.value = newOrder?.status?.toString() || "";
+        selectedEmployee.value = newOrder?.employee_id?.toString() || "";
+        selectedCustomer.value = newOrder?.customer_id?.toString() || "";
 
     }
 });
@@ -488,6 +513,9 @@ const resetToLiveBill = () => {
     custom_discount.value = 0;
     discount.value = 0;
     selectedStatus.value = "";
+    selectedEmployee.value = "";
+    selectedCustomer.value = "";
+
 };
 
 
@@ -562,7 +590,34 @@ const order_id = computed(() => {
 
 const submitOrder = async () => {
 
-    console.log(products.value);
+    if (
+        !customer.value.name.trim() ||
+        !customer.value.contactNumber.trim() ||
+        !customer.value.email.trim()
+    ) {
+        isAlertModalOpen.value = true;
+        message.value = "Please fill in all required customer details.";
+        return;
+    }
+
+
+
+    if (!employee_id.value) {
+        isAlertModalOpen.value = true;
+        message.value = "Please select an employee.";
+        return;
+    }
+    if (balance.value < 0) {
+        isAlertModalOpen.value = true;
+        message.value = "Cash is not enough.";
+        return;
+    }
+
+
+
+
+
+
     if (balance.value < 0) {
         isAlertModalOpen.value = true;
         message.value = "Cash is not enough";
@@ -572,7 +627,6 @@ const submitOrder = async () => {
         const response = await axios.post("/pos/submit", {
             customer: customer.value,
             products: products.value,
-            employee_id: employee_id.value,
             paymentMethod: selectedPaymentMethod.value,
             userId: props.loggedInUser.id,
             order_id: order_id.value,
@@ -581,6 +635,8 @@ const submitOrder = async () => {
             appliedCoupon: appliedCoupon.value,
             selectedType: selectedType.value,
             status: selectedStatus.value,
+            employee_id: selectedEmployee.value,
+            customer_id: selectedCustomer.value,
             kitchen_note: serviceNote.value,
         });
         isSuccessModalOpen.value = true;
@@ -598,6 +654,9 @@ const submitOrder = async () => {
     }
 };
 
+
+
+
 const updateOrder = async () => {
     console.log("Selected Order:", selectedOrder.value); // Debug logging
 
@@ -613,7 +672,8 @@ const updateOrder = async () => {
         const response = await axios.put(`/pos/update/${selectedOrder.value.order_id}`, {
             customer: customer.value,
             products: products.value,
-            employee_id: employee_id.value,
+            employee_id: selectedEmployee.value,
+            customer_id: selectedCustomer.value,
             paymentMethod: selectedPaymentMethod.value,
             cash: cash.value,
             custom_discount: custom_discount.value,
