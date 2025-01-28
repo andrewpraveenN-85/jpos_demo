@@ -74,6 +74,41 @@ const handleClose = () => {
 };
 
 const emit = defineEmits(["update:open"]);
+const calculateWarrantyPeriod = (start, end) => {
+    if (!start || !end) {
+        return null; // Return null if dates are invalid
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    // Check if the dates are valid
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return null;
+    }
+
+    let years = endDate.getFullYear() - startDate.getFullYear();
+    let months = endDate.getMonth() - startDate.getMonth();
+    let days = endDate.getDate() - startDate.getDate();
+
+    // Adjust months and years if necessary
+    if (days < 0) {
+        months -= 1;
+        const previousMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
+        days += previousMonth.getDate();
+    }
+
+    if (months < 0) {
+        years -= 1;
+        months += 12;
+    }
+
+    return {
+        years: years > 0 ? years : null,
+        months: months > 0 ? months : null,
+        days: days > 0 ? days : null,
+    };
+};
 
 // The `open` prop controls the visibility of the modal
 const props = defineProps({
@@ -133,18 +168,18 @@ const handlePrintReceipt = () => {
 
     // Generate table rows dynamically using props.products
     const productRows = props.products
-        .map((product) => {
-            // Determine the price based on discount
-            const price =
-                product.discount > 0 && product.apply_discount
-                    ? product.discounted_price // Use discounted price if discount is applied
-                    : product.selling_price; // Use selling price if no discount
+    .map((product) => {
+            // Calculate the warranty period for each product
+            const warrantyPeriod = calculateWarrantyPeriod(product.warranty_start, product.warranty_end);
+            const warrantyText = warrantyPeriod
+                ? `${warrantyPeriod.years ? warrantyPeriod.years + ' years ' : ''}${warrantyPeriod.months ? warrantyPeriod.months + ' months ' : ''}${warrantyPeriod.days ? warrantyPeriod.days + ' days' : ''}`
+                : "Not Available";  // Display "Not Available" if no warranty period is calculated
 
             return `
         <tr>
           <td>${product.name}<br>
 
-<b>Warranty end - ${product.warranty_end}</b>
+<b>Warranty Period ${warrantyText}</b><br/>
 
 
 
