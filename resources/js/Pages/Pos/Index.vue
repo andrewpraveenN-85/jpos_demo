@@ -350,7 +350,7 @@
         </div>
     </div>
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="products"
-    :employee="allemployee.find(emp => emp.id === employee_id)"
+    :employee="allemployee.find(emp => emp.id === Number(selectedEmployee)) || { name: 'Not Assigned' }"  
 
     :cashier="loggedInUser" :customer="customer" :order_id="order_id" :cash="cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"

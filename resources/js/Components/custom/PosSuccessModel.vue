@@ -130,6 +130,10 @@ const props = defineProps({
     default: 0,
     },
     cashier: Object,
+    employee: {
+        type: Object,
+        default: () => ({ name: "Not Assigned" }),
+    },
     customer: Object,
     order_id: String,
     balance: Number,
@@ -341,7 +345,7 @@ const handlePrintReceipt = () => {
 
                    <div>
                       <p>Employee :</p>
-                      <small>${props.employee_id}</small>
+                        <small>${props.employee?.name}</small>
                   </div>
                   <div>
                       <p>Cashier:</p>
