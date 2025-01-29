@@ -66,13 +66,13 @@
   <Head title="Reports" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <!-- Include the Header -->
     <Header />
     <div class="w-full py-12 space-y-16">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center justify-center space-x-4">
+      <div class="flex md:flex-row flex-col md:items-center items-start justify-between md:space-y-0 space-y-4">
+        <div class="flex items-center justify-center space-x-4 ">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
           </Link>
@@ -82,7 +82,7 @@
         </div>
         <div date-rangepicker class="flex items-center space-x-4">
           <!-- Start Date -->
-          <div class="relative">
+          <div class="relative ">
             <input
               v-model="startDate"
               type="date"
@@ -103,6 +103,22 @@
           <!-- Filter Button -->
           <button
             @click="filterData"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select hidden sm:inline-block"
+          >
+            Filter
+          </button>
+          <Link
+            href="/reports"
+            class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select hidden sm:inline-block"
+          >
+            Reset
+          </Link>
+
+        </div>
+        <div class="w-full flex justify-center items-center space-x-4 md:hidden">
+            <!-- Filter Button -->
+          <button
+            @click="filterData"
             class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select"
           >
             Filter
@@ -113,11 +129,12 @@
           >
             Reset
           </Link>
-        </div>
+          </div>
       </div>
+      
     </div>
     <!-- Statistic Boxes -->
-    <div class="grid w-full grid-cols-6 gap-4">
+    <div class="grid w-full md:grid-cols-6 grid-cols-3 gap-4">
       <!-- Total Sales -->
       <div
         class="py-6 flex flex-col justify-center items-center border-2 border-[#EC6116] w-full space-y-4 rounded-2xl bg-[#EC611666] shadow-lg transform transition-transform duration-300 hover:-translate-y-4"
@@ -206,7 +223,7 @@
     </div>
 
 
-     <div class="grid w-full grid-cols-3 gap-8">
+     <div class="grid w-full md:grid-cols-3 grid-cols-2 gap-8">
             <!-- Total Products -->
             <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#ffb224] w-full space-y-4 rounded-2xl bg-[#ffb224] shadow-lg">
@@ -247,7 +264,7 @@
             </div>
         </div>
     <!-- Charts Section -->
-    <div class="flex items-center justify-center w-full h-full space-x-4">
+    <div class="flex md:flex-row flex-col items-center justify-center w-full h-full md:space-x-4 md:space-y-0 space-y-4">
       <!-- Chart 1 -->
       <!-- <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
@@ -261,11 +278,11 @@
                 </div> -->
 
       <div
-        class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
+        class="flex flex-col justify-between items-center md:w-1/3 w-full bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
           <!-- Header with Title and Button -->
-          <div class="w-full flex justify-between items-center pb-4">
+          <div class="w-full flex justify-between items-center pb-8">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -287,10 +304,10 @@
 
       <!-- Chart 3 -->
       <div
-        class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
+        class="flex flex-col justify-between items-center md:w-1/3 w-full bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
-          <div class="w-full flex justify-between items-center pb-4">
+          <div class="w-full flex justify-between items-center md:pt-12">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -308,10 +325,10 @@
         </div>
       </div>
       <div
-        class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]"
+        class="flex flex-col justify-between items-center md:w-1/3 w-full bg-white border-4 border-black rounded-xl h-[450px]"
       >
         <div class="chart-container w-full p-4">
-          <div class="w-full flex justify-between items-center pb-4">
+          <div class="w-full flex justify-between items-center md:pt-12">
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
@@ -330,7 +347,7 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-center w-full h-full space-x-4">
+    <div class="flex md:flex-row flex-col items-center justify-center w-full h-full md:space-x-4 md:space-y-0 space-y-4 ">
       <!-- Chart 1 -->
       <!-- <div
                 class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
@@ -343,7 +360,7 @@
                 </div>
                 </div> -->
       <div
-        class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4"
+        class="flex flex-col justify-between items-center md:w-1/2 w-full bg-white border-4 border-black rounded-xl h-[500px] p-4"
       >
         <div class="chart-container w-full h-full relative p-4">
           <div class="w-full flex justify-between items-center pb-4">

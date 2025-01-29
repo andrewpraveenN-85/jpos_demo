@@ -2,11 +2,11 @@
 
     <Head title="POS" />
     <Banner />
-    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36">
+    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 md:px-36 px-16">
         <!-- Include the Header -->
         <Header />
 
-        <div class="w-5/6 py-12 space-y-16">
+        <div class="w-full md:w-5/6 w-full py-12 space-y-16">
             <div class="flex items-center justify-between space-x-4">
                 <div class="flex w-full space-x-4">
                     <Link href="/">
@@ -25,8 +25,8 @@
                     </p>
                 </div>
             </div>
-            <div class="flex w-full gap-4">
-                <div class="flex flex-col w-1/2">
+            <div class="flex md:flex-row flex-col w-full gap-4">
+                <div class="flex flex-col md:w-1/2 w-full">
                     <div class="flex flex-col w-full">
                         <div class="p-16 space-y-8 bg-black shadow-lg rounded-3xl">
                             <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
@@ -63,17 +63,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center justify-center w-full pt-32 space-y-8">
+                    <div class="flex flex-col items-center justify-center w-full md:pt-32 py-8 md:py-0 space-y-8">
                         <img src="/images/Fading wheel.gif" class="object-cover w-32 h-32 rounded-full" />
                         <p class="text-3xl text-black">
                             Bar Code Scanner is in Progress...
                         </p>
                     </div>
                 </div>
-                <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl">
-                    <div class="flex flex-col items-start justify-center w-full px-12">
+                <div class="flex md:w-1/2 w-full p-8 border-4 border-black rounded-3xl">
+                    <div class="flex flex-col items-start justify-center w-full md:px-12 px-4">
                         <div class="flex items-center justify-between w-full">
-                            <h2 class="text-5xl font-bold text-black">Billing Details</h2>
+                            <h2 class="md:text-5xl text-4xl font-bold text-black">Billing Details</h2>
                             <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
                                 <p class="text-xl text-blue-600 font-bold">User Manual</p>
                                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />

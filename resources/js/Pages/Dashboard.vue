@@ -1,12 +1,12 @@
 <template>
   <Head title="Dashboard" />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <!-- Include the Header -->
     <Header />
 
-    <div class="grid w-full h-full grid-cols-4 gap-8 auto-rows-fr">
+    <div class="grid w-full h-full md:grid-cols-4 grid-cols-1 gap-8 auto-rows-fr">
       <Link href="/pos" v-if="HasRole(['Admin', 'Cashier'])">
         <div class="dashboard-card bg-[#4d7c0f]">
           <div class="card-content">

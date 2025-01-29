@@ -2,12 +2,12 @@
 
     <Head title="CompanyInfo" />
     <Banner />
-    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36">
+    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16">
         <!-- Include the Header -->
         <Header />
 
         <!-- Main Content -->
-        <div class="w-5/6 py-12 space-y-24">
+        <div class="w-full md:w-5/6 py-12 space-y-24">
             <div class="flex items-center justify-between">
                 <!-- Back Button and Title -->
                 <div class="flex items-center space-x-4">

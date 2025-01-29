@@ -54,21 +54,22 @@
   <Head title="Suppliers" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <!-- Include the Header -->
     <Header />
-    <div class="w-5/6 py-12 space-y-24">
+    <div class="w-full md:w-5/6 py-12 space-y-24">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4"></div>
         <p class="text-3xl italic font-bold text-black">
           <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">
+            
             {{ allsuppliers.length }}
           </span>
           <span class="text-xl">/ Total Suppliers</span>
         </p>
       </div>
-      <div class="flex w-full">
+      <div class="flex md:flex-row flex-col w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
@@ -109,8 +110,8 @@
             "
             :class="
               HasRole(['Admin'])
-                ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-                : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
+                ? 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+                : 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
             "
             :title="
               HasRole(['Admin'])
@@ -118,7 +119,7 @@
                 : 'You do not have permission to add more Color'
             "
           >
-            <i class="pr-4 ri-add-circle-fill"></i> Add More Suppliers
+            <i class="md:pr-4 ri-add-circle-fill"></i> Add More Suppliers
           </p>
         </div>
       </div>

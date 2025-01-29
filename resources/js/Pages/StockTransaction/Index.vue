@@ -54,10 +54,10 @@
   <Head title="Stock Transition" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <Header />
-    <div class="w-5/6 py-12 space-y-24">
+    <div class="w-full md:w-5/6 py-12 space-y-24">
       <div class="flex items-center justify-between float-end">
         <p class="text-3xl italic font-bold text-black">
           <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
@@ -76,7 +76,7 @@
             Stock Transitions
           </p>
         </div>
-        <div class="flex justify-end w-full"></div>
+        <div class="flex justify-end md:inline hidden w-full"></div>
       </div>
       <template v-if="allStockTransactions && allStockTransactions.length > 0">
         <div class="overflow-x-auto">

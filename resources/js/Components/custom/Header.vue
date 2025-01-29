@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between w-full space-x-4 px-4 py-2">
+  <div class="flex md:flex-row flex-col items-center justify-between w-full space-x-4 px-4 py-2">
     <!-- Logo -->
     <Link
       href="/"
@@ -21,7 +21,7 @@
       />
     </Link>
     <!-- User Account Information -->
-    <div class="flex space-x-8">
+    <div class="w-full flex md:justify-end justify-between space-x-8">
       <div class="flex items-end space-x-4 text-right space-y-2">
         <div class="flex flex-col">
           <p class="text-lg">
@@ -68,6 +68,7 @@
     </div>
   </div>
 </template>
+
 
   <script setup>
 import { computed } from "vue";

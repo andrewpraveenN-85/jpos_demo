@@ -1,10 +1,10 @@
 <template>
     <Head title="QUOTATION" />
     <Banner />
-    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 px-36">
+    <div class="flex flex-col items-center justify-start min-h-screen py-8 space-y-4 bg-gray-100 md:px-36 px-16">
       <Header />
 
-      <div class="w-5/6 py-12 space-y-16">
+      <div class="w-full md:w-5/6 py-12 space-y-16">
         <div class="flex items-center justify-between space-x-4">
                 <div class="flex w-full space-x-4">
                     <Link href="/">
@@ -24,9 +24,9 @@
                 </div>
         </div>
 
-        <div class="flex w-full gap-4">
-          <div class="flex w-3/6 p-8 border-4 border-black rounded-3xl">
-            <div class="flex flex-col items-start justify-center w-full px-12">
+        <div class="flex md:flex-row flex-col w-full gap-4">
+          <div class="flex md:w-3/6 w-full p-8 border-4 border-black rounded-3xl">
+            <div class="flex flex-col items-start justify-center w-full md:px-12">
               <div class="flex items-center justify-between w-full">
                 <h2 class="text-5xl font-bold text-black">Quotation </h2>
                  <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
