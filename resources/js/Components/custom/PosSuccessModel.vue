@@ -338,6 +338,11 @@ const handlePrintReceipt = () => {
                       <p>Customer:</p>
                       <small>${props.customer.name}</small>
                   </div>
+
+                   <div>
+                      <p>Employee :</p>
+                      <small>${props.employee_id}</small>
+                  </div>
                   <div>
                       <p>Cashier:</p>
                       <small>${props.cashier.name}</small>

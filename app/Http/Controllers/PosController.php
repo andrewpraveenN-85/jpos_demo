@@ -114,10 +114,11 @@ class PosController extends Controller
     public function submit(Request $request)
     {
 
+
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
-        // Combine countryCode and contactNumber to create the phone field
+        // Combine countryCode and phone to create the phone field
 
         $customer = null;
 
@@ -142,9 +143,9 @@ class PosController extends Controller
         DB::beginTransaction();
 
         try {
-            if ($request->input('customer.contactNumber') || $request->input('customer.name') || $request->input('customer.email')) {
+            if ($request->input('customer.phone') || $request->input('customer.name') || $request->input('customer.email')) {
 
-                $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
+                $phone =  $request->input('customer.phone');
                 $customer = Customer::where('email', $request->input('customer.email'))->first();
                 $customer1 = Customer::where('phone', $phone)->first();
 
@@ -295,6 +296,20 @@ class PosController extends Controller
         // Delete existing sale items
         SaleItem::where('sale_id', $sale->id)->delete();
 
+
+        $customerId = $request->input('customer_id');
+        if ($customerId) {
+            $customer = Customer::find($customerId);
+            if ($customer) {
+                $customer->update([
+                    'name' => $request->input('customer.name', $customer->name),
+                    'email' => $request->input('customer.email', $customer->email),
+                    'phone' => $request->input('customer.phone', $customer->phone),
+                    'address' => $request->input('customer.address', $customer->address),
+                    'bdate' => $request->input('customer.bdate', $customer->bdate),
+                ]);
+            }
+        }
         // Update sale details
         $sale->update([
             'customer_id' => $request->input('customer_id'),

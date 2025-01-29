@@ -62,25 +62,41 @@
                             <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
 
 
-                            <div class="mb-3">
-                                <input v-model="customer.name" type="text" :placeholder="selectedOrder?.customer?.name || 'Enter Customer Name'"
-                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"  required/>
-                            </div>
-                            <div class="flex gap-2 mb-3 text-black">
+          
+                         
+   
 
-                                <input v-model="customer.phone" type="text"
-                                  :placeholder="selectedOrder?.customer?.phone || 'Enter Customer Contact Number'"
-                                    class="flex-grow px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-black">
-                                <input v-model="customer.email" type="email"
- :placeholder="selectedOrder?.customer?.email || 'Enter Customer Email'"
+    <!-- Row 2: Customer Phone & Customer Email -->
+    <div class="grid grid-cols-1 gap-4">
+
+        <div>
+            <label class="text-white text-lg font-semibold">Customer Name</label>
+        <input v-model="customer.name" type="text"
+            class="w-full px-4 py-3 text-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required />
+        </div>
+
+
+        <div>
+            <label class="text-white text-lg font-semibold">Customer Phone</label>
+            <input v-model="customer.phone" type="tel"
+    class="w-full px-4 py-3 text-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    @input="customer.phone = customer.phone.replace(/\D/g, '')" />
+        </div>
+
+        <div>
+            <label class="text-white text-lg font-semibold">Customer Email</label>
+            <input v-model="customer.email" type="email"
+                class="w-full px-4 py-3 text-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+    </div>
+ 
 
 
 
-                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                            </div>
 
+
+                         
 
                         </div>
                     </div>
@@ -503,6 +519,13 @@ watch(selectedOrder, (newOrder) => {
             apply_discount: false,
         }));
 
+
+        customer.value = {
+            name: newOrder.customer?.name || "",
+            phone: newOrder.customer?.phone || "",
+            email: newOrder.customer?.email || "",
+        };
+
         cash.value = newOrder?.cash || 0;
         custom_discount.value = newOrder?.custom_discount || 0;
         discount.value = newOrder?.discount || 0;
@@ -524,8 +547,14 @@ const resetToLiveBill = () => {
     selectedEmployee.value = "";
     selectedCustomer.value = "";
 
-
+    // Reset customer details
+    customer.value = {
+        name: "",
+        phone: "",
+        email: "",
+    };
 };
+
 
 
 const handleModalOpenUpdate = (newValue) => {
@@ -547,8 +576,7 @@ const props = defineProps({
 const discount = ref(0);
 
 const customer = ref({
-    name: "",
-    countryCode: "",
+    name: "", 
     phone: "",
     email: "",
 });
@@ -599,6 +627,13 @@ const order_id = computed(() => {
 
 const submitOrder = async () => {
 
+
+    if (!customer.value.name || !customer.value.phone) {
+        isAlertModalOpen.value = true;
+        message.value = "Customer name and phone number are required!";
+        return;
+    }
+
     if (balance.value < 0) {
         isAlertModalOpen.value = true;
         message.value = "Cash is not enough";
@@ -606,7 +641,11 @@ const submitOrder = async () => {
     }
     try {
         const response = await axios.post("/pos/submit", {
-            customer: customer.value,
+            customer: {
+                name: customer.value.name || "Guest",
+                phone: customer.value.phone || "0000000000",
+                email: customer.value.email || "",
+            },
             products: products.value,
             paymentMethod: selectedPaymentMethod.value,
             userId: props.loggedInUser.id,
