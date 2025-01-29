@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
-                  <!-- <div class="w-full">
+                  <div class="w-full">
                     <div>
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Code:</label
@@ -71,14 +71,14 @@
                         v-model="form.code"
                         type="text"
                         id="code"
-                        required
+
                         class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       />
                       <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                         form.errors.code
                       }}</span>
                     </div>
-                  </div> -->
+                  </div>
                   <!-- Cost Price input -->
                   <div class="w-full">
                     <!-- Category Name -->
@@ -464,7 +464,7 @@ const form = useForm({
   category_id: "",
   supplier_id: "",
   name: "",
-  code: "",
+  code: null,
   size_id: "",
   color_id: "",
   cost_price: null,

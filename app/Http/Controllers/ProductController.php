@@ -224,6 +224,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
@@ -231,12 +233,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            // 'code' => [
-            //     'required',
-            //     'string',
-            //     'max:50',
-            //     Rule::unique('products')->whereNull('deleted_at'),
-            // ],
+         'code' => 'nullable|max:50|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'required|numeric|min:0',
@@ -266,7 +263,6 @@ class ProductController extends Controller
 
             // Create the product
             $product = Product::create($validated);
-            $product->update(['code' => 'PROD-' . $product->id]);
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
@@ -301,7 +297,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
+         'code' => 'nullable|max:50|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'required|numeric|min:0',
@@ -331,8 +327,7 @@ class ProductController extends Controller
             // Product::create($validated);
 
             $product = Product::create($validated);
-            $product->update(['code' => 'PROD-' . $product->id]);
-
+        
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
             if ($stockQuantity > 0) {
@@ -421,7 +416,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
-            // 'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
+       'code' => 'nullable|max:50|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'required|numeric|min:0',
@@ -541,6 +536,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
+            'code' => 'nullable|max:50|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'required|numeric|min:0',
@@ -578,7 +574,6 @@ class ProductController extends Controller
             // Create the product
             $validated['is_promotion'] = true;
             $product = Product::create($validated);
-            $product->update(['code' => 'PROD-' . $product->id]);
             foreach ($products as $key => $promotionItem) {
                 PromotionItem::create([
                     'product_id' => $promotionItem['id'],
