@@ -174,6 +174,11 @@ const handlePrintReceipt = () => {
           ? product.discounted_price // Use discounted price if discount is applied
           : product.selling_price; // Use selling price if no discount
 
+        const Price =
+        product.discount > 0 && product.apply_discount
+          ? product.discounted_price * product.quantity
+          : product.selling_price * product.quantity;
+
       return `
         <tr>
           <td>${product.name}</td>
@@ -184,7 +189,7 @@ const handlePrintReceipt = () => {
                 ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
                 : ""
             }
-            <div>${product.selling_price}</div>
+            <div>${Price}</div>
           </td>
         </tr>
       `;
@@ -374,7 +379,7 @@ ${Number(props.subTotal) !== Number(props.total)
     ? ""
     : `<div>
         <span>Sub Total</span>
-        <span>(${(Number(props.subTotal) || 0).toFixed(2)}) LKR</span>
+        <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
       </div>`)
   : ""}
 
@@ -404,7 +409,7 @@ ${Number(props.subTotal) !== Number(props.total)
     ? ""
     : `<div>
         <span>Delivery Charge</span>
-        <span>(${(Number(props.delivery_charge) || 0).toFixed(2)}) LKR</span>
+        <span>${(Number(props.delivery_charge) || 0).toFixed(2)} LKR</span>
       </div>`}
 
 
@@ -413,7 +418,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : `<div style="font-weight: bold;">
       <span>Total</span>
-      <span>(${(Number(props.total) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 
@@ -421,7 +426,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : `<div>
       <span>Cash</span>
-      <span>(${(Number(props.cash) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 
@@ -433,7 +438,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : ` <div style="font-weight: bold;">
       <span>Balance</span>
-      <span>(${(Number(props.balance) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 
