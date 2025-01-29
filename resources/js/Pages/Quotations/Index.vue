@@ -116,6 +116,15 @@
                     class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
+                <div>
+                    <label for="add_discount" class="block mb-2 text-lg font-medium">Discount:</label>
+                    <input
+                    v-model="form.add_discount"
+                    id="add_discount"
+                    name="add_discount"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
 
                 <div>
                     <label for="valid_date" class="block mb-2 text-lg font-medium">Valid Date:</label>
@@ -170,7 +179,6 @@
                       <th class="px-4 py-2 text-left text-sm font-medium">Product</th>
                       <th class="px-4 py-2 text-right text-sm font-medium">Quantity</th>
                       <th class="px-4 py-2 text-right text-sm font-medium">Unit Price</th>
-                      <th class="px-4 py-2 text-right text-sm font-medium">Discount</th>
                       <th class="px-4 py-2 text-right text-sm font-medium">Sub Total</th>
                     </tr>
                   </thead>
@@ -178,9 +186,7 @@
                             <tr v-for="(item) in products" :key="item.id">
                                 <td class="px-4 py-2 text-gray-800 text-sm">{{ item.name }}</td>
                                 <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.quantity }}</td>
-                                <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.selling_price }}</td>
-                                <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.discount || 0 }}</td>
-                                <td class="px-4 py-2 text-gray-800 text-right text-sm">
+                                <td class="px-4 py-2 text-gray-800 text-right text-sm">{{ item.selling_price }}</td>                                <td class="px-4 py-2 text-gray-800 text-right text-sm">
                                 {{ (item.selling_price * item.quantity).toFixed(2) }}
                                 </td>
                             </tr>
@@ -194,8 +200,10 @@
                 
                 <p class="text-sm text-gray-500">Product Total:</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{total}}</p>
-                <p class="text-sm text-gray-500">Discount:</p>
-                <p class="text-right text-sm font-semibold text-gray-800">{{ totalDiscount }}</p>
+                <p v-if="parseFloat(totalDiscount) > 0" class="text-sm text-gray-500">Discount:</p>
+                <p v-if="parseFloat(totalDiscount) > 0" class="text-right text-sm font-semibold text-gray-800">
+                {{ totalDiscount }}
+                </p>
                 <p class="text-sm text-gray-500">{{ description || " "}}</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{ description_price }}</p>
                 <p class="text-sm text-gray-500">Grand Quotation Total:</p>
@@ -261,6 +269,7 @@ const custom_discount_type = ref('percent');
 const validUntilDate = ref("");
 const description = ref("");
 const description_price = ref("");
+const add_discount = ref("");
 
 
 
@@ -375,7 +384,6 @@ const subtotal = computed(() => {
 
 const totalDiscount = computed(() => {
     const productDiscount = products.value.reduce((total, item) => {
-        // Check if item has a discount
         if (item.discount && item.discount > 0 && item.apply_discount == true) {
             const discountAmount =
                 (parseFloat(item.selling_price) - parseFloat(item.discounted_price)) *
@@ -383,14 +391,17 @@ const totalDiscount = computed(() => {
             return total + discountAmount;
         }
         return total; // If no discount, return total as-is
-    }, 0); // Ensures two decimal places
+    }, 0);
 
     const couponDiscount = appliedCoupon.value
         ? Number(appliedCoupon.value.discount)
         : 0;
 
-    return (productDiscount + couponDiscount).toFixed(2);
+    const additionalDiscount = parseFloat(add_discount.value) || 0;
+
+    return (productDiscount + couponDiscount + additionalDiscount).toFixed(2);
 });
+
 
 
 
@@ -407,7 +418,7 @@ const total = computed(() => {
         customValue = customDiscount;
     }
 
-    return (subtotalValue - discountValue - customValue).toFixed(2);
+    return (subtotalValue ).toFixed(2);
 });
 
 const totalquotation = computed(() => {
@@ -582,6 +593,7 @@ const addQuotation = () => {
   validUntilDate.value = form.valid_date;
   description.value = form.description;
   description_price.value = form.description_price;
+  add_discount.value = form.add_discount;
 
   const quotationTotal = computed(() => {
   const totalValue = parseFloat(total.value) || 0;
@@ -618,21 +630,20 @@ const downloadPdf = () => {
   pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 52);
   pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 59);
   
-  // Add product table headers
-  const tableHeaders = ['Product', 'Qty', 'Unit Price', 'Discount', 'Sub Total'];
+  // **Remove "Discount" Column from Product Table**
+  const tableHeaders = ['Product', 'Qty', 'Unit Price', 'Sub Total'];
   const startY = 75;
   
   // Style for table header
   pdf.setFillColor(240, 240, 240);
-  pdf.rect(15, startY - 5, 180, 8, 'F');
+  pdf.rect(15, startY - 5, 165, 8, 'F'); // Adjust width for removed column
   pdf.setFont('helvetica', 'bold');
   
   // Add table headers
   pdf.text(tableHeaders[0], 15, startY);
   pdf.text(tableHeaders[1], 100, startY, { align: 'right' });
   pdf.text(tableHeaders[2], 130, startY, { align: 'right' });
-  pdf.text(tableHeaders[3], 160, startY, { align: 'right' });
-  pdf.text(tableHeaders[4], 190, startY, { align: 'right' });
+  pdf.text(tableHeaders[3], 170, startY, { align: 'right' }); // Shifted Sub Total
   
   // Add products
   let currentY = startY + 10;
@@ -648,14 +659,14 @@ const downloadPdf = () => {
     const itemName = item.name || 'Unnamed Product';
     const quantity = item.quantity?.toString() || '0';
     const price = item.selling_price?.toString() || '0';
-    const discount = (item.discount || '0') + '%';
-    const subtotal = (parseFloat(item.selling_price || 0) * parseFloat(quantity)).toFixed(2);
+    const subtotal = (
+      ( item.selling_price* item.quantity)
+    ).toFixed(2);
     
     pdf.text(itemName, 15, currentY);
     pdf.text(quantity, 100, currentY, { align: 'right' });
     pdf.text(price, 130, currentY, { align: 'right' });
-    pdf.text(discount, 160, currentY, { align: 'right' });
-    pdf.text(subtotal, 190, currentY, { align: 'right' });
+    pdf.text(subtotal, 170, currentY, { align: 'right' }); // Adjusted Sub Total Position
     
     currentY += 8;
   });
@@ -672,10 +683,12 @@ const downloadPdf = () => {
   pdf.text('Summary:', 15, currentY);
   currentY += 10;
   
-  let summaryItems = [
-    ['Product Total:', total.value || '0.00'],
-    ['Discount:', totalDiscount.value || '0.00']
-  ];
+  let summaryItems = [['Product Total:', total.value || '0.00']];
+  
+  // **Only show discount in summary if greater than 0**
+  if (parseFloat(totalDiscount.value) > 0) {
+    summaryItems.push(['Discount:', totalDiscount.value]);
+  }
   
   // Add description price only if description exists
   if (description.value && description_price.value) {
@@ -690,17 +703,18 @@ const downloadPdf = () => {
     // Left-aligned label
     pdf.text(label, 15, currentY);
     // Right-aligned value with currency
-    pdf.text(`${value} LKR`, 190, currentY, { align: 'right' });
+    pdf.text(`${value} LKR`, 170, currentY, { align: 'right' });
     currentY += 7;
   });
+
   // Add footer
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(smallSize);
   pdf.text('Thank you for your business!', 105, 280, { align: 'center' });
   
   // Save PDF
-
   pdf.save(`Quotation_${orderId.value}.pdf`);
 };
+
 
 </script>
