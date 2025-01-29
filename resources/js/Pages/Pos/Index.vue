@@ -62,9 +62,9 @@
                             <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
 
 
-          
-                         
-   
+
+
+
 
     <!-- Row 2: Customer Phone & Customer Email -->
     <div class="grid grid-cols-1 gap-4">
@@ -90,13 +90,13 @@
                 class="w-full px-4 py-3 text-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
     </div>
- 
 
 
 
 
 
-                         
+
+
 
                         </div>
                     </div>
@@ -109,248 +109,236 @@
                     </div>
                 </div>
                 <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl ">
-                    <div class="flex flex-col items-start justify-center w-full px-12 pb-0" style="margin-top: -50px;">
-                        <div class="flex items-center justify-between w-full">
-                            <h2 class="text-5xl font-bold text-black">{{ headingTitle }}</h2>
-                            <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
-                                <p class="text-xl text-blue-600 font-bold">User Manual</p>
-                                <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-center w-full mt-4 mb-4">
-                            <label for="search" class="text-xl font-medium text-gray-800"></label>
-                            <input v-model="form.barcode" id="search" type="text" placeholder="Enter BarCode Here!"
-                                class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                autofocus />
-
-                            <button @click="submitBarcode"
-                                class="px-12 py-4 text-2xl font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 text-white uppercase bg-blue-600 rounded-r-xl">
-                                Enter
-                            </button>
-
-                        </div>
-
-
-
-                        <div class="w-full text-center">
-                            <p v-if="products.length === 0" class="text-2xl text-red-500">
-                                No Products to show
-                            </p>
-                        </div>
-
-                        <div class="flex items-center w-full py-4 border-b border-black" v-for="item in products"
-                            :key="item.id">
-                            <div class="flex w-1/6">
-                                <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'
-                                    " alt="Supplier Image" class="object-cover w-16 h-16 border border-gray-500" />
-                            </div>
-                            <div class="flex flex-col justify-between w-5/6">
-
-
-                                <p class="text-xl text-black">
-                                    {{ item.name }}<br />
-                                    <span class="text-red-600 font-bold">
-                                        (Start: {{ item.warranty_start || "" }} - End: {{ item.warranty_end || "" }})
-                                    </span><br />
-                                    <span
-                                        v-if="calculateWarrantyPeriod(item.warranty_start, item.warranty_end) !== null"
-                                        class="text-orange-600 font-bold">
-                                        Warranty Period: {{ calculateWarrantyPeriod(item.warranty_start,
-                                        item.warranty_end) }}
-                                    </span>
-
-                                </p>
-                                <div class="flex items-center justify-between w-full">
-                                    <div class="flex space-x-4">
-                                        <p @click="incrementQuantity(item.id)"
-                                            class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
-                                            <i class="ri-add-line"></i>
-                                        </p>
-                                        <input type="number" v-model="item.quantity" min="0"
-                                            class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center" />
-                                        <p @click="decrementQuantity(item.id)"
-                                            class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
-                                            <i class="ri-subtract-line"></i>
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center justify-center">
-                                        <div>
-                                            <p @click="applyDiscount(item.id)" v-if="
-                                                item.discount &&
-                                                item.discount > 0 &&
-                                                item.apply_discount == false &&
-                                                !appliedCoupon
-                                            " class="cursor-pointer py-1 text-center px-4 bg-green-600 rounded-xl font-bold text-white tracking-wider">
-                                                Apply {{ item.discount }}% off
-                                            </p>
-
-                                            <p v-if="
-                                                item.discount &&
-                                                item.discount > 0 &&
-                                                item.apply_discount == true &&
-                                                !appliedCoupon
-                                            " @click="removeDiscount(item.id)"
-                                                class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider">
-                                                Remove {{ item.discount }}% Off
-                                            </p>
-                                            <p class="text-2xl font-bold text-black text-right">
-                                                {{ item.selling_price }}
-                                                LKR
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-end w-1/6">
-                                <p @click="removeProduct(item.id)"
-                                    class="text-3xl text-black border-2 border-black rounded-full cursor-pointer">
-                                    <i class="ri-close-line"></i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="w-full pt-6 space-y-2">
-                            <div class="flex items-center justify-between w-full px-16">
-                                <p class="text-xl">Sub Total</p>
-                                <p class="text-xl">{{ subtotal }} LKR</p>
-                            </div>
-                            <div class="flex items-center justify-between w-full px-16 py-2 pb-4 border-b border-black">
-                                <p class="text-xl">Discount</p>
-                                <p class="text-xl">( {{ selectedOrder?.discount ? selectedOrder.discount : totalDiscount
-                                    }} LKR )</p>
-                            </div>
-                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
-                                <p class="text-xl text-black">Service Charge</p>
-                                <span>
-                                    <CurrencyInput v-model="custom_discount" />
-
-                                </span>
-                            </div>
-
-                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
-                                <select required  v-model="selectedEmployee"
-                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="" disabled selected>Select an Employee</option>
-                                    <option v-for="employee in allemployee" :key="employee.id" :value="employee.id">
-                                        {{ employee.name }}
-
-                                    </option>
-                                </select>
-                            </div>
 
 
 
 
+                    <div class="flex flex-col items-start justify-center w-full px-12 pb-0"  >
+   <div class="flex items-center justify-between w-full">
+      <h2 class="text-5xl font-bold text-black">{{ headingTitle }}</h2>
+      <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
+         <p class="text-xl text-blue-600 font-bold">User Manual</p>
+         <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
+      </span>
+   </div>
+   <div class="flex items-center justify-center w-full mt-4 mb-4">
+      <label for="search" class="text-xl font-medium text-gray-800"></label>
+      <input v-model="form.barcode" id="search" type="text" placeholder="Enter BarCode Here!"
+         class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+         autofocus />
+      <button @click="submitBarcode"
+         class="px-12 py-4 text-2xl font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 text-white uppercase bg-blue-600 rounded-r-xl">
+      Enter
+      </button>
+   </div>
+   <div class="w-full text-center">
+      <p v-if="products.length === 0" class="text-2xl text-red-500">
+         No Products to show
+      </p>
+   </div>
+   <div class="flex items-center w-full py-4 border-b border-black" v-for="item in products"
+      :key="item.id">
+      <div class="flex w-1/6">
+         <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'
+            " alt="Supplier Image" class="object-cover w-16 h-16 border border-gray-500" />
+      </div>
+      <div class="flex flex-col justify-between w-5/6">
+         <p class="text-xl text-black">
+            {{ item.name }}<br />
+            <span class="text-red-600 font-bold">
+            (Start: {{ item.warranty_start || "" }} - End: {{ item.warranty_end || "" }})
+            </span><br />
+            <span
+               v-if="calculateWarrantyPeriod(item.warranty_start, item.warranty_end) !== null"
+               class="text-orange-600 font-bold">
+            Warranty Period: {{ calculateWarrantyPeriod(item.warranty_start,
+            item.warranty_end) }}
+            </span>
+         </p>
+         <div class="flex items-center justify-between w-full">
+            <div class="flex space-x-4">
+               <p @click="incrementQuantity(item.id)"
+                  class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
+                  <i class="ri-add-line"></i>
+               </p>
+               <input type="number" v-model="item.quantity" min="0"
+                  class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center" />
+               <p @click="decrementQuantity(item.id)"
+                  class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
+                  <i class="ri-subtract-line"></i>
+               </p>
+            </div>
+            <div class="flex items-center justify-center">
+               <div>
+                  <p @click="applyDiscount(item.id)" v-if="
+                     item.discount &&
+                     item.discount > 0 &&
+                     item.apply_discount == false &&
+                     !appliedCoupon
+                     " class="cursor-pointer py-1 text-center px-4 bg-green-600 rounded-xl font-bold text-white tracking-wider">
+                     Apply {{ item.discount }}% off
+                  </p>
+                  <p v-if="
+                     item.discount &&
+                     item.discount > 0 &&
+                     item.apply_discount == true &&
+                     !appliedCoupon
+                     " @click="removeDiscount(item.id)"
+                     class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider">
+                     Remove {{ item.discount }}% Off
+                  </p>
+                  <p class="text-2xl font-bold text-black text-right">
+                     {{ item.selling_price }}
+                     LKR
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="flex justify-end w-1/6">
+         <p @click="removeProduct(item.id)"
+            class="text-3xl text-black border-2 border-black rounded-full cursor-pointer">
+            <i class="ri-close-line"></i>
+         </p>
+      </div>
+   </div>
+   <div class="w-full pt-6 space-y-2">
+      <div class="flex items-center justify-between w-full px-16">
+         <p class="text-xl">Sub Total</p>
+         <p class="text-xl">{{ subtotal }} LKR</p>
+      </div>
+      <div class="flex items-center justify-between w-full px-16 py-2 pb-4 border-b border-black">
+         <p class="text-xl">Discount</p>
+         <p class="text-xl">( {{ selectedOrder?.discount ? selectedOrder.discount : totalDiscount
+            }} LKR )
+         </p>
+      </div>
+      <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+         <p class="text-xl text-black">Service Charge</p>
+         <span>
+            <CurrencyInput v-model="custom_discount" />
+         </span>
+      </div>
+      <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+         <select required  v-model="selectedEmployee"
+            class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="" disabled selected>Select an Employee</option>
+            <option v-for="employee in allemployee" :key="employee.id" :value="employee.id">
+               {{ employee.name }}
+            </option>
+         </select>
+      </div>
+      <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+         <p class="text-xl text-black">Cash</p>
+         <span>
+            <CurrencyInput v-model="cash" :options="{ currency: 'EUR' }" />
+         </span>
+      </div>
+      <div class="flex items-center justify-between w-full px-16 pt-4">
+         <p class="text-3xl text-black">Total</p>
+         <p class="text-3xl text-black">{{ total }} LKR</p>
+      </div>
+      <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+         <p class="text-xl text-black">Balance</p>
+         <p>{{ balance }} LKR</p>
+      </div>
+      <div class="w-full mt-4">
+         <div class="relative flex items-center">
+            <div class="flex items-center justify-center w-full    ">
+               <select v-model="selectedStatus"
+                  class="w-full px-4 my-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="" disabled selected>Select Task Status </option>
+                  <option value="0">Pending</option>
+                  <option value="1">Done</option>
+               </select>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="w-full my-5">
+      <div class="relative flex items-center">
+         <!-- Input Field -->
+         <label for="coupon" class="sr-only">Coupon Code</label>
+         <input id="coupon" v-model="couponForm.code" type="text" placeholder="Enter Coupon Code"
+            class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+         <template v-if="!appliedCoupon">
+            <button type="button" @click="submitCoupon"
+               class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Apply Coupon
+            </button>
+         </template>
+         <template v-else>
+            <button type="button" @click="removeCoupon"
+               class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+            Remove Coupon
+            </button>
+         </template>
+      </div>
+   </div>
+   <div class="w-full my-5">
+      <div class="relative flex items-center">
+         <!-- Input Field -->
+         <label for="service_note" class="sr-only">Service Note</label>
+         <input id="service_note" v-model="serviceNote" type="text"
+            :placeholder="selectedOrder?.kitchen_note || 'Enter Service Note'"
+            class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+   </div>
+   <div class="flex flex-col w-full space-y-4">
+      <div class="flex items-center justify-center w-full pt-8 space-x-8">
+         <p class="text-xl text-black">Payment Method :</p>
+         <div @click="selectedPaymentMethod = 'cash'" :class="[
+            'cursor-pointer w-[100px]  border border-black rounded-xl flex flex-col justify-center items-center text-center',
+            selectedPaymentMethod === 'cash'
+            ? 'bg-yellow-500 font-bold'
+            : 'text-black',
+            ]">
+            <img src="/images/money-stack.png" alt="" class="w-24" />
+         </div>
+         <div @click="selectedPaymentMethod = 'card'" :class="[
+            'cursor-pointer w-[100px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
+            selectedPaymentMethod === 'card'
+            ? 'bg-yellow-500 font-bold'
+            : 'text-black',
+            ]">
+            <img src="/images/bank-card.png" alt="" class="w-24" />
+         </div>
+      </div>
+      <div class="flex items-center justify-center w-full">
+         <button @click="
+            selectedOrder?.order_id ? updateOrder() : submitOrder()
+            " type="button" :disabled="products.length === 0" :class="[
+            'w-full bg-black py-4 text-2xl font-bold tracking-wider text-center text-white uppercase rounded-xl',
+            products.length === 0
+            ? ' cursor-not-allowed'
+            : ' cursor-pointer',
+            ]">
+         <i class="pr-4 ri-add-circle-fill"></i> {{ selectedOrder?.order_id ? 'Update Order'
+         : 'Confirm Order' }}
+         </button>
+      </div>
+   </div>
+</div>
 
 
 
 
 
-                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
-                                <p class="text-xl text-black">Cash</p>
-                                <span>
-                                    <CurrencyInput v-model="cash" :options="{ currency: 'EUR' }" />
-                                </span>
-                            </div>
-                            <div class="flex items-center justify-between w-full px-16 pt-4">
-                                <p class="text-3xl text-black">Total</p>
-                                <p class="text-3xl text-black">{{ total }} LKR</p>
-                            </div>
 
-                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
-                                <p class="text-xl text-black">Balance</p>
-                                <p>{{ balance }} LKR</p>
-                            </div>
 
-                            <div class="w-full mt-4">
-                                <div class="relative flex items-center">
-                                    <div class="flex items-center justify-center w-full    ">
-                                        <select v-model="selectedStatus"
-                                            class="w-full px-4 my-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
 
-                                            <option value="" disabled selected>Select Task Status </option>
-                                            <option value="0">Pending</option>
-                                            <option value="1">Done</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="w-full my-5">
-                            <div class="relative flex items-center">
-                                <!-- Input Field -->
-                                <label for="coupon" class="sr-only">Coupon Code</label>
-                                <input id="coupon" v-model="couponForm.code" type="text" placeholder="Enter Coupon Code"
-                                    class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
 
-                                <template v-if="!appliedCoupon">
-                                    <button type="button" @click="submitCoupon"
-                                        class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        Apply Coupon
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button type="button" @click="removeCoupon"
-                                        class="absolute right-2 top-2 h-12 px-6 text-lg font-semibold text-white uppercase bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                                        Remove Coupon
-                                    </button>
-                                </template>
-                            </div>
-                        </div>
 
-                        <div class="w-full my-5">
-                            <div class="relative flex items-center">
-                                <!-- Input Field -->
-                                <label for="service_note" class="sr-only">Service Note</label>
-                                <input id="service_note" v-model="serviceNote" type="text"
-                                    :placeholder="selectedOrder?.kitchen_note || 'Enter Service Note'"
-                                    class="w-full h-16 px-6 pr-40 text-lg text-gray-800 placeholder-gray-500 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                            </div>
-                        </div>
 
-                        <div class="flex flex-col w-full space-y-4">
-                            <div class="flex items-center justify-center w-full pt-8 space-x-8">
-                                <p class="text-xl text-black">Payment Method :</p>
-                                <div @click="selectedPaymentMethod = 'cash'" :class="[
-                                    'cursor-pointer w-[100px]  border border-black rounded-xl flex flex-col justify-center items-center text-center',
-                                    selectedPaymentMethod === 'cash'
-                                        ? 'bg-yellow-500 font-bold'
-                                        : 'text-black',
-                                ]">
-                                    <img src="/images/money-stack.png" alt="" class="w-24" />
-                                </div>
-                                <div @click="selectedPaymentMethod = 'card'" :class="[
-                                    'cursor-pointer w-[100px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
-                                    selectedPaymentMethod === 'card'
-                                        ? 'bg-yellow-500 font-bold'
-                                        : 'text-black',
-                                ]">
-                                    <img src="/images/bank-card.png" alt="" class="w-24" />
-                                </div>
-                            </div>
 
-                            <div class="flex items-center justify-center w-full">
-                                <button @click="
-                                    selectedOrder?.order_id ? updateOrder() : submitOrder()
-                                    " type="button" :disabled="products.length === 0" :class="[
-                    'w-full bg-black py-4 text-2xl font-bold tracking-wider text-center text-white uppercase rounded-xl',
-                    products.length === 0
-                        ? ' cursor-not-allowed'
-                        : ' cursor-pointer',
-                ]">
-                                    <i class="pr-4 ri-add-circle-fill"></i> {{ selectedOrder?.order_id ? 'Update Order'
-                                    : 'Confirm Order' }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
     </div>
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="products"
-    :employee="allemployee.find(emp => emp.id === Number(selectedEmployee)) || { name: 'Not Assigned' }"  
+    :employee="allemployee.find(emp => emp.id === Number(selectedEmployee)) || { name: 'Not Assigned' }"
 
     :cashier="loggedInUser" :customer="customer" :order_id="order_id" :cash="cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
@@ -576,7 +564,7 @@ const props = defineProps({
 const discount = ref(0);
 
 const customer = ref({
-    name: "", 
+    name: "",
     phone: "",
     email: "",
 });
