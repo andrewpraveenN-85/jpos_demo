@@ -289,7 +289,7 @@
                     />
                   </div>
 
-                  <!-- <div class="w-full">
+                  <div class="w-full">
                     <label
                       for="image"
                       class="block text-sm font-medium text-gray-300"
@@ -313,7 +313,7 @@
                     <span v-if="form.errors.sub_id" class="mt-4 text-red-500">
                       {{ form.errors.sub_id }}
                     </span>
-                  </div> -->
+                  </div> 
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">

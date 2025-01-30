@@ -76,7 +76,7 @@
                   }}</span>
                 </div>
 
-                <!-- <div>
+                <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Supplier Name:</label
                   >
@@ -97,7 +97,7 @@
                   <span v-if="form.errors.name" class="mt-4 text-red-500">{{
                     form.errors.name
                   }}</span>
-                </div> -->
+                </div> 
 
                 <div>
                   <label class="block text-sm font-medium text-gray-300"

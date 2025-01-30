@@ -76,10 +76,10 @@
                     {{ selectedProduct.category?.name ?? "No Category" }}
                   </p>
 
-                  <!-- <p class="pb-6 text-2xl font-bold text-black">
+                   <p class="pb-6 text-2xl font-bold text-black">
                     <span class="text-[#00000099] font-normal">Supplier : </span
                     >{{ selectedProduct.supplier?.name || "N/A" }}
-                  </p> -->
+                  </p>
 
                   <p class="pb-6 text-2xl font-bold text-black">
                     <span class="text-[#00000099] font-normal"
