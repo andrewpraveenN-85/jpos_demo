@@ -50,7 +50,19 @@ class PosController extends Controller
 
     public function getPendingOrders()
     {
-        $orders = Sale::with('saleItem.product','customer')->where('status', 0)->get(['order_id']); //
+        $orders = Sale::where('status', 0) // Fetch pending orders
+            ->with(['customer', 'employee']) // Load customer and employee relationships
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'order_id' => $order->order_id,
+                    'customer_id' => $order->customer_id ?? 'N/A',
+                    'customer_name' => $order->customer ? $order->customer->name : 'Guest',
+                    'employee_id' => $order->employee_id ?? 'N/A', // Ensure employee_id exists
+                    'employee_name' => $order->employee ? $order->employee->name : 'Not Assigned',
+                ];
+            });
+
         return response()->json($orders);
     }
 

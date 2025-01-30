@@ -8,7 +8,7 @@
 }
 
 /* Style the filter container */
-#stockQtyTbl_filter {
+#stockQtyTbl_filter ,#salesReportTbl_filter {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -17,7 +17,7 @@
 }
 
 /* Style the label and input field inside the filter */
-#stockQtyTbl_filter label {
+#stockQtyTbl_filter label , #salesReportTbl_filter label {
     font-size: 17px;
     color: #000000;
     /* Match text color of the table header */
@@ -26,7 +26,7 @@
 }
 
 /* Style the input field */
-#stockQtyTbl_filter input[type="search"] {
+#stockQtyTbl_filter input[type="search"]  , #salesReportTbl_filter input[type="search"] {
     font-weight: 400;
     padding: 9px 15px;
     font-size: 14px;
@@ -38,7 +38,7 @@
     transition: all 0.5s ease;
 }
 
-#stockQtyTbl_filter input[type="search"]:focus {
+#stockQtyTbl_filter input[type="search"]:focus ,#salesReportTbl_filter input[type="search"]:focus{
     outline: none;
     /* Removes the default outline */
     border: 1px solid #4b5563;
@@ -46,7 +46,8 @@
     /* Removes any focus box-shadow */
 }
 
-#stockQtyTbl_filter {
+#stockQtyTbl_filter ,
+#salesReportTbl_filter{
     float: left;
 }
 
@@ -360,7 +361,7 @@
                     <td class="p-4 border-gray-200">{{ sale.employee ? sale.employee.name : "Not Assigned" }}</td>
                     <td class="p-4 border-gray-200">{{ sale.total_amount }} LKR</td>
                     <td class="p-4 border-gray-200">{{ new Date(sale.sale_date).toLocaleDateString() }}</td>
-                    <td class="p-4 border-gray-200">
+         <td class="p-4 border-gray-200">
     <span v-if="sale.status === 0" class="text-red-500 font-semibold">Pending</span>
     <span v-else-if="sale.status === 1" class="text-green-500 font-semibold">Done</span>
 
@@ -730,6 +731,57 @@ $(document).ready(function () {
         },
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(document).ready(function () {
+    let table = $("#salesReportTbl").DataTable({
+        dom: "Bfrtip",
+        buttons: [],
+        paging: false, // Disable pagination
+        buttons: [],
+        columnDefs: [
+            {
+                targets: 0, // Adjust the target column if needed
+                searchable: false,
+                orderable: false, // Disable sorting for this specific column
+            },
+        ],
+        initComplete: function () {
+            let searchInput = $("div.dataTables_filter input");
+            searchInput.attr("placeholder", "Search ...");
+            searchInput.on("keypress", function (e) {
+                if (e.which == 13) {
+                    table.search(this.value).draw();
+                }
+            });
+        },
+        language: {
+            search: "",
+        },
+    });
+});
+
+
+
+
+
+
+
+
 
 
 </script>
