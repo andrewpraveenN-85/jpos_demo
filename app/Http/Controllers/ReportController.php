@@ -35,8 +35,7 @@ class ReportController extends Controller
             $salesQuery->whereBetween('sale_date', [$startDate, $endDate]);
         }
 
-        $sales = $salesQuery
-        ->with('employee')
+        $sales = Sale::with(['customer', 'employee', 'saleItems.product.category'])
         ->orderBy('sale_date', 'desc')
         ->get();
 

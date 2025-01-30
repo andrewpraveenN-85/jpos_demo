@@ -253,14 +253,14 @@
 
 
             <!-- Chart 3 -->
-          
+
 
 
             <div class="flex flex-col justify-between items-center w-full bg-white border-4 border-black rounded-xl h-[500px]">
     <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">
         Top Products Stock Table
     </h2>
-    
+
     <!-- Ensure full-width table -->
     <div class="overflow-x-auto w-full">
         <table id="stockQtyTbl"
@@ -287,8 +287,8 @@
                     <td class="p-4 border-gray-200">{{ product.discount || "N/A" }}</td>
                     <td class="p-4 border-gray-200">
                         {{
-                            product.discount <= 100 
-                                ? (product.selling_price * (1 - product.discount / 100)).toFixed(2) 
+                            product.discount <= 100
+                                ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
                                 : (product.selling_price - product.discount).toFixed(2)
                         }}
                     </td>
@@ -300,18 +300,18 @@
                     <td class="p-4 border-gray-200">
                         <span v-if="calculateWarrantyPeriod(new Date(), product.warranty_end)">
                             {{
-                                calculateWarrantyPeriod(new Date(), product.warranty_end).years 
-                                    ? calculateWarrantyPeriod(new Date(), product.warranty_end).years + ' years ' 
+                                calculateWarrantyPeriod(new Date(), product.warranty_end).years
+                                    ? calculateWarrantyPeriod(new Date(), product.warranty_end).years + ' years '
                                     : ''
                             }}
                             {{
-                                calculateWarrantyPeriod(new Date(), product.warranty_end).months 
-                                    ? calculateWarrantyPeriod(new Date(), product.warranty_end).months + ' months ' 
+                                calculateWarrantyPeriod(new Date(), product.warranty_end).months
+                                    ? calculateWarrantyPeriod(new Date(), product.warranty_end).months + ' months '
                                     : ''
                             }}
                             {{
-                                calculateWarrantyPeriod(new Date(), product.warranty_end).days 
-                                    ? calculateWarrantyPeriod(new Date(), product.warranty_end).days + ' days ' 
+                                calculateWarrantyPeriod(new Date(), product.warranty_end).days
+                                    ? calculateWarrantyPeriod(new Date(), product.warranty_end).days + ' days '
                                     : ''
                             }}
                         </span>
@@ -329,6 +329,48 @@
 
 
 
+
+
+
+
+<div class="flex flex-col justify-between items-center w-full bg-white border-4 border-black rounded-xl h-[500px]">
+    <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">
+        Sales Report Table
+    </h2>
+
+    <!-- Ensure full-width table -->
+    <div class="overflow-x-auto w-full">
+        <table id="salesReportTbl" class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md">
+            <thead>
+                <tr class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[14px] text-white border-b border-blue-700">
+                    <th class="p-4 font-semibold tracking-wide text-left">#</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Order ID</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Customer</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Employee</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Total Amount (LKR)</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Sale Date</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Reapir Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-[12px] font-normal">
+                <tr v-for="(sale, index) in sales" :key="sale.id" class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg">
+                    <td class="px-6 py-3">{{ index + 1 }}</td>
+                    <td class="p-4 font-bold border-gray-200">{{ sale.order_id }}</td>
+                    <td class="p-4 border-gray-200">{{ sale.customer ? sale.customer.name : "Guest" }}</td>
+                    <td class="p-4 border-gray-200">{{ sale.employee ? sale.employee.name : "Not Assigned" }}</td>
+                    <td class="p-4 border-gray-200">{{ sale.total_amount }} LKR</td>
+                    <td class="p-4 border-gray-200">{{ new Date(sale.sale_date).toLocaleDateString() }}</td>
+                    <td class="p-4 border-gray-200">
+    <span v-if="sale.status === 0" class="text-red-500 font-semibold">Pending</span>
+    <span v-else-if="sale.status === 1" class="text-green-500 font-semibold">Done</span>
+
+</td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
 
