@@ -105,6 +105,7 @@ const props = defineProps({
     custom_discount: Number,
     custom_discount_type: String,
     kitchen_note: String,
+    barcode: String, 
 });
 
 const handlePrintReceipt = () => {
@@ -358,6 +359,7 @@ const handlePrintReceipt = () => {
               <p class="italic">Let the quality define its own standards</p>
                <p style="font-weight: bold;">Powered by JAAN Network Ltd.</p>
                <p>${new Date().toLocaleTimeString()} </p>
+                <p>${props.barcode ? `<img class="barcode" src="${props.barcode}" alt="Order Barcode"  />` : ""}</p>
           </div>
       </div>
   </body>

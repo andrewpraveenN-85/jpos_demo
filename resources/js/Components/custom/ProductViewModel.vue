@@ -189,7 +189,7 @@
                     {{ formattedDate }}
                   </p>
 
-                  <!-- <div class="mt-2">
+                  <div class="mt-2">
                     <input
                       hidden
                       type="text"
@@ -205,7 +205,7 @@
                     >
                       Print Bar Code
                     </button>
-                  </div> -->
+                  </div> 
 
                 </div>
               </div>
@@ -355,14 +355,7 @@ function generateAndPrintBarcode() {
     margin: 0, // Remove default margins to maximize space usage
   });
 
-  // JsBarcode(barcodePrintElement, input, {
-  //   format: "CODE128",
-  //   // format: "EAN13",
-  //   lineColor: "#000",
-  //   width: 1.25,
-  //   height: 100,
-  //   displayValue: false,
-  // });
+ 
 
   const printContents = document.getElementById("printContainer").innerHTML;
   const originalContents = document.body.innerHTML;

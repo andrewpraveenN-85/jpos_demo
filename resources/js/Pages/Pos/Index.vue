@@ -29,8 +29,11 @@
       <div class="flex w-full gap-4">
         <div class="flex flex-col w-1/2">
         <div class="flex flex-col w-full">
+
+          
             <div class="flex flex-col items-center justify-center w-full pb-4 space-y-8"> 
             <div class="flex flex-col items-center justify-center w-full space-y-8 border-4 border-black rounded-3xl p-4">
+              
                 <p class="text-4xl font-bold text-black ">Pending Orders
                   <button
                   @click="resetToLiveBill"
@@ -39,6 +42,29 @@
                   Live Bill
                 </button>
                 </p>
+
+                <!-- Product Code -->
+                <div class="flex items-center justify-center w-full mt-4 mb-4">
+                <label
+                  for="search"
+                  class="text-xl font-medium text-gray-800"
+                ></label>
+                <input
+                  v-model="form.barcode"
+                  id="search"
+                  type="text"
+                  placeholder="Enter Bill BarCode Here!"
+                  class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autofocus
+                />
+
+                <button
+                  @click="submitBarcode"
+                  class="px-12 py-4 text-2xl font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 text-white uppercase bg-blue-600 rounded-r-xl"
+                >
+                  Enter
+                </button>
+              </div>
                 
                 <div v-if="pendingOrders.length === 0" class="text-red-500 ">
                     No pending orders found.
@@ -132,7 +158,7 @@
           </div>
         </div>
         <div class="flex w-1/2 p-8 border-4 border-black rounded-3xl ">
-          <div class="flex flex-col items-start justify-center w-full px-12 pb-0"  style="margin-top: -50px;">
+          <div class="flex flex-col items-start justify-center w-full px-12 pb-0"  >
             <div class="flex items-center justify-between w-full">
               <h2 class="text-5xl font-bold text-black">{{headingTitle}}</h2>
               <span
@@ -145,27 +171,24 @@
             </div>
 
             <div class="flex items-center justify-center w-full mt-4 mb-4">
-                <label
-                  for="search"
-                  class="text-xl font-medium text-gray-800"
-                ></label>
-                <input
-                  v-model="form.barcode"
-                  id="search"
-                  type="text"
-                  placeholder="Enter BarCode Here!"
-                  class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  autofocus
-                />
+              <input
+                v-model="form.barcode"
+                id="search"
+                type="text"
+                placeholder="Enter BarCode Here!"
+                class="w-full h-16 px-4 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autofocus
+                @keyup.enter="submitBarcode"
+              />
 
-                <button
-                  @click="submitBarcode"
-                  class="px-12 py-4 text-2xl font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 text-white uppercase bg-blue-600 rounded-r-xl"
-                >
-                  Enter
-                </button>
+              <button
+                @click="submitBarcode"
+                class="px-12 py-4 text-2xl font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 text-white uppercase bg-blue-600 rounded-r-xl"
+              >
+                Enter
+              </button>
+            </div>
 
-              </div>
               
        
  
@@ -425,6 +448,7 @@
     :custom_discount= "custom_discount"
     :selectedType="selectedType"
     :status="Number(selectedStatus)"
+    :barcode="barcodeData"
   />
   <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -467,6 +491,7 @@ const selectedStatus = ref("1");
 const serviceNote = ref("");
 const pendingOrders = ref([]);
 const selectedOrder = ref(null);
+const barcodeData = ref("");
 
 const headingTitle = computed(() => {
   return selectedOrder.value ? "Jobs" : "Live Bill";
@@ -611,6 +636,13 @@ const order_id = computed(() => {
   ).join("");
 });
 
+const generateBarcode = (orderId) => {
+  const canvas = document.createElement("canvas");
+  JsBarcode(canvas, orderId, { format: "CODE128" }); 
+  return canvas.toDataURL("image/png"); 
+};
+
+
 const submitOrder = async () => {
 
   console.log(products.value);
@@ -634,6 +666,7 @@ const submitOrder = async () => {
       status: selectedStatus.value, 
       kitchen_note: serviceNote.value, 
     });
+    barcodeData.value = generateBarcode(order_id.value);
     isSuccessModalOpen.value = true;
     console.log(response.data); // Handle success
   } catch (error) {
@@ -673,7 +706,7 @@ const updateOrder = async () => {
       status: selectedStatus.value,
       kitchen_note: serviceNote.value,
     });
-
+    barcodeData.value = generateBarcode(selectedOrder.value.order_id);
     isSuccessModalOpen.value = true;
     console.log("Order updated successfully:", response.data);
   } catch (error) {
@@ -771,59 +804,42 @@ const submitCoupon = async () => {
 };
 
 const submitBarcode = async () => {
+  if (!form.barcode) {
+    isAlertModalOpen.value = true;
+    message.value = "Please enter a barcode!";
+    return;
+  }
+
   try {
-    const response = await axios.post(route("pos.getProduct"), {
-      barcode: form.barcode, 
-    });
+    // Fetch order details using barcode (which is the order ID)
+    const response = await axios.get(`/order-details/${form.barcode}`);
 
-    // Extract the response data
-    const { product: fetchedProduct, error: fetchedError } = response.data;
+    if (response.data) {
+      selectedOrder.value = response.data;
 
-    if (fetchedProduct) {
-      if (fetchedProduct.stock_quantity < 1) {
-        isAlertModalOpen.value = true;
-        message.value = "Product is out of stock";
-        return;
-      }
-      // Check if the product already exists in the products array
-      const existingProduct = products.value.find(
-        (item) => item.id === fetchedProduct.id
-      );
+      products.value = response.data.sale_items.map((item) => ({
+        id: item.product.id,
+        name: item.product.name,
+        image: item.product.image || null,
+        selling_price: item.unit_price,
+        quantity: item.quantity,
+        discount: item.product.discount || 0,
+      }));
 
-      if (existingProduct) {
-        // If it exists, increment the quantity
-        existingProduct.quantity += 1;
-      } else {
-        // If it doesn't exist, add it to the products array with quantity 1
-        products.value.push({
-          ...fetchedProduct,
-          quantity: 1,
-          apply_discount: false, // Add the new attribute
-        });
-      }
-
-      product.value = fetchedProduct; // Update product state for individual display
-      error.value = null; // Clear any previous errors
-      console.log(
-        "Product fetched successfully and added to cart:",
-        fetchedProduct
-      );
+      // Clear barcode input after fetching details
+      form.barcode = "";
     } else {
       isAlertModalOpen.value = true;
-      message.value = fetchedError;
-      error.value = fetchedError; // Set the error message
-      console.error("Error:", fetchedError);
+      message.value = "Order not found!";
     }
-  } catch (err) {
-    if (err.response.status === 422) {
-      isAlertModalOpen.value = true;
-      message.value = err.response.data.message;
-    }
-
-    console.error("An error occurred:", err.response?.data || err.message);
-    error.value = "An unexpected error occurred. Please try again.";
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    isAlertModalOpen.value = true;
+    message.value = "Error fetching order details. Please try again!";
+    form.barcode = "";
   }
 };
+
 
 // Handle input from the barcode scanner
 const handleScannerInput = (event) => {
@@ -886,5 +902,31 @@ const handleSelectedProducts = (selectedProducts) => {
   });
 };
 
+function generateAndPrintBarcode() {
+  const input = document.getElementById("barcodeInput").value;
+  const barcodePrintElement = document.getElementById("barcodePrint");
 
+  if (input.trim() === "") {
+    alert("Please enter text to generate and print a barcode.");
+    return;
+  }
+
+  JsBarcode(barcodePrintElement, input, {
+    format: "CODE128", // Code 128 is compact and ideal for small labels
+    lineColor: "#000", // Black lines for high contrast
+    width: 1.3, // Narrower lines to fit more content within the label
+    height: 60, // Shorter height to fit within the 30mm space
+    displayValue: false, // Disable text display if it overlaps with the barcode
+    margin: 0, // Remove default margins to maximize space usage
+  });
+
+  const printContents = document.getElementById("printContainer").innerHTML;
+  const originalContents = document.body.innerHTML;
+
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+
+  location.reload();
+}
 </script>

@@ -105,6 +105,7 @@
                   >
                   <input
                     v-model="form.barcode"
+
                     type="text"
                     id="barcode"
                     placeholder="Enter Barcode"
