@@ -53,7 +53,7 @@
                                 </div>
                                 <div v-else>
                                     <button v-if="table.id !== 'default'" @click.stop="removeTable(index)"
-                                        class="ml-4 text-3xl text-red-500 hover:text-red-700">
+                                        class="text-3xl text-red-500 hover:text-red-700">
                                         ✖
                                     </button>
                                     <div class="text-2xl text-black font-bold">Table</div>
