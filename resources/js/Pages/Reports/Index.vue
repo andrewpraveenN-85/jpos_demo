@@ -392,6 +392,7 @@
               Download PDF
             </button>
           </div>
+<<<<<<< HEAD
 
           <!-- Render Doughnut Chart -->
           <Doughnut :data="chartData1" :options="chartOptions1" />
@@ -498,6 +499,16 @@
           </table>
         </div>
       </div>
+=======
+          <div class="flex items-center justify-center w-full h-full space-x-4">
+             <!-- Chart 1 -->
+              
+                <div
+    class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
+    <div class="chart-container w-full h-full relative">
+        <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12"> Top Products Stock Chart</h2>
+        <Doughnut :data="chartData5" :options="chartOptions5" />
+>>>>>>> 9160fe44c7c9378a98adee54babb59c34e5abbbf
     </div>
   </div>
   <Footer />
