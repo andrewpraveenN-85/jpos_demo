@@ -136,22 +136,22 @@
                     </div>
 
                     <!-- Second select box with label and error -->
-                    <!-- <div class="w-full">
+                    <div class="w-full">
                       <label class="block text-sm font-medium text-gray-300"
-                        >Product Code:</label
+                        >Serial Number:</label
                       >
                       <input
                         v-model="form.code"
                         type="text"
                         id="code"
-                        required
+
                         class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                        placeholder="Enter Product Code"
+                        placeholder="Enter Serial Number"
                       />
                       <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                         form.errors.code
                       }}</span>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
 
