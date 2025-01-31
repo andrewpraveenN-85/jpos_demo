@@ -114,7 +114,8 @@
                 </div>
                 <div class="flex flex-col items-center justify-center">
                    <p class="text-3xl font-bold text-black">
-                      {{ totalSaleAmount }} LKR
+                    {{ totalSaleAmount.toFixed(2) }} LKR
+
                    </p>
                 </div>
              </div>
@@ -127,7 +128,10 @@
                    </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                   <p class="text-3xl font-bold text-black">{{ netProfit }} LKR</p>
+                   <p class="text-3xl font-bold text-black">
+                    {{ netProfit.toFixed(2) }} LKR
+
+                    LKR</p>
                 </div>
              </div>
              <!-- Total Products -->
@@ -139,7 +143,9 @@
                    </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                   <p class="text-3xl font-bold text-black">{{ totalDiscount }} LKR</p>
+                   <p class="text-3xl font-bold text-black">
+                    {{ totalDiscount.toFixed(2) }}
+                    LKR</p>
                 </div>
              </div>
              <!-- Average Transaction Value -->
@@ -152,7 +158,9 @@
                 </div>
                 <div class="flex flex-col items-center justify-center">
                    <p class="text-3xl font-bold text-black">
-                      {{ averageTransactionValue }} LKR
+                    
+                      {{ averageTransactionValue.toFixed(2) }}
+                      LKR
                    </p>
                 </div>
              </div>
