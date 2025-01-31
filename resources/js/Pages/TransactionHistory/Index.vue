@@ -105,9 +105,9 @@
                             <td class="p-4 font-bold border-gray-200">{{ history.order_id || "N/A" }}</td>
 
                             <td class="p-4 font-bold border-gray-200">Job - {{ history.id || "N/A" }}</td>
-                            <td class="p-4 font-bold border-gray-200">
-    {{ (parseFloat(history.total_amount) || 0) + (parseFloat(history.custom_discount) || 0) - (parseFloat(history.discount || 0))}}
-</td>
+                                                        <td class="p-4 font-bold border-gray-200">
+                                {{ (parseFloat(history.total_amount) || 0) + (parseFloat(history.custom_discount) || 0) - (parseFloat(history.discount || 0))}}
+                            </td>
 
 
 
@@ -180,6 +180,17 @@ $(document).ready(function () {
       searchInput.on("keypress", function (e) {
         if (e.which == 13) {
           table.search(this.value).draw();
+        }
+      });
+      let barcodeValue = "";
+      searchInput.on("input", function (e) {
+        barcodeValue = $(this).val(); // Capture the barcode input
+      });
+
+      $(document).on("keypress", function (e) {
+        if (e.which == 13 && barcodeValue.length > 0) { // Enter key after scanning
+          table.search(barcodeValue).draw();
+          barcodeValue = ""; // Reset after search
         }
       });
     },
