@@ -131,7 +131,7 @@
                    <p class="text-3xl font-bold text-black">
                     {{ netProfit.toFixed(2) }} LKR
 
-                    LKR</p>
+                     </p>
                 </div>
              </div>
              <!-- Total Products -->
@@ -158,7 +158,7 @@
                 </div>
                 <div class="flex flex-col items-center justify-center">
                    <p class="text-3xl font-bold text-black">
-                    
+
                       {{ averageTransactionValue.toFixed(2) }}
                       LKR
                    </p>
