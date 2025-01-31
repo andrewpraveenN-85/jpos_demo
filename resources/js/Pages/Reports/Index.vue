@@ -233,16 +233,7 @@
           </div>
           <div class="flex items-center justify-center w-full h-full space-x-4">
              <!-- Chart 1 -->
-             <!-- <div
-                class="flex flex-col justify-between items-center w-1/3 bg-white border-4 border-black rounded-xl h-[450px]">
-                <div class="chart-container">
-                   <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12">
-                      Sales by Category
-                   </h2>
-
-                   <Doughnut :data="chartData2" :options="chartOptions2" />
-                </div>
-                </div> -->
+              
                 <div
     class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
     <div class="chart-container w-full h-full relative">
