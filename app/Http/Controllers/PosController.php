@@ -88,7 +88,7 @@ class PosController extends Controller
     }
 
     public function submit(Request $request)
-    {
+    { 
 
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
@@ -159,7 +159,9 @@ class PosController extends Controller
                 'total_cost' => $totalCost,
                 'payment_method' => $request->input('paymentMethod'), // Payment method from the request
                 'sale_date' => now()->toDateString(), // Current date
-            ]);
+                'cash' => $request->input('cash'),
+                'custom_discount' => $request->input('custom_discount'),
+            ]); 
 
             foreach ($products as $product) {
                 // Check stock before saving sale items
@@ -175,6 +177,14 @@ class PosController extends Controller
                             'message' => "Insufficient stock for product: {$productModel->name}
                             ({$productModel->stock_quantity} available)",
                         ], 423);
+                    }
+
+                    if ($productModel->expire_date && now()->greaterThan($productModel->expire_date)) {
+                        // Rollback transaction and return error
+                        DB::rollBack();
+                        return response()->json([
+                            'message' => "The product '{$productModel->name}' has expired (Expiration Date: {$productModel->expire_date->format('Y-m-d')}).",
+                        ], 423); // HTTP 422 Unprocessable Entity
                     }
 
                     // Create sale item
