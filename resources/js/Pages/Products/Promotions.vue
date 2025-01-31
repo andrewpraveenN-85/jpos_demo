@@ -182,22 +182,22 @@
                   </div>
 
                   <!-- Second select box with label and error -->
-                 <!-- <div class="w-full">
+                 <div class="w-full">
                     <label class="block text-sm font-medium text-black-300"
-                      >Product Code:</label
+                      >Serial Number:</label
                     >
                     <input
                       v-model="form.code"
                       type="text"
                       id="code"
-                      required
+
                       class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       placeholder="Enter Product Code"
                     />
                     <span v-if="form.errors.code" class="mt-4 text-red-500">{{
                       form.errors.code
                     }}</span>
-                  </div>-->
+                  </div>
                 </div>
               </div>
 
@@ -490,7 +490,7 @@ const handleSelectedProducts = (selectedProducts) => {
     }
 
     if (fetchedProduct.cost_price) {
-      form.cost_price = (Number(form.cost_price || 0) + Number(fetchedProduct.cost_price)).toFixed(2);   
+      form.cost_price = (Number(form.cost_price || 0) + Number(fetchedProduct.cost_price)).toFixed(2);
     }
   });
 };
