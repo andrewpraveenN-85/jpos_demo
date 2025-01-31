@@ -90,6 +90,7 @@
               placeholder="Start Date"
             />
           </div>
+<<<<<<< HEAD
           <span class="text-xl font-bold tracking-wider text-blue-600">To</span>
           <!-- End Date -->
           <div class="relative">
@@ -210,12 +211,53 @@
             <!-- Total Products -->
             <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#ffb224] w-full space-y-4 rounded-2xl bg-[#ffb224] shadow-lg">
+=======
+          <!-- Statistic Boxes -->
+          <div class="grid w-full grid-cols-6 gap-4">
+             <!-- Total Sales -->
+             <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#EC6116] w-full space-y-4 rounded-2xl bg-[#EC611666] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center">
+                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                      Total Sales
+                   </h2>
+                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                      Amount
+                   </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                   <p class="text-3xl font-bold text-black">
+                    {{ totalSaleAmount.toFixed(2) }} LKR
+
+                   </p>
+                </div>
+             </div>
+             <!-- Net Profit -->
+             <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#488D3F] w-full space-y-8 rounded-2xl bg-[#488D3F66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center justify-center">
+                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                      Net Profit
+                   </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                   <p class="text-3xl font-bold text-black">
+                    {{ netProfit.toFixed(2) }} LKR
+
+                     </p>
+                </div>
+             </div>
+             <!-- Total Products -->
+             <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#16D0EC] w-full space-y-4 rounded-2xl bg-[#16D0EC66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+>>>>>>> 7b54022635d35ef7ed39043299dff4d7015490ed
                 <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
                         Total Quantity In Stock:
                     </h2>
                 </div>
                 <div class="flex flex-col items-center justify-center">
+<<<<<<< HEAD
                     <p class="text-2xl font-bold text-black">{{ totalQty }} QTY </p>
                 </div>
             </div>
@@ -223,6 +265,32 @@
             <!-- Number of Transactions -->
             <div
                 class="py-6 flex flex-col justify-center items-center border-2 border-[#41ec16] w-full space-y-4 rounded-2xl bg-[#41ec16] shadow-lg ">
+=======
+                   <p class="text-3xl font-bold text-black">
+                    {{ totalDiscount.toFixed(2) }}
+                    LKR</p>
+                </div>
+             </div>
+             <!-- Average Transaction Value -->
+             <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#F6F20E] w-full space-y-4 rounded-2xl bg-[#F6F20E66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col text-center items-center justify-center">
+                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                      Avg. Transaction Value
+                   </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                   <p class="text-3xl font-bold text-black">
+
+                      {{ averageTransactionValue.toFixed(2) }}
+                      LKR
+                   </p>
+                </div>
+             </div>
+             <!-- Number of Transactions -->
+             <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#9E16EC] w-full space-y-4 rounded-2xl bg-[#9E16EC66] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+>>>>>>> 7b54022635d35ef7ed39043299dff4d7015490ed
                 <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
                         Total Selling Price In Stock:  
