@@ -20,9 +20,9 @@
                     <p v-if="selectedTable?.orderId" class="text-3xl font-bold tracking-wide text-black">
                         Order ID : #{{ selectedTable.orderId }}
                     </p>
-                    <!-- <p class="text-3xl text-black cursor-pointer">
-              <i @click="refreshData" class="ri-restart-line"></i>
-            </p> -->
+                    <p class="text-3xl text-black cursor-pointer">
+                      <i @click="refreshData" class="ri-restart-line"></i>
+                    </p> 
                 </div>
             </div>
             <div class="flex w-full gap-4">
@@ -585,7 +585,7 @@ const handleModalOpenUpdate = (newValue) => {
     if (!newValue) {
         removeSelectedTable();
         cash.value = 0;
-        // refreshData();
+        refreshData();
     }
 };
 
@@ -612,11 +612,64 @@ const employee_id = ref("");
 
 const selectedPaymentMethod = ref("cash");
 
-const refreshData = () => {
-    router.visit(route("pos.index"), {
-        preserveScroll: false, // Reset scroll
-        preserveState: false, // Reset component state
-    });
+const refreshData = async () => {
+    // Only refresh if the current selected table is the default/live bill
+    if (selectedTable.value?.id === "default") {
+        // Reset only the default table
+        const defaultTable = {
+            id: "default",
+            number: 1,
+            orderId: generateOrderId(),
+            products: [],
+            cash: 0.0,
+            balance: 0.0,
+            custom_discount: 0.0,
+            custom_discount_type: "percent",
+            kitchen_note: "",
+            order_type: "",
+            delivery_charge: "",
+        };
+
+        // Update the selected table if it's the default one
+        selectedTable.value = defaultTable;
+
+        // Update the default table in the tables array
+        const defaultIndex = tables.value.findIndex(table => table.id === "default");
+        if (defaultIndex !== -1) {
+            tables.value[defaultIndex] = defaultTable;
+        }
+
+        // Reset customer information only for live bill
+        customer.value = {
+            name: "",
+            contactNumber: "",
+            email: "",
+            bdate: "",
+        };
+
+        // Reset other state variables related to live bill
+        appliedCoupon.value = null;
+        cash.value = 0;
+        selectedPaymentMethod.value = "cash";
+        employee_id.value = "";
+
+        // Update localStorage with new tables state
+        localStorage.setItem("tables", JSON.stringify(tables.value));
+        localStorage.setItem("selectedTable", JSON.stringify(selectedTable.value));
+
+        try {
+            // Reload the page data using Inertia
+            await router.reload({
+                only: ['loggedInUser', 'allcategories', 'allemployee', 'colors', 'sizes', 'delivery'],
+                preserveState: false,
+                preserveScroll: false
+            });
+        } catch (error) {
+            console.error("Error refreshing data:", error);
+            // Fallback to hard reload if Inertia reload fails
+            window.location.reload();
+        }
+    }
 };
 
 const removeProduct = (id) => {

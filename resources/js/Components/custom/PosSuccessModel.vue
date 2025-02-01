@@ -181,7 +181,9 @@ const handlePrintReceipt = () => {
 
       return `
         <tr>
-          <td>${product.name}</td>
+          <td>${product.name}<br>
+          <span style="font-size: 8px;font-weight: bold; font-style: italic;"> (${product.selling_price} LKR)</span>
+          </td>
           <td style="text-align: center;">${product.quantity}</td>
           <td>
             ${
@@ -400,7 +402,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : `<div>
       <span>Customer Discount</span>
-      <span>(${(Number(props.custom_discount) || 0).toFixed(2)}) LKR</span>
+      <span>(${(Number(props.custom_discount) || 0).toFixed(2)})LKR</span>
     </div>`}
 
 
