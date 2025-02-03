@@ -234,7 +234,7 @@ class ProductController extends Controller
 
             // Create the product
             $product = Product::create($validated);
-            $product->update(['code' => 'PROD-' . $product->id]);
+            // $product->update(['code' => 'PROD-' . $product->id]);
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
@@ -305,7 +305,7 @@ class ProductController extends Controller
             }
 
             $product = Product::create($validated);
-            $product->update(['code' => 'PROD-' . $product->id]);
+            
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
