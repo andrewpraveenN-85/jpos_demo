@@ -23,6 +23,7 @@
         "@heroicons/vue": "^2.2.0",
         "chart.js": "^4.4.6",
         "dayjs": "^1.11.13",
+        "file-saver": "^2.0.5",
         "flatpickr": "^4.6.13",
         "html2canvas": "^1.4.1",
         "jquery": "^3.7.1",
@@ -33,6 +34,7 @@
         "select2": "^4.1.0-rc.0",
         "vue-barcode-reader": "^1.0.3",
         "vue-chartjs": "^5.3.2",
-        "vue-currency-input": "^3.1.0"
+        "vue-currency-input": "^3.1.0",
+        "xlsx": "^0.18.5"
     }
 }

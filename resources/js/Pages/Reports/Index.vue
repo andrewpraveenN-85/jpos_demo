@@ -366,11 +366,21 @@
 
       <!-- Chart 3 -->
       <div class="bg-white border-4 border-black rounded-xl h-[500px]">
-        <h2
-          class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2"
-        >
-          Top Products Stock Table
-        </h2>
+        <div class="w-full mt-4 px-4 flex justify-between items-center pb-4">
+            <h2
+              class="text-2xl font-medium tracking-wide text-slate-700 text-left"
+            >
+             Top Products Stock Table 
+            </h2>
+            <button
+              @click="downloadTable"
+              class="w-2/3 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
+            >
+              Download 
+            </button> 
+          </div>
+
+        
         <div class="overflow-x-auto overflow-y-auto max-h-[400px]">
           <table
             id="stockQtyTbl"
@@ -386,7 +396,15 @@
                 <th
                   class="p-4 font-semibold tracking-wide text-left first-line:"
                 >
+                  Cost Price (LKR)
+                </th>
+                <th
+                  class="p-4 font-semibold tracking-wide text-left first-line:"
+                >
                   Selling Price (LKR)
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left">
+                  Profit (LKR)
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left">
                   Discount (%)
@@ -410,7 +428,13 @@
                   {{ product.stock_quantity || "N/A" }}
                 </td>
                 <td class="p-4 border-gray-200">
+                  {{ product.cost_price || "N/A" }}
+                </td>
+                <td class="p-4 border-gray-200">
                   {{ product.selling_price || "N/A" }}
+                </td>
+                <td class="p-4 border-gray-200">
+                  {{ product.selling_price - product.cost_price || 0 }}
                 </td>
                 <td class="p-4 border-gray-200">
                   {{ product.discount || "N/A" }}
@@ -446,6 +470,8 @@ import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 import {
   Chart as ChartJS,
@@ -510,7 +536,33 @@ const totalRetailValue = computed(() => {
     }, 0);
 });
 
+const downloadTable = () => {
+  // Create worksheet from the products data
+  const ws = XLSX.utils.json_to_sheet(
+    products.value.map((product, index) => ({
+      "#": index + 1,
+      "Name": product.name || "N/A",
+      "QTY": product.stock_quantity || "N/A",
+      "Cost Price (LKR)": product.cost_price || "N/A",
+      "Selling Price (LKR)": product.selling_price || "N/A",
+      "Profit (LKR)": product.selling_price - product.cost_price || 0,
+      "Discount (%)": product.discount || "N/A",
+      "Retail Value": product.discount <= 100
+        ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+        : (product.selling_price - product.discount).toFixed(2),
+    }))
+  );
 
+  // Create a new workbook and append the worksheet
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Stock Data");
+
+  // Generate Excel file and trigger download
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+  saveAs(blob, "Top_Products_Stock.xlsx");
+};
 
 
 // Handle filter submission
