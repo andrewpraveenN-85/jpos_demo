@@ -18,7 +18,7 @@
                 </div>
                 <div class="flex items-center justify-between w-full space-x-4">
                     <p class="text-3xl font-bold tracking-wide text-black">
-                        Order ID : #{{ orderId }}
+                        Order ID : #{{ orderid  }}
                     </p>
                     <p class="text-3xl text-black cursor-pointer">
                         <i @click="refreshData" class="ri-restart-line"></i>
@@ -324,7 +324,7 @@
         </div>
     </div>
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="products"
-        :employee="employee" :cashier="loggedInUser" :customer="customer" :orderId="orderId" :cash="cash"
+        :employee="employee" :cashier="loggedInUser" :customer="customer" :orderid="orderid" :cash="cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
         :custom_discount_type="custom_discount_type"
         :custom_discount="custom_discount" />
@@ -348,6 +348,7 @@ import axios from "axios";
 import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
 import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
+import { generateOrderId } from "@/Utils/Other.js";
 
 const product = ref(null);
 const error = ref(null);
@@ -360,6 +361,7 @@ const cash = ref(0);
 const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
 const custom_discount_type = ref('percent');
+const orderid = computed(() => generateOrderId());
 
 
 // const balance = ref(0);
@@ -450,7 +452,7 @@ const submitOrder = async () => {
             employee_id: employee_id.value,
             paymentMethod: selectedPaymentMethod.value,
             userId: props.loggedInUser.id,
-            orderId: orderId.value,
+            orderid: orderid.value,
             cash: cash.value,
             custom_discount: custom_discount.value,
         });

@@ -87,7 +87,7 @@ const props = defineProps({
     },
     cashier: Object,
     customer: Object,
-    orderId: String,
+    orderid: String,
     balance: Number,
     cash: Number,
     subTotal: String,
@@ -273,7 +273,7 @@ const handlePrintReceipt = () => {
                   </div>
                   <div>
                       <p>Order No:</p>
-                      <small>${props.orderId}</small>
+                      <small>${props.orderid}</small>
                   </div>
               </div>
               <div class="info-row">
