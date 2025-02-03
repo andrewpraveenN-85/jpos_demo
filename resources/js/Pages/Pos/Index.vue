@@ -784,40 +784,51 @@ const totalDiscount = computed(() => {
 
 
 const sendKOT = (table) => {
-  // Check if the table has products
   if (!table.products || table.products.length === 0) {
     alert("No products available to send to KOT.");
     return;
   }
 
+  // Ensure `kotSentProducts` exists in the table object
+  if (!table.kotSentProducts) {
+    table.kotSentProducts = [];
+  }
 
-  const tableName =
-    table.id === "default"
-      ? "Live Bill"
-      : `Table ${table.number - 1}`
+  // Identify items with increased quantity OR newly added items
+  const newItems = table.products.filter((product) => {
+    const existingSentProduct = table.kotSentProducts.find((sent) => sent.id === product.id);
+    
+    // If product is new, return true
+    if (!existingSentProduct) return true;
 
+    // If product exists but quantity increased, return true
+    return product.quantity > existingSentProduct.quantity;
+  });
 
+  // If no new items or increased quantities, alert the user
+  if (newItems.length === 0) {
+    alert("No new items to send to KOT.");
+    return;
+  }
 
-  // Generate table rows dynamically using table.products
-  const productRows = table.products
+  const tableName = table.id === "default" ? "Live Bill" : `Table ${table.number - 1}`;
+
+  // Generate table rows dynamically for only new or updated items
+  const productRows = newItems
     .map((product) => {
-      // Ensure selling_price is a valid number
-      const sellingPrice = parseFloat(product.selling_price) || 0; // Default to 0 if invalid
-      const totalPrice = sellingPrice * product.quantity;
-
-
+      const previousQuantity = table.kotSentProducts.find((sent) => sent.id === product.id)?.quantity || 0;
+      const newQuantity = product.quantity - previousQuantity; // Show only the increased quantity
 
       return `
         <tr>
           <td>${product.name || "N/A"}</td>
-          <td style="text-align: center;">${product.quantity || 0}</td>
-
+          <td style="text-align: center;">${newQuantity || 0}</td>
         </tr>
       `;
     })
     .join("");
 
-  // Generate the receipt HTML
+  // Generate the KOT Receipt HTML
   const receiptHTML = `
   <!DOCTYPE html>
   <html lang="en">
@@ -918,7 +929,6 @@ const sendKOT = (table) => {
                   <tr>
                       <th>Product Name</th>
                       <th style="text-align: center;">Quantity</th>
-
                   </tr>
               </thead>
               <tbody>
@@ -958,6 +968,22 @@ const sendKOT = (table) => {
     printWindow.print();
     printWindow.close();
   };
+
+  // ✅ Update `kotSentProducts` to track sent items with updated quantities
+  table.kotSentProducts = table.kotSentProducts.map((sent) => {
+    const updatedProduct = table.products.find((p) => p.id === sent.id);
+    return updatedProduct ? { ...sent, quantity: updatedProduct.quantity } : sent;
+  });
+
+  // Add newly sent items
+  newItems.forEach((newProduct) => {
+    if (!table.kotSentProducts.some((p) => p.id === newProduct.id)) {
+      table.kotSentProducts.push({ ...newProduct });
+    }
+  });
+
+  // ✅ Store in localStorage to persist across refreshes
+  localStorage.setItem("kotSentProducts", JSON.stringify(table.kotSentProducts));
 };
 
 
