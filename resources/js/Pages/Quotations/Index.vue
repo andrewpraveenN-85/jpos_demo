@@ -152,6 +152,15 @@
           <div id="quotation-content" class="max-w-4xl mx-auto bg-white border border-gray-300 rounded-lg shadow-md p-6">
             <div>               
             <div class="text-center mb-6">
+                <img
+                    :src="
+                    companyInfo && companyInfo.logo
+                        ? companyInfo.logo
+                        : '/images/jaan_logo.jpg'
+                    "
+                    class="w-[100px] h-[50px] mx-auto"
+                    alt="Logo"
+                />
               <h1 class="text-4xl font-extrabold text-gray-800"> {{ companyInfo ? companyInfo.name : 'Company Name' }}</h1>
               <h2 class="text-2xl font-semibold text-gray-600 mt-2">Sales Quotation</h2>
             </div>
@@ -216,7 +225,7 @@
             <div class="flex justify-between items-center">
               <span class="text-gray-500">Thank you for your business!</span>
               <button
-                @click="downloadPdf"
+                @click="() => downloadPdf()"
                 class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"
               >
                 Download PDF
@@ -603,7 +612,7 @@ const addQuotation = () => {
 });
 };
 
-const downloadPdf = () => {
+const downloadPdf = async () => {
   // Create new PDF document
   const pdf = new jsPDF();
   
@@ -612,45 +621,106 @@ const downloadPdf = () => {
   const subtitleSize = 14;
   const normalSize = 10;
   const smallSize = 8;
+
+  // Add company logo if available
+  if (props.companyInfo && props.companyInfo.logo) {
+    try {
+      // Create a promise to load the image
+      const loadImage = () => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = "Anonymous";  // Handle CORS if needed
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = props.companyInfo.logo;
+        });
+      };
+
+      const img = await loadImage();
+      
+      // Calculate dimensions to maintain aspect ratio
+      const maxWidth = 50;  // Maximum width for logo
+      const maxHeight = 25; // Maximum height for logo
+      
+      let imgWidth = img.width;
+      let imgHeight = img.height;
+      
+      // Scale down if necessary while maintaining aspect ratio
+      if (imgWidth > maxWidth) {
+        const scale = maxWidth / imgWidth;
+        imgWidth = maxWidth;
+        imgHeight = imgHeight * scale;
+      }
+      if (imgHeight > maxHeight) {
+        const scale = maxHeight / imgHeight;
+        imgHeight = maxHeight;
+        imgWidth = imgWidth * scale;
+      }
+
+      // Calculate center position for logo
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const xPos = (pageWidth - imgWidth) / 2;
+      
+      // Add image to PDF
+      pdf.addImage(img, 'JPEG', xPos, 10, imgWidth, imgHeight);
+      
+      // Adjust starting Y position for rest of content
+      pdf.setFontSize(titleSize);
+      pdf.setFont('helvetica', 'bold');
+      const companyName = props.companyInfo ? props.companyInfo.name : 'Company Name';
+      pdf.text(companyName, 105, 45, { align: 'center' });
+      
+      // Adjust all other Y positions by adding 25 units
+      pdf.setFontSize(subtitleSize);
+      pdf.text('Sales Quotation', 105, 55, { align: 'center' });
+      
+      pdf.setFontSize(normalSize);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Quotation ID: ${orderId.value}`, 15, 70);
+      pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 77);
+      pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 84);
+      
+      const startY = 100;  // Adjusted start Y for table
+      
+    } catch (error) {
+      console.error('Error loading logo:', error);
+      // Fallback to original positions if logo fails to load
+      pdf.setFontSize(titleSize);
+      pdf.setFont('helvetica', 'bold');
+      const companyName = props.companyInfo ? props.companyInfo.name : 'Company Name';
+      pdf.text(companyName, 105, 20, { align: 'center' });
+      
+      pdf.setFontSize(subtitleSize);
+      pdf.text('Sales Quotation', 105, 30, { align: 'center' });
+      
+      pdf.setFontSize(normalSize);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Quotation ID: ${orderId.value}`, 15, 45);
+      pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 52);
+      pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 59);
+    }
+  }
   
-  // Add company logo/header
-  pdf.setFontSize(titleSize);
-  pdf.setFont('helvetica', 'bold');
-  const companyName = props.companyInfo ? props.companyInfo.name : 'Company Name';
-  pdf.text(companyName, 105, 20, { align: 'center' });
-  
-  // Add "Sales Quotation" subtitle
-  pdf.setFontSize(subtitleSize);
-  pdf.text('Sales Quotation', 105, 30, { align: 'center' });
-  
-  // Add quotation details
-  pdf.setFontSize(normalSize);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text(`Quotation ID: ${orderId.value}`, 15, 45);
-  pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 52);
-  pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 59);
-  
-  // **Remove "Discount" Column from Product Table**
+  // Rest of the PDF generation code remains the same
   const tableHeaders = ['Product', 'Qty', 'Unit Price', 'Sub Total'];
-  const startY = 75;
+  const startY = props.companyInfo && props.companyInfo.logo ? 100 : 75;
   
   // Style for table header
   pdf.setFillColor(240, 240, 240);
-  pdf.rect(15, startY - 5, 165, 8, 'F'); // Adjust width for removed column
+  pdf.rect(15, startY - 5, 165, 8, 'F');
   pdf.setFont('helvetica', 'bold');
   
   // Add table headers
   pdf.text(tableHeaders[0], 15, startY);
   pdf.text(tableHeaders[1], 100, startY, { align: 'right' });
   pdf.text(tableHeaders[2], 130, startY, { align: 'right' });
-  pdf.text(tableHeaders[3], 170, startY, { align: 'right' }); // Shifted Sub Total
+  pdf.text(tableHeaders[3], 170, startY, { align: 'right' });
   
   // Add products
   let currentY = startY + 10;
   pdf.setFont('helvetica', 'normal');
   
   products.value.forEach((item) => {
-    // Add new page if content exceeds page height
     if (currentY > 270) {
       pdf.addPage();
       currentY = 20;
@@ -659,14 +729,12 @@ const downloadPdf = () => {
     const itemName = item.name || 'Unnamed Product';
     const quantity = item.quantity?.toString() || '0';
     const price = item.selling_price?.toString() || '0';
-    const subtotal = (
-      ( item.selling_price* item.quantity)
-    ).toFixed(2);
+    const subtotal = (item.selling_price * item.quantity).toFixed(2);
     
     pdf.text(itemName, 15, currentY);
     pdf.text(quantity, 100, currentY, { align: 'right' });
     pdf.text(price, 130, currentY, { align: 'right' });
-    pdf.text(subtotal, 170, currentY, { align: 'right' }); // Adjusted Sub Total Position
+    pdf.text(subtotal, 170, currentY, { align: 'right' });
     
     currentY += 8;
   });
@@ -685,24 +753,18 @@ const downloadPdf = () => {
   
   let summaryItems = [['Product Total:', total.value || '0.00']];
   
-  // **Only show discount in summary if greater than 0**
   if (parseFloat(totalDiscount.value) > 0) {
     summaryItems.push(['Discount:', totalDiscount.value]);
   }
   
-  // Add description price only if description exists
   if (description.value && description_price.value) {
     summaryItems.push([description.value, description_price.value]);
   }
   
-  // Add grand total
   summaryItems.push(['Grand Total:', totalquotation.value || '0.00']);
   
-  // Display summary items with left-aligned labels and right-aligned values
   summaryItems.forEach(([label, value]) => {
-    // Left-aligned label
     pdf.text(label, 15, currentY);
-    // Right-aligned value with currency
     pdf.text(`${value} LKR`, 170, currentY, { align: 'right' });
     currentY += 7;
   });
@@ -715,6 +777,5 @@ const downloadPdf = () => {
   // Save PDF
   pdf.save(`Quotation_${orderId.value}.pdf`);
 };
-
 
 </script>
