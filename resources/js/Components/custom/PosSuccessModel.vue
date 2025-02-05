@@ -139,6 +139,8 @@ const props = defineProps({
   kitchen_note: String,
   delivery_charge : String,
   order_type : String,
+  service_charge : String,
+
 });
 
 const handlePrintReceipt = () => {
@@ -374,7 +376,7 @@ ${Number(props.subTotal) !== Number(props.total)
     ? ""
     : `<div>
         <span>Sub Total</span>
-        <span>(${(Number(props.subTotal) || 0).toFixed(2)}) LKR</span>
+        <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
       </div>`)
   : ""}
 
@@ -398,6 +400,13 @@ ${Number(props.subTotal) !== Number(props.total)
       <span>(${(Number(props.custom_discount) || 0).toFixed(2)}) LKR</span>
     </div>`}
 
+     ${Number(props.service_charge) === 0
+  ? ""
+  : `<div>
+      <span>Service Charge</span>
+      <span>${(Number(props.service_charge) || 0).toFixed(2)} LKR</span>
+    </div>`}
+
 
 
     ${!props.delivery_charge
@@ -413,7 +422,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : `<div style="font-weight: bold;">
       <span>Total</span>
-      <span>(${(Number(props.total) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 
@@ -421,7 +430,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : `<div>
       <span>Cash</span>
-      <span>(${(Number(props.cash) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 
@@ -433,7 +442,7 @@ ${Number(props.subTotal) !== Number(props.total)
   ? ""
   : ` <div style="font-weight: bold;">
       <span>Balance</span>
-      <span>(${(Number(props.balance) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 

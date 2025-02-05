@@ -271,6 +271,18 @@
                                     </select>
                                 </span>
                             </div>
+
+                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+                                <p class="text-xl text-black">Service Charge </p>
+                                <span class="flex items-center">
+                                    <CurrencyInput 
+                                        v-model="selectedTable.service_charge" 
+                                        class="rounded-md px-2 py-1 text-black text-md"
+                                    />
+                                    <span class="ml-2">LKR</span>
+                                    </span>
+                            </div>
+
                             <!-- <div
                   v-if="order_type === 'pickup'"
                   class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black"
@@ -398,7 +410,7 @@
         :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
         :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
-        :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note"
+        :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :service_charge="selectedTable.service_charge"
         :order_type="selectedTable.order_type" />
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -438,6 +450,7 @@ const order_type = ref("");
 const kitchen_note = ref("");
 const delivery_charge = ref("");
 
+
 // Load initial state from localStorage or use default values
 const savedTables = JSON.parse(localStorage.getItem("tables")) || [
     {
@@ -451,6 +464,7 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
         kitchen_note: "",
         order_type: "",
         delivery_charge: "",
+        service_charge: 0.0,
     },
 ];
 
@@ -703,9 +717,6 @@ const submitOrder = async () => {
         return;
     }
 
-
-
-
     try {
         const response = await axios.post("/pos/submit", {
             customer: customer.value,
@@ -716,7 +727,7 @@ const submitOrder = async () => {
             orderId: selectedTable.value.orderId,
             custom_discount: customDiscCalculated.value,
             cash: selectedTable.value.cash,
-
+            service_charge: selectedTable.value.service_charge,
             kitchen_note: selectedTable.value.kitchen_note,
             delivery_charge: selectedTable.value.delivery_charge,
             order_type: selectedTable.value.order_type,
@@ -995,6 +1006,7 @@ const total = computed(() => {
     const subtotalValue = parseFloat(subtotal.value) || 0;
     const discountValue = parseFloat(totalDiscount.value) || 0;
     const customDiscount = parseFloat(selectedTable.value.custom_discount) || 0;
+    const serviceCharge = parseFloat(selectedTable.value.service_charge) || 0;
 
     let customValue = 0;
 
@@ -1013,7 +1025,7 @@ const total = computed(() => {
     }
 
     return (
-        subtotalValue - discountValue - customValue + deliveryChargeValue
+        subtotalValue - discountValue - customValue + deliveryChargeValue + serviceCharge
     ).toFixed(2);
 });
 

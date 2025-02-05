@@ -92,7 +92,7 @@ class PosController extends Controller
     }
 
     public function submit(Request $request)
-    {
+    { 
       
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
@@ -169,6 +169,7 @@ class PosController extends Controller
                 'delivery_charge' => $request->input('delivery_charge'),
                 'kitchen_note' => $request->input('kitchen_note'),
                 'order_type' => $request->input('order_type'),
+                'service_charge'=> $request->input('service_charge'),
             ]);
 
             foreach ($products as $product) {

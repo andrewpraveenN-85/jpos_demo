@@ -562,7 +562,12 @@ ${
       <span>(${(Number(history.custom_discount) || 0).toFixed(2)}) LKR</span>
     </div>`}
 
-
+  ${Number(history.service_charge) === 0
+  ? ""
+  : `<div>
+      <span>Service Charge</span>
+      <span>${(Number(history.service_charge) || 0).toFixed(2)} LKR</span>
+    </div>`}
 
 
   ${!history.delivery_charge
@@ -582,6 +587,7 @@ ${
                     ${
                     (
                         (parseFloat(history.total_amount) || 0) +
+                          (parseFloat(history.service_charge) || 0) +
                         (parseFloat(history.delivery_charge) || 0) -
                         (parseFloat(history.discount) || 0) -
                         (parseFloat(history.custom_discount) || 0)
@@ -596,7 +602,7 @@ ${
   ? ""
   : `<div>
       <span>Cash</span>
-      <span>(${(Number(history.cash) || 0).toFixed(2)}) LKR</span>
+      <span>${(Number(history.cash) || 0).toFixed(2)} LKR</span>
     </div>`}
 
 
@@ -620,6 +626,7 @@ ${
               (parseFloat(history.cash) || 0) -
               (
                 (parseFloat(history.total_amount) || 0) +
+                (parseFloat(history.service_charge) || 0) +
                 (parseFloat(history.delivery_charge) || 0) -
                 (parseFloat(history.discount) || 0) -
                 (parseFloat(history.custom_discount) || 0)
