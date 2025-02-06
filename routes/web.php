@@ -85,6 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::resource('stock-transition', StockTransactionController::class);
     Route::resource('transactionHistory', TransactionHistoryController::class );
+    Route::post('/transactions/delete', [TransactionHistoryController::class, 'destroy'])->name('transactions.delete');
     Route::resource('delivery', DeliveryController::class);
 
     // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');
