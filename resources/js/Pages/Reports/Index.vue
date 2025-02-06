@@ -381,8 +381,8 @@
         </div>
       </div>
 
-      <!-- Chart 3 -->
-      <div class="bg-white border-4 border-black rounded-xl h-[500px]">
+      
+      <div class="w-full bg-white border-4 border-black rounded-xl h-[500px]">
 
 
         <h2
@@ -457,10 +457,74 @@
         </div>
 
         
-      </div>
-
-      
+      </div>  
     </div>
+
+<!-- Batch Management -->
+    <!-- Batch Management -->
+<div class="w-full bg-white border-4 border-black rounded-xl h-[500px] p-4">
+    <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">
+        Batch Management
+    </h2>
+
+    <!-- Search Form -->
+    <div class="flex justify-center items-center space-x-4 pb-4">
+        <input
+            v-model="searchCode"
+            type="text"
+            placeholder="Enter Product Code"
+            class="w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+            @click="fetchProductByCode"
+            class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+        >
+            Search
+        </button>
+    </div>
+
+    <!-- Batch Table - Only shown when there are search results -->
+    <div v-if="showBatchTable" class="overflow-x-auto overflow-y-auto max-h-[250px]">
+        <table class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto">
+            <thead>
+                <tr class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[14px] text-white border-b border-blue-700">
+                    <th class="p-4 font-semibold tracking-wide text-left">#</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Batch No</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Total Qty</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Remaining Qty</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Purchase Date</th>
+                    <th class="p-4 font-semibold tracking-wide text-left">Expire Date</th>
+                </tr>
+            </thead>
+            <tbody class="text-[12px] font-normal">
+                <tr v-for="(product, index) in batchProducts" 
+                    :key="index"
+                    class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg">
+                    <td class="px-6 py-3">{{ index + 1 }}</td>
+                    <td class="p-4 font-bold border-gray-200">{{ product.batch_no }}</td>
+                    <td class="p-4 border-gray-200">{{ product.total_quantity }}</td>
+                    <td class="p-4 border-gray-200">{{ product.stock_quantity }}</td>
+                    <td class="p-4 border-gray-200">{{ new Date(product.purchase_date).toLocaleDateString() }}</td>
+                    <td class="p-4 border-gray-200">{{ new Date(product.expire_date).toLocaleDateString() }}</td>
+                </tr>
+            </tbody>
+            <tfoot v-if="batchProducts.length > 0" class="bg-gray-100 text-gray-900 font-semibold">
+                <tr>
+                    <td colspan="2" class="p-4 text-right">Total:</td>
+                    <td class="p-4">{{ batchTotalQuantity }}</td>
+                    <td class="p-4">{{ batchRemainingQuantity }}</td>
+                    <td class="p-4"></td>
+                    <td class="p-4"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- No Results Message -->
+    <div v-else-if="searchCode && !batchProducts.length" class="text-center py-8">
+        <p class="text-gray-500">No batch records found for this product code.</p>
+    </div>
+</div>
   </div>
   <Footer />
 </template>
@@ -515,6 +579,33 @@ const props = defineProps({
   categorySales: { type: Object, required: true },
   employeeSalesSummary: { type: Object, required: true },
 });
+
+const searchCode = ref('');
+const batchProducts = ref([]);
+const batchTotalQuantity = ref(0);
+const batchRemainingQuantity = ref(0);
+const showBatchTable = ref(false);
+
+const fetchProductByCode = async () => {
+    try {
+        if (!searchCode.value) {
+            showBatchTable.value = false;
+            return;
+        }
+
+        const response = await axios.get('/batch-management/search', {
+            params: { code: searchCode.value }
+        });
+
+        batchProducts.value = response.data.products;
+        batchTotalQuantity.value = response.data.totalQuantity;
+        batchRemainingQuantity.value = response.data.remainingQuantity;
+        showBatchTable.value = true;
+    } catch (error) {
+        console.error('Error fetching batch data:', error);
+        alert('Error fetching batch data. Please try again.');
+    }
+};
 
 // Date filters
 const startDate = ref(props.startDate);

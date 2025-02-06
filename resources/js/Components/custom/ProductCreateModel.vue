@@ -234,8 +234,8 @@
             <form @submit.prevent="submit">
               <!-- Modal Form -->
               <div class="mt-6 space-y-4 text-left">
-                <!-- Category Name -->
-                <div>
+                  <div class="flex items-center gap-8">
+                    <div class="w-full">
                   <label class="block text-sm font-medium text-gray-300"
                     >Category Name:</label
                   >
@@ -264,7 +264,7 @@
                     form.errors.name
                   }}</span>
                 </div>
-                <div>
+                <div class="w-full">
                   <label class="block text-sm font-medium text-gray-300"
                     >Supplier Name:</label
                   >
@@ -285,7 +285,8 @@
                   <span v-if="form.errors.name" class="mt-4 text-red-500">{{
                     form.errors.name
                   }}</span>
-                </div>
+                  </div>
+                  </div>
                 <div class="flex items-center gap-8">
                   <div class="w-full">
                     <label class="block text-sm font-medium text-gray-300"
@@ -304,28 +305,44 @@
                       >{{ form.errors.barcode }}</span
                     >
                   </div>
-                  <div v-if="isPharma" class="w-full">
+                  <div class="w-full">
                     <label class="block text-sm font-medium text-gray-300"
-                      >Expire Date:</label
+                      >Product code:</label
                     >
                     <input
-                      v-model="form.expire_date"
-                      type="date"
-                      id="barcode"
-                      placeholder="Enter Barcode"
+                      v-model="form.code"
+                      type="text"
+                      id="code"
+                      placeholder="Enter product code"
                       class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                     />
                     <span
-                      v-if="form.errors.expire_date"
+                      v-if="form.errors.code"
                       class="mt-4 text-red-500"
-                      >{{ form.errors.expire_date }}</span
+                      >{{ form.errors.code }}</span
                     >
                   </div>
                 </div>
-                <div>
-                  <div class="flex items-center gap-8">
-                    <!-- First select box with label and error -->
-                    <div class="w-full">
+                
+                <div class="flex items-center gap-8">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Batch No:</label
+                    >
+                    <input
+                      v-model="form.batch_no"
+                      type="text"
+                      id="batch_no"
+                      placeholder="Enter batch no"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.batch_no"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.batch_no }}</span
+                    >
+                  </div>
+                  <div class="w-full">
                       <label class="block text-sm font-medium text-gray-300"
                         >Product Name:</label
                       >
@@ -341,22 +358,46 @@
                         form.errors.name
                       }}</span>
                     </div>
+                </div>
+                
+                <div>
+                  <div class="flex items-center gap-8">
+                    <!-- First select box with label and error -->
+                    <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Purchase Date:</label
+                    >
+                    <input
+                      v-model="form.purchase_date"
+                      type="date"
+                      id="purchase_date"
+                      placeholder="Enter purchase date"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.purchase_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.purchase_date }}</span
+                    >
+                  </div>
                     
-                    <!-- <div class="w-full">
-                      <label class="block text-sm font-medium text-gray-300"
-                        >Product Code:</label
-                      >
-                      <input
-                        v-model="form.code"
-                        type="text"
-                        id="code"
-                        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                        placeholder="Enter Product Code"
-                      />
-                      <span v-if="form.errors.code" class="mt-4 text-red-500">{{
-                        form.errors.code
-                      }}</span>
-                    </div> -->
+                     <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
+                    >
+                    <input
+                      v-model="form.expire_date"
+                      type="date"
+                      id="barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
+                  </div> 
                   </div>
                 </div>
                 <div>
@@ -623,6 +664,10 @@ const form = useForm({
   barcode: "",
   image: null, // For file upload
   expire_date: null,
+  batch_no: "",
+  purchase_date: null,
+
+
 });
 
 const isDialogOpen = ref(false);

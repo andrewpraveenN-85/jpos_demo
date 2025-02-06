@@ -696,6 +696,7 @@ const handleSelectedProducts = (selectedProducts) => {
 //   }
 
 //   let matches = 0;
+
 //   return props.products.filter((product) => {
 //     if (
 //       product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) &&

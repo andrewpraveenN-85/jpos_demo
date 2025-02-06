@@ -215,6 +215,8 @@ class ProductController extends Controller
             'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'expire_date' => 'nullable|date',
+            'batch_no' => 'nullable|max:50',
+            'purchase_date' => 'nullable|date',
         ]);
 
         // dd($validated);
@@ -231,7 +233,7 @@ class ProductController extends Controller
             if (empty($validated['barcode'])) {
                 $validated['barcode'] = $this->generateUniqueCode(12);
             }
-
+            $validated['total_quantity'] = $validated['stock_quantity'] ?? 0;
             // Create the product
             $product = Product::create($validated);
             // $product->update(['code' => 'PROD-' . $product->id]);
@@ -413,6 +415,8 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
             'expire_date' => 'nullable|date',
+            'batch_no' => 'nullable|max:50',
+            'purchase_date' => 'nullable|date'
         ]);
 
         // Handle image update
@@ -436,6 +440,7 @@ class ProductController extends Controller
 
         // Determine transaction type
         $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
+        $validated['total_quantity'] = $validated['stock_quantity'];
 
         // Update product
         $product->update($validated);

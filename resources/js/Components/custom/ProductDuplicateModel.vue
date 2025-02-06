@@ -58,6 +58,22 @@
                       >
                     </div>
                   </div>
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Batch No:</label
+                    >
+                    <input
+                      v-model="form.batch_no"
+                      type="text"
+                      id="batch_no"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.batch_no"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.batch_no }}</span
+                    >
+                  </div>
                   <!-- Cost Price input -->
                 </div>
 
@@ -149,6 +165,44 @@
                       >{{ form.errors.expire_date }}</span
                     >
                   </div>
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <!-- Selling Price input -->
+                  <div class="w-full">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Purchase Date:</label
+                      >
+                      <input
+                        v-model="form.purchase_date"
+                        type="date"
+                        id="purchase_date"
+                        required
+                        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      />
+                      <span v-if="form.errors.purchase_date" class="mt-4 text-red-500">{{
+                        form.errors.purchase_date
+                      }}</span>
+                    </div>
+                  </div>
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
+                    >
+                    <input
+                      v-model="form.expire_date"
+                      type="date"
+                      id="expire_date"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
+                  </div>
+                  <!-- Cost Price input -->
                 </div>
 
                 <div>
@@ -493,6 +547,8 @@ const form = useForm({
   barcode: "",
   image: null, // For file upload
   expire_date: null,
+  purchase_date: null,
+  batch_no: "",
 });
 
 // Handle file upload for images
@@ -574,10 +630,14 @@ watch(
       form.selling_price = newValue.selling_price || null;
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
+      form.batch_no = newValue.batch_no || "";
       form.image = newValue.image;
       form.expire_date = newValue.expire_date
         ? new Date(newValue.expire_date).toISOString().split("T")[0]
         : null;
+      form.purchase_date = newValue.purchase_date
+      ? new Date(newValue.purchase_date).toISOString().split("T")[0]
+      : null;
     }
   },
   { immediate: true }

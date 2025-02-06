@@ -25,6 +25,9 @@ class Product extends Model
         'barcode',
         'image',
         'expire_date',
+        'batch_no',
+        'total_quantity',
+        'purchase_date',
     ];
 
     // public static function boot()

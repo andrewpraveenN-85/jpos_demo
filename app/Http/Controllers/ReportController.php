@@ -23,6 +23,18 @@ class ReportController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $productCode = $request->input('code', null);
+        $productsQuery = Product::query();
+
+        if ($productCode) {
+            $productsQuery->where('code', $productCode)
+                          ->with('batch_no'); 
+        }
+
+        $products = $productsQuery->orderBy('created_at', 'desc')->get();
+        $totalQty = $products->sum('total_quantity');
+        $remainingQty = $products->sum('stock_quantity');
+
         $startDate = $request->input('start_date', '');
         $endDate = $request->input('end_date', '');
 
@@ -138,6 +150,41 @@ class ReportController extends Controller
             'endDate' => $endDate,
             'categorySales' => $categorySales,
             'employeeSalesSummary' => $employeeSalesSummary,
+            'totalQty' => $totalQty,
+            'remainingQty' => $remainingQty,
+        ]);
+    }
+
+    public function searchByCode(Request $request)
+    {
+        $code = $request->input('code');
+        
+        if (!$code) {
+            return response()->json([
+                'products' => [],
+                'totalQuantity' => 0,
+                'remainingQuantity' => 0
+            ]);
+        }
+
+        $products = Product::where('code', $code)
+            ->select([
+                'batch_no',
+                'total_quantity',
+                'stock_quantity',
+                'expire_date',
+                'purchase_date',
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalQuantity = $products->sum('total_quantity');
+        $remainingQuantity = $products->sum('stock_quantity');
+
+        return response()->json([
+            'products' => $products,
+            'totalQuantity' => $totalQuantity,
+            'remainingQuantity' => $remainingQuantity
         ]);
     }
 
