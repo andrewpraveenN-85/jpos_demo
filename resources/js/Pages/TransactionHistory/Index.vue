@@ -96,6 +96,7 @@
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Print</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">View</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">KOT</th>
+                  <th class="p-4 font-semibold tracking-wide text-left uppercase">Delete</th>
                 </tr>
               </thead>
               <tbody class="text-[13px] font-normal">
@@ -157,6 +158,11 @@
                     >
                       KOT
                     </button>
+                  </td>
+                  <td class="p-4 font-bold border-gray-200">
+                    <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600" @click="deleteReceipt(history.order_id)">
+                      Delete
+                  </button>
                   </td>
                 </tr>
               </tbody>
@@ -284,12 +290,12 @@
 
 
     </div>
-  </template>
+</template>
 
 
 <script setup>
 import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, router  } from "@inertiajs/vue3";
 import { Head, Link } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
@@ -307,6 +313,16 @@ const selectedTransaction = ref(null);
 
 const viewDetails = (history) => {
   selectedTransaction.value = history;
+};
+
+const deleteReceipt = (orderId) => {
+  if (confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
+    router.post(route("transactions.delete"), { order_id: orderId }, {
+      onError: (error) => {
+        alert("Error: " + (error.message || "Something went wrong."));
+      },
+    });
+  }
 };
 
 const closeModal = () => {
