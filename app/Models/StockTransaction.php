@@ -15,6 +15,7 @@ class StockTransaction extends Model
         'transaction_date',
         'supplier_id',
         'reason',
+        'sale_id',
     ];
 
      // Relationships

@@ -24,6 +24,8 @@ class Sale extends Model
         'kitchen_note',
         'job_id',
         'cash',
+        'is_return_bill', // ✅ New field
+    'return_date',    // ✅ New field
 
     ];
 
