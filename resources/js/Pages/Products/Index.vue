@@ -23,11 +23,11 @@
   <Head title="Products" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <!-- Include the Header -->
     <Header />
-    <div class="w-5/6 py-12 space-y-16">
+    <div class="w-full md:w-5/6 py-12 space-y-16">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-center space-x-4"></div>
         <p class="text-3xl italic font-bold text-black">
@@ -74,22 +74,22 @@
           "
           :class="
             HasRole(['Admin'])
-              ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-              : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
+              ? 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+              : 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
           "
           :title="
             HasRole(['Admin'])
               ? ''
-              : 'You do not have permission to add more Productss'
+              : 'You do not have permission to add more Products'
           "
         >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
+          <i class="md:pr-4 ri-add-circle-fill"></i> Add More Product
         </p>
       </div>
 
       <div class="flex items-center space-x-4">
         <!-- Search Input on the Left -->
-        <div class="w-1/3">
+        <div class="md:w-1/4 w-full">
           <input
             v-model="search"
             @input="performSearch"
@@ -125,7 +125,11 @@
               :key="category.id"
               :value="category.id"
             >
-              {{ category.name }}
+              {{
+                category.hierarchy_string
+                  ? category.hierarchy_string + " ----> " + category.name
+                  : category.name
+              }}
             </option>
           </select>
 
@@ -192,7 +196,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-4 gap-8">
+      <div class="grid md:grid-cols-4 grid-cols-1 gap-8">
         <template v-if="products.data.length > 0">
           <div
             v-for="product in products.data"
@@ -223,7 +227,7 @@
                 class="object-cover w-full h-64"
               />
             </div>
-            <div class="px-4 py-4 space-y-4">
+            <div class="px-2 py-4 space-y-4">
               <div
                 class="flex items-start space-x-3 justify-between text-[11px] font-bold tracking-wide"
               >
@@ -235,19 +239,19 @@
                 </p>
               </div>
 
-              <div class="flex items-center justify-center w-full space-x-4">
-                <p
-                  class="flex items-center space-x-2 text-justify text-gray-400"
-                >
-                  Color :
+              <div class="flex justify-center space-x-2 items-start w-full">
+                <div class="flex space-x-1 text-gray-400">
+                  <p class="font-bold">Color:</p>
 
-                  <b> &nbsp; {{ product.color?.name || "N/A" }} </b>
-                </p>
+                  <p>{{ product.color?.name || "N/A" }}</p>
+                </div>
 
-                <p class="text-justify text-gray-400">
-                  Size :
-                  <b> {{ product.size?.name || "N/A" }} </b>
-                </p>
+                <div class="flex space-x-1 text-gray-400">
+                  <p class="font-bold">Size:</p>
+                  <p>
+                    {{ product.size?.name || "N/A" }}
+                  </p>
+                </div>
               </div>
 
               <div class="flex items-center justify-center w-full space-x-4">
@@ -264,7 +268,7 @@
                   v-if="product.stock_quantity > 0"
                   class="text-xl font-bold tracking-wider text-green-500"
                 >
-                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock
+                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock ({{ product.stock_quantity }})
                 </p>
                 <p v-else class="text-xl font-bold tracking-wider text-red-500">
                   <i class="ri-checkbox-blank-circle-fill"></i> Out of Stock
@@ -334,7 +338,7 @@
         <template v-else>
           <div class="col-span-4 text-center text-gray-500">
             <p class="text-center text-red-500 text-[17px]">
-              No products available
+              No Products Available
             </p>
           </div>
         </template>
@@ -342,7 +346,7 @@
 
       <div class="flex space-x-2 pagination">
         <!-- Prev Button -->
-        <Link
+        <span
           v-if="products.links[0]"
           @click.prevent="navigateTo(products.links[0].url)"
           :class="[
@@ -351,11 +355,11 @@
           ]"
         >
           Previous
-        </Link>
+        </span>
 
         <!-- Pagination Links -->
-        <Link
-          v-for="(link, index) in products.links.slice(
+        <span
+          v-for="(link) in products.links.slice(
             1,
             products.links.length - 1
           )"
@@ -363,10 +367,10 @@
           @click.prevent="navigateTo(link.url)"
           :class="['pagination-btn', { 'pagination-active': link.active }]"
           v-html="link.label"
-        ></Link>
+        ></span>
 
         <!-- Next Button -->
-        <Link
+        <span
           v-if="products.links[products.links.length - 1]"
           @click.prevent="
             navigateTo(products.links[products.links.length - 1].url)
@@ -380,7 +384,7 @@
           ]"
         >
           Next
-        </Link>
+        </span>
       </div>
     </div>
   </div>
@@ -508,7 +512,7 @@ const applyFilters = (page) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     { preserveState: true }
   );
@@ -555,7 +559,7 @@ const navigateTo = (url) => {
       color: color.value,
       size: size.value,
       stockStatus: stockStatus.value,
-      selectedCategory: selectedCategory.value
+      selectedCategory: selectedCategory.value,
     },
     {
       preserveState: true, // Maintain the current state

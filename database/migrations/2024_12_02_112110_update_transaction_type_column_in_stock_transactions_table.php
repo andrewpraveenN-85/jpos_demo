@@ -26,11 +26,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('stock_transactions', function (Blueprint $table) {
-            $table->dropColumn('transaction_type'); // Drop the updated column
+            // $table->dropColumn('transaction_type'); // Drop the updated column
         });
 
-        Schema::table('stock_transactions', function (Blueprint $table) {
-            $table->enum('transaction_type', ['Purchase', 'Return', 'Adjustment'])->after('product_id'); // Revert to the old enum column
-        });
+        // Schema::table('stock_transactions', function (Blueprint $table) {
+        //     $table->enum('transaction_type', ['Purchase', 'Return', 'Adjustment'])->after('product_id'); // Revert to the old enum column
+        // });
     }
 };

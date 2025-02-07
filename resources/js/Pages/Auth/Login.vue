@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import AuthenticationCard from "@/Components/AuthenticationCard.vue";
 import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
 import Checkbox from "@/Components/Checkbox.vue";
@@ -8,6 +8,13 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import logo from "@/assets/logo.png";
+import { computed } from "vue";
+
+// Get the page properties using usePage()
+const page = usePage();
+
+// Access the companyInfo from the page props
+const companyInfo = computed(() => page.props.companyInfo);
 
 defineProps({
   canResetPassword: Boolean,
@@ -42,7 +49,9 @@ const submit = () => {
     >
       <div class="flex items-center justify-center w-full">
         <!-- <img src="./assetes/images/logo.png" class="w-[180px] h-[100px]" /> -->
-        <img :src="logo" alt="Logo" class="w-[180px] h-[100px]" />
+        <!-- <img :src="logo" alt="Logo" class="w-[180px] h-[100px]" /> -->
+
+        <img :src="companyInfo && companyInfo.logo ? companyInfo.logo : '/images/jaan_logo.jpg'" class="w-[180px] h-[100px]" alt="Logo" />
       </div>
       <div class="w-full max-w-md p-8 space-y-8 tracking-wider bg-black">
         <h2 class="text-3xl font-bold text-center text-white roboto-regular">
@@ -77,7 +86,7 @@ const submit = () => {
             <!-- <InputError class="mt-2 font-bold text-center" :message="form.errors.email" /> -->
             <InputError class="mt-2 font-bold text-center" :message="form.errors.identity" />
           </div>
-          
+
           <div class="w-full py-4">
             <button
               type="submit"
@@ -93,7 +102,9 @@ const submit = () => {
       class="flex items-center justify-center w-full space-x-4 tracking-wider roboto-regular"
     >
       <p class="text-2xl font-bold">
-        <i class="ri-global-line"></i> dressshub.lk
+        <i class="ri-global-line"></i>
+
+        {{ companyInfo?.website || 'JAAN Network (Pvt) Ltd' }}
       </p>
       <p class="text-2xl">|</p>
       <p class="text-2xl font-bold">
@@ -110,59 +121,9 @@ const submit = () => {
     </div>
   </section>
 
-  <!-- <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="block w-full mt-1"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="block w-full mt-1"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="text-sm text-gray-600 ms-2">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard> -->
 </template>
+<script setup>
+
+
+</script>

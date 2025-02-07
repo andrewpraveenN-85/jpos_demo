@@ -14,6 +14,7 @@ class StockTransaction extends Model
         'quantity',
         'transaction_date',
         'supplier_id',
+        'reason',
     ];
 
      // Relationships
@@ -27,6 +28,6 @@ class StockTransaction extends Model
      {
 
         return $this->belongsTo(Supplier::class)->withTrashed();
-         
+
      }
 }

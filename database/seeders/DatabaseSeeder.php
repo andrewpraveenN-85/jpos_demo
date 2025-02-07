@@ -41,7 +41,6 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('T1@725CI'),
             ]);
         }
-        
         // $this->call([
         //     ColorSeeder::class,
         //     SizeSeeder::class,

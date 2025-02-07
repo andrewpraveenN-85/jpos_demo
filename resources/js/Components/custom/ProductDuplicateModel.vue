@@ -58,6 +58,22 @@
                       >
                     </div>
                   </div>
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Batch No:</label
+                    >
+                    <input
+                      v-model="form.batch_no"
+                      type="text"
+                      id="batch_no"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.batch_no"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.batch_no }}</span
+                    >
+                  </div>
                   <!-- Cost Price input -->
                 </div>
 
@@ -98,7 +114,13 @@
                           :key="category.id"
                           :value="category.id"
                         >
-                          {{ category.name }}
+                          {{
+                            category.hierarchy_string
+                              ? category.hierarchy_string +
+                                " ----> " +
+                                category.name
+                              : category.name
+                          }}
                         </option>
                       </select>
                       <span v-if="form.errors.name" class="mt-4 text-red-500">{{
@@ -106,6 +128,81 @@
                       }}</span>
                     </div>
                   </div>
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Bar code:</label
+                    >
+                    <input
+                      v-model="form.barcode"
+                      type="text"
+                      id="barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.barcode"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.barcode }}</span
+                    >
+                  </div>
+                  <div class="w-full" v-if="isPharma">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
+                    >
+                    <input
+                      v-model="form.expire_date"
+                      type="date"
+                      id="barcode"
+                      placeholder="Enter Barcode"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-8 mt-6">
+                  <!-- Selling Price input -->
+                  <div class="w-full">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Purchase Date:</label
+                      >
+                      <input
+                        v-model="form.purchase_date"
+                        type="date"
+                        id="purchase_date"
+                        required
+                        class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      />
+                      <span v-if="form.errors.purchase_date" class="mt-4 text-red-500">{{
+                        form.errors.purchase_date
+                      }}</span>
+                    </div>
+                  </div>
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300"
+                      >Expire Date:</label
+                    >
+                    <input
+                      v-model="form.expire_date"
+                      type="date"
+                      id="expire_date"
+                      class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    />
+                    <span
+                      v-if="form.errors.expire_date"
+                      class="mt-4 text-red-500"
+                      >{{ form.errors.expire_date }}</span
+                    >
+                  </div>
+                  <!-- Cost Price input -->
                 </div>
 
                 <div>
@@ -118,7 +215,6 @@
                         >Size:</label
                       >
                       <select
-                        required
                         v-model="form.size_id"
                         id="parent_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
@@ -148,7 +244,6 @@
                         >Color:</label
                       >
                       <select
-                        required
                         v-model="form.color_id"
                         id="sub_id"
                         class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
@@ -201,7 +296,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Selling Price:</label
                     >
-                     <input
+                    <input
                       type="text"
                       id="selling_price"
                       v-model="form.selling_price"
@@ -227,7 +322,7 @@
                       class="block text-sm font-medium text-gray-300"
                       >Discount (%):</label
                     >
-                     <input
+                    <input
                       type="text"
                       id="discount"
                       v-model="form.discount"
@@ -400,6 +495,8 @@ import { useForm } from "@inertiajs/vue3";
 // Emit event to toggle modal visibility
 const emit = defineEmits(["update:open"]);
 
+const isPharma = computed(() => import.meta.env.VITE_APP_NAME === "pharma");
+
 // Play click sound function
 const playClickSound = () => {
   const clickSound = new Audio("/sounds/click-sound.mp3");
@@ -449,6 +546,9 @@ const form = useForm({
   stock_quantity: null,
   barcode: "",
   image: null, // For file upload
+  expire_date: null,
+  purchase_date: null,
+  batch_no: "",
 });
 
 // Handle file upload for images
@@ -530,7 +630,14 @@ watch(
       form.selling_price = newValue.selling_price || null;
       form.discounted_price = newValue.discounted_price || null;
       form.barcode = newValue.barcode || "";
+      form.batch_no = newValue.batch_no || "";
       form.image = newValue.image;
+      form.expire_date = newValue.expire_date
+        ? new Date(newValue.expire_date).toISOString().split("T")[0]
+        : null;
+      form.purchase_date = newValue.purchase_date
+      ? new Date(newValue.purchase_date).toISOString().split("T")[0]
+      : null;
     }
   },
   { immediate: true }

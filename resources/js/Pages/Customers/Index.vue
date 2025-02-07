@@ -58,14 +58,14 @@
   <Head title="Customers" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <!-- Include the Header -->
     <Header />
 
     <!-- Main Content -->
-    <div class="w-5/6 py-12 space-y-24">
-      <div class="flex items-center justify-between">
+    <div class="w-full md:w-5/6 md:py-12 space-y-24">
+      <div class="flex md:flex-row flex-col md:items-center justify-between md:space-y-0 space-y-8">
         <!-- Back Button and Title -->
         <div class="flex items-center space-x-4">
           <Link
@@ -209,7 +209,7 @@
       <template v-else>
         <div class="col-span-4 text-center text-blue-500">
           <p class="text-center text-red-500 text-[17px]">
-            No customers available
+            No Customers available
           </p>
         </div>
       </template>

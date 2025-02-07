@@ -54,10 +54,10 @@
   <Head title="Categories" />
   <Banner />
   <div
-    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 px-36"
+    class="flex flex-col items-center justify-start min-h-screen py-8 space-y-8 bg-gray-100 md:px-36 px-16"
   >
     <Header />
-    <div class="w-5/6 py-12 space-y-24">
+    <div class="w-full md:w-5/6 py-12 space-y-24">
       <div class="flex items-center justify-between float-end">
         <p class="text-3xl italic font-bold text-black">
           <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
@@ -67,7 +67,7 @@
         </p>
       </div>
 
-      <div class="flex w-full">
+      <div class="flex md:flex-row flex-col w-full">
         <div class="flex items-center w-full h-16 space-x-4 rounded-2xl">
           <Link href="/">
             <img src="/images/back-arrow.png" class="w-14 h-14" />
@@ -101,13 +101,13 @@
           <p
   @click="() => { if (HasRole(['Admin'])) { isCreateModalOpen = true; } }"
   :class="HasRole(['Admin'])
-            ? 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-            : 'px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
+            ? 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
+            : 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'"
   :title="HasRole(['Admin'])
             ? ''
             : 'You do not have permission to add more Categories'"
 >
-  <i class="pr-4 ri-add-circle-fill"></i> Add More Categories
+  <i class="md:pr-4 ri-add-circle-fill"></i> Add More Categories
 </p>
 
 
@@ -200,6 +200,17 @@
           </table>
         </div>
       </template>
+
+      <template v-else>
+        <div class="col-span-4 text-center text-blue-500">
+          <p class="text-center text-red-500 text-[17px]">
+            No Categories Available
+          </p>
+        </div>
+      </template>
+
+
+
     </div>
   </div>
   <CategoryCreateModel

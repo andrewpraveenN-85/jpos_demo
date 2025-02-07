@@ -25,21 +25,37 @@ class SizeController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->has('sizeName')) {
 
-        if (!Gate::allows('hasRole', ['Admin'])) {
-            abort(403, 'Unauthorized');
+            $request->merge(['name' => $request->input('sizeName')]);
+
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/',
+            ]);
+
+
+            Size::create($validated);
+            return redirect()
+            ->route('products.index')
+            ->with('success', 'Size created successfully and redirected to Products.');
         }
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
 
-        ]);
+        if ($request->has('name')) {
+            // Validate name directly
+            $validated = $request->validate([
+                'name' => 'required|string|max:191|regex:/^[a-zA-Z\s]+$/',
+            ]);
 
 
-        Size::create($validated);
+            Size::create($validated);
 
-        return redirect()->route('sizes.index')->banner('Size created successfully.');
 
-     }
+            return redirect()->route('sizes.index')->banner('Size created successfully !');
+        }
+
+        return redirect()->back()->withErrors(['error' => 'Invalid data provided.']);
+    }
 
 
 
@@ -51,7 +67,7 @@ class SizeController extends Controller
             abort(403, 'Unauthorized');
         }
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:191|regex:/^[a-zA-Z\s]+$/',
         ]);
 
         $Size->update($validated);
