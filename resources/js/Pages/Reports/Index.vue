@@ -393,6 +393,7 @@
                 <th class="p-4 font-semibold tracking-wide text-left">#</th>
                 <th class="p-4 font-semibold tracking-wide text-left">Name</th>
                 <th class="p-4 font-semibold tracking-wide text-left">QTY</th>
+                <th class="p-4 font-semibold tracking-wide text-left">Sales QTY</th>
                 <th
                   class="p-4 font-semibold tracking-wide text-left first-line:"
                 >
@@ -412,6 +413,9 @@
                 <th class="p-4 font-semibold tracking-wide text-left">
                   Retail Value
                 </th>
+                <th class="p-4 font-semibold tracking-wide text-left">
+                  Total Price
+                </th>
               </tr>
             </thead>
             <tbody class="text-[12px] font-normal">
@@ -426,6 +430,9 @@
                 </td>
                 <td class="p-4 border-gray-200">
                   {{ product.stock_quantity || "N/A" }}
+                </td>
+                <td class="p-4 border-gray-200">
+                  {{ product.sales_qty || "0" }}
                 </td>
                 <td class="p-4 border-gray-200">
                   {{ product.cost_price || "N/A" }}
@@ -448,6 +455,9 @@
                         ).toFixed(2)
                       : (product.selling_price - product.discount).toFixed(2)
                   }}
+                </td>
+                <td class="p-4 border-gray-200">
+                  {{ product.sales_qty * product.selling_price  || 0 }}
                 </td>
               </tr>
             </tbody>
@@ -537,21 +547,63 @@ const totalRetailValue = computed(() => {
 });
 
 const downloadTable = () => {
-  // Create worksheet from the products data
-  const ws = XLSX.utils.json_to_sheet(
-    products.value.map((product, index) => ({
-      "#": index + 1,
-      "Name": product.name || "N/A",
-      "QTY": product.stock_quantity || "N/A",
-      "Cost Price (LKR)": product.cost_price || "N/A",
-      "Selling Price (LKR)": product.selling_price || "N/A",
-      "Profit (LKR)": product.selling_price - product.cost_price || 0,
-      "Discount (%)": product.discount || "N/A",
-      "Retail Value": product.discount <= 100
-        ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
-        : (product.selling_price - product.discount).toFixed(2),
-    }))
-  );
+  // Map the products data with calculations
+  const productsData = products.value.map((product, index) => ({
+    "#": index + 1,
+    "Name": product.name || "N/A",
+    "QTY": product.stock_quantity || "N/A",
+    "Sales QTY": product.sales_qty || 0,
+    "Cost Price (LKR)": product.cost_price || "N/A",
+    "Selling Price (LKR)": product.selling_price || "N/A",
+    "Profit (LKR)": product.selling_price - product.cost_price || 0,
+    "Discount (%)": product.discount || "N/A",
+    "Retail Value": product.discount <= 100
+      ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+      : (product.selling_price - product.discount).toFixed(2),
+    "Total Price": product.sales_qty * product.selling_price || 0,
+  }));
+
+  // Calculate the sum of total prices
+  const totalSum = productsData.reduce((sum, product) => sum + product["Total Price"], 0);
+
+  // Add a total row
+  const dataWithTotal = [
+    ...productsData,
+    {
+      "#": "",
+      "Name": "Total",
+      "QTY": "",
+      "Sales QTY": "",
+      "Cost Price (LKR)": "",
+      "Selling Price (LKR)": "",
+      "Profit (LKR)": "",
+      "Discount (%)": "",
+      "Retail Value": "",
+      "Total Price": totalSum,
+    }
+  ];
+
+  // Create worksheet with the data including total
+  const ws = XLSX.utils.json_to_sheet(dataWithTotal);
+
+  // Add some styling to the total row (make the text bold)
+  const lastRow = dataWithTotal.length;
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  
+  // Set column widths
+  const colWidths = [
+    { wch: 5 },  // #
+    { wch: 30 }, // Name
+    { wch: 10 }, // QTY
+    { wch: 10 }, // Sales QTY
+    { wch: 15 }, // Cost Price
+    { wch: 15 }, // Selling Price
+    { wch: 15 }, // Profit
+    { wch: 12 }, // Discount
+    { wch: 15 }, // Retail Value
+    { wch: 15 }, // Total Price
+  ];
+  ws['!cols'] = colWidths;
 
   // Create a new workbook and append the worksheet
   const wb = XLSX.utils.book_new();
@@ -559,7 +611,9 @@ const downloadTable = () => {
 
   // Generate Excel file and trigger download
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  const blob = new Blob([excelBuffer], { 
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+  });
 
   saveAs(blob, "Top_Products_Stock.xlsx");
 };
