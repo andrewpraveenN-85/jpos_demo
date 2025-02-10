@@ -615,11 +615,12 @@ const selectedPaymentMethod = ref("cash");
 const refreshData = async () => {
     // Only refresh if the current selected table is the default/live bill
     if (selectedTable.value?.id === "default") {
+        const existingOrderId = selectedTable.value.orderId; 
         // Reset only the default table
         const defaultTable = {
             id: "default",
             number: 1,
-            orderId: generateOrderId(),
+            orderId: existingOrderId,
             products: [],
             cash: 0.0,
             balance: 0.0,
