@@ -102,10 +102,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/order-details/{order_id}', [PosController::class, 'getOrderDetails']);
     Route::put('/pos/update/{order_id}', [PosController::class, 'updateOrder']);
 
-
-
-
-
 });
 
 Route::get('/barcode/{id}', [CategoryController::class, 'showBarcode']);

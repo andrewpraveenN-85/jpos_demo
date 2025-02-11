@@ -55,7 +55,7 @@ class PosController extends Controller
 
     public function getPendingOrders()
     {
-        $orders = Sale::orderBy('order_id', 'desc')->get(['order_id','return_date','id']);
+        $orders = Sale::orderBy('id', 'desc')->get(['order_id','return_date','id']);
 
         return response()->json($orders);
     }
@@ -455,6 +455,154 @@ class PosController extends Controller
         }
     }
 
+    // public function updateOrder(Request $request, $order_id)
+    // {
+    //     try {
+    //         // Retrieve sale and check if status is NULL
+    //         $sale = Sale::where('order_id', $order_id)->firstOrFail();
+
+
+    //         if (is_null($sale->status)) {
+    //             return response()->json([
+    //                 'message' => 'Cannot update order: Sale status is NULL.'
+    //             ], 400);
+    //         }
+
+    //         // Restore stock for existing sale items
+    //         $existingItems = SaleItem::where('sale_id', $sale->id)->get();
+    //         foreach ($existingItems as $item) {
+    //             $product = Product::find($item->product_id);
+    //             if ($product) {
+    //                 $product->update([
+    //                     'stock_quantity' => $product->stock_quantity + $item->quantity,
+    //                 ]);
+    //             }
+    //         }
+
+    //         // Delete existing sale items
+    //         SaleItem::where('sale_id', $sale->id)->delete();
+
+    //         // Update sale details
+    //         $sale->update([
+    //             'customer_id' => $request->input('customer_id'),
+    //             'employee_id' => $request->input('employee_id'),
+    //             'payment_method' => $request->input('paymentMethod'),
+    //             'cash' => $request->input('cash'),
+    //             'custom_discount' => $request->input('custom_discount'),
+    //             'status' => $request->input('status'),
+    //             'kitchen_note' => $request->input('kitchen_note'),
+    //             'is_return_bill' => $request->returnBill,
+    //             'return_date' => $request->returnBill ? now() : null,
+    //         ]);
+
+    //         // Process new sale items only if sale status is NOT NULL
+    //         foreach ($request->input('products') as $product) {
+    //             $productModel = Product::find($product['id']);
+
+    //             if (!$productModel) {
+    //                 // If product doesn't exist, create a new product entry
+    //                 $productModel = Product::create([
+    //                     'id' => $product['id'],
+    //                     'name' => $product['name'],
+    //                     'stock_quantity' => $product['quantity'], // New product gets full quantity
+    //                     'selling_price' => $product['selling_price'],
+    //                     'supplier_id' => $product['supplier_id'] ?? null,
+    //                 ]);
+
+    //                 // Log the "New Product" entry in StockTransaction
+    //                 StockTransaction::create([
+    //                     'product_id' => $productModel->id,
+    //                     'sale_id' => $sale->id,
+    //                     'transaction_type' => 'New Product',
+    //                     'quantity' => $product['quantity'],
+    //                     'transaction_date' => now(),
+    //                     'supplier_id' => $product['supplier_id'] ?? null,
+    //                 ]);
+    //             } else {
+    //                 // If product already exists, update the stock calculation
+    //                 $reasonId = $product['returnReason'] ?? null;
+    //                 $oldStockQuantity = $productModel->stock_quantity;
+    //                 $newStockQuantity = $oldStockQuantity - $product['quantity'];
+
+    //                 // If reason_id is 1 (Damaged Product), stock remains unchanged
+    //                 if ($reasonId === "1") {
+    //                     $newStockQuantity = $oldStockQuantity;
+    //                 } elseif ($newStockQuantity < 0) {
+    //                     return response()->json([
+    //                         'message' => "Insufficient stock for product: {$productModel->name} ({$oldStockQuantity} available)",
+    //                     ], 423);
+    //                 }
+
+
+    //                 if ($sale->status == 0) {
+    //                     return response()->json([
+    //                         'message' => 'Sale status is 0. SaleItem cannot be created.',
+    //                     ], 403);
+    //                 }
+
+
+    //                 SaleItem::create([
+    //                     'sale_id' => $sale->id,
+    //                     'reason_id' => $reasonId,
+    //                     'product_id' => $productModel->id,
+    //                     'quantity' => $product['quantity'],
+    //                     'unit_price' => $product['selling_price'],
+    //                     'total_price' => $product['quantity'] * $product['selling_price'],
+    //                 ]);
+
+
+
+
+    //                 // Update stock only if reason_id is not 1 (Damaged Product)
+    //                 if ($reasonId !== "1") {
+    //                     $productModel->update([
+    //                         'stock_quantity' => $newStockQuantity,
+    //                     ]);
+    //                 }
+
+    //                 // Check if stock transaction already exists for this sale_id and product_id
+    //                 $stockTransaction = StockTransaction::where('sale_id', $sale->id)
+    //                     ->where('product_id', $productModel->id)
+    //                     ->first();
+
+    //                 if ($stockTransaction) {
+    //                     // Update existing transaction quantity
+    //                     $stockTransaction->update([
+    //                         'quantity' => $stockTransaction->quantity + $product['quantity'],
+    //                     ]);
+    //                 } else {
+    //                     // Insert new stock transaction
+    //                     StockTransaction::create([
+    //                         'product_id' => $productModel->id,
+    //                         'sale_id' => $sale->id,
+    //                         'transaction_type' => $request->returnBill ? 'Return' : 'Sold',
+    //                         'quantity' => $product['quantity'],
+    //                         'transaction_date' => now(),
+    //                         'supplier_id' => $productModel->supplier_id ?? null,
+    //                     ]);
+    //                 }
+
+    //                 // Log stock addition separately if new stock is added
+    //                 if (!$request->returnBill) {
+    //                     StockTransaction::create([
+    //                         'product_id' => $productModel->id,
+    //                         'sale_id' => $sale->id,
+    //                         'transaction_type' => 'Added',
+    //                         'quantity' => $newStockQuantity - $oldStockQuantity, // Ensure new stock tracking
+    //                         'transaction_date' => now(),
+    //                         'supplier_id' => $productModel->supplier_id ?? null,
+    //                     ]);
+    //                 }
+    //             }
+    //         }
+
+    //         return response()->json(['message' => 'Order updated successfully!'], 200);
+    //     } catch (ModelNotFoundException $e) {
+    //         return response()->json(['error' => 'Order not found'], 404);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => $e->getMessage()], 500);
+    //     }
+    // }
 
 
 }

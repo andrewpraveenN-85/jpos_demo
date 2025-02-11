@@ -463,7 +463,7 @@
           @update:open="handleModalOpenUpdate"
           :products="products.map((item, index) => ({
         ...item,
-        returnReason: selectedOrder?.sale_items?.[index]?.return_reason?.reason || 'No Reason'
+        returnReason: selectedOrder?.sale_items?.[index]?.return_reason?.reason || ''
     }))"
           :employee="employee"
           :cashier="loggedInUser"
@@ -532,7 +532,7 @@
 
 
 
- 
+
 
 
 
@@ -644,7 +644,7 @@
             quantity: item.quantity,
             discount: item.product.discount || 0,
             apply_discount: false,
-            returnReason: item.reason_id ?? 3, // Set default value if reason_id is null
+            returnReason: item.reason_id, // Set default value if reason_id is null
         }));
 
         cash.value = newOrder?.cash || 0;
