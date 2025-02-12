@@ -365,20 +365,43 @@
       </div>
 
       <!-- Chart 3 -->
-      <div class="bg-white border-4 border-black rounded-xl h-[500px]">
-        <div class="w-full mt-4 px-4 flex justify-between items-center pb-4">
-            <h2
-              class="text-2xl font-medium tracking-wide text-slate-700 text-left"
-            >
-             Top Products Stock Table 
-            </h2>
-            <button
-              @click="downloadTable"
-              class="w-2/3 px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
-            >
-              Download 
-            </button> 
+      <div class=" bg-white border-4 border-black rounded-xl h-[500px]">
+        <div class="w-full px-4 flex items-center pb-4 space-x-2 ">
+          <h2 class="text-2xl font-medium tracking-wide text-slate-700 text-left mr-48">
+            Top Products Stock Table
+          </h2>
+
+          <button
+            @click="downloadTable"
+            class="px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
+          >
+            Download Excel
+          </button>
+
+          <button
+            @click="downloadPDFTable"
+            class="px-4 py-2 text-md font-normal tracking-wider text-white bg-orange-600 rounded-lg custom-select hover:bg-orange-700 hover:shadow-lg"
+          >
+            Download PDF
+          </button>
+
+
+          <div
+            class="py-2 mt-2 flex flex-col justify-center items-center border-2 border-orange-600 rounded-2xl bg-orange-400 shadow-lg"
+          >
+            <div class="flex flex-col items-center text-center justify-center">
+              <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                Total Price:
+              </h2>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+              <p class="text-xl font-bold text-black">
+                {{ totalPrice.toLocaleString() }} LKR
+              </p>
+            </div>
           </div>
+        </div>
+
 
         
         <div class="overflow-x-auto overflow-y-auto max-h-[400px]">
@@ -522,6 +545,12 @@ const props = defineProps({
   employeeSalesSummary: { type: Object, required: true },
 });
 
+const totalPrice = computed(() => {
+  return products.value.reduce((sum, product) => {
+    return sum + (product.sales_qty * product.selling_price || 0);
+  }, 0);
+});
+
 // Date filters
 const startDate = ref(props.startDate);
 const endDate = ref(props.endDate);
@@ -545,6 +574,80 @@ const totalRetailValue = computed(() => {
         return total + (parseFloat(product.cost_price) || 0); // Handle cases where cost_price might not be valid
     }, 0);
 });
+
+
+const downloadPDFTable = () => {
+  const doc = new jsPDF("p", "mm", "a4"); // Portrait, A4 size
+
+  // Title for the PDF
+  doc.setFontSize(18);
+  doc.text("Top Products Stock Table", 14, 15);
+
+  // Prepare table headers
+  const tableColumn = [
+    "#",
+    "Name",
+    "QTY",
+    "Sales QTY",
+    "Cost Price (LKR)",
+    "Selling Price (LKR)",
+    "Profit (LKR)",
+    "Discount (%)",
+    "Retail Value",
+    "Total Price",
+  ];
+
+  // Prepare table data
+  const tableRows = products.value.map((product, index) => [
+    index + 1,
+    product.name || "N/A",
+    product.stock_quantity || "N/A",
+    product.sales_qty || "0",
+    product.cost_price || "N/A",
+    product.selling_price || "N/A",
+    product.selling_price - product.cost_price || 0,
+    product.discount || "N/A",
+    product.discount <= 100
+      ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+      : (product.selling_price - product.discount).toFixed(2),
+    product.sales_qty * product.selling_price || 0,
+  ]);
+
+  // Calculate total sum of "Total Price"
+  const totalSum = tableRows.reduce((sum, row) => sum + row[9], 0);
+
+  // Add a total row at the end
+  tableRows.push(["", "Total", "", "", "", "", "", "", "", totalSum.toFixed(2)]);
+
+  // Adjust column widths
+  doc.autoTable({
+    head: [tableColumn],
+    body: tableRows,
+    startY: 25, // Adjust start position to prevent overlap with title
+    theme: "striped",
+    styles: { fontSize: 10 },
+    headStyles: { fillColor: [44, 62, 80] },
+    columnStyles: {
+      0: { cellWidth: 8 },  // #
+      1: { cellWidth: 30 },  // Name (Increased for better visibility)
+      2: { cellWidth: 12 },  // QTY
+      3: { cellWidth: 15 },  // Sales QTY
+      4: { cellWidth: 25 },  // Cost Price
+      5: { cellWidth: 25 },  // Selling Price
+      6: { cellWidth: 20 },  // Profit
+      7: { cellWidth: 15 },  // Discount
+      8: { cellWidth: 25 },  // Retail Value (Increased to prevent cut-off)
+      9: { cellWidth: 30 },  // Total Price (Increased to make it visible)
+    },
+    margin: { left: 5, right: 10, top: 20 },
+  });
+
+  // Save the PDF
+  doc.save("Top_Products_Stock.pdf");
+};
+
+
+
 
 const downloadTable = () => {
   // Map the products data with calculations
