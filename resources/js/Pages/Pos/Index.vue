@@ -259,18 +259,51 @@
                   </span>
                 </div> -->
 
-                            <div class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
-                                <p class="text-xl text-black">Custom Discount</p>
-                                <span class="flex items-center">
-                                    <CurrencyInput v-model="selectedTable.custom_discount" placeholder="Enter value"
-                                        class="rounded-md px-2 py-1 text-black text-md" />
-                                    <select v-model="selectedTable.custom_discount_type"
-                                        class="ml-2 px-8 border-black rounded-md text-black py-1 text-md">
-                                        <option value="percent">%</option>
-                                        <option value="fixed">Rs</option>
-                                    </select>
-                                </span>
-                            </div>
+              
+                <div class="flex items-center justify-between w-full px-8 pt-4 pb-4">
+                    <button v-if="!selectedTable?.showDiscountField" @click="authorizeDiscount"
+                        class="bg-black text-white px-4 py-1 rounded-md text-md">
+                        Add Discount
+                    </button>
+                </div>
+
+                <!-- Custom Discount Field (Initially Hidden) -->
+                <div v-if="selectedTable?.showDiscountField" class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
+                    <p class="text-xl text-black">Custom Discount</p>
+                    <span class="flex items-center">
+                        <CurrencyInput 
+                            v-model="selectedTable.custom_discount" 
+                            placeholder="Enter value"
+                            class="rounded-md px-2 py-1 text-black text-md" 
+                        />
+                        <select 
+                            v-model="selectedTable.custom_discount_type"
+                            class="ml-2 px-8 border-black rounded-md text-black py-1 text-md"
+                        >
+                            <option value="percent">%</option>
+                            <option value="fixed">Rs</option>
+                        </select>
+                    </span>
+                </div>
+
+                <div v-if="isPasswordModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h3 class="text-lg font-bold mb-4">Enter Authorization Password</h3>
+      <input
+        type="password"
+        v-model="passwordInput"
+        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <div class="flex justify-end space-x-2 mt-4">
+        <button @click="isPasswordModalOpen = false" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">
+          Cancel
+        </button>
+        <button @click="verifyPassword" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
 
                             <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Service Charge </p>
@@ -449,6 +482,67 @@ const isSelectModalOpen = ref(false);
 const order_type = ref("");
 const kitchen_note = ref("");
 const delivery_charge = ref("");
+const isPasswordModalOpen = ref(false);
+const passwordInput = ref("");
+const correctPassword = "1234";
+const passwordModalTitle = ref("");
+const pendingAction = ref(null);
+
+const openPasswordModal = (title, action) => {
+  passwordModalTitle.value = title;
+  pendingAction.value = action;
+  isPasswordModalOpen.value = true;
+  passwordInput.value = ""; // Clear previous input
+};
+
+const authorizeDiscount = () => {
+    if (!selectedTable.value) return;
+
+    isPasswordModalOpen.value = true;
+    passwordInput.value = "";
+
+    // Store the pending action properly
+    pendingAction.value = () => {
+        selectedTable.value = {
+            ...selectedTable.value, 
+            showDiscountField: true, // Update the property reactively
+        };
+    };
+};
+
+
+const verifyPassword = () => {
+  if (passwordInput.value === correctPassword) {
+    // Check if pendingAction is a function and execute it
+    if (typeof pendingAction.value === "function") {
+      pendingAction.value(); // Execute the stored function (e.g., show discount field)
+    } 
+    // Check if pendingAction is an object and handle specific types
+    else if (typeof pendingAction.value === "object" && pendingAction.value !== null) {
+      if (pendingAction.value.type === 'decrementQuantity') {
+        const productIndex = selectedTable.value.products.findIndex(
+          (item) => item.id === pendingAction.value.productId
+        );
+        if (productIndex !== -1) {
+          selectedTable.value.products[productIndex].quantity--;
+          console.log(`Quantity decreased for product with ID ${pendingAction.value.productId}`);
+        }
+      } else if (pendingAction.value.type === 'removeProduct') {
+        selectedTable.value.products = selectedTable.value.products.filter(
+          (item) => item.id !== pendingAction.value.productId
+        );
+        console.log(`Product with ID ${pendingAction.value.productId} removed successfully`);
+      }
+    }
+
+    // Clear the pending action and close the modal
+    pendingAction.value = null;
+    isPasswordModalOpen.value = false;
+    passwordInput.value = "";
+  } else {
+    alert("Incorrect password!");
+  }
+};
 
 
 // Load initial state from localStorage or use default values
@@ -465,6 +559,7 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
         order_type: "",
         delivery_charge: "",
         service_charge: 0.0,
+        showDiscountField: false, 
     },
 ];
 
@@ -521,7 +616,8 @@ const addTable = () => {
         kitchen_note: "",
         order_type: "",
         delivery_charge: "",
-         kotStatus: "pending",
+        kotStatus: "pending",
+        showDiscountField: false,
     };
 
     tables.value.push(newTable);
@@ -634,22 +730,27 @@ const refreshData = () => {
 };
 
 const removeProduct = (id) => {
-    if (!selectedTable.value) {
-        console.error("No table selected");
-        return;
-    }
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
 
-    const initialLength = selectedTable.value.products.length;
-    selectedTable.value.products = selectedTable.value.products.filter(
-        (item) => item.id !== id
-    );
+  const productIndex = selectedTable.value.products.findIndex((item) => item.id === id);
+  if (productIndex === -1) {
+    console.warn(`Product with ID ${id} not found in the selected table.`);
+    return;
+  }
 
-    if (selectedTable.value.products.length < initialLength) {
-        console.log(`Product with ID ${id} removed successfully.`);
-    } else {
-        console.warn(`Product with ID ${id} not found in the selected table.`);
-    }
+  isPasswordModalOpen.value = true;
+  passwordInput.value = "";
+  
+  // Store the pending action
+  pendingAction.value = {
+    type: 'removeProduct',
+    productId: id
+  };
 };
+
 
 const removeCoupon = () => {
     appliedCoupon.value = null; // Clear the applied coupon
@@ -671,22 +772,31 @@ const incrementQuantity = (id) => {
 };
 
 const decrementQuantity = (id) => {
-    if (!selectedTable.value) {
-        console.error("No table selected");
-        return;
-    }
+  if (!selectedTable.value) {
+    console.error("No table selected");
+    return;
+  }
 
-    const product = selectedTable.value.products.find((item) => item.id === id);
-    if (product) {
-        if (product.quantity > 1) {
-            product.quantity -= 1;
-        } else {
-            console.warn(`Product quantity for ID ${id} is already at the minimum.`);
-        }
-    } else {
-        console.error(`Product with ID ${id} not found in the selected table.`);
-    }
+  const productIndex = selectedTable.value.products.findIndex((item) => item.id === id);
+  if (productIndex === -1) {
+    console.warn(`Product with ID ${id} not found in the selected table.`);
+    return;
+  }
+
+  if (selectedTable.value.products[productIndex].quantity > 1) {
+    isPasswordModalOpen.value = true;
+    passwordInput.value = "";
+    
+    // Store the pending action in a more structured way
+    pendingAction.value = {
+      type: 'decrementQuantity',
+      productId: id
+    };
+  } else {
+    console.warn(`Product quantity for ID ${id} is already at the minimum.`);
+  }
 };
+
 
 // const orderId = computed(() => {
 //   const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to a base-36 string
@@ -833,6 +943,8 @@ const sendKOT = (table) => {
       });
     }
   });
+
+
 
   if (newItems.length === 0 && reducedItems.length === 0 && removedItems.length === 0) {
     alert("No changes to send to KOT.");
