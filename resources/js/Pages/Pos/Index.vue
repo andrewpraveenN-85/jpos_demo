@@ -23,12 +23,14 @@
 </div>
 
              </div>
+
+
              <div class="flex w-full gap-4">
                 <div class="flex flex-col w-1/2">
                    <div class="flex flex-col w-full">
                       <div class="flex flex-col items-center justify-center w-full pb-4 space-y-8">
                          <div class="flex flex-col items-center justify-center w-full space-y-8 border-4 border-black rounded-3xl p-4">
-                            <p class="text-4xl font-bold text-black ">Pending Orders
+                            <p class="text-4xl font-bold text-black ">All Orders
                                <button
                                   @click="resetToLiveBill"
                                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 ml-56"
@@ -468,7 +470,7 @@
           :employee="employee"
           :cashier="loggedInUser"
           :customer="customer"
-          :order_id="order_id"
+          :order_id= "selectedOrder?.order_id || ''"
           :cash="cash"
           :balance="balance"
           :subTotal="subtotal"
