@@ -615,7 +615,17 @@ const selectedPaymentMethod = ref("cash");
 const refreshData = async () => {
     // Only refresh if the current selected table is the default/live bill
     if (selectedTable.value?.id === "default") {
-        const existingOrderId = selectedTable.value.orderId; 
+        const today = new Date();
+        const formattedDate = `${today.getFullYear().toString().slice(-2)}.${String(today.getMonth() + 1).padStart(2, "0")}.${String(today.getDate()).padStart(2, "0")}`;
+
+        // Retrieve the last stored date from localStorage
+        const lastDate = localStorage.getItem("lastOrderDate");
+        let existingOrderId = selectedTable.value.orderId;
+
+         if (lastDate !== formattedDate) {
+            existingOrderId = generateOrderId();    
+        }
+
         // Reset only the default table
         const defaultTable = {
             id: "default",
