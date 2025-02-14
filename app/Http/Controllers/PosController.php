@@ -411,6 +411,10 @@ class PosController extends Controller
                         ]);
                     }
 
+
+
+                    
+
                     // Check if stock transaction already exists for this sale_id and product_id
                     $stockTransaction = StockTransaction::where('sale_id', $sale->id)
                         ->where('product_id', $productModel->id)

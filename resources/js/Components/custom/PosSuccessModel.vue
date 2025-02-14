@@ -343,34 +343,59 @@
                   </table>
               </div>
               <div class="totals">
-                  <div>
-                      <span>Sub Total</span>
-                      <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
-                  </div>
-                  <div>
-                      <span>Discount</span>
-                      <span>${(Number(props.totalDiscount) || 0).toFixed(
-                2
-            )} LKR</span>
-                  </div>
-                  <div>
-                      <span>Service Charge</span>
-                      <span>
-                        ${(Number(props.custom_discount) || 0).toFixed(2)} LKR
-                      </span>
-                  </div>
-                  <div style="font-size: 14px; font-weight: bold;">
-                      <span >Total</span>
-                      <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
-                  </div>
-                  <div>
-                      <span>Cash</span>
-                      <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
-                  </div>
-                  <div>
-                      <span>Balance</span>
-                      <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
-                  </div>
+
+
+${Number(props.subTotal) !== Number(props.total)
+  ? (Number(props.subTotal) === 0
+    ? ""
+    : `<div>
+        <span>Sub Total</span>
+        <span>${(Number(props.subTotal) || 0).toFixed(2)} LKR</span>
+      </div>`)
+  : ""}
+
+
+
+     ${Number(props.totalDiscount) === 0
+  ? ""
+  : `<div>
+      <span>Discount</span>
+      <span>(${(Number(props.totalDiscount) || 0).toFixed(2)}) LKR</span>
+    </div>`}
+
+
+
+
+  ${Number(props.custom_discount) === 0
+  ? ""
+  : `<div>
+      <span>Customer Discount</span>
+      <span>(${(Number(props.custom_discount) || 0).toFixed(2)})LKR</span>
+    </div>`}
+
+              ${Number(props.total) === 0
+  ? ""
+  : `<div style="font-weight: bold;">
+      <span>Total</span>
+      <span>${(Number(props.total) || 0).toFixed(2)} LKR</span>
+    </div>`}
+
+
+
+                 ${Number(props.cash) === 0
+  ? ""
+  : `<div>
+      <span>Cash</span>
+      <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
+    </div>`}
+
+                 ${Number(props.balance) === 0
+  ? ""
+  : ` <div style="font-weight: bold;">
+      <span>Balance</span>
+      <span>${(Number(props.balance) || 0).toFixed(2)} LKR</span>
+    </div>`}
+
               </div>
               ${props.kitchen_note ? `
                   <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
