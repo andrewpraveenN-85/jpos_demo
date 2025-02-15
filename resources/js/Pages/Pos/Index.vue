@@ -124,18 +124,6 @@
                     </div>
                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
                 <div class="flex w-1/2 h-full p-8 border-4 border-black rounded-3xl">
                     <div class="flex flex-col items-start justify-center w-full px-12">
                         <div class="flex items-center justify-between w-full mb-4">
@@ -147,8 +135,10 @@
                                 }}
                             </h2>
 
+                            <span class="mr-[-200px] text-xl text-black font-bold cursor-pointer"  @click="PreBill">Pre Bill</span>
+
                             <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
-                                <p class="text-xl text-blue-600 font-bold">Food Menu</p>
+                                <p class="text-xxl text-blue-600 font-bold">Food Menu</p>
                                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
                             </span>
                         </div>
@@ -445,6 +435,12 @@
         :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
         :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :service_charge="selectedTable.service_charge"
         :order_type="selectedTable.order_type" />
+    <BillSuccessModel :open="isBillSuccessModalOpen" @update:open="isBillSuccessModalOpen = $event" :products="selectedTable.products"
+        :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash" :balance="balance"
+        :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total" :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
+        :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :service_charge="selectedTable.service_charge" :order_type="selectedTable.order_type"
+/>
+
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
     <SelectProductModel v-model:open="isSelectModalOpen" :allcategories="allcategories" :colors="colors" :sizes="sizes"
@@ -456,6 +452,7 @@ import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import PosSuccessModel from "@/Components/custom/PosSuccessModel.vue";
+import BillSuccessModel from "@/Components/custom/BillSuccessModel.vue";
 import AlertModel from "@/Components/custom/AlertModel.vue";
 
 import { useForm, router } from "@inertiajs/vue3";
@@ -474,6 +471,7 @@ const product = ref(null);
 const error = ref(null);
 const products = ref([]);
 const isSuccessModalOpen = ref(false);
+const isBillSuccessModalOpen = ref(false);
 const isAlertModalOpen = ref(false);
 const message = ref("");
 const appliedCoupon = ref(null);
@@ -487,6 +485,7 @@ const passwordInput = ref("");
 const correctPassword = "1234";
 const passwordModalTitle = ref("");
 const pendingAction = ref(null);
+
 
 const openPasswordModal = (title, action) => {
   passwordModalTitle.value = title;
@@ -810,6 +809,10 @@ const orderId = computed(() => {
         characters.charAt(Math.floor(Math.random() * characters.length))
     ).join("");
 });
+
+const PreBill = async () => {
+    isBillSuccessModalOpen.value = true;
+};
 
 const submitOrder = async () => {
     // if (window.confirm("Are you sure you want to confirm the order?")) {
