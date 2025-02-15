@@ -404,7 +404,7 @@ class ProductController extends Controller
             'name' => 'string|max:255',
             'code' => 'nullable|string|max:50',
             //'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
-            'barcode' => 'nullable|string|unique:products',
+            'barcode' => 'nullable|string|max:255|unique:products,barcode,' . $product->id,
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'numeric|min:0',
@@ -437,6 +437,9 @@ class ProductController extends Controller
 
         // Calculate stock change
         $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
+
+        $validated['barcode'] = $request->barcode ?? "";
+
 
         // Determine transaction type
         $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
