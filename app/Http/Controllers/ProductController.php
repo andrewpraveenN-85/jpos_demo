@@ -219,7 +219,6 @@ class ProductController extends Controller
             'purchase_date' => 'nullable|date',
         ]);
 
-        // dd($validated);
 
         try {
             // Handle image upload
@@ -231,7 +230,7 @@ class ProductController extends Controller
             }
 
             if (empty($validated['barcode'])) {
-                $validated['barcode'] = $this->generateUniqueCode(12);
+                $validated['barcode'] = "";
             }
             $validated['total_quantity'] = $validated['stock_quantity'] ?? 0;
             // Create the product
@@ -403,8 +402,9 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'string|max:255',
-            // 'code' => 'nullable|string|max:50',
-            // 'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
+            'code' => 'nullable|string|max:50',
+            //'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
+            'barcode' => 'nullable|string|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'numeric|min:0',

@@ -388,8 +388,8 @@
                     <input
                       v-model="form.expire_date"
                       type="date"
-                      id="barcode"
-                      placeholder="Enter Barcode"
+                      id="expire_date"
+                      placeholder="Enter expire_date"
                       class="w-full px-4 py-2 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                     />
                     <span
