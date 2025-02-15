@@ -302,7 +302,7 @@ class ProductController extends Controller
             // Product::create($validated);
 
             if (empty($validated['barcode'])) {
-                $validated['barcode'] = $this->generateUniqueCode(12);
+                $validated['barcode'] = "";
             }
 
             $product = Product::create($validated);
