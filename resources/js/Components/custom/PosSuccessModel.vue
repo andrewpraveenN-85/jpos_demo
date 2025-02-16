@@ -252,7 +252,7 @@ const handlePrintReceipt = () => {
   <body>
       <div class="receipt-container">
                 <div class="header">
-                  <img src="/images/billlogo.png" style="width: 120px; height: 70px;" />
+                  <img src="/images/shop.jpeg" style="width: 120px; height: 70px;" />
            ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
   ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
   ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email)
