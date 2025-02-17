@@ -58,9 +58,9 @@
                       >
                         <p
                           :class="{
-                            'text-2xl text-blue-600':
+                            'text-xl text-blue-600':
                               selectedParentCategory?.id !== category.id,
-                            'text-2xl text-red-600':
+                            'text-xl text-red-600':
                               selectedParentCategory?.id === category.id,
                           }"
                         >
