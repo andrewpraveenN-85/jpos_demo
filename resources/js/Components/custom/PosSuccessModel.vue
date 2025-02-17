@@ -156,11 +156,13 @@ const handlePrintReceipt = () => {
       <title>Receipt</title>
       <style>
           @media print {
-              body {
-                  margin: 0;
-                  padding: 0;
-                  -webkit-print-color-adjust: exact;
-              }
+body {
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact;
+        width: 58mm; /* or 80mm depending on your printer */
+        max-width: 58mm;
+    }
           }
           body {
               background-color: #ffffff;
