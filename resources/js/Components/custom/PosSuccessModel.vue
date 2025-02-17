@@ -140,7 +140,7 @@ const props = defineProps({
   kitchen_note: String,
   delivery_charge : String,
   order_type : String,
-  service_charge : String,
+  service_charge : Number,
 
 });
 
@@ -401,12 +401,12 @@ ${Number(props.subTotal) !== Number(props.total)
       <span>(${(Number(props.custom_discount) || 0).toFixed(2)}) LKR</span>
     </div>`}
 
-     ${Number(props.service_charge) === 0
-  ? ""
-  : `<div>
+     ${Number(props.service_charge) > 0
+  ? `<div>
       <span>Service Charge</span>
-      <span>${(Number(props.service_charge) || 0).toFixed(2)} LKR</span>
-    </div>`}
+      <span>${Number(props.service_charge).toFixed(2)} LKR</span>
+    </div>`
+  : ""}
 
 
 
@@ -427,19 +427,19 @@ ${Number(props.subTotal) !== Number(props.total)
     </div>`}
 
 
- ${Number(props.cash) === 0
+  ${Number(props.cash) === 0
   ? ""
   : `<div>
       <span>Cash</span>
       <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
     </div>`}
 
-${Number(props.split) === 0
-  ? ""
-  : `<div>
-      <span>Card</span>
-      <span>${(Number(props.split) || 0).toFixed(2)} LKR</span>
-    </div>`}
+  ${Number(props.split) > 0
+    ? `<div>
+        <span>Card</span>
+        <span>${Number(props.split).toFixed(2)} LKR</span>
+      </div>`
+    : ""}
 
 
 
