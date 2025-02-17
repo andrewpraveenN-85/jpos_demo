@@ -343,49 +343,60 @@ function generateAndPrintBarcode() {
 
 <style>
 @media print {
-  /* Label container */
+  /* Ensure proper page settings for printing */
+  @page {
+    size: auto; /* Auto size based on content */
+    margin: 5mm; /* Prevents cutting off content */
+  }
+
+  /* Hide everything except the print container */
+  body {
+    visibility: hidden;
+  }
+  
+  #printContainer, 
+  #printContainer * {
+    visibility: visible;
+  }
+
+  /* Main container - ensures full page width and height */
   #printContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     width: 100%;
-    height: 100%;
-    margin-top: 0;
+    height: auto;
+    margin: 0;
+    padding: 5mm;
   }
 
   /* Print content */
   .print-content {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
+    display: block;
     width: 100%;
     margin-top: 2mm;
   }
 
-  /* Barcode centered and full width */
+  /* Barcode - centered */
   #barcodePrint {
     width: 100%;
-    margin-left: 12mm;
+    max-width: 100mm; /* Ensures barcode fits within A4 page width */
+    text-align: center;
+    margin: 0 auto;
   }
 
   /* Product details */
   .product-details {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
+    display: block; /* Ensure proper display */
+    text-align: center;
     font-size: 10px;
     font-weight: bold;
     margin-bottom: 5px;
-    margin-left: 12mm;
   }
 
   .product-category,
   .product-price {
     color: #000;
-    margin: 0;
+    margin: 2px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -397,8 +408,17 @@ function generateAndPrintBarcode() {
     font-size: 10px;
     font-weight: bold;
     margin-top: 5px;
-    margin-left: 10mm;
+    text-align: center;
+  }
+
+  /* Prevents page breaks inside elements */
+  .print-content, 
+  .product-details, 
+  #barcodePrint, 
+  .product-code {
+    break-inside: avoid;
   }
 }
+
 </style>
 
