@@ -155,98 +155,149 @@ const handlePrintReceipt = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Receipt</title>
       <style>
-          @media print {
-              body {
-                  margin: 0;
-                  padding: 0;
-                  -webkit-print-color-adjust: exact;
-              }
-          }
-          body {
-              background-color: #ffffff;
-              font-size: 12px;
-              font-family: 'Arial', sans-serif;
-              margin: 0;
-              padding: 10px;
-              color: #000;
-          }
-          .header {
-              text-align: center;
-              margin-bottom: 16px;
-          }
-          .header h1 {
-              font-size: 20px;
-              font-weight: bold;
-              margin: 0;
-          }
-          .header p {
-              font-size: 10px;
-              margin: 4px 0;
-          }
-          .section {
-              margin-bottom: 16px;
-              padding-top: 8px;
-              border-top: 1px solid #000;
-          }
-          .info-row {
-              display: flex;
-              justify-content: space-between;
-              font-size: 12px;
-              margin-top: 8px;
-          }
-          .info-row p {
-              margin: 0;
-              font-weight: bold;
-          }
-          .info-row small {
-              font-weight: normal;
-          }
-          table {
-              width: 100%;
-              font-size: 12px;
-              border-collapse: collapse;
-              margin-top: 8px;
-          }
-          table th, table td {
-              padding: 6px 8px;
-              
-          }
-          table th {
-              text-align: left;
-          }
-          table td {
-              text-align: right;
-          }
-          table td:first-child {
-              text-align: left;
-          }
-          .totals {
-              border-top: 1px solid #000;
-              padding-top: 8px;
-              font-size: 12px;
-          }
-          .totals div {
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 8px;
-          }
-          .totals div:nth-child(4) {
-              font-size: 14px;
-              font-weight: bold;
-          }
-          .footer {
-              text-align: center;
-              font-size: 10px;
-              margin-top: 16px;
-          }
-          .footer p {
-              margin: 6px 0;
-          }
-          .footer .italic {
-              font-style: italic;
-          }
+@media print {
+    /* Ensure proper page settings */
+    @page {
+        size: auto; /* Adjusts based on content */
+        margin: 5mm; /* Prevents content from being cut off */
+    }
 
-          
+    /* Force visibility of all elements inside the print area */
+    body {
+        visibility: hidden;
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact; /* Ensures accurate colors */
+        print-color-adjust: exact;
+    }
+
+    /* Make print content fully visible */
+    #printContainer, 
+    #printContainer * {
+        visibility: visible;
+    }
+
+    /* Ensure the main container is structured correctly */
+    #printContainer {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: 5mm;
+        margin: 0 auto;
+    }
+
+    /* General styling for printing */
+    body {
+        background-color: #ffffff;
+        font-size: 12px;
+        font-family: 'Arial', sans-serif;
+        color: #000;
+    }
+
+    /* Header section */
+    .header {
+        text-align: center;
+        margin-bottom: 16px;
+    }
+    
+    .header h1 {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .header p {
+        font-size: 10px;
+        margin: 4px 0;
+    }
+
+    /* Section with separator */
+    .section {
+        margin-bottom: 16px;
+        padding-top: 8px;
+        border-top: 1px solid #000;
+    }
+
+    /* Information rows (flex adjusted for print) */
+    .info-row {
+        display: block; /* Avoids flex issues on mobile print */
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
+    .info-row p {
+        margin: 0;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .info-row small {
+        font-weight: normal;
+    }
+
+    /* Table for listing items */
+    table {
+        width: 100%;
+        font-size: 12px;
+        border-collapse: collapse;
+        margin-top: 8px;
+    }
+
+    table th, table td {
+        padding: 6px 8px;
+    }
+
+    table th {
+        text-align: left;
+    }
+
+    table td {
+        text-align: right;
+    }
+
+    table td:first-child {
+        text-align: left;
+    }
+
+    /* Totals section */
+    .totals {
+        border-top: 1px solid #000;
+        padding-top: 8px;
+        font-size: 12px;
+    }
+
+    .totals div {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .totals div:nth-child(4) {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        font-size: 10px;
+        margin-top: 16px;
+    }
+
+    .footer p {
+        margin: 6px 0;
+    }
+
+    .footer .italic {
+        font-style: italic;
+    }
+
+    /* Prevent page breaks inside important elements */
+    .header, .section, .info-row, .table, .totals, .footer {
+        break-inside: avoid;
+    }
+}
+
       </style>
   </head>
   <body>
