@@ -156,6 +156,10 @@ const handlePrintReceipt = () => {
       <title>Receipt</title>
       <style>
           @media print {
+          @page {
+        size: auto;
+        margin: 0; /* Remove default margins */
+    }
               body {
                   margin: 0;
                   padding: 0;
@@ -348,8 +352,8 @@ if (isMobile) {
     // Create an iframe dynamically
     const iframe = document.createElement("iframe");
     iframe.style.position = "absolute";
-    iframe.style.width = "100%";
-    iframe.style.height = "100%";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
     iframe.style.border = "none";
     document.body.appendChild(iframe);
 
