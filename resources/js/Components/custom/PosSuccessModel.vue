@@ -160,7 +160,6 @@ const handlePrintReceipt = () => {
                   margin: 0;
                   padding: 0;
                   -webkit-print-color-adjust: exact;
-                          zoom: 2.5; /* Adjust zoom level to improve visibility */
 
               }
           }
