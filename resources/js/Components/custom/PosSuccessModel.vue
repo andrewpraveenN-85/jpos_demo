@@ -164,6 +164,7 @@ const handlePrintReceipt = () => {
 
     /* Force visibility of all elements inside the print area */
     body {
+        visibility: hidden;
         margin: 0;
         padding: 0;
         -webkit-print-color-adjust: exact; /* Ensures accurate colors */
