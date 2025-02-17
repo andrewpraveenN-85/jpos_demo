@@ -156,15 +156,11 @@ const handlePrintReceipt = () => {
       <title>Receipt</title>
       <style>
           @media print {
-          @page {
-        size: auto;
-        margin: 0; /* Remove default margins */
-    }
               body {
                   margin: 0;
                   padding: 0;
                   -webkit-print-color-adjust: exact;
-                          zoom: 2; /* Adjust zoom level to improve visibility */
+                          zoom: 3; /* Adjust zoom level to improve visibility */
 
               }
           }
