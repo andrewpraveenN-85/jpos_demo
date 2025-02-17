@@ -135,7 +135,7 @@
                                 }}
                             </h2>
 
-                            <span class="mr-[-200px] text-xl text-black font-bold cursor-pointer border border-black p-2"  @click="PreBill">Pre Bill</span>
+                            <span class="mr-[-100px] text-xl text-black font-bold cursor-pointer border border-black p-2"  @click="PreBill">Pre Bill</span>
 
                             <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
                                 <p class="text-xxl text-blue-600 font-bold">Food Menu</p>
