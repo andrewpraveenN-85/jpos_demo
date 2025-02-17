@@ -621,6 +621,12 @@ ${
       <span>${(Number(history.cash) || 0).toFixed(2)} LKR</span>
     </div>`}
 
+${Number(history.split) === 0
+  ? ""
+  : `<div>
+      <span>Card</span>
+      <span>${(Number(history.split) || 0).toFixed(2)} LKR</span>
+    </div>`}
 
 
 
@@ -645,6 +651,7 @@ ${
                 (parseFloat(history.service_charge) || 0) +
                 (parseFloat(history.delivery_charge) || 0) -
                 (parseFloat(history.discount) || 0) -
+                (parseFloat(history.split) || 0) -
                 (parseFloat(history.custom_discount) || 0)
               )
             ).toFixed(2)

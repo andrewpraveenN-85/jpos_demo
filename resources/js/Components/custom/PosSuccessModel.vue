@@ -131,6 +131,7 @@ const props = defineProps({
   orderId: String,
   balance: Number,
   cash: Number,
+  split : Number,
   subTotal: String,
   totalDiscount: String,
   total: String,
@@ -433,7 +434,12 @@ ${Number(props.subTotal) !== Number(props.total)
       <span>${(Number(props.cash) || 0).toFixed(2)} LKR</span>
     </div>`}
 
-
+${Number(props.split) === 0
+  ? ""
+  : `<div>
+      <span>Card</span>
+      <span>${(Number(props.split) || 0).toFixed(2)} LKR</span>
+    </div>`}
 
 
 

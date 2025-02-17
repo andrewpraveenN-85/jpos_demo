@@ -135,7 +135,7 @@
                                 }}
                             </h2>
 
-                            <span class="mr-[-200px] text-xl text-black font-bold cursor-pointer"  @click="PreBill">Pre Bill</span>
+                            <span class="mr-[-200px] text-xl text-black font-bold cursor-pointer border border-black p-2"  @click="PreBill">Pre Bill</span>
 
                             <span class="flex cursor-pointer" @click="isSelectModalOpen = true">
                                 <p class="text-xxl text-blue-600 font-bold">Food Menu</p>
@@ -277,23 +277,23 @@
                 </div>
 
                 <div v-if="isPasswordModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h3 class="text-lg font-bold mb-4">Enter Authorization Password</h3>
-      <input
-        type="password"
-        v-model="passwordInput"
-        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <div class="flex justify-end space-x-2 mt-4">
-        <button @click="isPasswordModalOpen = false" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">
-          Cancel
-        </button>
-        <button @click="verifyPassword" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Confirm
-        </button>
-      </div>
-    </div>
-  </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                    <h3 class="text-lg font-bold mb-4">Enter Authorization Password</h3>
+                    <input
+                        type="password"
+                        v-model="passwordInput"
+                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <div class="flex justify-end space-x-2 mt-4">
+                        <button @click="isPasswordModalOpen = false" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">
+                        Cancel
+                        </button>
+                        <button @click="verifyPassword" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Confirm
+                        </button>
+                    </div>
+                    </div>
+                </div>
 
                             <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Service Charge </p>
@@ -355,6 +355,15 @@
                                     <span class="ml-2">LKR</span>
                                 </span>
                             </div>
+                            <div v-if="selectedPaymentMethod === 'split'" class="w-full px-16 pt-4 pb-4 border-b border-black mt-4">
+                                <div class="flex items-center justify-between w-full mt-4">
+                                    <p class="text-xl text-black">Card</p>
+                                    <span>
+                                        <CurrencyInput v-if="selectedTable" v-model="selectedTable.split" :options="{ currency: 'EUR' }" />
+                                        <span class="ml-2">LKR</span>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Balance</p>
                                 <p>{{ balance }} LKR</p>
@@ -410,6 +419,16 @@
                                 ]">
                                     <img src="/images/bank-card.png" alt="" class="w-24" />
                                 </div>
+                                <div @click="selectedPaymentMethod = 'split'" :class="[
+                                    'cursor-pointer w-[100px] border border-black rounded-xl flex flex-col justify-center items-center text-center',
+                                    selectedPaymentMethod === 'split'
+                                        ? 'bg-yellow-500 font-bold'
+                                        : 'text-black',
+                                ]">
+                                    
+                                    <img src="/images/money-stack.png"  alt="" class="w-12" />
+                                    <img src="/images/bank-card.png"  alt="" class="w-12" />
+                                </div>
                             </div>
 
                             <div class="flex items-center justify-center w-full">
@@ -430,7 +449,7 @@
         </div>
     </div>
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="selectedTable.products"
-        :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash"
+        :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash" :split="selectedTable.split"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
         :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
         :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :service_charge="selectedTable.service_charge"
@@ -476,6 +495,7 @@ const isAlertModalOpen = ref(false);
 const message = ref("");
 const appliedCoupon = ref(null);
 const cash = ref(0);
+const split = ref(0);
 const isSelectModalOpen = ref(false);
 const order_type = ref("");
 const kitchen_note = ref("");
@@ -591,6 +611,20 @@ watch(
     },
     { deep: true }
 );
+
+watch(
+  () => selectedTable.value.cash,
+  (newCash) => {
+    if (selectedPaymentMethod.value === "split") {
+      const totalValue = parseFloat(total.value) || 0;
+      const cashValue = parseFloat(newCash) || 0;
+
+      // Ensure the card value does not go negative
+      selectedTable.value.split = Math.max(0, totalValue - cashValue);
+    }
+  }
+);
+
 
 // const tablesItems = ref([]);
 //
@@ -840,6 +874,7 @@ const submitOrder = async () => {
             orderId: selectedTable.value.orderId,
             custom_discount: customDiscCalculated.value,
             cash: selectedTable.value.cash,
+            split: selectedTable.value.split,
             service_charge: selectedTable.value.service_charge,
             kitchen_note: selectedTable.value.kitchen_note,
             delivery_charge: selectedTable.value.delivery_charge,
@@ -1187,17 +1222,20 @@ const customDiscCalculated = computed(() => {
 
 const balance = computed(() => {
     if (!selectedTable.value) {
-        return 0; // Return 0 if no table is selected
+        return 0; // No table selected
     }
 
-    if (selectedTable.value.cash == null || selectedTable.value.cash === 0) {
-        return 0; // If cash is null or 0, return 0
-    }
+    const totalValue = parseFloat(total.value) || 0;
+    const cashValue = parseFloat(selectedTable.value.cash) || 0;
+    const cardValue = parseFloat(selectedTable.value.split) || 0;
 
-    return (
-        parseFloat(selectedTable.value.cash) - parseFloat(total.value)
-    ).toFixed(2);
+    if (selectedPaymentMethod.value === "split") {
+        return (cashValue + cardValue - totalValue).toFixed(2);
+    } else {
+        return (cashValue - totalValue).toFixed(2);
+    }
 });
+
 
 // Check for product or handle errors
 const form = useForm({

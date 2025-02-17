@@ -25,6 +25,7 @@ class Sale extends Model
         'cash',
         'order_type',
         'service_charge',
+        'split',
         
     ];
 
