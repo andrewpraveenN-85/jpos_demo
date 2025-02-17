@@ -156,147 +156,139 @@ const handlePrintReceipt = () => {
       <title>Receipt</title>
       <style>
 @media print {
-    /* Ensure proper page settings */
-    @page {
-        size: auto; /* Adjusts based on content */
-        margin: 5mm; /* Prevents content from being cut off */
-    }
+            /* Page settings */
+            @page {
+                size: auto; /* Adjust to content */
+                margin: 5mm; /* Avoids cutting */
+            }
 
-    /* Force visibility of all elements inside the print area */
-    body {
-        visibility: hidden;
-        margin: 0;
-        padding: 0;
-        -webkit-print-color-adjust: exact; /* Ensures accurate colors */
-        print-color-adjust: exact;
-    }
+            /* Hide everything except print area */
+            body {
+                visibility: hidden;
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact; /* Ensure colors print correctly */
+                print-color-adjust: exact;
+            }
 
-    /* Make print content fully visible */
-    #printContainer, 
-    #printContainer * {
-        visibility: visible;
-    }
+            /* Print container visibility */
+            #printContainer, #printContainer * {
+                visibility: visible;
+            }
 
-    /* Ensure the main container is structured correctly */
-    #printContainer {
-        display: block;
-        width: 100%;
-        height: auto;
-        padding: 5mm;
-        margin: 0 auto;
-    }
+            /* Make print container fill page */
+            #printContainer {
+                display: block;
+                width: 100%;
+                height: auto;
+                margin: 0 auto;
+                padding: 5mm;
+            }
 
-    /* General styling for printing */
-    body {
-        background-color: #ffffff;
-        font-size: 12px;
-        font-family: 'Arial', sans-serif;
-        color: #000;
-    }
+            /* Header */
+            .header {
+                text-align: center;
+                margin-bottom: 16px;
+            }
 
-    /* Header section */
-    .header {
-        text-align: center;
-        margin-bottom: 16px;
-    }
-    
-    .header h1 {
-        font-size: 20px;
-        font-weight: bold;
-        margin: 0;
-    }
+            .header h1 {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 0;
+            }
 
-    .header p {
-        font-size: 10px;
-        margin: 4px 0;
-    }
+            .header p {
+                font-size: 10px;
+                margin: 4px 0;
+            }
 
-    /* Section with separator */
-    .section {
-        margin-bottom: 16px;
-        padding-top: 8px;
-        border-top: 1px solid #000;
-    }
+            /* Section Styling */
+            .section {
+                margin-bottom: 16px;
+                padding-top: 8px;
+                border-top: 1px solid #000;
+            }
 
-    /* Information rows (flex adjusted for print) */
-    .info-row {
-        display: block; /* Avoids flex issues on mobile print */
-        font-size: 12px;
-        margin-top: 8px;
-    }
+            /* Info Rows */
+            .info-row {
+                display: block;
+                font-size: 12px;
+                margin-top: 8px;
+                text-align: left;
+            }
 
-    .info-row p {
-        margin: 0;
-        font-weight: bold;
-        text-align: left;
-    }
+            .info-row p {
+                margin: 0;
+                font-weight: bold;
+            }
 
-    .info-row small {
-        font-weight: normal;
-    }
+            .info-row small {
+                font-weight: normal;
+            }
 
-    /* Table for listing items */
-    table {
-        width: 100%;
-        font-size: 12px;
-        border-collapse: collapse;
-        margin-top: 8px;
-    }
+            /* Table */
+            table {
+                width: 100%;
+                font-size: 12px;
+                border-collapse: collapse;
+                margin-top: 8px;
+            }
 
-    table th, table td {
-        padding: 6px 8px;
-    }
+            table th, table td {
+                padding: 6px 8px;
+            }
 
-    table th {
-        text-align: left;
-    }
+            table th {
+                text-align: left;
+            }
 
-    table td {
-        text-align: right;
-    }
+            table td {
+                text-align: right;
+            }
 
-    table td:first-child {
-        text-align: left;
-    }
+            table td:first-child {
+                text-align: left;
+            }
 
-    /* Totals section */
-    .totals {
-        border-top: 1px solid #000;
-        padding-top: 8px;
-        font-size: 12px;
-    }
+            /* Totals */
+            .totals {
+                border-top: 1px solid #000;
+                padding-top: 8px;
+                font-size: 12px;
+            }
 
-    .totals div {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
+            .totals div {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+            }
 
-    .totals div:nth-child(4) {
-        font-size: 14px;
-        font-weight: bold;
-    }
+            .totals div:nth-child(4) {
+                font-size: 14px;
+                font-weight: bold;
+            }
 
-    /* Footer */
-    .footer {
-        text-align: center;
-        font-size: 10px;
-        margin-top: 16px;
-    }
+            /* Footer */
+            .footer {
+                text-align: center;
+                font-size: 10px;
+                margin-top: 16px;
+            }
 
-    .footer p {
-        margin: 6px 0;
-    }
+            .footer p {
+                margin: 6px 0;
+            }
 
-    .footer .italic {
-        font-style: italic;
-    }
+            .footer .italic {
+                font-style: italic;
+            }
 
-    /* Prevent page breaks inside important elements */
-    .header, .section, .info-row, .table, .totals, .footer {
-        break-inside: avoid;
-    }
-}
+            /* Prevent page breaks */
+            .header, .section, .info-row, .table, .totals, .footer {
+                break-inside: avoid;
+            }
+        }
 
       </style>
   </head>
