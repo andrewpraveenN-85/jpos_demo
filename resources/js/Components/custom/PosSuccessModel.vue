@@ -157,11 +157,11 @@ const handlePrintReceipt = () => {
       <style>
           @media print {
 body {
+        width: 100%;
+        max-width: 100%;
         margin: 0;
         padding: 0;
         -webkit-print-color-adjust: exact;
-        width: 58mm; /* or 80mm depending on your printer */
-        max-width: 58mm;
     }
           }
           body {
