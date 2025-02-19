@@ -91,6 +91,8 @@
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Total Amount</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Discount</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Payment Method</th>
+                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Bank Name</th>
+                    <th class="p-4 font-semibold tracking-wide text-left uppercase">Last 4 Digit</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Order Type</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Sale Date</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Print</th>
@@ -124,6 +126,8 @@
                     LKR
                   </td>
                   <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
+                  <td class="p-4 font-bold border-gray-200">{{ history.bank_name || "N/A" }}</td>
+                  <td class="p-4 font-bold border-gray-200">{{ history.card_last4 || "N/A" }}</td>
                   <td class="p-4 font-bold border-gray-200">
                     <span v-if="history.order_type === 'takeaway'">Takeaway</span>
                     <span v-else-if="history.order_type === 'pickup'">
@@ -221,6 +225,14 @@
       </p>
     </div>
     <div>
+      <p class="font-medium">Bank:</p>
+      <p class="text-sm">{{ selectedTransaction.bank_name }}</p>
+    </div>
+    <div>
+      <p class="font-medium">Last 4 Digit:</p>
+      <p class="text-sm">{{ selectedTransaction.card_last4 }}</p>
+    </div>
+    <div>
       <p class="font-medium">Sale Date:</p>
       <p class="text-sm">{{ selectedTransaction.sale_date }}</p>
     </div>
@@ -279,12 +291,8 @@
   </div>
 </div>
 
-
-
-
-
     </div>
-  </template>
+</template>
 
 
 <script setup>

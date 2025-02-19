@@ -169,6 +169,8 @@ class PosController extends Controller
                 'delivery_charge' => $request->input('delivery_charge'),
                 'kitchen_note' => $request->input('kitchen_note'),
                 'order_type' => $request->input('order_type'),
+                'bank_name' => $request->bank_name,
+                'card_last4' => $request->card_last4,
             ]);
 
             foreach ($products as $product) {

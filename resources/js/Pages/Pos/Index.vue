@@ -320,6 +320,46 @@
                                     <span class="ml-2">LKR</span>
                                 </span>
                             </div>
+                    
+                            <div v-if="selectedPaymentMethod === 'card'" class="w-full px-16 pt-4 pb-4 border-b border-black mt-4">
+                                <div class="flex items-center justify-between w-full mt-4">
+                                    <p class="text-xl text-black ">Select Bank</p>
+                                    <Combobox v-model="selectedTable.bank_name">
+                                    <div class="relative w-[150px]">
+                                    <ComboboxInput 
+                                        class="w-full border border-gray-300 rounded-md py-2 px-3 text-black"
+                                        @change="query = $event.target.value"
+                                        placeholder="Search Bank"
+                                    />
+                                    <ComboboxOptions 
+                                        v-if="filteredBanks.length" 
+                                        class="absolute w-full bg-white border border-gray-300 shadow-md rounded-md mt-1 max-h-40 overflow-auto"
+                                    >
+                                        <ComboboxOption 
+                                        v-for="bank in filteredBanks" 
+                                        :key="bank"
+                                        :value="bank"
+                                        class="p-2 hover:bg-blue-100 cursor-pointer"
+                                        >
+                                        {{ bank }}
+                                        </ComboboxOption>
+                                    </ComboboxOptions>
+                                    </div>
+                                </Combobox>
+                                </div>
+                            </div>
+
+                            <div v-if="selectedPaymentMethod === 'card'" class="w-full px-16 pt-4 pb-4 border-b border-black mt-4">
+                                <div class="flex items-center justify-between w-full mt-4">
+                                    <p class="text-xl text-black">Last 4 Digits of Card</p>
+                                    <input v-model="selectedTable.card_last4"
+                                        type="text"
+                                        maxlength="4"
+                                        pattern="[0-9]{4}"
+                                        placeholder="Enter Last 4 Digits"
+                                        class="w-24 text-center border border-gray-400 rounded-lg py-2 px-3 text-xl">
+                                </div>
+                            </div>
                             <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Balance</p>
                                 <p>{{ balance }} LKR</p>
@@ -422,6 +462,7 @@ import CurrencyInput from "@/Components/custom/CurrencyInput.vue";
 import SelectProductModel from "@/Components/custom/SelectProductModel.vue";
 import ProductAutoComplete from "@/Components/custom/ProductAutoComplete.vue";
 import { generateOrderId } from "@/Utils/Other.js";
+import { Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from "@headlessui/vue";
 
 // const custom_discount = ref(0);
 
@@ -437,7 +478,25 @@ const isSelectModalOpen = ref(false);
 const order_type = ref("");
 const kitchen_note = ref("");
 const delivery_charge = ref("");
+const bankOptions = ref([
+    "Alliance Finance Co PLC", "Amana Bank", "American Express Bank Ltd", "Asia Asset Finance PLC",
+    "Bank of Ceylon", "Bank of China",
+    "CDB", "Cargils Bank Ltd", "Central Bank of Sri Lanka", "Central Finance PLC", "City Bank", "Commercial Bank", "Commercial Credit", "Cooperative Regional Rural Bank LTD",
+    "DFCC Bank PLC", "Deutsche Bank", "Dialog Finance PLC",
+    "Fintrex Finance Limited",
+    "HDFC Bank", "HNB Finance PLC", "HSBC", "Hatton National Bank",
+    "Indian Bank", "Indian Overseas Bank", "Kanrich Finance Bank", "LB Finance", "LOLC Development Finance Plc", "LOLC Finance Plc", "Lanka Credit and Business Finance Limited",
+    "MBSL", "MCB", "Mercantile Investment", "NDB Bank", "NSB", "Nations Trust Bank", 
+    "Peoples Leasing and Finance PLC", "Pan Asia Bank", "Peoples Bank", "Public Bank Berhad", 
+    "RDB", "Richard Pieris Finance", "SDB", "SENKADAGALA FINANCE", "SMIB", "Sampath Bank", "Sarvodaya Development Finace LTD", "Seylan Bank", "Singer Finance(Lanka) Bank", "Siyapatha Finance PLC", "Softlogic Finance PLC", "Standard Charted Bank", "State Bank of India", "Union Bank" 
+]);
 
+const query = ref("");
+const filteredBanks = computed(() =>
+  query.value
+    ? bankOptions.value.filter(bank => bank.toLowerCase().includes(query.value.toLowerCase()))
+    : bankOptions.value
+);
 // Load initial state from localStorage or use default values
 const savedTables = JSON.parse(localStorage.getItem("tables")) || [
     {
@@ -780,7 +839,8 @@ const submitOrder = async () => {
             orderId: selectedTable.value.orderId,
             custom_discount: customDiscCalculated.value,
             cash: selectedTable.value.cash,
-
+            bank_name: selectedTable.value.bank_name,
+            card_last4: selectedTable.value.card_last4,
             kitchen_note: selectedTable.value.kitchen_note,
             delivery_charge: selectedTable.value.delivery_charge,
             order_type: selectedTable.value.order_type,

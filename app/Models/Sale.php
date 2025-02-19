@@ -24,6 +24,8 @@ class Sale extends Model
         'delivery_charge',
         'cash',
         'order_type',
+        'bank_name',
+        'card_last4',
     ];
 
 
