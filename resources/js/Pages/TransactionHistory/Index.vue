@@ -210,7 +210,7 @@
     </div>
     <div>
       <p class="font-medium">Discount:</p>
-      <p class="text-sm">{{ selectedTransaction.discount || 0 }} LKR</p>
+        <p class="text-sm">{{ parseFloat(selectedTransaction.discount || 0) + parseFloat(selectedTransaction.custom_discount || 0) }} LKR</p>
     </div>
     <div>
       <p class="font-medium">Payment Method:</p>
@@ -359,9 +359,11 @@ const getSafeValue = (obj, path) => {
   const saleItems = history.sale_items || [];
   const productRows = saleItems.map(item => `
     <tr>
-      <td>${getSafeValue(item, 'product.name') || 'N/A'}</td>
+      <td>${getSafeValue(item, 'product.name') || 'N/A'}
+      <span style="font-size: 8px;font-weight: bold; font-style: italic;"> (${item.unit_price} LKR)</span>
+      </td>
       <td class="text-right">${item.quantity || 0}</td>
-      <td class="text-right">${item.unit_price || 0} </td>
+      <td class="text-right">${(item.unit_price || 0) * (item.quantity || 0)}</td>
     </tr>
   `).join('');
 

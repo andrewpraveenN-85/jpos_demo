@@ -327,7 +327,7 @@
                                     <Combobox v-model="selectedTable.bank_name">
                                     <div class="relative w-[150px]">
                                     <ComboboxInput 
-                                        class="w-full border border-gray-300 rounded-md py-2 px-3 text-black"
+                                        class="w-full h-12 border border-gray-300 rounded-md py-2 px-3 text-black"
                                         @change="query = $event.target.value"
                                         placeholder="Search Bank"
                                     />
@@ -356,8 +356,8 @@
                                         type="text"
                                         maxlength="4"
                                         pattern="[0-9]{4}"
-                                        placeholder="Enter Last 4 Digits"
-                                        class="w-24 text-center border border-gray-400 rounded-lg py-2 px-3 text-xl">
+                                        placeholder="Last 4 Digits"
+                                        class="w-36 text-center border border-gray-300 rounded-lg py-2  text-x">
                                 </div>
                             </div>
                             <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
