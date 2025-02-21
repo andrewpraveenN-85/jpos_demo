@@ -88,6 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('reports', ReportController::class);
     Route::get('/batch-management/search', [ReportController::class, 'searchByCode']);
     Route::resource('customers', CustomerController::class);
+    Route::get('/customers/{customerId}/bills', [CustomerController::class, 'customerBills'])->name('customer.bills');
     Route::resource('colors', ColorController::class);
     Route::resource('coupons', CouponController::class);
     Route::resource('sizes', SizeController::class);
@@ -96,6 +97,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/transactions/delete', [TransactionHistoryController::class, 'destroy'])->name('transactions.delete');
     Route::resource('stock-transition', StockTransactionController::class);
     Route::resource('manualpos', ManualPosController::class);
+    Route::post('/sales/{id}/update-status', [TransactionHistoryController::class, 'updateStatus']);
 
 
 

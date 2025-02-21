@@ -91,6 +91,7 @@
                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Discount</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Payment Method</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase">Sale Date</th>
+                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Status</th>
                         <th class="p-4 font-semibold tracking-wide text-left uppercase"> Action</th>
                     </tr>
                     </thead>
@@ -106,10 +107,24 @@
                              <td class="p-4 font-bold border-gray-200">{{((parseFloat(history.discount) || 0) + (parseFloat(history.custom_discount) || 0)).toLocaleString()}}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
+                            <td class="p-4 font-bold border-gray-200"><select
+                                v-model="history.status"
+                                @change="updateStatus(history.status)"
+                                class="p-2 border rounded"
+                            >
+                            <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select></td>
                             <td class="p-4 font-bold border-gray-200">
+                                    <button 
+                                    @click="markAsCompleted(history)"
+                                        class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 mr-2"
+                                    >
+                                        Done
+                                    </button>
                                 <button 
                                     @click="printReceipt(history)"
-                                    class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 mr-4"
+                                    class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 mr-2"
                                 >
                                     Print
                                 </button>
@@ -163,7 +178,19 @@ const deleteReceipt = (orderId) => {
     });
   }
 };
-
+const markAsCompleted = async (history) => {
+  console.log('Updating status for ID:', history.id); // Check if ID is valid
+  try {
+    const response = await axios.post(`/sales/${history.id}/update-status`, {
+      status: 'completed',
+    });
+    history.status = 'completed';
+    alert(response.data.message || 'Status updated successfully!');
+  } catch (error) {
+    console.error('Error updating status:', error);
+    alert('Failed to update status. Please try again.');
+  }
+};
 
 
 $(document).ready(function () {
@@ -349,6 +376,11 @@ const getSafeValue = (obj, path) => {
                     <small>${history.user?.name || ' '}</small>
                 </div>
             </div>
+            <div>
+                <p style="font-weight: bold; ${history.status === 'pending' ? 'border: 1px solid black;' : ''} padding: 2px; font-size: 15px; text-align: center; display: flex; justify-content: center; align-items: center;">
+                    ${history.status === 'pending' ? 'Credit Bill' : ''}
+                </p>
+              </div>
         </div>
 
         <div class="section">

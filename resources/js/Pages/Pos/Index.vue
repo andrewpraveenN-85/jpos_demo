@@ -31,25 +31,51 @@
                         <div class="p-16 space-y-8 bg-black shadow-lg rounded-3xl">
                             <p class="mb-4 text-5xl font-bold text-white">Customer Details</p>
                             <div class="mb-3">
-                                <input v-model="customer.name" type="text" placeholder="Enter Customer Name"
-                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <input 
+                                    v-model="customer.name" 
+                                    type="text" 
+                                    placeholder="Enter Customer Name"
+                                    @input="handleNameInput"
+                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+
+                                <!-- Autocomplete dropdown -->
+                                <div v-if="filteredCustomers.length > 0 && showAutocomplete" 
+                                    class="absolute w-[385px] z-50 mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                                    <ul class="max-h-60 overflow-auto">
+                                    <li v-for="matchedCustomer in filteredCustomers" 
+                                        :key="matchedCustomer.id"
+                                        @click="selectCustomer(matchedCustomer)"
+                                        class="px-4  py-2 cursor-pointer hover:bg-gray-100 text-black">
+                                        {{ matchedCustomer.name }}
+                                    </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Hidden customer selection for form submission -->
+                                <select v-model="customer_id" class="hidden">
+                                    <option value="">Select a Customer</option>
+                                    <option v-for="customer in allcustomers" :key="customer.id" :value="customer.id">
+                                    {{ customer.name }}
+                                    </option>
+                                </select>
+
+                                <!-- Dropdown for selecting existing customers -->
+                                <select v-model="customer_id" id="customer_id"
+                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Select a Customer</option>
+                                    <option v-for="customer in allcustomers" :key="customer.id" :value="customer.id">
+                                        {{ customer.name }}
+                                    </option>
+                                </select>
                             </div>
                             <div class="flex gap-2 mb-3 text-black">
-                                <!-- <select
-                  v-model="customer.countryCode"
-                  class="w-[60px] px-2 py-2 bg-white placeholder-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="+94">+94</option>
-                  <option value="+1">+1</option>
-                  <option value="+44">+44</option>
-                </select> -->
-                                <input v-model="customer.contactNumber" type="text"
-                                    placeholder="Enter Customer Contact Number"
+                                <input v-model="customer.contactNumber" type="text" placeholder="Enter Customer Contact Number"
                                     class="flex-grow px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                            </div>
+                                </div>
                             <div class="text-black">
-                                <input v-model="customer.email" type="email" placeholder="Enter Customer Email"
-                                    class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input v-model="customer.email" type="email" placeholder="Enter Customer Email"
+                                class="w-full px-4 py-4 text-black placeholder-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             </div>
 
                             <div class="text-black">
@@ -79,6 +105,14 @@
                                 <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
                             </span>
                         </div>
+
+                        <div class="mt-4">
+                            <div class=" w-[31rem]  text-right">
+                            <label for="credit" class="text-xl text-blue-600 font-bold mr-2">Credit</label>
+                            <input type="radio" id="credit" value="credit" v-model="selectedType" />
+                            </div>
+                        </div>
+            
 
                         <div class="flex items-end justify-between w-full my-5 border-2 border-black rounded-2xl">
                             <div class="flex items-center justify-center w-3/4">
@@ -326,7 +360,7 @@
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="products"
         :employee="employee" :cashier="loggedInUser" :customer="customer" :orderid="orderid" :cash="cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
-        :custom_discount_type="custom_discount_type"
+        :custom_discount_type="custom_discount_type"  :selectedType="selectedType"
         :custom_discount="custom_discount" />
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 
@@ -362,6 +396,9 @@ const custom_discount = ref(0);
 const isSelectModalOpen = ref(false);
 const custom_discount_type = ref('percent');
 const orderid = computed(() => generateOrderId());
+const selectedType = ref(""); 
+const showAutocomplete = ref(false);
+const filteredCustomers = ref([]);
 
 
 // const balance = ref(0);
@@ -379,6 +416,8 @@ const props = defineProps({
     allemployee: Array,
     colors: Array,
     sizes: Array,
+    selectedType: String ,
+    allcustomers: Array
 });
 
 const discount = ref(0);
@@ -389,6 +428,7 @@ const customer = ref({
     contactNumber: "",
     email: "",
 });
+const customer_id = ref('');
 
 const employee_id = ref("");
 
@@ -424,6 +464,8 @@ const decrementQuantity = (id) => {
     }
 };
 
+
+
 // const orderId = computed(() => {
 //   const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to a base-36 string
 //   const randomString = Math.random().toString(36).substr(2, 5).toUpperCase(); // Generate a shorter random string
@@ -446,8 +488,18 @@ const submitOrder = async () => {
         return;
     }
     try {
+        let customerData = {};
+        if (customer_id.value) {
+            customerData = { id: customer_id.value };
+        } else {
+            customerData = {
+                name: customer.value.name,
+                contactNumber: customer.value.contactNumber,
+                email: customer.value.email
+            };
+        }
         const response = await axios.post("/pos/submit", {
-            customer: customer.value,
+            customer: customerData,
             products: products.value,
             employee_id: employee_id.value,
             paymentMethod: selectedPaymentMethod.value,
@@ -455,6 +507,7 @@ const submitOrder = async () => {
             orderid: orderid.value,
             cash: cash.value,
             custom_discount: custom_discount.value,
+            selectedType: selectedType.value,
         });
         isSuccessModalOpen.value = true;
         console.log(response.data); // Handle success
@@ -471,6 +524,58 @@ const submitOrder = async () => {
     }
 };
 // };
+const handleNameInput = () => {
+  const searchTerm = customer.value.name.toLowerCase().trim();
+  
+  if (searchTerm === '') {
+    filteredCustomers.value = [];
+    showAutocomplete.value = false;
+    return;
+  }
+
+  filteredCustomers.value = props.allcustomers.filter(c => 
+    c.name.toLowerCase().includes(searchTerm)
+  );
+  showAutocomplete.value = true;
+};
+
+// Function to select a customer from the dropdown
+const selectCustomer = (selectedCustomer) => {
+  customer_id.value = selectedCustomer.id;
+  customer.value = {
+    name: selectedCustomer.name,
+    contactNumber: selectedCustomer.phone || selectedCustomer.phone || '',
+    email: selectedCustomer.email || '',
+  };
+  showAutocomplete.value = false;
+  filteredCustomers.value = [];
+};
+
+// Add click outside handler to close autocomplete
+onMounted(() => {
+  document.addEventListener('click', (e) => {
+    const customerInput = document.querySelector('input[placeholder="Enter Customer Name"]');
+    const autocompleteDropdown = document.querySelector('.absolute');
+    
+    if (!customerInput?.contains(e.target) && !autocompleteDropdown?.contains(e.target)) {
+      showAutocomplete.value = false;
+    }
+  });
+});
+
+// Previous watch effect remains
+watch(customer_id, (newValue) => {
+  if (newValue) {
+    const selectedCustomer = props.allcustomers.find(c => c.id === newValue);
+    if (selectedCustomer) {
+      customer.value = {
+        name: selectedCustomer.name,
+        contactNumber: selectedCustomer.phone || selectedCustomer.phone || '',
+        email: selectedCustomer.email || '',
+      };
+    }
+  }
+});
 
 const subtotal = computed(() => {
     return products.value

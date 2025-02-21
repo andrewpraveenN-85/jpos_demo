@@ -33,6 +33,7 @@ class PosController extends Controller
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $allemployee = Employee::orderBy('created_at', 'desc')->get();
+        $allcustomers = Customer::orderBy('created_at', 'desc')->get();
 
 
         // Render the page for GET requests
@@ -44,6 +45,7 @@ class PosController extends Controller
             'allemployee' => $allemployee,
             'colors' => $colors,
             'sizes' => $sizes,
+            'allcustomers' => $allcustomers,
         ]);
     }
 
@@ -89,16 +91,13 @@ class PosController extends Controller
 
     public function submit(Request $request)
     {
-
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
-        // Combine countryCode and contactNumber to create the phone field
-
 
         $customer = null;
-
         $products = $request->input('products');
+
         $totalAmount = collect($products)->reduce(function ($carry, $product) {
             return $carry + ($product['quantity'] * $product['selling_price']);
         }, 0);
@@ -115,32 +114,31 @@ class PosController extends Controller
             return $carry;
         }, 0);
 
-        // Get coupon discount if applied
-        $couponDiscount = isset($request->input('appliedCoupon')['discount']) ?
-            floatval($request->input('appliedCoupon')['discount']) : 0;
+        $couponDiscount = isset($request->input('appliedCoupon')['discount']) ? floatval($request->input('appliedCoupon')['discount']) : 0;
+        $totalDiscount = $productDiscounts + $couponDiscount;
 
-
-        // Calculate total combined discount
-        $totalDiscount = $productDiscounts + $couponDiscount ;
-
-        DB::beginTransaction(); // Start a transaction
+        DB::beginTransaction();
 
         try {
-            // Save the customer data to the database
-            if ($request->input('customer.contactNumber') || $request->input('customer.name') || $request->input('customer.email')) {
-
+            // 🟢 **Check if an existing customer is selected**
+            if ($request->filled('customer.id')) {
+                $customer = Customer::find($request->input('customer.id'));
+            } 
+            // 🟢 **If no customer ID, create a new customer**
+            else if ($request->filled('customer.contactNumber') || $request->filled('customer.name') || $request->filled('customer.email')) {
                 $phone = $request->input('customer.countryCode') . $request->input('customer.contactNumber');
-                $customer = Customer::where('email', $request->input('customer.email'))->first();
-                $customer1 = Customer::where('phone', $phone)->first();
 
-                if ($customer) {
-                    $email = '';
+                $existingCustomerByEmail = Customer::where('email', $request->input('customer.email'))->first();
+                $existingCustomerByPhone = Customer::where('phone', $phone)->first();
+
+                if ($existingCustomerByEmail) {
+                    $email = null; // Prevent duplicate email
                 } else {
                     $email = $request->input('customer.email');
                 }
 
-                if ($customer1) {
-                    $phone = '';
+                if ($existingCustomerByPhone) {
+                    $phone = null; // Prevent duplicate phone
                 }
 
                 if (!empty($phone) || !empty($email) || !empty($request->input('customer.name'))) {
@@ -148,51 +146,45 @@ class PosController extends Controller
                         'name' => $request->input('customer.name'),
                         'email' => $email,
                         'phone' => $phone,
-                        'address' => $request->input('customer.address', ''), // Optional address
-                        'member_since' => now()->toDateString(), // Current date
-                        'loyalty_points' => 0, // Default value
+                        'address' => $request->input('customer.address', ''),
+                        'member_since' => now()->toDateString(),
+                        'loyalty_points' => 0,
                     ]);
                 }
             }
 
-            // Create the sale record
+            // 🟢 **Create the sale record using existing or new customer**
             $sale = Sale::create([
-                'customer_id' => $customer ? $customer->id : null, // Nullable customer_id
+                'customer_id' => $customer ? $customer->id : null,
                 'employee_id' => $request->input('employee_id'),
-                'user_id' => $request->input('userId'), // Logged-in user ID
+                'user_id' => $request->input('userId'),
                 'order_id' => $request->input('orderid'),
-                'total_amount' => $totalAmount, // Total amount of the sale
-                'discount' => $totalDiscount, // Default discount to 0 if not provided
+                'total_amount' => $totalAmount,
+                'discount' => $totalDiscount,
                 'total_cost' => $totalCost,
-                'payment_method' => $request->input('paymentMethod'), // Payment method from the request
-                'sale_date' => now()->toDateString(), // Current date
+                'payment_method' => $request->input('paymentMethod'),
+                'sale_date' => now()->toDateString(),
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
-
+                'status' => $request->input('selectedType') === 'credit' ? 'pending' : 'completed',
             ]);
 
             foreach ($products as $product) {
-                // Check stock before saving sale items
                 $productModel = Product::find($product['id']);
                 if ($productModel) {
                     $newStockQuantity = $productModel->stock_quantity - $product['quantity'];
-
-                    // Prevent stock from going negative
                     if ($newStockQuantity < 0) {
-                        // Rollback transaction and return error
                         DB::rollBack();
                         return response()->json([
-                            'message' => "Insufficient stock for product: {$productModel->name}
-                            ({$productModel->stock_quantity} available)",
+                            'message' => "Insufficient stock for product: {$productModel->name} ({$productModel->stock_quantity} available)",
                         ], 423);
                     }
 
                     if ($productModel->expire_date && now()->greaterThan($productModel->expire_date)) {
-                        // Rollback transaction and return error
                         DB::rollBack();
                         return response()->json([
                             'message' => "The product '{$productModel->name}' has expired (Expiration Date: {$productModel->expire_date->format('Y-m-d')}).",
-                        ], 423); // HTTP 422 Unprocessable Entity
+                        ], 423);
                     }
 
                     // Create sale item
@@ -212,30 +204,22 @@ class PosController extends Controller
                         'supplier_id' => $productModel->supplier_id ?? null,
                     ]);
 
-                    // Update stock quantity
                     $productModel->update([
                         'stock_quantity' => $newStockQuantity,
                     ]);
                 }
             }
 
-            // Commit the transaction
             DB::commit();
 
             return response()->json(['message' => 'Sale recorded successfully!'], 201);
         } catch (\Exception $e) {
-            // Rollback the transaction if any error occurs
             DB::rollBack();
-
             return response()->json([
                 'message' => 'An error occurred while processing the sale.',
                 'error' => $e->getMessage(),
             ], 500);
         }
-
-        return response()->json([
-            'message' => 'Customer details saved successfully!',
-            'data' => $customer,
-        ], 201);
     }
+
 }

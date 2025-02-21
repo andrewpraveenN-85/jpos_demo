@@ -67,5 +67,27 @@ public function destroy(Request $request)
     return redirect()->route('transactionHistory.index')->banner('Record deleted successfully, and stock updated.');
 }
 
+public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:pending,completed', 
+    ]);
+
+    try {
+        $sale = Sale::findOrFail($id);
+        $sale->status = $request->input('status');
+        $sale->save();
+
+        return response()->json([
+            'message' => 'Status updated successfully!',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Failed to update status.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
 
 }

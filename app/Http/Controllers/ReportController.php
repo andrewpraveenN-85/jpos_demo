@@ -40,7 +40,7 @@ class ReportController extends Controller
 
         // Query with optional date range filtering
         //  $salesQuery = Sale::with('saleItems.product.category');
-        $salesQuery = Sale::whereHas('saleItems.product.category')
+        $salesQuery = Sale::where('status', 'completed')->whereHas('saleItems.product.category')
             ->with('saleItems.product.category');
 
         if ($startDate && $endDate) {

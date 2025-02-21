@@ -538,8 +538,6 @@ import { Head } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 
 import {
   Chart as ChartJS,

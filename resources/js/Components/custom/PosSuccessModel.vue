@@ -94,7 +94,8 @@ const props = defineProps({
     totalDiscount: String,
     total: String,
     custom_discount: Number,
-    custom_discount_type: String
+    custom_discount_type: String,
+    selectedType: String,
 });
 
 const handlePrintReceipt = () => {
@@ -284,6 +285,9 @@ const handlePrintReceipt = () => {
                       <p>Cashier:</p>
                       <small>${props.cashier.name}</small>
                   </div>
+              </div>
+              <div>
+                    <p style="font-weight: bold;  ${props.selectedType === 'credit' ? 'border: 1px solid black;' : ''}, padding: 2px; font-size: 15px; text-align: center; display: flex; justify-content: center; align-items: center;">${props.selectedType === 'credit' ? 'Credit Bill' : ''}</p>
               </div>
           </div>
           <div class="section">

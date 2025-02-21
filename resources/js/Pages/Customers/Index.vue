@@ -126,7 +126,8 @@
               <tr
                 v-for="customer in allcustomers"
                 :key="customer.id"
-                class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
+                class="cursor-pointer hover:bg-gray-200"
+                @click="viewCustomerBills(customer.id)"
               >
                 <td class="p-4 font-bold border-t border-gray-200">
                   {{ customer.name || "N/A" }}
@@ -145,58 +146,36 @@
                 </td>
                 <td class="p-4 text-center border-t border-gray-200">
                   <div class="inline-flex items-center w-full space-x-3">
-                    <!-- <button
-                    v-if="HasRole(['Admin'])"
-                      @click="
-                        () => {
-
-                          openEditModal(customer);
-                        }
-                      "
-                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-green-500 to-green-400 transition duration-150 ease-in-out rounded-md hover:from-green-600 hover:to-green-500"
+                    <button @click.stop="viewCustomerBills(customer.id)" class="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                      View Bills
+                    </button>
+                    <button
+                      :class="HasRole(['Admin'])
+                                ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+                                : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
+                      :title="HasRole(['Admin'])
+                                ? ''
+                                : 'You do not have permission to edit'"
+                      :disabled="!HasRole(['Admin'])"
+                      @click="() => { if (HasRole(['Admin'])) openEditModal(customer); }"
                     >
                       Edit
                     </button>
-                    <button
-                      @click="
-                        () => {
 
-                          openDeleteModal(customer);
-                        }
-                      "
-                      class="w-full px-4 py-2 font-medium text-[14px] tracking-wider text-white bg-gradient-to-r from-red-500 to-red-400 transition duration-150 ease-in-out rounded-md hover:from-red-600 hover:to-red-500"
+                    <!-- Delete Button -->
+                    <button
+                      :class="HasRole(['Admin'])
+                                ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+                                : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
+                      :title="HasRole(['Admin'])
+                                ? ''
+                                : 'You do not have permission to delete'"
+                      :disabled="!HasRole(['Admin'])"
+                      @click="() => { if (HasRole(['Admin'])) openDeleteModal(customer); }"
                     >
                       Delete
-                    </button> -->
-
-<!-- Edit Button -->
-<button
-  :class="HasRole(['Admin'])
-            ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
-            : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
-  :title="HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to edit'"
-  :disabled="!HasRole(['Admin'])"
-  @click="() => { if (HasRole(['Admin'])) openEditModal(customer); }"
->
-  Edit
-</button>
-
-<!-- Delete Button -->
-<button
-  :class="HasRole(['Admin'])
-            ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
-            : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
-  :title="HasRole(['Admin'])
-            ? ''
-            : 'You do not have permission to delete'"
-  :disabled="!HasRole(['Admin'])"
-  @click="() => { if (HasRole(['Admin'])) openDeleteModal(customer); }"
->
-  Delete
-</button>
-
+                    </button>
+                    
 
 
                   </div>
@@ -248,7 +227,9 @@ defineProps({
 });
 
 
-
+const viewCustomerBills = (customerId) => {
+  router.visit(route("customer.bills", { customerId }));
+};
 
 
 

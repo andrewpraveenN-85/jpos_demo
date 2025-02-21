@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\CompanyInfo;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
@@ -21,8 +22,33 @@ class CustomerController extends Controller
         return Inertia::render('Customers/Index', [
             'allcustomers' => $allcustomers,
             'totalCustomers' => $allcustomers,
+            
         ]);
     }
+
+    public function customerBills($customerId)
+    {
+        $customer = Customer::with([
+            'sales', 
+            'sales.saleItems.product', 
+            'sales.user'
+        ])->where('id', $customerId)->firstOrFail();
+
+        $companyInfo = CompanyInfo::all();
+
+        // Debugging: Check if saleItems are being fetched
+        \Log::info('Customer Sales:', $customer->sales->toArray());
+
+        return Inertia::render('Customers/Bills', [
+            'customer' => $customer,
+            'bills' => $customer->sales,
+            'totalbills' => $customer->sales->count(),
+            'companyInfo' => $companyInfo,
+        ]);
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
