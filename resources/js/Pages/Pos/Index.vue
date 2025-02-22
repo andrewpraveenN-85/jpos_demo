@@ -312,7 +312,7 @@
                                 <p class="text-3xl text-black">Total</p>
                                 <p class="text-3xl text-black">{{ total }} LKR</p>
                             </div>
-                            <div class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
+                            <div v-if="selectedPaymentMethod === 'cash'" class="flex items-center justify-between w-full px-16 pt-4 pb-4 border-b border-black">
                                 <p class="text-xl text-black">Cash</p>
                                 <span>
                                     <CurrencyInput v-if="selectedTable" v-model="selectedTable.cash"
@@ -438,7 +438,7 @@
         :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
         :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
-        :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note"
+        :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :selectedPaymentMethod="selectedPaymentMethod"
         :order_type="selectedTable.order_type" />
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
 

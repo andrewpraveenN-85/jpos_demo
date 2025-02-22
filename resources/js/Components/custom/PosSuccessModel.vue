@@ -139,6 +139,7 @@ const props = defineProps({
   kitchen_note: String,
   delivery_charge : String,
   order_type : String,
+  selectedPaymentMethod : String,
 });
 
 const handlePrintReceipt = () => {
@@ -343,6 +344,12 @@ const handlePrintReceipt = () => {
                   <div>
                       <p>Cashier:</p>
                       <small>${props.cashier.name}</small>
+                  </div>
+              </div>
+              <div class="info-row">
+                   <div>
+                      <p>Payment Type:</p>
+                      <small>${props.selectedPaymentMethod}</small>
                   </div>
               </div>
               <div style="font-weight: bold; border: 1px solid black; text-align: center; padding: 5px; margin: 8px 0;">

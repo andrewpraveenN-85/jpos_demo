@@ -520,6 +520,12 @@ const getSafeValue = (obj, path) => {
                     <small>${history.user?.name || ' '}</small>
                 </div>
             </div>
+            <div class="info-row">
+                   <div>
+                      <p>Payment Type:</p>
+                      <small>${history.payment_method || ' '}</small>
+                  </div>
+              </div>
         </div>
 
         <div class="section">
