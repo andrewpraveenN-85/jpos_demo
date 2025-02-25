@@ -113,6 +113,7 @@ class ReportController extends Controller
         $totalCost = $sales->sum('total_cost');
         $totalDiscount = $sales->sum('discount');
         $customeDiscount = $sales->sum('custom_discount');
+        $totalServiceCharge = $sales->sum('service_charge');
         $netProfit = $totalSaleAmount - $totalCost - $totalDiscount - $customeDiscount;
 
         // Calculate total transactions and average transaction value
@@ -133,6 +134,7 @@ class ReportController extends Controller
             'totalDiscount' => $totalDiscount,
             'customeDiscount' => $customeDiscount,
             'totalTransactions' => $totalTransactions,
+            'totalServiceCharge' => $totalServiceCharge,
             'averageTransactionValue' => round($averageTransactionValue, 2), // Round to 2 decimals
             'startDate' => $startDate,
             'endDate' => $endDate,

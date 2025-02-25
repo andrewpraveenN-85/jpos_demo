@@ -181,6 +181,18 @@
                    <p class="text-3xl font-bold text-black">{{ totalCustomer }}</p>
                 </div>
              </div>
+
+             <div
+                class="py-6 flex flex-col justify-center items-center border-2 border-[#EC1D9] w-full space-y-4 rounded-2xl bg-[#EC16D766] shadow-lg transform transition-transform duration-300 hover:-translate-y-4">
+                <div class="flex flex-col items-center text-center justify-center">
+                   <h2 class="text-xl font-extrabold tracking-wide text-black uppercase">
+                      Total Service Charges
+                   </h2>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                   <p class="text-3xl font-bold text-black">{{totalServiceCharge}} LKR</p>
+                </div>
+             </div>
           </div>
           <!-- Charts Section -->
           <div class="flex items-center justify-center w-full h-full space-x-4">
@@ -309,7 +321,7 @@
 
        </div>
        <Footer />
- </template>
+</template>
  <script setup>
     import { ref, computed } from "vue";
     import {  Doughnut } from "vue-chartjs";
@@ -348,6 +360,7 @@
         averageTransactionValue: { type: Number, required: true },
         netProfit: { type: Number, required: true },
         totalTransactions: { type: Number, required: true },
+        totalServiceCharge: {type:Number, required: true},
         totalDiscount: { type: Number, required: true },
         totalCustomer: { type: Number, required: true },
         startDate: { type: String, default: "" },
