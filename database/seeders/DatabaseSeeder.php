@@ -40,20 +40,7 @@ if (!\App\Models\User::where('email', 't1@cashier.com')->exists()) {
         'role_type' => 'Cashier',
         'password' => Hash::make('C@sh1erR@ndom!1'),
     ]);
-}
-
-if (!\App\Models\User::where('email', 'demo@demo.com')->exists()) {
-    \App\Models\User::factory()->create([
-        'name' => 'demo',
-        'email' => 'demo@demo.com',
-        'role_type' => 'Admin',
-        'password' => Hash::make('D3moStr0ngP@ss!'),
-    ]);
-}
-
-
-        
-        
+} 
         // $this->call([
         //     ColorSeeder::class,
         //     SizeSeeder::class,
