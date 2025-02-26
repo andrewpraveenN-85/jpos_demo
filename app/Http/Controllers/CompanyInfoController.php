@@ -65,43 +65,43 @@ class CompanyInfoController extends Controller
 
 
      public function update(Request $request, CompanyInfo $companyInfo)
-{
-    if (!Gate::allows('hasRole', ['Admin'])) {
-        abort(403, 'Unauthorized');
-    }
+     {
+         if (!Gate::allows('hasRole', ['Admin'])) {
+             abort(403, 'Unauthorized');
+         }
 
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'address' => 'nullable|string|max:255',
-        'phone' => 'nullable|string|regex:/^\d{10}$/',
-        'phone2' => 'nullable|string|regex:/^\d{10}$/',
-        'email' => 'nullable|email|max:255|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/',
-        'website' => 'nullable|url|max:255',
-        'logo' => 'nullable|max:2048', // Ensure the uploaded file is an image
-    ]);
+         $validated = $request->validate([
+             'name' => 'required|string|max:255',
+             'address' => 'nullable|string|max:255',
+             'phone' => 'nullable|string|regex:/^\d{10}$/',
+             'phone2' => 'nullable|string|regex:/^\d{10}$/',
+             'email' => 'nullable|email|max:255|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/',
+             'website' => 'nullable|url|max:255',
+             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+         ]);
 
-    // Handle logo upload
-    if ($request->hasFile('logo')) {
-        // Delete the old logo if it exists
-        if ($companyInfo->logo && Storage::disk('public')->exists(str_replace('storage/', '', $companyInfo->logo))) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $companyInfo->logo));
-        }
+         if ($request->hasFile('logo')) {
+             // Delete old logo
+             if ($companyInfo->logo && file_exists(public_path($companyInfo->logo))) {
+                 unlink(public_path($companyInfo->logo));
+             }
 
-        // Save the new logo
-        $fileExtension = $request->file('logo')->getClientOriginalExtension();
-        $fileName = 'companyInfo_' . date("YmdHis") . '.' . $fileExtension;
-        $path = $request->file('logo')->storeAs('CompanyInfos', $fileName, 'public');
-        $validated['logo'] = 'storage/' . $path;
-    } else {
-        $validated['logo'] = $companyInfo->logo;
-    }
+             // Store new logo
+             $file = $request->file('logo');
+             $fileName = 'companyInfo_' . time() . '.' . $file->getClientOriginalExtension();
+             $path = $file->storeAs('public/CompanyInfos', $fileName);
+             $validated['logo'] = str_replace('public/', 'storage/', $path);
+         } else {
+             $validated['logo'] = $companyInfo->logo;
+         }
 
-    // Update company info
-    $companyInfo->update($validated);
+         // Update company info
+         $companyInfo->update($validated);
 
-    return redirect()->route('companyInfo.index')
-        ->banner('Company info updated successfully');
-}
+         return redirect()->route('companyInfo.index')
+             ->with('success', 'Company info updated successfully');
+     }
+
 
 
     /**
