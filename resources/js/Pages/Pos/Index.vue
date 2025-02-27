@@ -136,11 +136,11 @@
                             </p>
                         </div>
 
-                        <div class="flex items-center w-full py-4 border-b border-black" v-for="item in products"
-                            :key="item.id">
+                        <div class="flex items-center w-full py-4 border-b border-black" v-for="item in products" :key="item.id">
                             <div class="flex w-1/6">
-                                <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'
-                                    " alt="Supplier Image" class="object-cover w-16 h-16 border border-gray-500" />
+                                <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'"
+                                    alt="Supplier Image"
+                                    class="object-cover w-16 h-16 border border-gray-500" />
                             </div>
                             <div class="flex flex-col justify-between w-5/6">
                                 <p class="text-xl text-black">
@@ -152,11 +152,6 @@
                                             class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
                                             <i class="ri-add-line"></i>
                                         </p>
-                                        <!-- <p
-                      class="bg-[#D9D9D9] border-2 border-black h-8 w-8 text-black flex justify-center items-center rounded"
-                    >
-                      {{ item.quantity }}
-                    </p> -->
                                         <input type="number" v-model="item.quantity" min="0"
                                             class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center" />
                                         <p @click="decrementQuantity(item.id)"
@@ -185,10 +180,12 @@
                                                 class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider">
                                                 Remove {{ item.discount }}% Off
                                             </p>
-                                            <p class="text-2xl font-bold text-black text-right">
-                                                {{ item.selling_price }}
-                                                LKR
-                                            </p>
+
+                                            <!-- Editable Price Input -->
+                                            <input type="number" v-model="item.selling_price" min="0"
+                                                class="text-2xl font-bold text-black text-right border border-gray-300 rounded px-2 py-1 w-28" />
+
+                                            <span class="text-2xl font-bold text-black">LKR</span>
                                         </div>
                                     </div>
                                 </div>
@@ -200,6 +197,7 @@
                                 </p>
                             </div>
                         </div>
+
                         <div class="w-full pt-6 space-y-2">
                             <div class="flex items-center justify-between w-full px-8">
                                 <p class="text-xl">Sub Total</p>
@@ -447,6 +445,10 @@ const submitOrder = async () => {
     }
     try {
         const response = await axios.post("/pos/submit", {
+            products: products.value.map(product => ({
+                id: product.id,
+                selling_price: product.selling_price,  
+            })),
             customer: customer.value,
             products: products.value,
             employee_id: employee_id.value,

@@ -194,6 +194,9 @@ class PosController extends Controller
                             'message' => "The product '{$productModel->name}' has expired (Expiration Date: {$productModel->expire_date->format('Y-m-d')}).",
                         ], 423); // HTTP 422 Unprocessable Entity
                     }
+                    $productModel->update([
+                        'selling_price' => $product['selling_price'], 
+                    ]);
 
                     // Create sale item
                     SaleItem::create([
