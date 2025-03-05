@@ -964,9 +964,11 @@ const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
                   ? "Delivery"
                   : "Dine In"
               }</p>
+              <p>Date: ${new Date().toLocaleDateString()}</p>
           </div>
           <div class="info-row">
-              <p>Date: ${new Date().toLocaleDateString()}</p>
+              
+              <p>Time: ${new Date().toLocaleTimeString()}</p>
               <p>Order No: ${table.orderId || "N/A"}</p>
           </div>
           <div class="info-row">
