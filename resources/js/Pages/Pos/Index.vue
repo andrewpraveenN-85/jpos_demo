@@ -908,47 +908,97 @@ const totalDiscount = computed(() => {
 
 
 const sendKOT = (table) => {
-  // Check if the table has products
-  if (!table.products || table.products.length === 0) {
-    alert("No products available to send to KOT.");
+  if (!table.products) table.products = [];
+  if (!table.kotSentProducts) table.kotSentProducts = [];
+
+  const newItems = [];
+  const reducedItems = [];
+  const removedItems = [];
+
+  table.kotSentProducts.forEach((sentProduct) => {
+    const currentProduct = table.products.find((p) => p.id === sentProduct.id);
+
+    if (!currentProduct) {
+      //  If product was removed, store it
+      removedItems.push(sentProduct);
+    } else if (currentProduct.quantity < sentProduct.quantity) {
+      //  If product quantity was reduced, store the difference
+      reducedItems.push({
+        ...currentProduct,
+        previousQuantity: sentProduct.quantity,
+        newQuantity: currentProduct.quantity,
+        reducedBy: sentProduct.quantity - currentProduct.quantity,
+      });
+    }
+  });
+
+  table.products.forEach((product) => {
+    const existingSentProduct = table.kotSentProducts.find((sent) => sent.id === product.id);
+    
+    if (!existingSentProduct) {
+      //  If product is newly added, store the full quantity
+      newItems.push({ ...product, incrementalQuantity: product.quantity });
+    } else if (product.quantity > existingSentProduct.quantity) {
+      //  If quantity increased, store only the increment value
+      newItems.push({ 
+        ...product, 
+        incrementalQuantity: product.quantity - existingSentProduct.quantity 
+      });
+    }
+  });
+
+  if (newItems.length === 0 && reducedItems.length === 0 && removedItems.length === 0) {
+    alert("No changes to send to KOT.");
     return;
   }
 
+  const tableName = table.id === "default" ? "Live Bill" : `Table ${table.number - 1}`;
 
-  const tableName =
-    table.id === "default"
-      ? "Live Bill"
-      : `Table ${table.number - 1}`
+  //  Generate KOT for newly added/increased items (Only incremental quantity is shown)
+  if (newItems.length > 0) {
+    printKOT(newItems, table, tableName, "New KOT");
+  }
 
+  //  Generate Suspend KOT for removed or reduced items
+  if (reducedItems.length > 0 || removedItems.length > 0) {
+    printKOT([...reducedItems, ...removedItems], table, tableName, "Suspend KOT", true);
+  }
 
+  //  Update `kotSentProducts`
+  table.kotSentProducts = table.products.map((product) => ({
+    ...product,
+  }));
 
-  // Generate table rows dynamically using table.products
-  const productRows = table.products
+  //  Persist changes in localStorage
+  localStorage.setItem("kotSentProducts", JSON.stringify(table.kotSentProducts));
+};
+
+/**
+ *  Prints a KOT or Suspend KOT receipt.
+ */
+const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
+  const productRows = items
     .map((product) => {
-      // Ensure selling_price is a valid number
-      const sellingPrice = parseFloat(product.selling_price) || 0; // Default to 0 if invalid
-      const totalPrice = sellingPrice * product.quantity;
-
-
-
+      const quantity = isSuspend 
+        ? (product.reducedBy || product.quantity) * 1 
+        : product.incrementalQuantity || product.quantity; //  Show only incremental quantity
+      
       return `
         <tr>
           <td>${product.name || "N/A"}</td>
-          <td style="text-align: center;">${product.quantity || 0}</td>
-
+          <td style="text-align: center;">${quantity}</td>
         </tr>
       `;
     })
     .join("");
 
-  // Generate the receipt HTML
   const receiptHTML = `
   <!DOCTYPE html>
   <html lang="en">
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>KOT Receipt</title>
+      <title>${kotType} Receipt</title>
       <style>
           @media print {
               body {
@@ -1018,8 +1068,7 @@ const sendKOT = (table) => {
   </head>
   <body>
       <div class="receipt-container">
-     <h1>KOT Note - ${tableName}</h1>
-
+          <h1>${kotType} - ${tableName}</h1>
           <div class="info-row">
               <p>Order Type: ${
                 table.order_type === "takeaway"
@@ -1028,9 +1077,11 @@ const sendKOT = (table) => {
                   ? "Delivery"
                   : "Dine In"
               }</p>
+              <p>Date: ${new Date().toLocaleDateString()}</p>
           </div>
           <div class="info-row">
-              <p>Date: ${new Date().toLocaleDateString()}</p>
+              
+              <p>Time: ${new Date().toLocaleTimeString()}</p>
               <p>Order No: ${table.orderId || "N/A"}</p>
           </div>
           <div class="info-row">
@@ -1042,7 +1093,6 @@ const sendKOT = (table) => {
                   <tr>
                       <th>Product Name</th>
                       <th style="text-align: center;">Quantity</th>
-
                   </tr>
               </thead>
               <tbody>
@@ -1058,31 +1108,31 @@ const sendKOT = (table) => {
           `
               : ""
           }
-
       </div>
   </body>
   </html>
   `;
 
-  // Open a new window
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
     alert("Failed to open print window. Please check your browser settings.");
     return;
   }
 
-  // Write the content to the new window
   printWindow.document.open();
   printWindow.document.write(receiptHTML);
   printWindow.document.close();
-
-  // Wait for the content to load before triggering print
   printWindow.onload = () => {
     printWindow.focus();
     printWindow.print();
     printWindow.close();
   };
 };
+
+
+
+
+
 
 
 
