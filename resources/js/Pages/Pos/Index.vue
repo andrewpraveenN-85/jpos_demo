@@ -919,18 +919,22 @@ const sendKOT = (table) => {
   if (!table.products) table.products = [];
   if (!table.kotSentProducts) table.kotSentProducts = [];
 
+  // Filter out beverages (is_beverage = 1)
+  const nonBeverageProducts = table.products.filter(product => product.is_beverage !== 1);
+  const nonBeverageKotSentProducts = table.kotSentProducts.filter(product => product.is_beverage !== 1);
+
   const newItems = [];
   const reducedItems = [];
   const removedItems = [];
 
-  table.kotSentProducts.forEach((sentProduct) => {
-    const currentProduct = table.products.find((p) => p.id === sentProduct.id);
+  nonBeverageKotSentProducts.forEach((sentProduct) => {
+    const currentProduct = nonBeverageProducts.find((p) => p.id === sentProduct.id);
 
     if (!currentProduct) {
-      //  If product was removed, store it
+      // If product was removed, store it
       removedItems.push(sentProduct);
     } else if (currentProduct.quantity < sentProduct.quantity) {
-      //  If product quantity was reduced, store the difference
+      // If product quantity was reduced, store the difference
       reducedItems.push({
         ...currentProduct,
         previousQuantity: sentProduct.quantity,
@@ -940,14 +944,14 @@ const sendKOT = (table) => {
     }
   });
 
-  table.products.forEach((product) => {
-    const existingSentProduct = table.kotSentProducts.find((sent) => sent.id === product.id);
+  nonBeverageProducts.forEach((product) => {
+    const existingSentProduct = nonBeverageKotSentProducts.find((sent) => sent.id === product.id);
     
     if (!existingSentProduct) {
-      //  If product is newly added, store the full quantity
+      // If product is newly added, store the full quantity
       newItems.push({ ...product, incrementalQuantity: product.quantity });
     } else if (product.quantity > existingSentProduct.quantity) {
-      //  If quantity increased, store only the increment value
+      // If quantity increased, store only the increment value
       newItems.push({ 
         ...product, 
         incrementalQuantity: product.quantity - existingSentProduct.quantity 
@@ -962,25 +966,24 @@ const sendKOT = (table) => {
 
   const tableName = table.id === "default" ? "Live Bill" : `Table ${table.number - 1}`;
 
-  //  Generate KOT for newly added/increased items (Only incremental quantity is shown)
+  // Generate KOT for newly added/increased items (Only incremental quantity is shown)
   if (newItems.length > 0) {
     printKOT(newItems, table, tableName, "New KOT");
   }
 
-  //  Generate Suspend KOT for removed or reduced items
+  // Generate Suspend KOT for removed or reduced items
   if (reducedItems.length > 0 || removedItems.length > 0) {
     printKOT([...reducedItems, ...removedItems], table, tableName, "Suspend KOT", true);
   }
 
-  //  Update `kotSentProducts`
-  table.kotSentProducts = table.products.map((product) => ({
+  // Update `kotSentProducts` with non-beverage products
+  table.kotSentProducts = nonBeverageProducts.map((product) => ({
     ...product,
   }));
 
-  //  Persist changes in localStorage
+  // Persist changes in localStorage
   localStorage.setItem("kotSentProducts", JSON.stringify(table.kotSentProducts));
 };
-
 /**
  *  Prints a KOT or Suspend KOT receipt.
  */

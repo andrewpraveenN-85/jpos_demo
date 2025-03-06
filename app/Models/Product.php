@@ -26,6 +26,7 @@ class Product extends Model
         'image',
         'description',
         'is_promotion',
+        'is_beverage',
     ];
 
     // public static function boot()

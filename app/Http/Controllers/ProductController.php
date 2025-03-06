@@ -248,6 +248,7 @@ class ProductController extends Controller
             'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
+            'is_beverage' => 'boolean',
         ]);
 
         try {

@@ -134,6 +134,24 @@
                         form.errors.name
                       }}</span>
                     </div>
+                    <div class="w-full">
+                      <label class="block text-sm font-medium text-gray-300"
+                        >Beverages:</label
+                      >
+                      <div class="mt-2">
+                      <label class="inline-flex items-center">
+                        <input
+                          v-model="form.is_beverage"
+                          type="checkbox"
+                          class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+                        />
+                        <span class="ml-2 text-gray-300">Is this product a beverage?</span>
+                      </label>
+                    </div>
+                      <span v-if="form.errors.is_beverage" class="mt-4 text-red-500">{{
+                        form.errors.is_beverage
+                      }}</span>
+                    </div>
 
                     <!-- Second select box with label and error -->
                     <!-- <div class="w-full">
@@ -457,6 +475,7 @@ const form = useForm({
   barcode: "",
   image: null, // For file upload
   description: "",
+  is_beverage : false,
 });
 
 
@@ -494,6 +513,7 @@ const handleImageUpload = (event) => {
 };
 
 const submit = () => {
+   form.is_beverage = form.is_beverage ? 1 : 0;
   form.post("/products", {
     preserveScroll: true,
     onSuccess: () => {
