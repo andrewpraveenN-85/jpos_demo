@@ -553,11 +553,14 @@ const addTable = () => {
         newNumber++; // Increment until we find an unused number
     }
 
+    // Check if the table was previously removed and has an existing orderId
+    const previouslyRemovedTable = JSON.parse(localStorage.getItem(`removedTable_${newNumber}`));
+
     // Create the new table
     const newTable = {
         id: Date.now(),
         number: newNumber,
-        orderId: generateOrderId(),
+        orderId: previouslyRemovedTable ? previouslyRemovedTable.orderId : generateOrderId(), // Reuse orderId if table was previously removed
         products: [],
         cash: 0.0,
         balance: 0.0,
@@ -566,13 +569,14 @@ const addTable = () => {
         kitchen_note: "",
         order_type: "",
         delivery_charge: "",
-         kotStatus: "pending",
+        kotStatus: "pending",
     };
 
     tables.value.push(newTable);
-    // nextTableNumber.value++;
-
     selectedTable.value = newTable;
+
+    // Remove the saved removed table from localStorage
+    localStorage.removeItem(`removedTable_${newNumber}`);
 };
 
 const selectTable = (table) => {
@@ -580,13 +584,16 @@ const selectTable = (table) => {
 };
 
 const removeTable = (index) => {
-    tables.value.splice(index, 1);
+    const removedTable = tables.value.splice(index, 1)[0];
 
     if (tables.value.length > 0) {
         selectedTable.value = tables.value[tables.value.length - 1];
     } else {
         selectedTable.value = null;
     }
+
+    // Save the removed table's orderId in localStorage for potential reuse
+    localStorage.setItem(`removedTable_${removedTable.number}`, JSON.stringify(removedTable));
 };
 
 const removeSelectedTable = () => {
@@ -847,6 +854,7 @@ const submitOrder = async () => {
             total: total.value,
         });
         isSuccessModalOpen.value = true;
+        selectedTable.value.orderId = generateOrderId();
         customer.value = {
             name: "",
             countryCode: "",
@@ -1128,14 +1136,6 @@ const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
     printWindow.close();
   };
 };
-
-
-
-
-
-
-
-
 
 
 
