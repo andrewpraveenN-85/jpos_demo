@@ -64,6 +64,7 @@
                       }}</span>
                     </div>
                   </div>
+                  
                   <!-- Cost Price input -->
                 </div>
 

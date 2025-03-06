@@ -136,7 +136,7 @@
                     </div>
                     <div class="w-full">
                       <label class="block text-sm font-medium text-gray-300"
-                        >Beverages:</label
+                        >Dry Food:</label
                       >
                       <div class="mt-2">
                       <label class="inline-flex items-center">
@@ -145,7 +145,7 @@
                           type="checkbox"
                           class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
                         />
-                        <span class="ml-2 text-gray-300">Is this product a beverage?</span>
+                        <span class="ml-2 text-gray-300">Is this product a dry food?</span>
                       </label>
                     </div>
                       <span v-if="form.errors.is_beverage" class="mt-4 text-red-500">{{
