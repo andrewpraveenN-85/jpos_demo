@@ -650,7 +650,7 @@ const handleKOTPrintReceipt = () => {
               <div class="info-row">
                   <div>
                       <p>Date:</p>
-                      <small>${new Date().toLocaleDateString()} </small>
+                      <small>${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</small>
                   </div>
                   <div>
                       <p>Order No:</p>

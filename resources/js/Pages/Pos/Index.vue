@@ -554,13 +554,13 @@ const addTable = () => {
     }
 
     // Check if the table was previously removed and has an existing orderId
-    const previouslyRemovedTable = JSON.parse(localStorage.getItem(`removedTable_${newNumber}`));
+    //const previouslyRemovedTable = JSON.parse(localStorage.getItem(`removedTable_${newNumber}`));
 
     // Create the new table
     const newTable = {
         id: Date.now(),
         number: newNumber,
-        orderId: previouslyRemovedTable ? previouslyRemovedTable.orderId : generateOrderId(), // Reuse orderId if table was previously removed
+        orderId: generateOrderId(),
         products: [],
         cash: 0.0,
         balance: 0.0,
