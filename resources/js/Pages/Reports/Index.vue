@@ -131,7 +131,7 @@
           </Link>
           </div>
       </div>
-      
+
     </div>
     <!-- Statistic Boxes -->
     <div class="grid w-full md:grid-cols-6 grid-cols-3 gap-4">
@@ -342,7 +342,7 @@
             </button>
           </div>
 
-          <!-- Render Doughnut Chart -->
+
           <Doughnut :data="chartData1" :options="chartOptions1" />
         </div>
       </div>
@@ -359,7 +359,7 @@
                    <Doughnut :data="chartData2" :options="chartOptions2" />
                 </div>
                 </div> -->
-      <div
+      <!-- <div
         class="flex flex-col justify-between items-center md:w-1/2 w-full bg-white border-4 border-black rounded-xl h-[500px] p-4"
       >
         <div class="chart-container w-full h-full relative p-4">
@@ -379,85 +379,104 @@
 
           <Doughnut :data="chartData5" :options="chartOptions5" />
         </div>
-      </div>
-
-      
-      <div class="w-full bg-white border-4 border-black rounded-xl h-[500px]">
+      </div> -->
 
 
-        <h2
-          class="text-2xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2"
+      <div class="w-full bg-white border-4 border-black rounded-xl p-6">
+  <h2 class="text-2xl font-semibold text-slate-700 text-center pb-4">
+    Top Products Stock Table
+  </h2>
+
+  <!-- Buttons and Total Price in a Single Row -->
+  <div class="flex justify-between items-center pb-4">
+    <!-- Left: Buttons -->
+    <div class="flex gap-4">
+      <!-- <button
+        @click="downloadTable"
+        class="px-4 py-2 text-md font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 shadow-md"
+      >
+        Download Excel
+      </button> -->
+
+      <button
+        @click="downloadPDFTable"
+        class="px-4 py-2 text-md font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 shadow-md"
+      >
+        Download PDF
+      </button>
+    </div>
+
+    <!-- Right: Total Price -->
+    <div
+      class="py-3 px-6 border-2 border-orange-600 rounded-xl bg-orange-400 shadow-lg text-center"
+    >
+      <h2 class="text-lg font-extrabold text-black uppercase">Total Price:
+      <span class="text-xl font-bold text-black">
+        {{ totalPrice.toLocaleString() }} LKR
+      </span> </h2>
+    </div>
+  </div>
+
+
+  <div class="overflow-x-auto max-h-[400px] border rounded-xl mt-4">
+    <table
+      id="stockQtyTbl"
+      class="w-full text-gray-800 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
+    >
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 text-white text-[14px] border-b border-blue-800">
+          <th class="p-3 text-left font-semibold">#</th>
+          <th class="p-3 text-left font-semibold">Name</th>
+          <th class="p-3 text-center font-semibold">QTY</th>
+          <th class="p-3 text-center font-semibold">Sales QTY</th>
+          <th class="p-3 text-center font-semibold">Cost Price (LKR)</th>
+          <th class="p-3 text-center font-semibold">Selling Price (LKR)</th>
+          <th class="p-3 text-center font-semibold">Profit (LKR)</th>
+          <th class="p-3 text-center font-semibold">Discount (%)</th>
+          <th class="p-3 text-center font-semibold">Retail Value</th>
+          <th class="p-3 text-center font-semibold">Total Price</th>
+        </tr>
+      </thead>
+
+      <tbody class="text-[12px] font-medium">
+        <tr
+          v-for="(product, index) in products"
+          :key="product.id"
+          class="border-b transition duration-200 hover:bg-gray-100"
         >
-          Top Products Stock Table
-        </h2>
+          <td class="p-3 text-center">{{ index + 1 }}</td>
+          <td class="p-3 font-bold">{{ product.name || "N/A" }}</td>
+          <td class="p-3 text-center">{{ product.stock_quantity }}</td>
+          <td class="p-3 text-center">{{ product.sales_qty || "0" }}</td>
+          <td class="p-3 text-center">{{ product.cost_price || "N/A" }}</td>
+          <td class="p-3 text-center">{{ product.selling_price || "N/A" }}</td>
+          <td class="p-3 text-center">
+            {{ product.selling_price - product.cost_price || 0 }}
+          </td>
+          <td class="p-3 text-center">{{ product.discount || "N/A" }}</td>
+          <td class="p-3 text-center">
+            {{
+              product.discount <= 100
+                ? (
+                    product.selling_price *
+                    (1 - product.discount / 100)
+                  ).toFixed(2)
+                : (product.selling_price - product.discount).toFixed(2)
+            }}
+          </td>
+          <td class="p-3 text-center">
+            {{ product.sales_qty * product.selling_price || 0 }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 
 
 
 
-
-
-        <div class="overflow-x-auto overflow-y-auto max-h-[400px]">
-          <table
-            id="stockQtyTbl"
-            class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
-          >
-            <thead>
-              <tr
-                class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[14px] text-white border-b border-blue-700"
-              >
-                <th class="p-4 font-semibold tracking-wide text-left">#</th>
-                <th class="p-4 font-semibold tracking-wide text-left">Name</th>
-                <th class="p-4 font-semibold tracking-wide text-left">QTY</th>
-                <th
-                  class="p-4 font-semibold tracking-wide text-left first-line:"
-                >
-                  Selling Price (LKR)
-                </th>
-                <th class="p-4 font-semibold tracking-wide text-left">
-                  Discount (%)
-                </th>
-                <th class="p-4 font-semibold tracking-wide text-left">
-                  Retail Value
-                </th>
-              </tr>
-            </thead>
-            <tbody class="text-[12px] font-normal">
-              <tr
-                v-for="(product, index) in products"
-                :key="product.id"
-                class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
-              >
-                <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
-                <td class="p-4 font-bold border-gray-200">
-                  {{ product.name || "N/A" }}
-                </td>
-                <td class="p-4 border-gray-200">
-                  {{ product.stock_quantity || "N/A" }}
-                </td>
-                <td class="p-4 border-gray-200">
-                  {{ product.selling_price || "N/A" }}
-                </td>
-                <td class="p-4 border-gray-200">
-                  {{ product.discount || "N/A" }}
-                </td>
-                <td class="p-4 border-gray-200">
-                  {{
-                    product.discount <= 100
-                      ? (
-                          product.selling_price *
-                          (1 - product.discount / 100)
-                        ).toFixed(2)
-                      : (product.selling_price - product.discount).toFixed(2)
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        
-      </div>  
     </div>
 
 <!-- Batch Management -->
@@ -497,7 +516,7 @@
                 </tr>
             </thead>
             <tbody class="text-[12px] font-normal">
-                <tr v-for="(product, index) in batchProducts" 
+                <tr v-for="(product, index) in batchProducts"
                     :key="index"
                     class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg">
                     <td class="px-6 py-3">{{ index + 1 }}</td>
@@ -580,6 +599,12 @@ const props = defineProps({
   employeeSalesSummary: { type: Object, required: true },
 });
 
+const totalPrice = computed(() => {
+  return products.value.reduce((sum, product) => {
+    return sum + (product.sales_qty * product.selling_price || 0);
+  }, 0);
+});
+
 const searchCode = ref('');
 const batchProducts = ref([]);
 const batchTotalQuantity = ref(0);
@@ -637,6 +662,158 @@ const totalRetailValue = computed(() => {
 });
 
 
+
+
+
+
+
+
+
+
+const downloadPDFTable = () => {
+  const doc = new jsPDF("p", "mm", "a4"); // Portrait, A4 size
+
+  // Title for the PDF
+  doc.setFontSize(18);
+  doc.text("Top Products Stock Table", 14, 15);
+
+  // Prepare table headers
+  const tableColumn = [
+    "#",
+    "Name",
+    "QTY",
+    "Sales QTY",
+    "Cost Price (LKR)",
+    "Selling Price (LKR)",
+    "Profit (LKR)",
+    "Discount (%)",
+    "Retail Value",
+    "Total Price",
+  ];
+
+  // Prepare table data
+  const tableRows = products.value.map((product, index) => [
+    index + 1,
+    product.name || "N/A",
+    product.stock_quantity || "N/A",
+    product.sales_qty || "0",
+    product.cost_price || "N/A",
+    product.selling_price || "N/A",
+    product.selling_price - product.cost_price || 0,
+    product.discount || "N/A",
+    product.discount <= 100
+      ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+      : (product.selling_price - product.discount).toFixed(2),
+    product.sales_qty * product.selling_price || 0,
+  ]);
+
+  // Calculate total sum of "Total Price"
+  const totalSum = tableRows.reduce((sum, row) => sum + row[9], 0);
+
+  // Add a total row at the end
+  tableRows.push(["", "Total", "", "", "", "", "", "", "", totalSum.toFixed(2)]);
+
+  // Adjust column widths
+  doc.autoTable({
+    head: [tableColumn],
+    body: tableRows,
+    startY: 25, // Adjust start position to prevent overlap with title
+    theme: "striped",
+    styles: { fontSize: 10 },
+    headStyles: { fillColor: [44, 62, 80] },
+    columnStyles: {
+      0: { cellWidth: 8 },  // #
+      1: { cellWidth: 30 },  // Name (Increased for better visibility)
+      2: { cellWidth: 12 },  // QTY
+      3: { cellWidth: 15 },  // Sales QTY
+      4: { cellWidth: 25 },  // Cost Price
+      5: { cellWidth: 25 },  // Selling Price
+      6: { cellWidth: 20 },  // Profit
+      7: { cellWidth: 15 },  // Discount
+      8: { cellWidth: 25 },  // Retail Value (Increased to prevent cut-off)
+      9: { cellWidth: 30 },  // Total Price (Increased to make it visible)
+    },
+    margin: { left: 5, right: 10, top: 20 },
+  });
+
+  // Save the PDF
+  doc.save("Top_Products_Stock.pdf");
+};
+
+
+
+
+const downloadTable = () => {
+  // Map the products data with calculations
+  const productsData = products.value.map((product, index) => ({
+    "#": index + 1,
+    "Name": product.name || "N/A",
+    "QTY": product.stock_quantity || "N/A",
+    "Sales QTY": product.sales_qty || 0,
+    "Cost Price (LKR)": product.cost_price || "N/A",
+    "Selling Price (LKR)": product.selling_price || "N/A",
+    "Profit (LKR)": product.selling_price - product.cost_price || 0,
+    "Discount (%)": product.discount || "N/A",
+    "Retail Value": product.discount <= 100
+      ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+      : (product.selling_price - product.discount).toFixed(2),
+    "Total Price": product.sales_qty * product.selling_price || 0,
+  }));
+
+  // Calculate the sum of total prices
+  const totalSum = productsData.reduce((sum, product) => sum + product["Total Price"], 0);
+
+  // Add a total row
+  const dataWithTotal = [
+    ...productsData,
+    {
+      "#": "",
+      "Name": "Total",
+      "QTY": "",
+      "Sales QTY": "",
+      "Cost Price (LKR)": "",
+      "Selling Price (LKR)": "",
+      "Profit (LKR)": "",
+      "Discount (%)": "",
+      "Retail Value": "",
+      "Total Price": totalSum,
+    }
+  ];
+
+  // Create worksheet with the data including total
+  const ws = XLSX.utils.json_to_sheet(dataWithTotal);
+
+  // Add some styling to the total row (make the text bold)
+  const lastRow = dataWithTotal.length;
+  const range = XLSX.utils.decode_range(ws['!ref']);
+
+  // Set column widths
+  const colWidths = [
+    { wch: 5 },  // #
+    { wch: 30 }, // Name
+    { wch: 10 }, // QTY
+    { wch: 10 }, // Sales QTY
+    { wch: 15 }, // Cost Price
+    { wch: 15 }, // Selling Price
+    { wch: 15 }, // Profit
+    { wch: 12 }, // Discount
+    { wch: 15 }, // Retail Value
+    { wch: 15 }, // Total Price
+  ];
+  ws['!cols'] = colWidths;
+
+  // Create a new workbook and append the worksheet
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Stock Data");
+
+  // Generate Excel file and trigger download
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  });
+
+  saveAs(blob, "Top_Products_Stock.xlsx");
+};
 
 
 
