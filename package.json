@@ -27,6 +27,7 @@
         "flatpickr": "^4.6.13",
         "html2canvas": "^1.4.1",
         "jquery": "^3.7.1",
+        "jsbarcode": "^3.11.6",
         "jspdf": "^2.5.2",
         "jspdf-autotable": "^3.8.4",
         "lodash": "^4.17.21",

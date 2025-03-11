@@ -38,54 +38,42 @@
         </p>
       </div>
       <div class="flex items-center justify-between">
-        <div class="flex items-center justify-center space-x-4">
-          <Link href="/">
-            <img src="/images/back-arrow.png" class="w-14 h-14" />
-          </Link>
-          <p class="text-4xl font-bold tracking-wide text-black uppercase">
-            Products
-          </p>
-        </div>
-        <!-- <p
-          :disabled="!HasRole(['Admin'])"
-          @click="
-            () => {
-              if (HasRole(['Admin'])) {
-                isCreateModalOpen = true;
-              }
-            }
-          "
-          :class="{
-            'cursor-not-allowed opacity-50': !HasRole(['Admin']),
-            'cursor-pointer': HasRole(['Admin']),
-          }"
-          class="px-12 py-4 text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl"
-        >
-          <i class="pr-4 ri-add-circle-fill"></i> Add More Productss
-        </p> -->
+  <!-- Left Section: Back Button and Title -->
+  <div class="flex items-center space-x-4">
+    <Link href="/">
+      <img src="/images/back-arrow.png" class="w-14 h-14" />
+    </Link>
+    <p class="text-4xl font-bold tracking-wide text-black uppercase">
+      Products
+    </p>
+  </div>
 
-        <p
-          @click="
-            () => {
-              if (HasRole(['Admin'])) {
-                isCreateModalOpen = true;
-              }
-            }
-          "
-          :class="
-            HasRole(['Admin'])
-              ? 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 rounded-xl'
-              : 'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase bg-blue-600 cursor-not-allowed rounded-xl'
-          "
-          :title="
-            HasRole(['Admin'])
-              ? ''
-              : 'You do not have permission to add more Products'
-          "
-        >
-          <i class="md:pr-4 ri-add-circle-fill"></i> Add More Product
-        </p>
-      </div>
+  <!-- Right Section: Buttons Aligned to Right -->
+  <div class="flex items-center space-x-4">
+    <p
+  @click="HasRole(['Admin']) ? (isBarcodeModalOpen = true) : null"
+  :class="[
+    'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase rounded-xl',
+    HasRole(['Admin']) ? 'bg-black cursor-pointer' : 'bg-gray-400 cursor-not-allowed'
+  ]"
+  :title="HasRole(['Admin']) ? '' : 'You do not have permission to print barcode list'"
+>
+  <i class="md:pr-4 ri-barcode-line"></i> Barcode List
+</p>
+
+    <p
+      @click="HasRole(['Admin']) ? (isCreateModalOpen = true) : null"
+      :class="[
+        'md:px-12 py-4 px-4 md:text-2xl font-bold tracking-wider text-white uppercase rounded-xl',
+        HasRole(['Admin']) ? 'bg-blue-600 cursor-pointer' : 'bg-blue-600 cursor-not-allowed'
+      ]"
+      :title="HasRole(['Admin']) ? '' : 'You do not have permission to add more Products'"
+    >
+      <i class="md:pr-4 ri-add-circle-fill"></i> Add More Product
+    </p>
+  </div>
+</div>
+
 
       <div class="flex items-center space-x-4">
         <!-- Search Input on the Left -->
@@ -426,6 +414,8 @@
     :selected-product="selectedProduct"
     @delete="deleteProduct"
   />
+
+  <BarcodePrintModal v-model:open="isBarcodeModalOpen" />
   <Footer />
 </template>
 
@@ -438,7 +428,7 @@ import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 import { defineProps, onMounted } from "vue";
 import ProductCreateModel from "@/Components/custom/ProductCreateModel.vue";
-
+import BarcodePrintModal from "@/Components/custom/BarcodePrintModal.vue";
 import ProductDuplicateModel from "@/Components/custom/ProductDuplicateModel.vue";
 import ProductUpdateModel from "@/Components/custom/ProductUpdateModel.vue";
 import ProductViewModel from "@/Components/custom/ProductViewModel.vue";
@@ -452,7 +442,7 @@ const isDuplicateModalOpen = ref(false);
 const isViewModalOpen = ref(false);
 const selectedProduct = ref(null);
 const isDeleteModalOpen = ref(false);
-
+const isBarcodeModalOpen = ref(false);
 const emit = defineEmits(["update:open"]);
 
 const openEditModal = (product) => {

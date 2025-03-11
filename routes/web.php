@@ -73,6 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('products-variant', [ProductController::class, 'productVariantStore'])->name('productVariant');
 
     Route::post('products-size', [ProductController::class, 'sizeStore'])->name('productSize');
+    Route::get('/api/products/barcodes', [ProductController::class, 'getBarcodes']);
 
 
     // Route::resource('company-info', CompanyInfoController::class)->name('companyInfo.index');
@@ -114,7 +115,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('return-bill', ReturnItemController::class);
 
 
-    
+
 
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
     Route::post('/api/sale/items', [ReturnItemController::class, 'fetchSaleItems'])->name('sale.items');

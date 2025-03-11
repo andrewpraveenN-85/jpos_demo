@@ -31,6 +31,13 @@ class ProductController extends Controller
         ]);
     }
 
+
+    public function getBarcodes()
+    {
+        return response()->json(Product::select('code', 'name', 'selling_price', 'image')->take(25)->get());
+    }
+
+
     public function fetchProducts(Request $request)
     {
         $query = $request->input('search');
@@ -307,7 +314,7 @@ class ProductController extends Controller
             }
 
             $product = Product::create($validated);
-            
+
 
             // Add stock transaction if stock quantity is provided
             $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
