@@ -15,35 +15,96 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        if (!\App\Models\User::where('email', 'admin@admin.com')->exists()) {
+   if (!\App\Models\User::where('email', 'rishan@admin.com')->exists()) {
     \App\Models\User::factory()->create([
-        'name' => 'admin',
-        'email' => 'admin@admin.com',
+        'name' => 'Rishan',
+        'email' => 'rishan@admin.com',
         'role_type' => 'Admin',
-        'password' => Hash::make('R@nd0mP@55w0rd1!'),
+        'password' => Hash::make('nR^v36z6?Dec'),
     ]);
 }
 
-if (!\App\Models\User::where('email', 'manager@manager.com')->exists()) {
+if (!\App\Models\User::where('email', 'ushan@manager.com')->exists()) {
     \App\Models\User::factory()->create([
-        'name' => 'manager',
-        'email' => 'manager@manager.com',
+        'name' => 'Ushan',
+        'email' => 'ushan@manager.com',
         'role_type' => 'Manager',
-        'password' => Hash::make('Str0ngM@nagerP@55!'),
+        'password' => Hash::make('74!302PGbkN'),
     ]);
 }
 
-if (!\App\Models\User::where('email', 't1@cashier.com')->exists()) {
+
+
+if (!\App\Models\User::where('email', 'minusha@manager.com')->exists()) {
     \App\Models\User::factory()->create([
-        'name' => 't1',
-        'email' => 't1@cashier.com',
-        'role_type' => 'Cashier',
-        'password' => Hash::make('C@sh1erR@ndom!1'),
+        'name' => 'Minusha',
+        'email' => 'minusha@manager.com',
+        'role_type' => 'Manager',
+        'password' => Hash::make('nNP(0$441f8C'),
     ]);
-} 
-        // $this->call([
-        //     ColorSeeder::class,
-        //     SizeSeeder::class,
-        // ]);
+}
+
+if (!\App\Models\User::where('email', 'dharshana@manager.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'Dharshana',
+        'email' => 'dharshana@manager.com',
+        'role_type' => 'Manager',
+        'password' => Hash::make('f{7(3xv8K37A'),
+    ]);
+}
+if (!\App\Models\User::where('email', 'sasini@manager.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'Sasini',
+        'email' => 'sasini@manager.com',
+        'role_type' => 'Manager',
+        'password' => Hash::make('b479+4N]xStm'),
+    ]);
+}
+if (!\App\Models\User::where('email', 'dilrukshi@manager.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'Dilrukshi',
+        'email' => 'dilrukshi@manager.com',
+        'role_type' => 'Manager',
+        'password' => Hash::make('Vty5y9;a=OO7'),
+    ]);
+}
+
+
+
+
+
+
+if (!\App\Models\User::where('email', 'sadeepa@cashier.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'Sadeepa',
+        'email' => 'sadeepa@cashier.com',
+        'role_type' => 'Cashier',
+        'password' => Hash::make('CR0-i,9r2\g}'),
+    ]);
+}
+
+
+if (!\App\Models\User::where('email', 'thisandi@cashier.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'Thisandi',
+        'email' => 'thisandi@cashier.com',
+        'role_type' => 'Cashier',
+        'password' => Hash::make('06!Hj1a?5jn$'),
+    ]);
+}
+
+
+
+
+
+if (!\App\Models\User::where('email', 'lakshitha@cashier.com')->exists()) {
+    \App\Models\User::factory()->create([
+        'name' => 'Lakshitha',
+        'email' => 'lakshitha@cashier.com',
+        'role_type' => 'Cashier',
+        'password' => Hash::make('5ro7DI5|6ZMu'),
+    ]);
+}
+
     }
 }
