@@ -150,31 +150,30 @@
                       View Bills
                     </button>
                     <button
-                      :class="HasRole(['Admin'])
-                                ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
-                                : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
-                      :title="HasRole(['Admin'])
-                                ? ''
-                                : 'You do not have permission to edit'"
-                      :disabled="!HasRole(['Admin'])"
-                      @click="() => { if (HasRole(['Admin'])) openEditModal(customer); }"
-                    >
-                      Edit
-                    </button>
+  @click.stop="HasRole(['Admin']) ? openEditModal(customer) : null"
+  :class="HasRole(['Admin'])
+        ? 'px-4 py-2 bg-green-500 text-white rounded-lg'
+        : 'px-4 py-2 bg-green-400 text-white rounded-lg cursor-not-allowed'"
+  :title="HasRole(['Admin'])
+        ? ''
+        : 'You do not have permission to edit'"
+  :disabled="!HasRole(['Admin'])"
+>
+  Edit
+</button>
 
-                    <!-- Delete Button -->
-                    <button
-                      :class="HasRole(['Admin'])
-                                ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
-                                : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
-                      :title="HasRole(['Admin'])
-                                ? ''
-                                : 'You do not have permission to delete'"
-                      :disabled="!HasRole(['Admin'])"
-                      @click="() => { if (HasRole(['Admin'])) openDeleteModal(customer); }"
-                    >
-                      Delete
-                    </button>
+<button
+  @click.stop="HasRole(['Admin']) ? openDeleteModal(customer) : null"
+  :class="HasRole(['Admin'])
+        ? 'px-4 py-2 bg-red-500 text-white rounded-lg ml-2'
+        : 'px-4 py-2 bg-red-400 text-white rounded-lg cursor-not-allowed ml-2'"
+  :title="HasRole(['Admin'])
+        ? ''
+        : 'You do not have permission to delete'"
+  :disabled="!HasRole(['Admin'])"
+>
+  Delete
+</button>
                     
 
 
