@@ -465,7 +465,7 @@ const playClickSound = () => {
 };
 
 // Define props
-const { open, categories, colors, suppliers, sizes,branches, selectedProduct } =
+const { open, categories, colors, suppliers, sizes, branches, selectedProduct } =
   defineProps({
     open: {
       type: Boolean,
@@ -588,6 +588,7 @@ watch(
       form.supplier_id = newValue.supplier_id || "";
       form.stock_quantity = newValue.stock_quantity || null;
       form.size_id = newValue.size_id || "";
+      form.branch_id = newValue.branch_id || "";
       form.color_id = newValue.color_id || "";
       form.cost_price = newValue.cost_price || null;
       form.discount = newValue.discount || 0;

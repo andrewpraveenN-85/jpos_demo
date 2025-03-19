@@ -40,7 +40,6 @@ class ProductController extends Controller
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
         $selectedCategory = $request->input('selectedCategory');
-        
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             ->when($query, function ($queryBuilder) use ($query) {
@@ -74,7 +73,6 @@ class ProductController extends Controller
             });
 
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
-        
 
         return response()->json([
             'products' => $products,
@@ -91,7 +89,6 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
-        
         $selectedCategory = $request->input('selectedCategory');
 
 
@@ -141,7 +138,6 @@ class ProductController extends Controller
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $branches = Branch::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
-        $branches = Branch::orderBy('created_at', 'desc')->get();
 
 
         return Inertia::render('Products/Index', [
@@ -195,12 +191,15 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
-            'branch_id' => 'nullable|exists:branches,id',
             'name' => 'required|string|max:255',
+            'branch_id' => 'nullable||exists:branches,id',
             'code' => [
                 'string',
                 'max:50',
-                Rule::unique('products')->whereNull('deleted_at'),
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('branch_id', $request->branch_id)
+                                ->whereNull('deleted_at');
+                }),
             ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
@@ -210,7 +209,14 @@ class ProductController extends Controller
             'stock_quantity' => 'nullable|integer|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'barcode' => 'nullable|string|unique:products',
+            'barcode' => [
+                'nullable',  
+                'string',
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('branch_id', $request->branch_id)
+                                ->whereNull('deleted_at');
+                }),
+            ],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'expire_date' => 'nullable|date',
         ]);
@@ -248,6 +254,7 @@ class ProductController extends Controller
             // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
         } catch (\Exception $e) {
+            dd($e);
             // Log error and redirect back with an error message
             \Log::error('Error creating product: ' . $e->getMessage());
 
@@ -269,7 +276,6 @@ class ProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50',
-            'branch_id' => 'nullable|exists:branches,id',
             // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
             'barcode' => 'nullable|string|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
