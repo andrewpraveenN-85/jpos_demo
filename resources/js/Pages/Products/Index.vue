@@ -422,6 +422,7 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    :branches="branches"
     v-model:open="isViewModalOpen"
     :selected-product="selectedProduct"
   />
@@ -563,6 +564,7 @@ const navigateTo = (url) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
+      branch: branch.value,
       stockStatus: stockStatus.value,
       selectedCategory: selectedCategory.value,
     },

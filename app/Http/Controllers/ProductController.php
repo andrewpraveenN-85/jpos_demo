@@ -40,6 +40,7 @@ class ProductController extends Controller
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
         $selectedCategory = $request->input('selectedCategory');
+        
 
         $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             ->when($query, function ($queryBuilder) use ($query) {
@@ -73,6 +74,7 @@ class ProductController extends Controller
             });
 
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
+        
 
         return response()->json([
             'products' => $products,
