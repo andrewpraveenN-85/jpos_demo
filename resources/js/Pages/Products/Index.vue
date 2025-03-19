@@ -393,7 +393,9 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    :branches="branches"
     :suppliers="suppliers"
+    
     v-model:open="isCreateModalOpen"
   />
   <ProductUpdateModel
@@ -401,6 +403,7 @@
     :colors="colors"
     :suppliers="suppliers"
     :sizes="sizes"
+    :branches="branches"
     v-model:open="isEditModalOpen"
     :selected-product="selectedProduct"
   />
@@ -410,6 +413,7 @@
     :colors="colors"
     :suppliers="suppliers"
     :sizes="sizes"
+    :branches="branches"
     v-model:open="isDuplicateModalOpen"
     :selected-product="selectedProduct"
   />
@@ -481,6 +485,7 @@ const props = defineProps({
   suppliers: Array,
   colors: Array,
   sizes: Array,
+  branches: Array,
   allcategories: Array,
   totalProducts: Number,
   search: String,

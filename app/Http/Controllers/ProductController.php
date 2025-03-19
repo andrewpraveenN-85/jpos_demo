@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Branch;
 use App\Models\StockTransaction;
 use App\Traits\GeneratesUniqueCode;
 use Illuminate\Http\Request;
@@ -88,6 +89,7 @@ class ProductController extends Controller
         $selectedColor = $request->input('color');
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
+        
         $selectedCategory = $request->input('selectedCategory');
 
 
@@ -135,7 +137,9 @@ class ProductController extends Controller
         });
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
+        $branches = Branch::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
+        $branches = Branch::orderBy('created_at', 'desc')->get();
 
 
         return Inertia::render('Products/Index', [
@@ -143,6 +147,7 @@ class ProductController extends Controller
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
+            'branches' => $branches,
             'suppliers' => $suppliers,
             'totalProducts' => $count,
             'search' => $query,
@@ -188,6 +193,7 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
+            'branch_id' => 'nullable|exists:branches,id',
             'name' => 'required|string|max:255',
             'code' => [
                 'string',
@@ -261,6 +267,7 @@ class ProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50',
+            'branch_id' => 'nullable|exists:branches,id',
             // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
             'barcode' => 'nullable|string|unique:products',
             'size_id' => 'nullable|exists:sizes,id',

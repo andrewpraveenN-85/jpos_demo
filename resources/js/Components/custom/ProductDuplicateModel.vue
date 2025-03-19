@@ -149,6 +149,21 @@
                       >{{ form.errors.expire_date }}</span
                     >
                   </div>
+                  <div class="w-full">
+                  <label class="block text-sm font-medium text-gray-300">Branch Name:</label>
+                  <select
+                    v-model="form.branch_id"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  >
+                    <option value="">Select a Branch</option>
+                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">
+                      {{ branch.name }}
+                    </option>
+                  </select>
+                  <span v-if="form.errors.branch_id" class="mt-4 text-red-500">{{
+                    form.errors.branch_id
+                  }}</span>
+                </div>
                 </div>
 
                 <div>
@@ -450,7 +465,7 @@ const playClickSound = () => {
 };
 
 // Define props
-const { open, categories, colors, suppliers, sizes, selectedProduct } =
+const { open, categories, colors, suppliers, sizes,branches, selectedProduct } =
   defineProps({
     open: {
       type: Boolean,
@@ -470,6 +485,10 @@ const { open, categories, colors, suppliers, sizes, selectedProduct } =
     },
     sizes: {
       type: Array,
+      required: true,
+    },
+     branches: {
+      type: Array, // Add this
       required: true,
     },
     selectedProduct: {
@@ -493,6 +512,7 @@ const form = useForm({
   barcode: "",
   image: null, // For file upload
   expire_date: null,
+  branch_id: "",
 });
 
 // Handle file upload for images
