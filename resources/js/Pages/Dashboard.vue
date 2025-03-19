@@ -180,7 +180,7 @@
           <div class="card-content">
             <div class="icon-container">
               <img
-                src="/images/dashboard/measuring-tape.png"
+                src="/images/dashboard/branches.jpg"
                 class="icon"
                 alt="dresshub.lk"
               />
@@ -188,9 +188,7 @@
             <div class="text-container">
               <p class="title">Branches</p>
               <p class="description">
-                Organize and update product sizes to streamline inventory
-                tracking and simplify the sales process.
-              </p>
+              Office branches extend operations and support across locations while staying connected to the main office.              </p>
             </div>
           </div>
         </div>
