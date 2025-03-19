@@ -274,10 +274,18 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
+            'branch_id' => 'nullable|exists:branches,id',
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50',
             // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
-            'barcode' => 'nullable|string|unique:products',
+            'barcode' => [
+                'nullable',  
+                'string',
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('branch_id', $request->branch_id)
+                                ->whereNull('deleted_at');
+                }),
+            ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
