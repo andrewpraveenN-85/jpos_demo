@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Report;
 use App\Models\Sale;
+use App\Models\SaleItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -22,27 +23,49 @@ class ReportController extends Controller
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
+        $products = Product::orderBy('created_at', 'desc')->get();
 
         $startDate = $request->input('start_date', '');
         $endDate = $request->input('end_date', '');
 
-        // Query with optional date range filtering
-        //  $salesQuery = Sale::with('saleItems.product.category');
-        $salesQuery = Sale::whereHas('saleItems.product.category')
-            ->with('saleItems.product.category');
+        // Query for completed sales with optional date range filtering
+        $salesQuery = Sale::query()
+        ->whereHas('saleItems.product.category')
+        ->with(['saleItems.product.category', 'employee']);
+
+        $salesQuantitiesQuery = SaleItem::query()
+        ->whereNotNull('product_id')
+        ->whereHas('sale', function($query) {
+            $query->whereNotNull('id'); 
+        });
+
 
         if ($startDate && $endDate) {
             $salesQuery->whereBetween('sale_date', [$startDate, $endDate]);
+
+            $salesQuantitiesQuery->whereHas('sale', function($query) use ($startDate, $endDate) {
+                $query->whereBetween('sale_date', [$startDate, $endDate]);
+            });
         }
 
-        $sales = $salesQuery
-        ->with('employee')
-        ->orderBy('sale_date', 'desc')
+        $salesQuantities = $salesQuantitiesQuery
+        ->select('product_id')
+        ->selectRaw('SUM(quantity) as total_sales_qty')
+        ->groupBy('product_id')
         ->get();
+    
+        $salesQuantitiesMap = [];
+        foreach ($salesQuantities as $sq) {
+            $salesQuantitiesMap[$sq->product_id] = $sq->total_sales_qty;
+        }
+        
+        // Add filtered sales quantities to products
+        $products->transform(function ($product) use ($salesQuantitiesMap) {
+            $product->sales_qty = $salesQuantitiesMap[$product->id] ?? 0;
+            return $product;
+        });
 
-
-
-
+        $sales = $salesQuery->orderBy('sale_date', 'desc')->get();
 
 
         $categorySales = [];
@@ -125,7 +148,7 @@ class ReportController extends Controller
 
         // Pass data to the view
         return Inertia::render('Reports/Index', [
-            'products' => Product::orderBy('created_at', 'desc')->get(),
+            'products' => $products,
             'sales' => $sales,
             'totalSaleAmount' => $totalSaleAmount,
             'totalCustomer' => $totalCustomer,

@@ -22,6 +22,7 @@ class Product extends Model
         'cost_price',
         'selling_price',
         'stock_quantity',
+        'total_stock',
         'barcode',
         'image',
         'description',

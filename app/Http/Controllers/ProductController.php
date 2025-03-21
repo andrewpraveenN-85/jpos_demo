@@ -233,7 +233,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-         'code' => 'nullable|max:50|unique:products',
+            'code' => 'nullable|max:50|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'required|numeric|min:0',
@@ -260,7 +260,7 @@ class ProductController extends Controller
                 $validated['barcode'] = $this->generateUniqueCode(12);
             }
 
-
+            $validated['total_stock'] = $validated['stock_quantity'];
             // Create the product
             $product = Product::create($validated);
 

@@ -236,12 +236,12 @@
                 </div>
                 </div> -->
                 <div
-    class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
-    <div class="chart-container w-full h-full relative">
-        <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12"> Top Products Stock Chart</h2>
-        <Doughnut :data="chartData5" :options="chartOptions5" />
-    </div>
-</div>
+                  class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px] p-4">
+                  <div class="chart-container w-full h-full relative">
+                     <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-12"> Top Products Stock Chart</h2>
+                     <Doughnut :data="chartData5" :options="chartOptions5" />
+                  </div>
+               </div>
 
 
              <!-- Chart 3 -->
@@ -296,20 +296,71 @@
                                {{ product.discount || "N/A" }}
                             </td>
                             <td class="p-4 border-gray-200">
-  {{ product.discount <= 100
-      ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
-      : (product.selling_price - product.discount).toFixed(2) }}
-</td>
+                           {{ product.discount <= 100
+                                 ? (product.selling_price * (1 - product.discount / 100)).toFixed(2)
+                                 : (product.selling_price - product.discount).toFixed(2) }}
+                           </td>
                          </tr>
                       </tbody>
                    </table>
                 </div>
              </div>
           </div>
-
+         <div
+                class="flex flex-col justify-between items-center w-1/2 bg-white border-4 border-black rounded-xl h-[500px]">
+                <h2 class="text-3xl font-medium tracking-wide text-slate-700 text-center pb-4 pt-2">Sales Table</h2>
+                <div class="overflow-x-auto">
+                   <table
+                      id="stockQtyTb2"
+                      class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
+                      >
+                      <thead>
+                         <tr
+                            class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[14px] text-white border-b border-blue-700"
+                            >
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                               #
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                                 Name
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  ">
+                                 QTY
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  first-line:">
+                                Cost Price (LKR)
+                            </th>
+                            <th class="p-4 font-semibold tracking-wide text-left  first-line:">
+                                Selling Price (LKR)
+                            </th>
+                         </tr>
+                      </thead>
+                      <tbody class="text-[12px] font-normal">
+                         <tr
+                            v-for=" (product ,index) in products" :key="product.id"
+                            class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
+                            >
+                            <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
+                            <td class="p-4 font-bold  border-gray-200">
+                               {{ product.name || "N/A" }}
+                            </td>
+                            <td class="p-4 border-gray-200">
+                               {{ product.sales_qty || "0" }}
+                           </td>
+                           <td class="p-4    border-gray-200">
+                               {{ (product.cost_price * product.sales_qty) ?? "N/A" }}
+                            </td>
+                            <td class="p-4    border-gray-200">
+                               {{ (product.selling_price * product.sales_qty)  ?? "N/A" }}
+                            </td>                     
+                         </tr>
+                      </tbody>
+                   </table>
+                </div>
+         </div>
        </div>
        <Footer />
- </template>
+</template>
  <script setup>
     import { ref, computed } from "vue";
     import {  Doughnut } from "vue-chartjs";
@@ -613,6 +664,27 @@
         },
     });
 });
+
+
+$(document).ready(function () {
+    let table = $("#stockQtyTb2").DataTable({
+        dom: "Bfrtip",
+        buttons: [],
+        paging: false, // Disable pagination
+        columnDefs: [
+            {
+                targets: 0, // Adjust the target column if needed
+                searchable: false,
+                orderable: false, // Disable sorting for this specific column
+            },
+        ],
+        language: {
+            search: "",
+        },
+    });
+});
+
+
 
 
  </script>
