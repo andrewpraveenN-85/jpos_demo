@@ -393,7 +393,6 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
-    :branches="branches"
     :suppliers="suppliers"
     
     v-model:open="isCreateModalOpen"
@@ -403,7 +402,6 @@
     :colors="colors"
     :suppliers="suppliers"
     :sizes="sizes"
-    :branches="branches"
     v-model:open="isEditModalOpen"
     :selected-product="selectedProduct"
   />
@@ -413,7 +411,6 @@
     :colors="colors"
     :suppliers="suppliers"
     :sizes="sizes"
-    :branches="branches"
     v-model:open="isDuplicateModalOpen"
     :selected-product="selectedProduct"
   />
@@ -422,7 +419,6 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
-    :branches="branches"
     v-model:open="isViewModalOpen"
     :selected-product="selectedProduct"
   />
@@ -486,7 +482,6 @@ const props = defineProps({
   suppliers: Array,
   colors: Array,
   sizes: Array,
-  branches: Array,
   allcategories: Array,
   totalProducts: Number,
   search: String,
@@ -564,7 +559,6 @@ const navigateTo = (url) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
-      branch: branch.value,
       stockStatus: stockStatus.value,
       selectedCategory: selectedCategory.value,
     },

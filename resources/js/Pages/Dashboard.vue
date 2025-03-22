@@ -175,24 +175,6 @@
         </div>
       </Link>
 
-      <Link href="/branches" v-if="HasRole(['Admin', 'Manager'])">
-        <div class="dashboard-card bg-[#1b5852]">
-          <div class="card-content">
-            <div class="icon-container">
-              <img
-                src="/images/dashboard/branches.jpg"
-                class="icon"
-                alt="dresshub.lk"
-              />
-            </div>
-            <div class="text-container">
-              <p class="title">Branches</p>
-              <p class="description">
-              Office branches extend operations and support across locations while staying connected to the main office.              </p>
-            </div>
-          </div>
-        </div>
-      </Link>
 
       <Link href="/stock-transition" v-if="HasRole(['Admin'])">
         <div class="dashboard-card bg-[#3426ff]">

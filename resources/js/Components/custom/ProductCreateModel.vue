@@ -321,21 +321,7 @@
                       >{{ form.errors.expire_date }}</span
                     >
                   </div>
-                  <div class="w-full">
-                  <label class="block text-sm font-medium text-gray-300">Branch Name:</label>
-                  <select
-                    v-model="form.branch_id"
-                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                  >
-                    <option value="">Select a Branch</option>
-                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">
-                      {{ branch.name }}
-                    </option>
-                  </select>
-                  <span v-if="form.errors.branch_id" class="mt-4 text-red-500">{{
-                    form.errors.branch_id
-                  }}</span>
-                </div>
+                  
                 </div>
                 <div>
                   <div class="flex items-center gap-8">
@@ -595,7 +581,7 @@ const emit = defineEmits(["update:open"]);
 const isPharma = computed(() => import.meta.env.VITE_APP_NAME === "pharma");
 
 // Define props
-const { open, categories, colors, suppliers, sizes, branches, selectedProduct } =
+const { open, categories, colors, suppliers, sizes, selectedProduct } =
   defineProps({
     open: {
       type: Boolean,
@@ -617,10 +603,7 @@ const { open, categories, colors, suppliers, sizes, branches, selectedProduct } 
       type: Array,
       required: true,
     },
-     branches: {
-      type: Array, // Add this
-      required: true,
-    },
+     
     selectedProduct: {
       type: Object,
       default: null,
@@ -642,7 +625,6 @@ const form = useForm({
   barcode: "",
   image: null, // For file upload
   expire_date: null,
-  branch_id: "",
 });
 
 const isDialogOpen = ref(false);

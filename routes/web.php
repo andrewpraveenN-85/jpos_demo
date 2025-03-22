@@ -85,7 +85,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('colors', ColorController::class);
     Route::resource('coupons', CouponController::class);
     Route::resource('sizes', SizeController::class);
-    Route::resource('branches', BranchController::class);
     Route::resource('employees', EmployeeController::class);
     Route::resource('transactionHistory', TransactionHistoryController::class );
     Route::resource('stock-transition', StockTransactionController::class);

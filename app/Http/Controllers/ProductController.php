@@ -8,7 +8,6 @@ use App\Models\Color;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
-use App\Models\Branch;
 use App\Models\StockTransaction;
 use App\Traits\GeneratesUniqueCode;
 use Illuminate\Http\Request;
@@ -136,7 +135,6 @@ class ProductController extends Controller
         });
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
-        $branches = Branch::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
 
 
@@ -145,7 +143,6 @@ class ProductController extends Controller
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
-            'branches' => $branches,
             'suppliers' => $suppliers,
             'totalProducts' => $count,
             'search' => $query,
@@ -192,14 +189,10 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'branch_id' => 'nullable||exists:branches,id',
             'code' => [
                 'string',
                 'max:50',
-                Rule::unique('products')->where(function ($query) use ($request) {
-                    return $query->where('branch_id', $request->branch_id)
-                                ->whereNull('deleted_at');
-                }),
+                Rule::unique('products')->whereNull('deleted_at'),
             ],
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
@@ -209,14 +202,7 @@ class ProductController extends Controller
             'stock_quantity' => 'nullable|integer|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'barcode' => [
-                'nullable',  
-                'string',
-                Rule::unique('products')->where(function ($query) use ($request) {
-                    return $query->where('branch_id', $request->branch_id)
-                                ->whereNull('deleted_at');
-                }),
-            ],
+            'barcode' => 'nullable|string|unique:products',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'expire_date' => 'nullable|date',
         ]);
@@ -254,7 +240,7 @@ class ProductController extends Controller
             // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
         } catch (\Exception $e) {
-            dd($e);
+         
             // Log error and redirect back with an error message
             \Log::error('Error creating product: ' . $e->getMessage());
 
@@ -274,18 +260,10 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
-            'branch_id' => 'nullable|exists:branches,id',
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50',
             // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
-            'barcode' => [
-                'nullable',  
-                'string',
-                Rule::unique('products')->where(function ($query) use ($request) {
-                    return $query->where('branch_id', $request->branch_id)
-                                ->whereNull('deleted_at');
-                }),
-            ],
+            'barcode' => 'nullable|string|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
