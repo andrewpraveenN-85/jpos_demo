@@ -209,7 +209,7 @@ const handlePrintReceipt = () => {
           }
           table th, table td {
               padding: 6px 8px;
-              
+
           }
           table th {
               text-align: left;
@@ -246,14 +246,14 @@ const handlePrintReceipt = () => {
               font-style: italic;
           }
 
-          
+
       </style>
   </head>
   <body>
       <div class="receipt-container">
                 <div class="header">
                   <img src="/images/billlogo.png" style="width: 120px; height: 70px;" />
-           ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
+            
   ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
   ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email)
             ? `<p>${companyInfo.value.phone || ''} | ${companyInfo.value.phone2 || ''}  ${companyInfo.value.email || ''}</p>`
