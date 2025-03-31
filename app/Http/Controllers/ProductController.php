@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Branch;
 use App\Models\StockTransaction;
 use App\Traits\GeneratesUniqueCode;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth; 
 
 class ProductController extends Controller
 {
@@ -40,7 +42,9 @@ class ProductController extends Controller
         $stockStatus = $request->input('stockStatus');
         $selectedCategory = $request->input('selectedCategory');
 
-        $productsQuery = Product::with('category', 'color', 'size', 'supplier')
+        $user = Auth::user();
+
+        $productsQuery = Product::with('category', 'color', 'size', 'supplier', )
             ->when($query, function ($queryBuilder) use ($query) {
                 $queryBuilder->where(function ($subQuery) use ($query) {
                     $subQuery->where('name', 'like', "%{$query}%")
@@ -70,6 +74,9 @@ class ProductController extends Controller
             ->when($selectedCategory, function ($queryBuilder) use ($selectedCategory) {
                 $queryBuilder->where('category_id', $selectedCategory);
             });
+        if ($user->role_type !== 'Admin') {
+            $productsQuery->where('branch_id', $user->branch_id);
+        }
 
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
 
@@ -89,9 +96,9 @@ class ProductController extends Controller
         $selectedSize = $request->input('size');
         $stockStatus = $request->input('stockStatus');
         $selectedCategory = $request->input('selectedCategory');
+        $user = Auth::user();
 
-
-        $productsQuery = Product::with('category', 'color', 'size', 'supplier')
+        $productsQuery = Product::with('category', 'color', 'size', 'supplier', 'branch')
             ->when($query, function ($queryBuilder) use ($query) {
                 $queryBuilder->where(function ($subQuery) use ($query) {
                     $subQuery->where('name', 'like', "%{$query}%")
@@ -122,7 +129,9 @@ class ProductController extends Controller
                 $queryBuilder->where('category_id', $selectedCategory); // Filter by category
             });
 
-
+        if ($user->role_type !== 'Admin') {
+            $productsQuery->where('branch_id', $user->branch_id);
+        }
         $count = $productsQuery->count();
 
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
@@ -136,13 +145,14 @@ class ProductController extends Controller
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
-
+        $branches = Branch::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Products/Index', [
             'products' => $products,
             'allcategories' => $allcategories,
             'colors' => $colors,
             'sizes' => $sizes,
+            'branches' => $branches,
             'suppliers' => $suppliers,
             'totalProducts' => $count,
             'search' => $query,
@@ -181,7 +191,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+    { 
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
@@ -192,9 +202,14 @@ class ProductController extends Controller
             'code' => [
                 'string',
                 'max:50',
-                Rule::unique('products')->whereNull('deleted_at'),
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('branch_id', $request->branch_id)
+                                ->whereNull('deleted_at');
+                }),
             ],
+            
             'size_id' => 'nullable|exists:sizes,id',
+            'branch_id' => 'nullable|exists:branches,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
             'selling_price' => 'nullable|numeric|min:0',
@@ -202,7 +217,14 @@ class ProductController extends Controller
             'stock_quantity' => 'nullable|integer|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'barcode' => 'nullable|string|unique:products',
+            'barcode' => [
+                'nullable',  
+                'string',
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('branch_id', $request->branch_id)
+                                ->whereNull('deleted_at');
+                }),
+            ],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'expire_date' => 'nullable|date',
         ]);
@@ -230,6 +252,7 @@ class ProductController extends Controller
             if ($stockQuantity > 0) {
                 StockTransaction::create([
                     'product_id' => $product->id,
+                    'branch_id' => Auth::user()->branch_id,
                     'transaction_type' => 'Added',
                     'quantity' => $stockQuantity,
                     'transaction_date' => now(),
@@ -266,11 +289,12 @@ class ProductController extends Controller
             'barcode' => 'nullable|string|unique:products',
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
+            'branch_id' => 'nullable|exists:branches,id',
             'cost_price' => 'nullable|numeric|min:0',
             'selling_price' => 'nullable|numeric|min:0',
             'discounted_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100', // Validation for discount
+            'discount' => 'nullable|numeric|min:0|max:100', 
             'supplier_id' => 'nullable|exists:suppliers,id',
             'image' => 'nullable|max:2048',
             'expire_date' => 'nullable|date',
@@ -344,7 +368,8 @@ class ProductController extends Controller
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();
 
-        $product->load('category', 'color', 'size', 'suppliers');
+
+        $product->load('category', 'color', 'size', 'suppliers', 'branch');
 
         return Inertia::render('Products/Show', [
 

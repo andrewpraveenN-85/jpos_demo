@@ -15,6 +15,7 @@ class SaleItem extends Model
         'quantity',
         'unit_price',
         'total_price',
+        'branch_id',
 
     ];
 
@@ -28,5 +29,10 @@ class SaleItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id','id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }

@@ -104,6 +104,9 @@
                   Name
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Branch
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   Contact
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
@@ -130,6 +133,9 @@
               >
                 <td class="p-4 font-bold border-t border-gray-200">
                   {{ customer.name || "N/A" }}
+                </td>
+                <td class="p-4 font-bold border-t border-gray-200">
+                  {{ customer.branch?.name || "N/A" }}
                 </td>
                 <td class="p-4 border-t border-gray-200">
                   {{ customer.phone || "N/A" }}

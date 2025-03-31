@@ -14,7 +14,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $allcustomers = Customer::orderBy('created_at', 'desc')
+        $allcustomers = Customer::with('branch')->orderBy('created_at', 'desc')
             ->get();
         $totalCustomers = $allcustomers->count();
 

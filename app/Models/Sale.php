@@ -21,6 +21,7 @@ class Sale extends Model
         'total_cost',
         'cash',
         'custom_discount',
+        'branch_id',
     ];
 
 
@@ -53,5 +54,9 @@ class Sale extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id','id');
+    }
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }

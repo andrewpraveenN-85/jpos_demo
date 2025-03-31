@@ -262,6 +262,13 @@
 
                   <b> &nbsp; {{ product.supplier?.name || "N/A" }} </b>
                 </p>
+                 <p
+                  class="flex items-center space-x-2 text-justify text-gray-400"
+                >
+                  Branch :
+
+                  <b> &nbsp; {{ product.branch?.name || "N/A" }} </b>
+                </p>
               </div>
               <div class="flex items-center justify-between">
                 <p
@@ -393,6 +400,7 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    :branches="branches"
     :suppliers="suppliers"
     
     v-model:open="isCreateModalOpen"
@@ -402,6 +410,7 @@
     :colors="colors"
     :suppliers="suppliers"
     :sizes="sizes"
+    :branches="branches"
     v-model:open="isEditModalOpen"
     :selected-product="selectedProduct"
   />
@@ -411,6 +420,7 @@
     :colors="colors"
     :suppliers="suppliers"
     :sizes="sizes"
+    :branches="branches"
     v-model:open="isDuplicateModalOpen"
     :selected-product="selectedProduct"
   />
@@ -419,6 +429,7 @@
     :categories="allcategories"
     :colors="colors"
     :sizes="sizes"
+    :branches="branches"
     v-model:open="isViewModalOpen"
     :selected-product="selectedProduct"
   />
@@ -481,6 +492,7 @@ const props = defineProps({
   categories: Array,
   suppliers: Array,
   colors: Array,
+  branches: Array,
   sizes: Array,
   allcategories: Array,
   totalProducts: Number,
@@ -496,6 +508,7 @@ const search = ref(props.search || "");
 const sort = ref(props.sort || "");
 const color = ref(props.color || "");
 const size = ref(props.size || "");
+
 const suppliers = ref(props.suppliers || "");
 const stockStatus = ref(props.stockStatus || "");
 const selectedCategory = ref(props.selectedCategory || "");
@@ -512,6 +525,7 @@ const applyFilters = (page) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
+      branch: branch.value,
       stockStatus: stockStatus.value,
       selectedCategory: selectedCategory.value,
     },
@@ -559,6 +573,7 @@ const navigateTo = (url) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
+       branch: branch.value,
       stockStatus: stockStatus.value,
       selectedCategory: selectedCategory.value,
     },

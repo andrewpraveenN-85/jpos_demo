@@ -81,6 +81,21 @@
           </p>
         </div>
         <div date-rangepicker class="flex items-center space-x-4">
+          <!-- Branch Filter Dropdown -->
+          <select
+            v-model="selectedBranch"
+            class="text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+          >
+            <option value="">Branch</option>
+            <option
+              v-for="branch in branches"
+              :key="branch.id"
+              :value="branch.id"
+            >
+              {{ branch.name }}
+            </option>
+          </select>
+
           <!-- Start Date -->
           <div class="relative">
             <input
@@ -483,13 +498,21 @@ const props = defineProps({
   endDate: { type: String, default: "" },
   categorySales: { type: Object, required: true },
   employeeSalesSummary: { type: Object, required: true },
+  branches: Array,
+  selectedBranch: String,
 });
 
 // Date filters
 const startDate = ref(props.startDate);
 const endDate = ref(props.endDate);
+const selectedBranch = ref(props.selectedBranch || "");
+const products = computed(() => {
+  if (!selectedBranch.value) return props.products;
+  return props.products.filter(
+    (product) => product.branch_id == selectedBranch.value
+  );
+});
 
-const products = ref(props.products);
 const sales = ref(props.sales);
 const totalQty = computed(() => {
   return products.value.reduce(
@@ -521,6 +544,7 @@ const filterData = () => {
   router.get(route("reports.index"), {
     start_date: startDate.value,
     end_date: endDate.value,
+    branch_id: selectedBranch.value,
   });
 };
 

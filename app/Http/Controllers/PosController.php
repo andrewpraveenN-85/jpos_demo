@@ -139,6 +139,7 @@ class PosController extends Controller
                 if (!empty($phone) || !empty($email) || !empty($request->input('customer.name'))) {
                     $customer = Customer::create([
                         'name' => $request->input('customer.name'),
+                        'branch_id' => Auth::user()->branch_id,
                         'email' => $email,
                         'phone' => $phone,
                         'address' => $request->input('customer.address', ''), // Optional address
@@ -154,6 +155,7 @@ class PosController extends Controller
                 'employee_id' => $request->input('employee_id'),
                 'user_id' => $request->input('userId'), // Logged-in user ID
                 'order_id' => $request->input('orderId'),
+                'branch_id' => Auth::user()->branch_id,
                 'total_amount' => $totalAmount, // Total amount of the sale
                 'discount' => $totalDiscount, // Default discount to 0 if not provided
                 'total_cost' => $totalCost,
@@ -190,6 +192,7 @@ class PosController extends Controller
                     // Create sale item
                     SaleItem::create([
                         'sale_id' => $sale->id,
+                        'branch_id' => Auth::user()->branch_id,
                         'product_id' => $product['id'],
                         'quantity' => $product['quantity'],
                         'unit_price' => $product['selling_price'],
@@ -198,6 +201,7 @@ class PosController extends Controller
 
                     StockTransaction::create([
                         'product_id' => $product['id'],
+                        'branch_id' => Auth::user()->branch_id,
                         'transaction_type' => 'Sold',
                         'quantity' => $product['quantity'],
                         'transaction_date' => now(),

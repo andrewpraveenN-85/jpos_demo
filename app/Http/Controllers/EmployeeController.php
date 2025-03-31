@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -17,9 +18,7 @@ class EmployeeController extends Controller
         if (!Gate::allows('hasRole', ['Admin','Manager'])) {
             abort(403, 'Unauthorized');
         }
-        $allemployee = Employee::orderBy('created_at', 'desc')->get();
-
-
+        $allemployee = Employee::with('branch')->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Employee/Index', [
             'allemployee' => $allemployee,
@@ -51,6 +50,7 @@ class EmployeeController extends Controller
             'address' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
+            'branch_id' => 'nullable|exists:branches,id',
         ]);
 
 

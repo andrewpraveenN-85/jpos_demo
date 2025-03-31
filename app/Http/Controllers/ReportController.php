@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Report;
 use App\Models\Sale;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -25,6 +26,7 @@ class ReportController extends Controller
 
         $startDate = $request->input('start_date', '');
         $endDate = $request->input('end_date', '');
+        $branchId = $request->input('branch_id');
 
         // Query with optional date range filtering
         //  $salesQuery = Sale::with('saleItems.product.category');
@@ -33,6 +35,9 @@ class ReportController extends Controller
 
         if ($startDate && $endDate) {
             $salesQuery->whereBetween('sale_date', [$startDate, $endDate]);
+        }
+        if ($branchId) {
+            $salesQuery->where('branch_id', $branchId); 
         }
 
         $sales = $salesQuery
@@ -136,6 +141,8 @@ class ReportController extends Controller
             'endDate' => $endDate,
             'categorySales' => $categorySales,
             'employeeSalesSummary' => $employeeSalesSummary,
+            'branches' => Branch::all(),
+            'selectedBranch' => $branchId,
         ]);
     }
 

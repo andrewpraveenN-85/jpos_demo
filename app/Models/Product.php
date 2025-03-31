@@ -25,6 +25,7 @@ class Product extends Model
         'barcode',
         'image',
         'expire_date',
+        'branch_id',
     ];
 
     // public static function boot()
@@ -59,5 +60,9 @@ class Product extends Model
 
     protected $casts = [
         'expire_date' => 'date', // Cast expiry_date as a date
-    ];    
+    ]; 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }   
 }

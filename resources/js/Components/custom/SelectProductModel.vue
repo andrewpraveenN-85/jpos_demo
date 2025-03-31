@@ -414,6 +414,7 @@ const { open, allcategories, colors, sizes } = defineProps({
   allcategories: Array,
   colors: Array,
   sizes: Array,
+  branchId: Number,
 });
 
 // Form for handling deletion

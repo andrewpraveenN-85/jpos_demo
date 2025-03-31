@@ -62,7 +62,21 @@
                     {{ form.errors.name }}
                   </span>
                 </div>
-
+                <div class="w-full">
+                  <label class="block text-sm font-medium text-gray-300">Branch Name:</label>
+                  <select
+                    v-model="form.branch_id"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  >
+                    <option value="">Select a Branch</option>
+                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">
+                      {{ branch.name }}
+                    </option>
+                  </select>
+                  <span v-if="form.errors.branch_id" class="mt-4 text-red-500">{{
+                    form.errors.branch_id
+                  }}</span>
+                </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-300"
                     >Address:</label
@@ -155,6 +169,10 @@ defineProps({
     type: Array,
     required: true,
   },
+  branches: {
+        type: Array, 
+        required: true,
+    }, 
 });
 
 const form = useForm({
@@ -163,6 +181,7 @@ const form = useForm({
   address: "",
   email: "",
   phone: "",
+  branch_id: "",
 });
 
 const submit = () => {

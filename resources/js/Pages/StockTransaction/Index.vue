@@ -95,6 +95,9 @@
                   Product Name
                 </th>
                 <th class="p-4 font-semibold tracking-wide text-left uppercase">
+                  Branch
+                </th>
+                <th class="p-4 font-semibold tracking-wide text-left uppercase">
                   Transaction Type & Date
                 </th>
 
@@ -125,6 +128,9 @@
                 <td class="px-6 py-3 text- first-letter:">{{ index + 1 }}</td>
                 <td class="p-4 font-bold border-gray-200">
                   {{ stock.product?.name || "N/A" }}
+                </td>
+                <td class="p-4 font-bold border-gray-200">
+                    {{ stock.branch?.name  || 'N/A' }}
                 </td>
                 <td class="p-4 border-gray-200">
                   <span

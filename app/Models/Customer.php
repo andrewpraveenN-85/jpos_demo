@@ -16,7 +16,13 @@ class Customer extends Model
         'address',
         'member_since',
         'loyalty_points',
+        'branch_id',
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 
 
 }
