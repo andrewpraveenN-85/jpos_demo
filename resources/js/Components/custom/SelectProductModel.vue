@@ -32,44 +32,52 @@
           >
             <div class="flex flex-col items-center justify-start">
               <div class="w-full flex">
-                <div class="w-full py-12 space-y-16">
-                  <div
-                    class="flex items-center justify-between w-full space-x-4"
-                  >
-                    <!-- Input Section -->
-                    <div class="w-1/6">
-                      <input
-                        v-model="search"
-                        @input="() => fetchProducts()"
-                        type="text"
-                        placeholder="Search ..."
-                        class="w-full custom-input"
-                      />
-                    </div>
 
-                    <!-- Top Categories Section -->
-                    <div class="w-5/6 flex items-center justify-end space-x-4">
-                      <p class="text-2xl">Top Categories:</p>
-                      <div
-                        v-for="category in parentCategories"
-                        :key="category.id"
-                        class="cursor-pointer"
-                        @click="selectParentCategory(category)"
-                      >
-                        <p
-                          :class="{
-                            'text-xl text-blue-600':
-                              selectedParentCategory?.id !== category.id,
-                            'text-xl text-red-600':
-                              selectedParentCategory?.id === category.id,
-                          }"
-                        >
-                          {{ category.name }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+                <div class="w-full py-12 space-y-8">
+  <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-6">
+    <!-- Input Section -->
+    <div class="w-full lg:w-3/4">
+      <input
+        v-model="search"
+        @input="() => fetchProducts()"
+        type="text"
+        placeholder="Search ..."
+        class="w-full custom-input px-4 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+      />
+    </div>
+</div>
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-6">
+    <!-- Top Categories Section -->
+    <div class="w-full">
+  <div class="flex items-center space-x-4 pb-2">
+    <p class="text-2xl font-bold shrink-0">Top Categories:</p>
+
+    <div class="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 pl-2">
+      <div
+        v-for="category in parentCategories"
+        :key="category.id"
+        class="cursor-pointer shrink-0"
+        @click="selectParentCategory(category)"
+      >
+        <p
+          :class="[
+            'text-xl font-bold whitespace-nowrap',
+            selectedParentCategory?.id === category.id
+              ? 'text-red-600'
+              : 'text-blue-600',
+          ]"
+        >
+          {{ category.name }} /
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
               </div>
 
               <div class="flex w-full space-x-4">
