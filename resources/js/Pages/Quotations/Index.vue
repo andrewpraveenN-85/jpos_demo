@@ -655,7 +655,7 @@ const addQuotation = () => {
 const downloadPdf = async () => {
   const pdf = new jsPDF();
 
-  const headerSize = 27;
+  const headerSize =  40;
   const titleSize = 10;
   const normalSize = 10;
   const smallSize = 9;
@@ -667,7 +667,13 @@ const downloadPdf = async () => {
   pdf.setFillColor(25, 47, 66);
   pdf.rect(0, 0, pageWidth, 50, 'F');
 
-  // Add Logo (positioned top-left)
+  // Quotation Title (left side)
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(headerSize);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Quotation', 15, 30); // Left-aligned
+
+  // Add Logo (positioned top-right)
   try {
     const logoImg = new Image();
     logoImg.src = '/images/billlogo-white.png';
@@ -686,42 +692,36 @@ const downloadPdf = async () => {
     ctx.drawImage(logoImg, 0, 0);
 
     const base64Img = canvas.toDataURL('image/png');
-    const imgWidth = 60;
-    const imgHeight = 30;
-    const xPos = 10; // Left-aligned with 10px margin
-    const yPos = 5;  // Top-aligned with 5px margin
+    const imgWidth = 40;
+    const imgHeight = 20;
+    const xPos = 110;
+    const yPos = 2;
     pdf.addImage(base64Img, 'PNG', xPos, yPos, imgWidth, imgHeight);
   } catch (error) {
     console.error('Error adding logo to PDF:', error);
     pdf.setFontSize(12);
-    pdf.text('Company Logo', 10, 20); // Fallback position also top-left
+    pdf.text('Company Logo', pageWidth - 60, 20);
   }
-
-  // Quotation Title (moved slightly right to accommodate logo)
-  pdf.setTextColor(255, 255, 255);
-  pdf.setFontSize(headerSize);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('Quotation', 80, 45); // Adjusted x-position from 20 to 80
 
   // --- CMSPORTS-style Right-Side Contact Info ---
   const contactDetails = [
     {
-      text: props.companyInfo?.phone || '075 549 1437 | 075 738 7608',
+      text:  '075 549 1437 | 075 738 7608',
       icon: '/images/phone-icon.png',
     },
     {
-      text: props.companyInfo?.website || 'cmsports.info',
+      text:  'cmsports.info',
       icon: '/images/web-icon.png',
     },
     {
-      text: props.companyInfo?.address || '441/B, Colombo Road, Piliyandala',
+      text:  '441/B, Colombo Road, Piliyandala',
       icon: '/images/location-icon.png',
     },
   ];
 
-  let contactY = 10;
+  let contactY = 23;
   const contactX = pageWidth - 95;
-  const iconSize = 5;
+  const iconSize = 4;
   const iconGap = 3;
   const lineSpacing = 9;
 
@@ -749,7 +749,7 @@ const downloadPdf = async () => {
       console.error(`Failed to load icon ${item.icon}:`, error);
     }
 
-    pdf.setFontSize(8);
+    pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(255, 255, 255);
     pdf.text(item.text, contactX + iconSize + iconGap, contactY + 4);
@@ -833,7 +833,6 @@ const downloadPdf = async () => {
 
     pdf.setTextColor(0, 0, 0);
     pdf.text(itemName, 15, currentY + 7);
-    pdf.setTextColor(0, 0, 0);
     pdf.text(quantity, 110, currentY + 7, { align: 'center' });
     pdf.text(price, 145, currentY + 7, { align: 'center' });
     pdf.text(subtotal, 180, currentY + 7, { align: 'center' });
@@ -863,21 +862,23 @@ const downloadPdf = async () => {
 
   // Footer
   currentY += 20;
-  pdf.setFont('helvetica', 'italic');
-  const validText = `Valid Until: ${validUntilDate.value || 'Not Specified'}`;
+  pdf.setFont('helvetica', 'italic', 'bold');
+  const validText = `The Quotation is Valid only: ${validUntilDate.value || 'Not Specified'}`;
   pdf.text(validText, 10, currentY);
 
-  currentY += 10;
-  pdf.setFont('helvetica', 'bold');
+  currentY += 8;
+  pdf.setFont('helvetica', 'italic');
   pdf.text('Thank You!', 10, currentY);
 
-  currentY += 10;
+  currentY += 8;
+  pdf.setFont('helvetica', 'italic');
   const companyName = props.companyInfo?.name || 'Your Company Name';
   pdf.text(companyName, 10, currentY);
 
   // Save
   pdf.save(`Quotation_${orderId.value || '0012'}.pdf`);
 };
+
 
 
 
