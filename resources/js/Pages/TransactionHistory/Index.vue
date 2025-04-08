@@ -75,18 +75,52 @@
           </div>
           <div class="flex justify-end w-full"></div>
         </div>
+        
 
         <template v-if="allhistoryTransactions && allhistoryTransactions.length > 0">
           <div class="overflow-x-auto">
+            <div date-rangepicker class="flex items-center space-x-4 mb-4">
+                   <!-- Start Date -->
+                   <div class="relative">
+                      <input v-model="startDate" type="date"
+                         class="text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                         placeholder="Start Date" />
+                   </div>
+                   <span class="text-xl font-bold tracking-wider text-blue-600">To</span>
+                   <!-- End Date -->
+                   <div class="relative">
+                      <input v-model="endDate" type="date"
+                         class="text-xl font-normal tracking-wider text-blue-600 bg-white border border-blue-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                         placeholder="End Date" />
+                   </div>
+                   <!-- Filter Button -->
+                   <button @click="filterData"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select">
+                   Filter
+                   </button>
+                   <Link href="/transactionHistory"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-blue-600 rounded-lg custom-select">
+                   Reset
+                   </Link>
+                   <button
+                      @click="deleteSelected"
+                      class="px-6 py-3 text-xl font-normal tracking-wider text-white text-center bg-red-600 rounded-lg custom-select"
+                      v-if="selectedOrders.length"
+                    >
+                      Delete Selected ({{ selectedOrders.length }})
+                    </button>
+                </div>
             <table
               id="TransitionTable"
               class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
             >
+            
               <thead>
                 <tr
                   class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[12px] text-white border-b border-blue-700"
                 >
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">#</th>
+                  <th class="p-4"><input type="checkbox" @change="toggleAll" :checked="areAllSelected" /></th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Order ID</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Total Amount</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Discount</th>
@@ -98,6 +132,7 @@
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">Print</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">View</th>
                   <th class="p-4 font-semibold tracking-wide text-left uppercase">KOT</th>
+
                 </tr>
               </thead>
               <tbody class="text-[13px] font-normal">
@@ -107,6 +142,7 @@
                   class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg"
                 >
                   <td class="px-6 py-3">{{ index + 1 }}</td>
+                  <td class="p-4"><input type="checkbox" v-model="selectedOrders" :value="history.order_id" /></td>
                   <td class="p-4 font-bold border-gray-200">{{ history.order_id || "N/A" }}</td>
                   <td class="p-4 font-bold border-gray-200">
                     {{
@@ -162,6 +198,7 @@
                       KOT
                     </button>
                   </td>
+                  
                 </tr>
               </tbody>
             </table>
@@ -296,8 +333,8 @@
 
 
 <script setup>
-import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { ref, computed  } from "vue";
+import { useForm , router } from "@inertiajs/vue3";
 import { Head, Link } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
@@ -881,5 +918,63 @@ const getSafeValue = (obj, path) => {
   printWindow.print();
   printWindow.close();
 };
+
+const deleteReceipt = (orderId) => {
+  if (confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
+    router.post(route("transactions.delete"), { order_id: orderId }, {
+      onError: (error) => {
+        alert("Error: " + (error.message || "Something went wrong."));
+      },
+    });
+  }
+};
+
+ // Date filters
+const startDate = ref(props.startDate);
+const endDate = ref(props.endDate);
+
+    // Handle filter submission
+    const filterData = () => {
+        if (new Date(startDate.value) > new Date(endDate.value)) {
+            alert("Start date cannot be greater than end date.");
+            return;
+        }
+        router.get(route("transactionHistory.index"), {
+            start_date: startDate.value,
+            end_date: endDate.value,
+        });
+    };
+
+    const selectedOrders = ref([]);
+
+const areAllSelected = computed(() =>
+  props.allhistoryTransactions.every((t) => selectedOrders.value.includes(t.order_id))
+);
+
+const toggleAll = () => {
+  if (areAllSelected.value) {
+    selectedOrders.value = [];
+  } else {
+    selectedOrders.value = props.allhistoryTransactions.map((t) => t.order_id);
+  }
+};
+
+const deleteSelected = () => {
+  if (!selectedOrders.value.length) return;
+
+  if (confirm(`Are you sure you want to delete ${selectedOrders.value.length} record(s)?`)) {
+    router.post(route("transactions.bulkDelete"), {
+      order_ids: selectedOrders.value,
+    }, {
+      onSuccess: () => {
+        selectedOrders.value = [];
+      },
+      onError: (error) => {
+        alert("Failed to delete: " + (error.message || "Unknown error"));
+      },
+    });
+  }
+};
+
 
 </script>
