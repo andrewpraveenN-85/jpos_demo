@@ -650,6 +650,11 @@ ${
 
 
 
+      ${history.kitchen_note ? `
+        <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
+        border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
+          <small style="display: block; text-align: left;">Note: ${history.kitchen_note}</small>
+        </div>` : ''}
 
 
         </div>
@@ -859,13 +864,11 @@ const getSafeValue = (obj, path) => {
             </table>
         </div>
 
-    ${history.kitchen_note ? `
-              <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
-              border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
-                <small style="display: block; text-align: left;">Note: ${props.kitchen_note}</small>
-              </div>` : ''}
-
-
+          ${history.kitchen_note ? `
+        <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
+        border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
+          <small style="display: block; text-align: left;">Note: ${history.kitchen_note}</small>
+        </div>` : ''}
 
       </div>
     </body>

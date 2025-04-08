@@ -1110,14 +1110,11 @@ const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
                   ${productRows}
               </tbody>
           </table>
-          ${
-            table.kitchen_note
-              ? `
-            <div class="totals">
-              <p style="font-weight: bold;">Kitchen Note: ${table.kitchen_note}</p>
-            </div>
-          `
-              : ""
+          ${table.kitchen_note ? `
+              <div style="font-weight: bold; text-align: left; border-top: 1px solid black;
+              border-bottom: 1px solid black; padding-top: 10px; padding-bottom: 10px;">
+                <small style="display: block; text-align: left;">Note: ${table.kitchen_note}</small>
+              </div>` : ''}
           }
       </div>
   </body>
