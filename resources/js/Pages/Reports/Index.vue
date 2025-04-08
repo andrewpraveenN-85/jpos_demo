@@ -131,7 +131,7 @@
           </Link>
           </div>
       </div>
-      
+
     </div>
     <!-- Statistic Boxes -->
     <div class="grid w-full md:grid-cols-6 grid-cols-3 gap-4">
@@ -148,7 +148,7 @@
           </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
-          <p class="text-2xl font-bold text-black">{{ totalSaleAmount }} LKR</p>
+          <p class="text-2xl font-bold text-black">{{ totalSaleAmount.toFixed(2) }} LKR</p>
         </div>
       </div>
       <!-- Net Profit -->
@@ -161,7 +161,7 @@
           </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
-          <p class="text-2xl font-bold text-black">{{ netProfit }} LKR</p>
+          <p class="text-2xl font-bold text-black">{{ netProfit.toFixed(2) }} LKR</p>
         </div>
       </div>
       <!-- Total Products -->
@@ -190,7 +190,7 @@
         </div>
         <div class="flex flex-col items-center justify-center">
           <p class="text-2xl font-bold text-black">
-            {{ averageTransactionValue }} LKR
+            {{ averageTransactionValue.toFixed(2) }} LKR
           </p>
         </div>
       </div>
@@ -332,7 +332,8 @@
             <h2
               class="text-2xl font-medium tracking-wide text-slate-700 text-left"
             >
-              Top Sales By Payment Method
+            Top Gross Sales by Payment Method
+
             </h2>
             <button
               @click="downloadPDF3"
@@ -381,7 +382,7 @@
         </div>
       </div>
 
-      
+
       <div class="w-full bg-white border-4 border-black rounded-xl h-[500px]">
 
 
@@ -456,8 +457,8 @@
           </table>
         </div>
 
-        
-      </div>  
+
+      </div>
     </div>
 
 <!-- Batch Management -->
@@ -497,7 +498,7 @@
                 </tr>
             </thead>
             <tbody class="text-[12px] font-normal">
-                <tr v-for="(product, index) in batchProducts" 
+                <tr v-for="(product, index) in batchProducts"
                     :key="index"
                     class="transition duration-200 ease-in-out hover:bg-gray-200 hover:shadow-lg">
                     <td class="px-6 py-3">{{ index + 1 }}</td>
@@ -774,11 +775,16 @@ const chartOptions = {
 const paymentMethodTotals = computed(() => {
   const totals = {};
   props.sales.forEach((item) => {
-    const method = item.payment_method;
-    totals[method] = (totals[method] || 0) + parseFloat(item.total_amount);
+    const method = item.payment_method || 'Unknown';
+    const amount = parseFloat(item.total_amount) || 0;
+    totals[method] = (totals[method] || 0) + amount;
   });
   return sortDescending(totals);
 });
+
+
+
+
 
 const chartData1 = computed(() => ({
   labels: Object.keys(paymentMethodTotals.value),
@@ -826,6 +832,8 @@ const chartOptions1 = {
   },
 };
 
+
+// Fix for downloadPDF3 function
 const downloadPDF3 = () => {
   const doc = new jsPDF();
 
@@ -843,17 +851,27 @@ const downloadPDF3 = () => {
     startY: 20,
   });
 
-  // Step 3: Add Chart as an Image (Optional)
-  const chartElement = document.getElementById("paymentChart"); // Ensure your chart canvas has this ID
-  if (chartElement) {
-    const chartInstance = chartElement.__chartjsInstance; // Get Chart.js instance
-    const chartImage = chartInstance.toBase64Image(); // Generate base64 image of chart
-    doc.addImage(chartImage, "PNG", 14, doc.lastAutoTable.finalY + 10, 180, 90); // Adjust positioning
-  }
-
-  // Step 4: Save the PDF
+  // Step 3: Save the PDF without trying to capture chart image
+  // since there's no ID assigned to the chart element
   doc.save("PaymentMethodTotals.pdf");
 };
+
+// Ensure totalSaleAmount is properly parsed and formatted
+const formattedTotalSaleAmount = computed(() => {
+  // Parse the totalSaleAmount to ensure it's a number and format it
+  return parseFloat(props.totalSaleAmount).toFixed(2);
+});
+
+
+
+
+
+
+
+
+
+
+
 
 // Doughnut Chart Data for Sales by Category
 const sortedCategorySales = computed(() => sortDescending(props.categorySales));

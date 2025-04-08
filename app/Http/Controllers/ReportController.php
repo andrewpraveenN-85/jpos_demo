@@ -15,150 +15,155 @@ class ReportController extends Controller
      * Display a listing of the resource.
      */
 
+     public function index(Request $request)
+     {
+         if (!Gate::allows('hasRole', ['Admin'])) {
+             abort(403, 'Unauthorized');
+         }
 
+         $productCode = $request->input('code', null);
+         $productsQuery = Product::query();
 
-    public function index(Request $request)
-    {
-        if (!Gate::allows('hasRole', ['Admin'])) {
-            abort(403, 'Unauthorized');
-        }
+         if ($productCode) {
+             $productsQuery->where('code', $productCode)
+                           ->with('batch_no');
+         }
 
-        $productCode = $request->input('code', null);
-        $productsQuery = Product::query();
+         $products = $productsQuery->orderBy('created_at', 'desc')->get();
+         $totalQty = $products->sum('total_quantity');
+         $remainingQty = $products->sum('stock_quantity');
 
-        if ($productCode) {
-            $productsQuery->where('code', $productCode)
-                          ->with('batch_no'); 
-        }
+         $startDate = $request->input('start_date', '');
+         $endDate = $request->input('end_date', '');
 
-        $products = $productsQuery->orderBy('created_at', 'desc')->get();
-        $totalQty = $products->sum('total_quantity');
-        $remainingQty = $products->sum('stock_quantity');
+         // Query with optional date range filtering
+         //  $salesQuery = Sale::with('saleItems.product.category');
+         $salesQuery = Sale::whereHas('saleItems.product.category')
+             ->with('saleItems.product.category');
 
-        $startDate = $request->input('start_date', '');
-        $endDate = $request->input('end_date', '');
+         if ($startDate && $endDate) {
+             $salesQuery->whereBetween('sale_date', [$startDate, $endDate]);
+         }
 
-        // Query with optional date range filtering
-        //  $salesQuery = Sale::with('saleItems.product.category');
-        $salesQuery = Sale::whereHas('saleItems.product.category')
-            ->with('saleItems.product.category');
-
-        if ($startDate && $endDate) {
-            $salesQuery->whereBetween('sale_date', [$startDate, $endDate]);
-        }
-
-        $sales = $salesQuery
-        ->with('employee')
-        ->orderBy('sale_date', 'desc')
-        ->get();
+         $sales = $salesQuery
+         ->with('employee')
+         ->orderBy('sale_date', 'desc')
+         ->get();
 
 
 
 
 
 
-        $categorySales = [];
+         $categorySales = [];
 
-        foreach ($sales as $sale) {
-            foreach ($sale->saleItems as $item) {
- 
-                $categoryName = $item->product->category->name ?? 'No Category';
+         foreach ($sales as $sale) {
+             foreach ($sale->saleItems as $item) {
 
-                $totalAmount = $sale->total_amount;
+                 $categoryName = $item->product->category->name ?? 'No Category';
 
-                if (!isset($categorySales[$categoryName])) {
-                    $categorySales[$categoryName] = 0;
-                }
-                $categorySales[$categoryName] += $totalAmount;
-            }
-        }
+                 $totalAmount = $sale->total_amount;
 
-
-        // Initialize an empty array to store the totals by payment method
-        $paymentMethodTotals = [];
-
-        // Loop through the sales and aggregate totals by payment method
-        foreach ($sales as $item) {
-            $paymentMethod = $item->payment_method; // Get the payment method
-            $totalAmount = $item->total_amount; // Get the total amount for the sale
-
-            // Aggregate the total amount for each payment method
-            if (isset($paymentMethodTotals[$paymentMethod])) {
-                $paymentMethodTotals[$paymentMethod] += $totalAmount;
-            } else {
-                $paymentMethodTotals[$paymentMethod] = $totalAmount;
-            }
-        }
+                 if (!isset($categorySales[$categoryName])) {
+                     $categorySales[$categoryName] = 0;
+                 }
+                 $categorySales[$categoryName] += $totalAmount;
+             }
+         }
 
 
-        $employeeSalesSummary = []; // Initialize an array to store employee sales summary
+         // Initialize an empty array to store the totals by payment method
+         $paymentMethodTotals = [];
 
-        foreach ($sales as $item) {
-            $employee = $item->employee; // Access the related employee via the relationship
+         // Loop through the sales and aggregate totals by payment method
+         foreach ($sales as $item) {
+             $paymentMethod = $item->payment_method; // Get the payment method
+             $totalAmount = $item->total_amount; // Get the total amount for the sale
 
-            // Skip the iteration if the employee is null
-            if ($employee === null) {
-                continue;
-            }
-
-
-            if (!isset($employeeSalesSummary[$employee->name])) {
-                $employeeSalesSummary[$employee->name] = [
-                    'Employee Name' => $employee->name,
-                    'Total Sales Amount' => 0,
-                ];
-            }
+             // Aggregate the total amount for each payment method
+             if (isset($paymentMethodTotals[$paymentMethod])) {
+                 $paymentMethodTotals[$paymentMethod] += $totalAmount;
+             } else {
+                 $paymentMethodTotals[$paymentMethod] = $totalAmount;
+             }
+         }
 
 
-            $discount = $item->discount ?? 0;
-            $netAmount = $item->total_amount - $discount;
+         $employeeSalesSummary = []; // Initialize an array to store employee sales summary
+
+         foreach ($sales as $item) {
+             $employee = $item->employee; // Access the related employee via the relationship
+
+             // Skip the iteration if the employee is null
+             if ($employee === null) {
+                 continue;
+             }
 
 
-            $employeeSalesSummary[$employee->name]['Total Sales Amount'] += $netAmount;
-        }
+             if (!isset($employeeSalesSummary[$employee->name])) {
+                 $employeeSalesSummary[$employee->name] = [
+                     'Employee Name' => $employee->name,
+                     'Total Sales Amount' => 0,
+                 ];
+             }
+
+
+             $discount = $item->discount ?? 0;
+             $netAmount = $item->total_amount - $discount;
+
+
+             $employeeSalesSummary[$employee->name]['Total Sales Amount'] += $netAmount;
+         }
 
 
 
 
-        // Calculate totals based on filtered sales
-        $totalSaleAmount = $sales->sum('total_amount');
-        $totalCost = $sales->sum('total_cost');
-        $totalDiscount = $sales->sum('discount');
-        $customeDiscount = $sales->sum('custom_discount');
-        $netProfit = $totalSaleAmount - $totalCost - $totalDiscount - $customeDiscount;
+         // Calculate totals based on filtered sales
 
-        // Calculate total transactions and average transaction value
-        $totalTransactions = $sales->count();
-        $averageTransactionValue = ($totalTransactions > 0)
-            ? $totalSaleAmount / $totalTransactions
-            : 0;
 
-        $totalCustomer = $salesQuery->distinct('customer_id')->count('customer_id');
 
-        // Pass data to the view
-        return Inertia::render('Reports/Index', [
-            'products' => Product::orderBy('created_at', 'desc')->get(),
-            'sales' => $sales,
-            'totalSaleAmount' => $totalSaleAmount,
-            'totalCustomer' => $totalCustomer,
-            'netProfit' => $netProfit,
-            'totalDiscount' => $totalDiscount,
-            'customeDiscount' => $customeDiscount,
-            'totalTransactions' => $totalTransactions,
-            'averageTransactionValue' => round($averageTransactionValue, 2), // Round to 2 decimals
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'categorySales' => $categorySales,
-            'employeeSalesSummary' => $employeeSalesSummary,
-            'totalQty' => $totalQty,
-            'remainingQty' => $remainingQty,
-        ]);
-    }
+         $totalCost = $sales->sum('total_cost');
+         $totalDiscount = $sales->sum('discount');
+         $customeDiscount = $sales->sum('custom_discount');
+         $totalSaleAmount = $sales->sum('total_amount')-$customeDiscount -$totalDiscount;
+
+          $netProfit = $totalSaleAmount - $totalCost - $totalDiscount - $customeDiscount;
+
+         // dd($netProfit);
+
+         // Calculate total transactions and average transaction value
+         $totalTransactions = $sales->count();
+         $averageTransactionValue = ($totalTransactions > 0)
+             ? $totalSaleAmount / $totalTransactions
+             : 0;
+
+         $totalCustomer = $salesQuery->distinct('customer_id')->count('customer_id');
+
+         // Pass data to the view
+         return Inertia::render('Reports/Index', [
+             'products' => Product::orderBy('created_at', 'desc')->get(),
+             'sales' => $sales,
+             'totalSaleAmount' => $totalSaleAmount,
+             'totalCustomer' => $totalCustomer,
+             'netProfit' => $netProfit,
+             'totalDiscount' => $totalDiscount,
+             'customeDiscount' => $customeDiscount,
+             'totalTransactions' => $totalTransactions,
+             'averageTransactionValue' => round($averageTransactionValue, 2), // Round to 2 decimals
+             'startDate' => $startDate,
+             'endDate' => $endDate,
+             'categorySales' => $categorySales,
+             'employeeSalesSummary' => $employeeSalesSummary,
+             'totalQty' => $totalQty,
+             'remainingQty' => $remainingQty,
+         ]);
+     }
+
 
     public function searchByCode(Request $request)
     {
         $code = $request->input('code');
-        
+
         if (!$code) {
             return response()->json([
                 'products' => [],
