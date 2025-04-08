@@ -11,7 +11,7 @@
                     <img src="/images/back-arrow.png" class="w-14 h-14" />
                     </Link>
                     <p class="pt-3 text-4xl font-bold tracking-wide text-black uppercase">
-                        PoS
+                        Quotation
                     </p>
                 </div>
                 <div class="flex items-center justify-between w-full space-x-4">
@@ -34,9 +34,9 @@
                     <img src="/images/selectpsoduct.svg" class="w-6 h-6 ml-2" />
                 </span>
               </div>
-              
 
-              <div class="space-y-6 mt-6 w-full">             
+
+              <div class="space-y-6 mt-6 w-full">
                  <div class="flex items-center w-full py-4 border-b border-black" v-for="item in products"
                     :key="item.id">
                     <div class="flex w-1/6">
@@ -53,7 +53,7 @@
                                     class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
                                     <i class="ri-add-line"></i>
                                 </p>
-                                
+
                                 <input type="number" v-model="item.quantity" min="0"
                                     class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center" />
                                 <p @click="decrementQuantity(item.id)"
@@ -82,10 +82,14 @@
                                         class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider">
                                         Remove {{ item.discount }}% Off
                                     </p>
-                                    <p class="text-2xl font-bold text-black text-right">
-                                        {{ item.selling_price }}
-                                        LKR
-                                    </p>
+
+                                    <input
+  v-model="item.selling_price"
+  type="number"
+  min="0"
+  class="w-40 m-2 text-right px-2 py-1 border-2 border-black rounded text-black font-bold text-xl"
+  @input="item.selling_price = parseFloat(item.selling_price) || 0"
+/>
                                 </div>
                             </div>
                         </div>
@@ -137,6 +141,33 @@
                     />
                 </div>
 
+
+                <!-- Client Name -->
+<div>
+  <label for="client_name" class="block mb-2 text-lg font-medium">Client Name:</label>
+  <input
+    v-model="form.client_name"
+    id="client_name"
+    name="client_name"
+    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter client name"
+  />
+</div>
+
+<!-- Client Address -->
+<div>
+  <label for="client_address" class="block mb-2 text-lg font-medium">Client Address:</label>
+  <textarea
+    v-model="form.client_address"
+    id="client_address"
+    name="client_address"
+    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter client address"
+    rows="2"
+  ></textarea>
+</div>
+
+
                 <button
                   class="pr-4"
                    @click="addQuotation"
@@ -149,10 +180,11 @@
           </div>
 
           <!-- Quotation Report -->
-          <div id="quotation-content" class="max-w-4xl mx-auto bg-white border border-gray-300 rounded-lg shadow-md p-6">
-            <div>               
+          <div id="quotation-content" class="w-[50%] bg-white border border-gray-300 rounded-lg shadow-md p-6">
+
+            <div>
             <div class="text-center mb-6">
-                <img
+                <!-- <img
                     :src="
                     companyInfo && companyInfo.logo
                         ? companyInfo.logo
@@ -161,6 +193,8 @@
                     class="w-[100px] h-[50px] mx-auto"
                     alt="Logo"
                 />
+
+                <img src="/images/billlogo.png" style="width: 120px; height: 70px;" /> -->
               <h1 class="text-4xl font-extrabold text-gray-800"> {{ companyInfo ? companyInfo.name : 'Company Name' }}</h1>
               <h2 class="text-2xl font-semibold text-gray-600 mt-2">Sales Quotation</h2>
             </div>
@@ -206,7 +240,7 @@
             <div class="bg-gray-50 p-4 rounded-lg mb-6">
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Summary</h3>
               <div class="grid grid-cols-2 gap-4">
-                
+
                 <p class="text-sm text-gray-500">Product Total:</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{total}}</p>
                 <p v-if="parseFloat(totalDiscount) > 0" class="text-sm text-gray-500">Discount:</p>
@@ -216,9 +250,9 @@
                 <p class="text-sm text-gray-500">{{ description || " "}}</p>
                 <p class="text-right text-sm font-semibold text-gray-800">{{ description_price }}</p>
                 <p class="text-sm text-gray-500">Grand Quotation Total:</p>
-                <p class="text-right text-sm font-semibold text-gray-800">{{ totalquotation }}</p>                           
-            
-                             
+                <p class="text-right text-sm font-semibold text-gray-800">{{ totalquotation }}</p>
+
+
               </div>
             </div>
 
@@ -291,7 +325,7 @@ const handleModalOpenUpdate = (newValue) => {
 };
 
 const props = defineProps({
-    loggedInUser: Object, 
+    loggedInUser: Object,
     allcategories: Array,
     allemployee: Array,
     colors: Array,
@@ -314,8 +348,8 @@ const selectedPaymentMethod = ref("cash");
 
 const refreshData = () => {
     router.visit(route("quotation.index"), {
-        preserveScroll: false, 
-        preserveState: false, 
+        preserveScroll: false,
+        preserveState: false,
     });
 };
 
@@ -388,7 +422,7 @@ const subtotal = computed(() => {
             (total, item) => total + parseFloat(item.selling_price) * item.quantity,
             0
         )
-        .toFixed(2); 
+        .toFixed(2);
 });
 
 const totalDiscount = computed(() => {
@@ -553,7 +587,7 @@ const handleScannerInput = (event) => {
     // Timeout to reset the barcode if scanning is interrupted
     timeout = setTimeout(() => {
         barcode = "";
-    }, 100); 
+    }, 100);
 };
 
 
@@ -612,170 +646,239 @@ const addQuotation = () => {
 });
 };
 
+
+
+
+
+
+
 const downloadPdf = async () => {
-  // Create new PDF document
   const pdf = new jsPDF();
-  
-  // Set default font sizes
-  const titleSize = 18;
-  const subtitleSize = 14;
+
+  const headerSize = 27;
+  const titleSize = 10;
   const normalSize = 10;
-  const smallSize = 8;
+  const smallSize = 9;
 
-  // Add company logo if available
-  if (props.companyInfo && props.companyInfo.logo) {
-    try {
-      // Create a promise to load the image
-      const loadImage = () => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.crossOrigin = "Anonymous";  // Handle CORS if needed
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-          img.src = props.companyInfo.logo;
-        });
-      };
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
 
-      const img = await loadImage();
-      
-      // Calculate dimensions to maintain aspect ratio
-      const maxWidth = 50;  // Maximum width for logo
-      const maxHeight = 25; // Maximum height for logo
-      
-      let imgWidth = img.width;
-      let imgHeight = img.height;
-      
-      // Scale down if necessary while maintaining aspect ratio
-      if (imgWidth > maxWidth) {
-        const scale = maxWidth / imgWidth;
-        imgWidth = maxWidth;
-        imgHeight = imgHeight * scale;
-      }
-      if (imgHeight > maxHeight) {
-        const scale = maxHeight / imgHeight;
-        imgHeight = maxHeight;
-        imgWidth = imgWidth * scale;
-      }
+  // Header background
+  pdf.setFillColor(25, 47, 66);
+  pdf.rect(0, 0, pageWidth, 50, 'F');
 
-      // Calculate center position for logo
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const xPos = (pageWidth - imgWidth) / 2;
-      
-      // Add image to PDF
-      pdf.addImage(img, 'JPEG', xPos, 10, imgWidth, imgHeight);
-      
-      // Adjust starting Y position for rest of content
-      pdf.setFontSize(titleSize);
-      pdf.setFont('helvetica', 'bold');
-      const companyName = props.companyInfo ? props.companyInfo.name : 'Company Name';
-      pdf.text(companyName, 105, 45, { align: 'center' });
-      
-      // Adjust all other Y positions by adding 25 units
-      pdf.setFontSize(subtitleSize);
-      pdf.text('Sales Quotation', 105, 55, { align: 'center' });
-      
-      pdf.setFontSize(normalSize);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`Quotation ID: ${orderId.value}`, 15, 70);
-      pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 77);
-      pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 84);
-      
-      const startY = 100;  // Adjusted start Y for table
-      
-    } catch (error) {
-      console.error('Error loading logo:', error);
-      // Fallback to original positions if logo fails to load
-      pdf.setFontSize(titleSize);
-      pdf.setFont('helvetica', 'bold');
-      const companyName = props.companyInfo ? props.companyInfo.name : 'Company Name';
-      pdf.text(companyName, 105, 20, { align: 'center' });
-      
-      pdf.setFontSize(subtitleSize);
-      pdf.text('Sales Quotation', 105, 30, { align: 'center' });
-      
-      pdf.setFontSize(normalSize);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`Quotation ID: ${orderId.value}`, 15, 45);
-      pdf.text(`Quote Date: ${new Date().toISOString().split('T')[0]}`, 15, 52);
-      pdf.text(`Valid Until: ${validUntilDate.value || 'N/A'}`, 15, 59);
-    }
+  // Add Logo (positioned top-left)
+  try {
+    const logoImg = new Image();
+    logoImg.src = '/images/billlogo-white.png';
+    logoImg.crossOrigin = 'Anonymous';
+
+    await new Promise((resolve, reject) => {
+      logoImg.onload = resolve;
+      logoImg.onerror = reject;
+      setTimeout(reject, 3000);
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = logoImg.width;
+    canvas.height = logoImg.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(logoImg, 0, 0);
+
+    const base64Img = canvas.toDataURL('image/png');
+    const imgWidth = 60;
+    const imgHeight = 30;
+    const xPos = 10; // Left-aligned with 10px margin
+    const yPos = 5;  // Top-aligned with 5px margin
+    pdf.addImage(base64Img, 'PNG', xPos, yPos, imgWidth, imgHeight);
+  } catch (error) {
+    console.error('Error adding logo to PDF:', error);
+    pdf.setFontSize(12);
+    pdf.text('Company Logo', 10, 20); // Fallback position also top-left
   }
-  
-  // Rest of the PDF generation code remains the same
-  const tableHeaders = ['Product', 'Qty', 'Unit Price', 'Sub Total'];
-  const startY = props.companyInfo && props.companyInfo.logo ? 100 : 75;
-  
-  // Style for table header
-  pdf.setFillColor(240, 240, 240);
-  pdf.rect(15, startY - 5, 165, 8, 'F');
+
+  // Quotation Title (moved slightly right to accommodate logo)
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(headerSize);
   pdf.setFont('helvetica', 'bold');
-  
-  // Add table headers
-  pdf.text(tableHeaders[0], 15, startY);
-  pdf.text(tableHeaders[1], 100, startY, { align: 'right' });
-  pdf.text(tableHeaders[2], 130, startY, { align: 'right' });
-  pdf.text(tableHeaders[3], 170, startY, { align: 'right' });
-  
-  // Add products
-  let currentY = startY + 10;
+  pdf.text('Quotation', 80, 45); // Adjusted x-position from 20 to 80
+
+  // --- CMSPORTS-style Right-Side Contact Info ---
+  const contactDetails = [
+    {
+      text: props.companyInfo?.phone || '075 549 1437 | 075 738 7608',
+      icon: '/images/phone-icon.png',
+    },
+    {
+      text: props.companyInfo?.website || 'cmsports.info',
+      icon: '/images/web-icon.png',
+    },
+    {
+      text: props.companyInfo?.address || '441/B, Colombo Road, Piliyandala',
+      icon: '/images/location-icon.png',
+    },
+  ];
+
+  let contactY = 10;
+  const contactX = pageWidth - 95;
+  const iconSize = 5;
+  const iconGap = 3;
+  const lineSpacing = 9;
+
+  for (const item of contactDetails) {
+    try {
+      const iconImg = new Image();
+      iconImg.src = item.icon;
+      iconImg.crossOrigin = 'Anonymous';
+
+      await new Promise((resolve, reject) => {
+        iconImg.onload = resolve;
+        iconImg.onerror = reject;
+        setTimeout(reject, 3000);
+      });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = iconImg.width;
+      canvas.height = iconImg.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(iconImg, 0, 0);
+
+      const base64Icon = canvas.toDataURL('image/png');
+      pdf.addImage(base64Icon, 'PNG', contactX, contactY, iconSize, iconSize);
+    } catch (error) {
+      console.error(`Failed to load icon ${item.icon}:`, error);
+    }
+
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(255, 255, 255);
+    pdf.text(item.text, contactX + iconSize + iconGap, contactY + 4);
+    contactY += lineSpacing;
+  }
+
+  // Reset to black text
+  pdf.setTextColor(0, 0, 0);
+
+  let startY = 55;
+
+  // Quotation Number + Date
+  pdf.setFillColor(240, 240, 240);
+  pdf.setDrawColor(0, 0, 0);
+
+  pdf.rect(10, startY, pageWidth / 2 - 15, 15);
+  pdf.setFontSize(titleSize);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Quotation #: ' + (orderId.value || '0012'), 15, startY + 10);
+
+  pdf.rect(pageWidth / 2, startY, pageWidth / 2 - 10, 15);
+  const formattedDate = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
+  pdf.text('Quotation Date: ' + formattedDate, pageWidth / 2 + 5, startY + 10);
+
+  // Billed To + Address
+  startY += 15;
+
+  pdf.rect(10, startY, pageWidth / 2 - 15, 25);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Billed To:', 15, startY + 5);
   pdf.setFont('helvetica', 'normal');
-  
+  const clientName = form.client_name || 'Client Name Not Provided';
+  pdf.text(clientName, 15, startY + 12);
+
+  pdf.rect(pageWidth / 2, startY, pageWidth / 2 - 10, 25);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Address:', pageWidth / 2 + 5, startY + 5);
+  pdf.setFont('helvetica', 'normal');
+  const clientAddress = form.client_address || 'Client Address Not Provided';
+  const addressLines = pdf.splitTextToSize(clientAddress, pageWidth / 2 - 20);
+  pdf.text(addressLines, pageWidth / 2 + 5, startY + 12);
+
+  startY += 25;
+
+  // Table Header
+  pdf.setFillColor(240, 240, 240);
+  pdf.rect(10, startY, pageWidth - 20, 10, 'FD');
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Product', 40, startY + 7, { align: 'center' });
+  pdf.text('Quantity', 110, startY + 7, { align: 'center' });
+  pdf.text('Unit Price', 145, startY + 7, { align: 'center' });
+  pdf.text('Total', 180, startY + 7, { align: 'center' });
+
+  pdf.line(70, startY, 70, startY + 10);
+  pdf.line(130, startY, 130, startY + 10);
+  pdf.line(160, startY, 160, startY + 10);
+
+  startY += 10;
+  let currentY = startY;
+  const rowHeight = 10;
+  pdf.setFont('helvetica', 'normal');
+
   products.value.forEach((item) => {
-    if (currentY > 270) {
+    if (currentY > 250) {
       pdf.addPage();
       currentY = 20;
     }
-    
+
+    pdf.rect(10, currentY, pageWidth - 20, rowHeight, 'D');
+    pdf.line(70, currentY, 70, currentY + rowHeight);
+    pdf.line(130, currentY, 130, currentY + rowHeight);
+    pdf.line(160, currentY, 160, currentY + rowHeight);
+
     const itemName = item.name || 'Unnamed Product';
     const quantity = item.quantity?.toString() || '0';
     const price = item.selling_price?.toString() || '0';
-    const subtotal = (item.selling_price * item.quantity).toFixed(2);
-    
-    pdf.text(itemName, 15, currentY);
-    pdf.text(quantity, 100, currentY, { align: 'right' });
-    pdf.text(price, 130, currentY, { align: 'right' });
-    pdf.text(subtotal, 170, currentY, { align: 'right' });
-    
-    currentY += 8;
-  });
-  
-  // Add summary section
-  currentY += 10;
-  
-  if (currentY > 250) {
-    pdf.addPage();
-    currentY = 20;
-  }
-  
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('Summary:', 15, currentY);
-  currentY += 10;
-  
-  let summaryItems = [['Product Total:', total.value || '0.00']];
-  
-  if (parseFloat(totalDiscount.value) > 0) {
-    summaryItems.push(['Discount:', totalDiscount.value]);
-  }
-  
-  if (description.value && description_price.value) {
-    summaryItems.push([description.value, description_price.value]);
-  }
-  
-  summaryItems.push(['Grand Total:', totalquotation.value || '0.00']);
-  
-  summaryItems.forEach(([label, value]) => {
-    pdf.text(label, 15, currentY);
-    pdf.text(`${value} LKR`, 170, currentY, { align: 'right' });
-    currentY += 7;
+    const subtotal = (item.selling_price * item.quantity).toString();
+
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(itemName, 15, currentY + 7);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(quantity, 110, currentY + 7, { align: 'center' });
+    pdf.text(price, 145, currentY + 7, { align: 'center' });
+    pdf.text(subtotal, 180, currentY + 7, { align: 'center' });
+
+    currentY += rowHeight;
   });
 
-  // Add footer
+  if (description.value) {
+    if (currentY > 250) {
+      pdf.addPage();
+      currentY = 20;
+    }
+
+    pdf.rect(10, currentY, pageWidth - 20, rowHeight, 'D');
+    pdf.line(130, currentY, 130, currentY + rowHeight);
+    pdf.text(description.value, 15, currentY + 7);
+    pdf.text(description_price.value, 180, currentY + 7, { align: 'center' });
+    currentY += rowHeight;
+  }
+
+  // Grand Total
+  pdf.rect(10, currentY, pageWidth - 20, rowHeight, 'D');
+  pdf.line(130, currentY, 130, currentY + rowHeight);
   pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(smallSize);
-  pdf.text('Thank you for your business!', 105, 280, { align: 'center' });
-  
-  // Save PDF
-  pdf.save(`Quotation_${orderId.value}.pdf`);
+  pdf.text('Grand Total', 70, currentY + 7, { align: 'center' });
+  pdf.text(totalquotation.value?.toString() || '0', 180, currentY + 7, { align: 'center' });
+
+  // Footer
+  currentY += 20;
+  pdf.setFont('helvetica', 'italic');
+  const validText = `Valid Until: ${validUntilDate.value || 'Not Specified'}`;
+  pdf.text(validText, 10, currentY);
+
+  currentY += 10;
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Thank You!', 10, currentY);
+
+  currentY += 10;
+  const companyName = props.companyInfo?.name || 'Your Company Name';
+  pdf.text(companyName, 10, currentY);
+
+  // Save
+  pdf.save(`Quotation_${orderId.value || '0012'}.pdf`);
 };
+
+
 
 </script>
