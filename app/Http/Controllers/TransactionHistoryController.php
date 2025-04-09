@@ -91,14 +91,6 @@ class TransactionHistoryController extends Controller
                 if ($product) {
                     $product->increment('stock_quantity', $item->quantity);
 
-                    StockTransaction::create([
-                        'product_id' => $item->product_id,
-                        'transaction_type' => 'Deleted',
-                        'quantity' => $item->quantity,
-                        'transaction_date' => now(),
-                        'supplier_id' => $product->supplier_id ?? null,
-                        'reason' => null,
-                    ]);
                 }
             }
 
