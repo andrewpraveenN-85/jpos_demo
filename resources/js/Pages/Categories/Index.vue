@@ -115,6 +115,8 @@
 
         </div>
       </div>
+
+
       <template v-if="allcategories && allcategories.length > 0">
         <div class="overflow-x-auto">
           <table
@@ -261,16 +263,18 @@ const isEditModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedCategory = ref(null);
 
+
+
 $(document).ready(function () {
   let table = $("#CategoryTable").DataTable({
     dom: "Bfrtip",
     pageLength: 10,
     buttons: [],
+    ordering: false, // ⛔ Disables all column sorting
     columnDefs: [
       {
         targets: 2,
         searchable: false,
-        orderable: false,
       },
     ],
     initComplete: function () {
@@ -287,4 +291,6 @@ $(document).ready(function () {
     },
   });
 });
+
+
 </script>
