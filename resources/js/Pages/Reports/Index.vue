@@ -159,7 +159,7 @@
           </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
-          <p class="text-2xl font-bold text-black">{{ netProfit }} LKR</p>
+          <p class="text-2xl font-bold text-black">{{ netProfit.toFixed(2) }} LKR</p>
         </div>
       </div>
       <!-- Total Products -->
@@ -173,7 +173,8 @@
         </div>
         <div class="flex flex-col items-center justify-center">
           <p class="text-2xl font-bold text-black">
-            {{ (totalDiscount || 0) + (customeDiscount || 0) }} LKR
+            {{ ((totalDiscount || 0) + (customeDiscount || 0)).toFixed(2) }} LKR
+
           </p>
         </div>
       </div>
