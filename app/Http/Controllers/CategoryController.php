@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -39,7 +40,7 @@ class CategoryController extends Controller
             'hierarchy_string' => $category->hierarchy_string,
         ];
     });
- 
+
 
         return Inertia::render('Categories/Index', [
             // 'paginatedcategories' => $paginatedcategories,
@@ -81,43 +82,62 @@ class CategoryController extends Controller
 
 
 
+
     public function store(Request $request)
     {
+        if ($request->has('categoryName')) {
+            $request->merge(['name' => $request->input('categoryName')]);
+        }
 
+        $parentId = $request->input('parent_id'); // null-safe
+
+        // Validate with name + parent_id uniqueness, with proper null handling
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories')->where(function ($query) use ($parentId) {
+                    if ($parentId === null) {
+                        $query->whereNull('parent_id');
+                    } else {
+                        $query->where('parent_id', $parentId);
+                    }
+                    return $query->whereNull('deleted_at');
+                }),
+            ],
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        // Soft delete recovery logic with correct null handling
+        $existing = Category::withTrashed()
+            ->where('name', $validated['name'])
+            ->when($parentId === null, fn($q) => $q->whereNull('parent_id'))
+            ->when($parentId !== null, fn($q) => $q->where('parent_id', $parentId))
+            ->first();
+
+        if ($existing) {
+            if ($existing->trashed()) {
+                $existing->restore();
+                $existing->update(['parent_id' => $parentId]);
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Category with the same name and parent already exists.']);
+            }
+        } else {
+            Category::create($validated);
+        }
 
         if ($request->has('categoryName')) {
-
-            $request->merge(['name' => $request->input('categoryName')]);
-
-
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'parent_id' => 'nullable|exists:categories,id',
-            ]);
-
-
-            Category::create($validated);
             return redirect()
-            ->route('products.index')
-            ->with('success', 'Category created successfully and redirected to Products.');
+                ->route('products.index')
+                ->with('success', 'Category created successfully and redirected to Products.');
         }
 
-        if ($request->has('name')) {
-            // Validate name directly
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                 'parent_id' => 'nullable|exists:categories,id',
-            ]);
-
-
-            Category::create($validated);
-
-
-            return redirect()->route('categories.index')->banner('Category created successfully !');
-        }
-
-        return redirect()->back()->withErrors(['error' => 'Invalid data provided.']);
+        return redirect()->route('categories.index')->banner('Category created successfully!');
     }
+
+
+
 
 
 
@@ -131,35 +151,59 @@ class CategoryController extends Controller
         ]);
     }
 
+
+
     public function update(Request $request, Category $category)
     {
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
+
+        $parentId = $request->input('parent_id');
+
+        // Validate with uniqueness rule on name + parent_id, excluding soft-deleted & current record
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories')
+                    ->where(function ($query) use ($parentId) {
+                        if ($parentId === null) {
+                            $query->whereNull('parent_id');
+                        } else {
+                            $query->where('parent_id', $parentId);
+                        }
+                        return $query->whereNull('deleted_at');
+                    })
+                    ->ignore($category->id),
+            ],
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
-        // Check for circular relationship
-        if ($validated['parent_id']) {
-            $parent = Category::find($validated['parent_id']);
+        // Prevent circular relationship
+        if ($parentId) {
+            $parent = Category::find($parentId);
 
-            // Traverse up the hierarchy to check for circular references
             while ($parent) {
                 if ($parent->id === $category->id) {
                     return back()->withErrors(['parent_id' => 'A category cannot be its own parent or ancestor.']);
                 }
-                $parent = $parent->parent; // Assuming a `parent` relationship exists in your Category model
+                $parent = $parent->parent; // Assumes you have a `parent()` relationship in Category model
             }
         }
 
         $category->update($validated);
 
         return redirect()->route('categories.index')->banner('Category updated successfully.');
-
-        // return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
+
+
+
+
+
+
+
 
     public function destroy(Category $category)
     {

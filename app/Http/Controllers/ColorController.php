@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Color;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 
 class ColorController extends Controller
@@ -23,78 +24,66 @@ class ColorController extends Controller
         ]);
     }
 
-    // public function store(Request $request)
-    // {
 
-    //     if (!Gate::allows('hasRole', ['Admin'])) {
-    //         abort(403, 'Unauthorized');
-    //     }
-
-    //     $validated = $request->validate([
-    //         'name' => 'required|string|max:255',
-
-    //     ]);
-
-    //     Color::create($validated);
-
-    //     return redirect()->route('colors.index')->banner('Color created successfully.');
-
-    // }
     public function store(Request $request)
     {
 
+        if ($request->has('colorName')) {
+            $request->merge(['name' => $request->input('colorName')]);
+        }
+
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('colors')->whereNull('deleted_at'),
+            ],
+        ]);
+
+
+        $existing = Color::withTrashed()->where('name', $validated['name'])->first();
+        if ($existing) {
+            if ($existing->trashed()) {
+                $existing->restore();
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Color already exists.']);
+            }
+        } else {
+            Color::create($validated);
+        }
+
 
         if ($request->has('colorName')) {
-
-            $request->merge(['name' => $request->input('colorName')]);
-
-
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-            ]);
-
-
-            Color::create($validated);
             return redirect()
-            ->route('products.index')
-            ->with('success', 'Color created successfully and redirected to Products.');
+                ->route('products.index')
+                ->with('success', 'Color created successfully.');
         }
 
-        if ($request->has('name')) {
-            // Validate name directly
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-            ]);
-
-
-            Color::create($validated);
-
-
-            return redirect()->route('colors.index')->banner('Color created successfully !');
-        }
-
-        return redirect()->back()->withErrors(['error' => 'Invalid data provided.']);
+        return redirect()->route('colors.index')->banner('Color created successfully!');
     }
-
-
-
-
 
 
     public function update(Request $request, Color $color)
     {
-
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
+
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('colors')->ignore($color->id)->whereNull('deleted_at'),
+            ],
         ]);
 
         $color->update($validated);
 
         return redirect()->route('colors.index')->banner('Color updated successfully.');
     }
+
 
     public function destroy(Color $color)
     {

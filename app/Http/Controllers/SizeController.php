@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Size;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 
 class SizeController extends Controller
@@ -23,57 +24,90 @@ class SizeController extends Controller
         ]);
     }
 
+
+
+
+
     public function store(Request $request)
     {
+
         if ($request->has('sizeName')) {
-
             $request->merge(['name' => $request->input('sizeName')]);
+        }
+
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('sizes')->whereNull('deleted_at'),
+            ],
+        ]);
 
 
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-            ]);
-
-
+        $existing = Size::withTrashed()->where('name', $validated['name'])->first();
+        if ($existing) {
+            if ($existing->trashed()) {
+                $existing->restore();
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Size already exists.']);
+            }
+        } else {
             Size::create($validated);
+        }
+
+
+        if ($request->has('sizeName')) {
             return redirect()
-            ->route('products.index')
-            ->with('success', 'Size created successfully and redirected to Products.');
+                ->route('sizes.index')
+                ->with('success', 'Size created successfully.');
         }
 
-        if ($request->has('name')) {
-            // Validate name directly
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-            ]);
-
-
-            Size::create($validated);
-
-
-            return redirect()->route('sizes.index')->banner('Size created successfully !');
-        }
-
-        return redirect()->back()->withErrors(['error' => 'Invalid data provided.']);
+        return redirect()->route('sizes.index')->banner('Size created successfully!');
     }
 
 
 
-
-    public function update(Request $request, Size $Size)
+    public function update(Request $request, Size $size)
     {
-
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
+
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('sizes')->ignore($size->id)->whereNull('deleted_at'),
+            ],
         ]);
 
-        $Size->update($validated);
+        $size->update($validated);
 
         return redirect()->route('sizes.index')->banner('Size updated successfully.');
     }
+
+
+
+
+
+
+
+    // public function update(Request $request, Size $Size)
+    // {
+
+    //     if (!Gate::allows('hasRole', ['Admin'])) {
+    //         abort(403, 'Unauthorized');
+    //     }
+    //     $validated = $request->validate([
+    //         'name' => 'nullable|string|max:255',
+    //     ]);
+
+    //     $Size->update($validated);
+
+    //     return redirect()->route('sizes.index')->banner('Size updated successfully.');
+    // }
 
 
 
