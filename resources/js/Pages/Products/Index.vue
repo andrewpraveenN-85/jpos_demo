@@ -402,7 +402,7 @@
     :sizes="sizes"
     :branches="branches"
     :suppliers="suppliers"
-    
+
     v-model:open="isCreateModalOpen"
   />
   <ProductUpdateModel
@@ -508,7 +508,7 @@ const search = ref(props.search || "");
 const sort = ref(props.sort || "");
 const color = ref(props.color || "");
 const size = ref(props.size || "");
-
+const selectedBranch = ref(null);
 const suppliers = ref(props.suppliers || "");
 const stockStatus = ref(props.stockStatus || "");
 const selectedCategory = ref(props.selectedCategory || "");
@@ -572,7 +572,7 @@ const navigateTo = (url) => {
       sort: sort.value,
       color: color.value,
       size: size.value,
-       branch: branch.value,
+      branch: selectedBranch.value,
       stockStatus: stockStatus.value,
       selectedCategory: selectedCategory.value,
     },

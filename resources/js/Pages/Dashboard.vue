@@ -27,7 +27,26 @@
           </div>
         </div>
       </Link>
-
+      <Link href="/branches" v-if="HasRole(['Admin'])">
+        <div class="dashboard-card bg-[#1b5852]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/branch.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Branches</p>
+              <p class="description">
+                Organize and update product sizes to streamline inventory
+                tracking and simplify the sales process.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
       <Link href="/categories" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#003161]">
           <div class="card-content">
@@ -219,26 +238,7 @@
         </div>
       </Link>
 
-      <Link href="/branches" v-if="HasRole(['Admin'])">
-        <div class="dashboard-card bg-[#1b5852]">
-          <div class="card-content">
-            <div class="icon-container">
-              <img
-                src="/images/dashboard/measuring-tape.png"
-                class="icon"
-                alt="dresshub.lk"
-              />
-            </div>
-            <div class="text-container">
-              <p class="title">Branches</p>
-              <p class="description">
-                Organize and update product sizes to streamline inventory
-                tracking and simplify the sales process.
-              </p>
-            </div>
-          </div>
-        </div>
-      </Link>
+
 
 
 

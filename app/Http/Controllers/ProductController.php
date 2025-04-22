@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -191,7 +191,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    { 
+    {
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
@@ -199,16 +199,17 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => [
-                'string',
-                'max:50',
-                Rule::unique('products')->where(function ($query) use ($request) {
-                    return $query->where('branch_id', $request->branch_id)
-                                ->whereNull('deleted_at');
-                }),
-            ],
-            
-            'size_id' => 'nullable|exists:sizes,id',
+    'code' => [
+    'required',
+    'string',
+    'max:50',
+    Rule::unique('products')->where(function ($query) use ($request) {
+        return $query->where('branch_id', $request->branch_id)
+                     ->whereNull('deleted_at');
+    }),
+],
+
+            'size_id' => 'nullable|exists:sizes,id ',
             'branch_id' => 'nullable|exists:branches,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
@@ -218,7 +219,7 @@ class ProductController extends Controller
             'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'barcode' => [
-                'nullable',  
+                'nullable',
                 'string',
                 Rule::unique('products')->where(function ($query) use ($request) {
                     return $query->where('branch_id', $request->branch_id)
@@ -263,7 +264,7 @@ class ProductController extends Controller
             // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
         } catch (\Exception $e) {
-         
+
             // Log error and redirect back with an error message
             \Log::error('Error creating product: ' . $e->getMessage());
 
@@ -276,34 +277,46 @@ class ProductController extends Controller
 
     public function productVariantStore(Request $request)
     {
-
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
 
+        // First validate branch_id alone to use in barcode rule
+        $request->validate([
+            'branch_id' => 'required|exists:branches,id',
+        ]);
+
+        $branchId = $request->branch_id;
+
+        // Now validate everything including barcode scoped to the branch
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50',
-            // 'code' => 'required|string|max:50|unique:products,code, NULL,id,deleted_at,NULL',
-            'barcode' => 'nullable|string|unique:products',
+
+            'barcode' => [
+                'nullable',
+                'string',
+                Rule::unique('products')->where(function ($query) use ($branchId) {
+                    return $query->where('branch_id', $branchId)
+                                 ->whereNull('deleted_at');
+                }),
+            ],
+
             'size_id' => 'nullable|exists:sizes,id',
             'color_id' => 'nullable|exists:colors,id',
-            'branch_id' => 'nullable|exists:branches,id',
+            'branch_id' => 'required|exists:branches,id',
             'cost_price' => 'nullable|numeric|min:0',
             'selling_price' => 'nullable|numeric|min:0',
             'discounted_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'nullable|integer|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100', 
+            'discount' => 'nullable|numeric|min:0|max:100',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'expire_date' => 'nullable|date',
         ]);
 
-
         try {
-
-
             if ($request->hasFile('image')) {
                 $fileExtension = $request->file('image')->getClientOriginalExtension();
                 $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
@@ -311,20 +324,17 @@ class ProductController extends Controller
                 $validated['image'] = 'storage/' . $path;
             }
 
-
-            // Product::create($validated);
-
             if (empty($validated['barcode'])) {
                 $validated['barcode'] = $this->generateUniqueCode(12);
             }
 
             $product = Product::create($validated);
 
-            // Add stock transaction if stock quantity is provided
-            $stockQuantity = $validated['stock_quantity'] ?? 0; // Default to 0 if not provided
+            $stockQuantity = $validated['stock_quantity'] ?? 0;
             if ($stockQuantity > 0) {
                 StockTransaction::create([
                     'product_id' => $product->id,
+                    'branch_id' => $validated['branch_id'],
                     'transaction_type' => 'Added',
                     'quantity' => $stockQuantity,
                     'transaction_date' => now(),
@@ -332,21 +342,13 @@ class ProductController extends Controller
                 ]);
             }
 
-
-
-
-
-
-
-            // Redirect with success message
             return redirect()->route('products.index')->banner('Product created successfully');
         } catch (\Exception $e) {
-            // Log error and redirect back with an error message
             \Log::error('Error creating product: ' . $e->getMessage());
-
             return redirect()->back()->with('error', 'An error occurred while creating the product. Please try again.');
         }
     }
+
 
 
 
@@ -418,6 +420,7 @@ class ProductController extends Controller
             'code' => 'nullable|string|max:50',
             // 'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
             'size_id' => 'nullable|exists:sizes,id',
+            'branch_id' => 'nullable|exists:branches,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'numeric|min:0',
             'selling_price' => 'numeric|min:0',
