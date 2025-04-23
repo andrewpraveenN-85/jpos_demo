@@ -305,6 +305,34 @@
 
 
 
+      <Link href="/service-charge" v-if="HasRole(['Admin', 'Manager'])">
+        <div class="dashboard-card bg-[#12ddf8]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/waiter.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Service Charge</p>
+              <p class="description">
+  Set, modify, and review service charges applied to customer bills. Ensure transparency and easy adjustments for seamless billing operations.
+</p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
+
+
+
+
+
+
 
 
 

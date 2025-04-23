@@ -75,7 +75,7 @@
           </div>
           <div class="flex justify-end w-full"></div>
         </div>
-        
+
 
         <template v-if="allhistoryTransactions && allhistoryTransactions.length > 0">
           <div class="overflow-x-auto">
@@ -114,7 +114,7 @@
               id="TransitionTable"
               class="w-full text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md table-auto"
             >
-            
+
               <thead>
                 <tr
                   class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[12px] text-white border-b border-blue-700"
@@ -198,7 +198,7 @@
                       KOT
                     </button>
                   </td>
-                  
+
                 </tr>
               </tbody>
             </table>
@@ -269,6 +269,21 @@
       <p class="font-medium">Last 4 Digit:</p>
       <p class="text-sm">{{ selectedTransaction.card_last4 }}</p>
     </div>
+
+
+    <div v-if="selectedTransaction.delivery_charge && selectedTransaction.delivery_charge != 0">
+  <p class="font-medium">Delivery Charge:</p>
+  <p class="text-sm">{{ selectedTransaction.delivery_charge }}</p>
+</div>
+
+<div v-if="selectedTransaction.service_charge && selectedTransaction.service_charge != 0">
+  <p class="font-medium">Service Charge:</p>
+  <p class="text-sm">{{ selectedTransaction.service_charge }}</p>
+</div>
+
+
+
+
     <div>
       <p class="font-medium">Sale Date:</p>
       <p class="text-sm">{{ selectedTransaction.sale_date }}</p>
@@ -281,6 +296,7 @@
       <p class="font-medium">Cashier:</p>
       <p class="text-sm">{{ selectedTransaction.user?.name || 'N/A' }}</p>
     </div>
+
   </div>
 
   <!-- Items Table -->
@@ -626,6 +642,12 @@ ${
       </div>`}
 
 
+  ${!history.service_charge
+    ? ""
+    : `<div>
+        <span>Service Charge</span>
+        <span>(${(Number(history.service_charge) || 0).toFixed(2)}) LKR</span>
+      </div>`}
 
 
 

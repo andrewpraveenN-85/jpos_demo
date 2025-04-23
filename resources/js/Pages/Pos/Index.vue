@@ -22,7 +22,7 @@
                     </p>
                     <p class="text-3xl text-black cursor-pointer">
                       <i @click="refreshData" class="ri-restart-line"></i>
-                    </p> 
+                    </p>
                 </div>
             </div>
             <div class="flex w-full gap-4">
@@ -299,10 +299,16 @@
                             </div>
 
 
-
-
-
-
+                            <div v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
+     class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
+    <select v-model="selectedTable.service_charge"
+        class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer">
+        <option value="">Select Service Charge</option>
+        <option v-for="charge in serviceCharge" :key="charge.id" :value="charge.service_charge">
+            {{ charge.service_charge }} LKR
+        </option>
+    </select>
+</div>
 
 
 
@@ -320,23 +326,23 @@
                                     <span class="ml-2">LKR</span>
                                 </span>
                             </div>
-                    
+
                             <div v-if="selectedPaymentMethod === 'card'" class="w-full px-16 pt-4 pb-4 border-b border-black mt-4">
                                 <div class="flex items-center justify-between w-full mt-4">
                                     <p class="text-xl text-black ">Select Bank</p>
                                     <Combobox v-model="selectedTable.bank_name">
                                     <div class="relative w-[150px]">
-                                    <ComboboxInput 
+                                    <ComboboxInput
                                         class="w-full h-12 border border-gray-300 rounded-md py-2 px-3 text-black"
                                         @change="query = $event.target.value"
                                         placeholder="Search Bank"
                                     />
-                                    <ComboboxOptions 
-                                        v-if="filteredBanks.length" 
+                                    <ComboboxOptions
+                                        v-if="filteredBanks.length"
                                         class="absolute w-full bg-white border border-gray-300 shadow-md rounded-md mt-1 max-h-40 overflow-auto"
                                     >
-                                        <ComboboxOption 
-                                        v-for="bank in filteredBanks" 
+                                        <ComboboxOption
+                                        v-for="bank in filteredBanks"
                                         :key="bank"
                                         :value="bank"
                                         class="p-2 hover:bg-blue-100 cursor-pointer"
@@ -437,7 +443,7 @@
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="selectedTable.products"
         :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
-        :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
+        :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"  :service_charge="selectedTable.service_charge"
         :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :selectedPaymentMethod="selectedPaymentMethod"
         :order_type="selectedTable.order_type" />
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
@@ -478,6 +484,7 @@ const isSelectModalOpen = ref(false);
 const order_type = ref("");
 const kitchen_note = ref("");
 const delivery_charge = ref("");
+const service_charge = ref("");
 const bankOptions = ref([
     "Alliance Finance Co PLC", "Amana Bank", "American Express Bank Ltd", "Asia Asset Finance PLC",
     "Bank of Ceylon", "Bank of China",
@@ -486,9 +493,9 @@ const bankOptions = ref([
     "Fintrex Finance Limited",
     "HDFC Bank", "HNB Finance PLC", "HSBC", "Hatton National Bank",
     "Indian Bank", "Indian Overseas Bank", "Kanrich Finance Bank", "LB Finance", "LOLC Development Finance Plc", "LOLC Finance Plc", "Lanka Credit and Business Finance Limited",
-    "MBSL", "MCB", "Mercantile Investment", "NDB Bank", "NSB", "Nations Trust Bank", 
-    "Peoples Leasing and Finance PLC", "Pan Asia Bank", "Peoples Bank", "Public Bank Berhad", 
-    "RDB", "Richard Pieris Finance", "SDB", "SENKADAGALA FINANCE", "SMIB", "Sampath Bank", "Sarvodaya Development Finace LTD", "Seylan Bank", "Singer Finance(Lanka) Bank", "Siyapatha Finance PLC", "Softlogic Finance PLC", "Standard Charted Bank", "State Bank of India", "Union Bank" 
+    "MBSL", "MCB", "Mercantile Investment", "NDB Bank", "NSB", "Nations Trust Bank",
+    "Peoples Leasing and Finance PLC", "Pan Asia Bank", "Peoples Bank", "Public Bank Berhad",
+    "RDB", "Richard Pieris Finance", "SDB", "SENKADAGALA FINANCE", "SMIB", "Sampath Bank", "Sarvodaya Development Finace LTD", "Seylan Bank", "Singer Finance(Lanka) Bank", "Siyapatha Finance PLC", "Softlogic Finance PLC", "Standard Charted Bank", "State Bank of India", "Union Bank"
 ]);
 
 const query = ref("");
@@ -510,6 +517,7 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
         kitchen_note: "",
         order_type: "",
         delivery_charge: "",
+        service_charge: "",
     },
 ];
 
@@ -569,6 +577,7 @@ const addTable = () => {
         kitchen_note: "",
         order_type: "",
         delivery_charge: "",
+        service_charge: "",
         kotStatus: "pending",
     };
 
@@ -620,6 +629,7 @@ const removeSelectedTable = () => {
             kitchen_note: "",
             order_type: "",
             delivery_charge: "",
+            service_charge: "",
         };
         // Also update the table in the tables array
         tables.value[index] = selectedTable.value;
@@ -662,6 +672,7 @@ const props = defineProps({
     colors: Array,
     sizes: Array,
     delivery: Array,
+    serviceCharge: Array,
 });
 
 const discount = ref(0);
@@ -689,7 +700,7 @@ const refreshData = async () => {
         let existingOrderId = selectedTable.value.orderId;
 
          if (lastDate !== formattedDate) {
-            existingOrderId = generateOrderId();    
+            existingOrderId = generateOrderId();
         }
 
         // Reset only the default table
@@ -705,6 +716,7 @@ const refreshData = async () => {
             kitchen_note: "",
             order_type: "",
             delivery_charge: "",
+            service_charge: "",
         };
 
         // Update the selected table if it's the default one
@@ -737,7 +749,7 @@ const refreshData = async () => {
         try {
             // Reload the page data using Inertia
             await router.reload({
-                only: ['loggedInUser', 'allcategories', 'allemployee', 'colors', 'sizes', 'delivery'],
+                only: ['loggedInUser', 'allcategories', 'allemployee', 'colors', 'sizes', 'delivery','serviceCharge'],
                 preserveState: false,
                 preserveScroll: false
             });
@@ -850,6 +862,7 @@ const submitOrder = async () => {
             card_last4: selectedTable.value.card_last4,
             kitchen_note: selectedTable.value.kitchen_note,
             delivery_charge: selectedTable.value.delivery_charge,
+            service_charge: selectedTable.value.service_charge,
             order_type: selectedTable.value.order_type,
             total: total.value,
         });
@@ -946,15 +959,15 @@ const sendKOT = (table) => {
 
   nonBeverageProducts.forEach((product) => {
     const existingSentProduct = nonBeverageKotSentProducts.find((sent) => sent.id === product.id);
-    
+
     if (!existingSentProduct) {
       // If product is newly added, store the full quantity
       newItems.push({ ...product, incrementalQuantity: product.quantity });
     } else if (product.quantity > existingSentProduct.quantity) {
       // If quantity increased, store only the increment value
-      newItems.push({ 
-        ...product, 
-        incrementalQuantity: product.quantity - existingSentProduct.quantity 
+      newItems.push({
+        ...product,
+        incrementalQuantity: product.quantity - existingSentProduct.quantity
       });
     }
   });
@@ -990,10 +1003,10 @@ const sendKOT = (table) => {
 const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
   const productRows = items
     .map((product) => {
-      const quantity = isSuspend 
-        ? (product.reducedBy || product.quantity) * 1 
+      const quantity = isSuspend
+        ? (product.reducedBy || product.quantity) * 1
         : product.incrementalQuantity || product.quantity; //  Show only incremental quantity
-      
+
       return `
         <tr>
           <td>${product.name || "N/A"}</td>
@@ -1091,7 +1104,7 @@ const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
               <p>Date: ${new Date().toLocaleDateString()}</p>
           </div>
           <div class="info-row">
-              
+
               <p>Time: ${new Date().toLocaleTimeString()}</p>
               <p>Order No: ${table.orderId || "N/A"}</p>
           </div>
@@ -1138,7 +1151,6 @@ const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
 };
 
 
-
 const total = computed(() => {
     const subtotalValue = parseFloat(subtotal.value) || 0;
     const discountValue = parseFloat(totalDiscount.value) || 0;
@@ -1154,16 +1166,17 @@ const total = computed(() => {
     }
 
     let deliveryChargeValue = 0;
-
-
     if (selectedTable.value.order_type === "pickup") {
         deliveryChargeValue = parseFloat(selectedTable.value.delivery_charge) || 0;
     }
 
+    const serviceChargeValue = parseFloat(selectedTable.value.service_charge) || 0;
+
     return (
-        subtotalValue - discountValue - customValue + deliveryChargeValue
+        subtotalValue - discountValue - customValue + deliveryChargeValue + serviceChargeValue
     ).toFixed(2);
 });
+
 
 
 const customDiscCalculated = computed(() => {

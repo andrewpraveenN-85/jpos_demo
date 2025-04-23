@@ -22,6 +22,7 @@ class Sale extends Model
         'custom_discount',
         'kitchen_note',
         'delivery_charge',
+        'service_charge',
         'cash',
         'order_type',
         'bank_name',

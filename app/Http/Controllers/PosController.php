@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Delivery;
+use App\Models\ServiceCharge;
 use App\Models\Color;
 use App\Models\Coupon;
 use App\Models\Customer;
@@ -35,6 +36,7 @@ class PosController extends Controller
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $delivery = Delivery::orderBy('created_at', 'desc')->get();
+        $serviceCharge = ServiceCharge::orderBy('created_at', 'desc')->get();
         $allemployee = Employee::orderBy('created_at', 'desc')->get();
 
 
@@ -47,6 +49,7 @@ class PosController extends Controller
             'allemployee' => $allemployee,
             'colors' => $colors,
             'delivery' => $delivery,
+            'serviceCharge' => $serviceCharge,
             'sizes' => $sizes,
         ]);
     }
@@ -93,7 +96,7 @@ class PosController extends Controller
 
     public function submit(Request $request)
     {
-      
+
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
         }
@@ -167,6 +170,7 @@ class PosController extends Controller
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
                 'delivery_charge' => $request->input('delivery_charge'),
+                'service_charge' => $request->input('service_charge'),
                 'kitchen_note' => $request->input('kitchen_note'),
                 'order_type' => $request->input('order_type'),
                 'bank_name' => $request->bank_name,
