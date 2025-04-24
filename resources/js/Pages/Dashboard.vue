@@ -331,6 +331,28 @@
 
 
 
+      <Link href="/bank-service-charge" v-if="HasRole(['Admin', 'Manager'])">
+        <div class="dashboard-card bg-[#2df812]">
+          <div class="card-content">
+            <div class="icon-container">
+              <img
+                src="/images/dashboard/financial.png"
+                class="icon"
+                alt="dresshub.lk"
+              />
+            </div>
+            <div class="text-container">
+              <p class="title">Bank Service Charge</p>
+              <p class="description">
+  Configure and manage bank service charges applied to customer transactions. Maintain clarity, flexibility, and control in your billing process.
+</p>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+
+
 
 
 

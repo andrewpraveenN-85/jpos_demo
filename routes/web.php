@@ -16,6 +16,7 @@ use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\ServiceChargeController;
 use App\Http\Controllers\TransactionHistoryController;
 use App\Http\Controllers\StockTransactionController;
+use App\Http\Controllers\BankServiceChargeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -90,6 +91,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/transactions/bulk-delete', [TransactionHistoryController::class, 'bulkDelete']) ->name('transactions.bulkDelete');
     Route::resource('delivery', DeliveryController::class);
     Route::resource('service-charge', ServiceChargeController::class);
+
+    Route::resource('bank-service-charge', BankServiceChargeController::class);
     // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');
     // Route::post('/stock-transition', [PosController::class, 'getProduct'])->name('pos.getProduct');
 
