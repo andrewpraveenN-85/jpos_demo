@@ -39,19 +39,19 @@
                     </label>
                     <div class="relative flex items-center">
                       <input
-                        v-model="form.service_charge"
+                        v-model="form.bank_service_charge"
                         type="number"
                         min="0"
                         max="100"
                         step="0.01"
-                        id="service_charge"
+                        id="bank_service_charge"
                         required
                         class="w-full px-4 py-2 pr-10 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       />
                       <span class="absolute right-4 top-3 text-gray-400 text-xl font-bold">%</span>
                     </div>
-                    <span v-if="form.errors.service_charge" class="text-sm text-red-500 mt-1">
-                      {{ form.errors.service_charge }}
+                    <span v-if="form.errors.bank_service_charge" class="text-sm text-red-500 mt-1">
+                      {{ form.errors.bank_service_charge }}
                     </span>
                   </div>
                 </div>
@@ -102,14 +102,14 @@
   });
 
   const form = useForm({
-    service_charge: "",
+    bank_service_charge: "",
   });
 
   watch(
     () => props.selectedBankCharge,
     (newVal) => {
       if (newVal) {
-        form.service_charge = newVal.service_charge ?? "";
+        form.bank_service_charge = newVal.bank_service_charge ?? "";
       }
     },
     { immediate: true }

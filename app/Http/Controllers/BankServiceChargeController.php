@@ -39,12 +39,12 @@ class BankServiceChargeController extends Controller
 
 
         $validated = $request->validate([
-            'service_charge' => 'required|numeric|min:0|max:100', // Limit to percentage if applicable
+            'bank_service_charge' => 'required|numeric|min:0|max:100', // Limit to percentage if applicable
         ]);
 
         // Store the service charge
         BankServiceCharge::create([
-            'service_charge' => round($validated['service_charge'], 2), // Round to 2 decimal places
+            'bank_service_charge' => round($validated['bank_service_charge'], 2), // Round to 2 decimal places
         ]);
 
         return redirect()
@@ -64,12 +64,12 @@ class BankServiceChargeController extends Controller
 
         // Validate the input
         $validated = $request->validate([
-            'service_charge' => 'required|numeric|min:0|max:100', // Assuming % value
+            'bank_service_charge' => 'required|numeric|min:0|max:100', // Assuming % value
         ]);
 
         // Update the service charge, optionally round to 2 decimal places
         $bankServiceCharge->update([
-            'service_charge' => round($validated['service_charge'], 2),
+            'bank_service_charge' => round($validated['bank_service_charge'], 2),
         ]);
 
         // Redirect with success message

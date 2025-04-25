@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class BankServiceCharge extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['service_charge'];
+    protected $fillable = ['bank_service_charge'];
 }

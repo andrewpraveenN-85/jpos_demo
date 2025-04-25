@@ -13,6 +13,7 @@ use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Size;
 use App\Models\StockTransaction;
+use App\Models\BankServiceCharge;
 use App\Models\Employee;
 use App\Models\PromotionItem;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ class PosController extends Controller
         $delivery = Delivery::orderBy('created_at', 'desc')->get();
         $serviceCharge = ServiceCharge::orderBy('created_at', 'desc')->get();
         $allemployee = Employee::orderBy('created_at', 'desc')->get();
+        $bankCharge = BankServiceCharge::orderBy('created_at', 'desc')->get();
 
 
         // Render the page for GET requests
@@ -50,6 +52,7 @@ class PosController extends Controller
             'colors' => $colors,
             'delivery' => $delivery,
             'serviceCharge' => $serviceCharge,
+            'bankCharge' => $bankCharge,
             'sizes' => $sizes,
         ]);
     }
@@ -96,6 +99,8 @@ class PosController extends Controller
 
     public function submit(Request $request)
     {
+
+
 
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
@@ -171,6 +176,7 @@ class PosController extends Controller
                 'custom_discount' => $request->input('custom_discount'),
                 'delivery_charge' => $request->input('delivery_charge'),
                 'service_charge' => $request->input('service_charge'),
+             'bank_service_charge' => $request->input('bank_service_charge') ?? 0,
                 'kitchen_note' => $request->input('kitchen_note'),
                 'order_type' => $request->input('order_type'),
                 'bank_name' => $request->bank_name,

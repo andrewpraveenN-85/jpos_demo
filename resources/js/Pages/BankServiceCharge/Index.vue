@@ -40,7 +40,7 @@
             <tbody>
               <tr v-for="(charge, index) in allBankServiceCharge" :key="charge.id" class="hover:bg-gray-200">
                 <td class="px-6 py-3">{{ index + 1 }}</td>
-                <td class="px-6 py-3">{{ charge.service_charge }} %</td>
+                <td class="px-6 py-3">{{ charge.bank_service_charge }} %</td>
                 <td class="px-6 py-3">
                   <button
                     @click="openEditModal(charge)"

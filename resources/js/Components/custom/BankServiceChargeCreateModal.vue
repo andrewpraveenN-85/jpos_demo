@@ -39,12 +39,12 @@
                     </label>
                     <div class="relative flex items-center">
                       <input
-                        v-model="form.service_charge"
+                        v-model="form.bank_service_charge"
                         type="number"
                         min="0"
                         max="100"
                         step="0.01"
-                        id="service_charge"
+                        id="bank_service_charge"
                         required
                         class="w-full px-4 py-2 pr-10 mt-2 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       />
@@ -54,8 +54,8 @@
                       <span class="absolute right-4 top-3 text-gray-600 font-semibold text-2xl">%</span>
 
                     </div>
-                    <span v-if="form.errors.service_charge" class="mt-1 text-red-500 text-sm">
-                      {{ form.errors.service_charge }}
+                    <span v-if="form.errors.bank_service_charge" class="mt-1 text-red-500 text-sm">
+                      {{ form.errors.bank_service_charge }}
                     </span>
                   </div>
                 </div>
@@ -95,7 +95,7 @@ defineProps({
 });
 
 const form = useForm({
-  service_charge: "",
+  bank_service_charge: "",
 });
 
 const submit = () => {

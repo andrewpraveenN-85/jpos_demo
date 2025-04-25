@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bank_service_charges', function (Blueprint $table) {
             $table->id();
-            $table->decimal('service_charge');
+            $table->decimal('bank_service_charge');
             $table->softDeletes();
             $table->timestamps();
         });

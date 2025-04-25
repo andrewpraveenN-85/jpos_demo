@@ -281,6 +281,11 @@
   <p class="text-sm">{{ selectedTransaction.service_charge }}</p>
 </div>
 
+<div v-if="selectedTransaction.bank_service_charge && selectedTransaction.bank_service_charge != 0">
+  <p class="font-medium">Bank Service Charge:</p>
+  <p class="text-sm">{{ selectedTransaction.bank_service_charge }} %</p>
+</div>
+
 
 
 
@@ -641,6 +646,15 @@ ${
         <span>(${(Number(history.delivery_charge) || 0).toFixed(2)}) LKR</span>
       </div>`}
 
+  ${!history.bank_service_charge
+    ? ""
+    : `<div>
+        <span>Bank Service Charge</span>
+        <span>(${(Number(history.bank_service_charge) || 0).toFixed(2)}) %</span>
+      </div>`}
+
+
+
 
   ${!history.service_charge
     ? ""
@@ -651,19 +665,20 @@ ${
 
 
 
-            <div style="font-weight: bold;">
-                <span>Total</span>
-                <span>
-                    ${
-                    (
-                        (parseFloat(history.total_amount) || 0) +
-                        (parseFloat(history.delivery_charge) || 0) -
-                        (parseFloat(history.discount) || 0) -
-                        (parseFloat(history.custom_discount) || 0)
-                    ).toFixed(2)
-                    } LKR
-                </span>
-            </div>
+          <div style="font-weight: bold;">
+    <span>Total</span>
+    <span>
+        ${
+        (
+            (parseFloat(history.total_amount) || 0) +
+            (parseFloat(history.delivery_charge) || 0) -
+            (parseFloat(history.discount) || 0) -
+            (parseFloat(history.custom_discount) || 0) +
+            ((parseFloat(history.total_amount) || 0) * (parseFloat(history.bank_service_charge) || 0) / 100)
+        ).toFixed(2)
+        } LKR
+    </span>
+</div>
 
 
 

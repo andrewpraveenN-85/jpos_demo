@@ -355,6 +355,22 @@
                                 </div>
                             </div>
 
+                            <div v-if="selectedPaymentMethod === 'card'" class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
+    <select
+        v-model.number="selectedTable.bank_service_charge"
+        class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer"
+    >
+        <option value="" >Select Bank Service Charge</option>
+        <option
+            v-for="charge1 in bankCharge"
+            :key="charge1.id"
+            :value="parseFloat(charge1.bank_service_charge)"
+        >
+            {{ charge1.bank_service_charge }}%
+        </option>
+    </select>
+</div>
+
                             <div v-if="selectedPaymentMethod === 'card'" class="w-full px-16 pt-4 pb-4 border-b border-black mt-4">
                                 <div class="flex items-center justify-between w-full mt-4">
                                     <p class="text-xl text-black">Last 4 Digits of Card</p>
@@ -371,6 +387,16 @@
                                 <p>{{ balance }} LKR</p>
                             </div>
                         </div>
+
+
+
+
+
+
+
+
+
+
 
                         <div class="w-full my-5">
                             <div class="relative flex items-center">
@@ -443,7 +469,9 @@
     <PosSuccessModel :open="isSuccessModalOpen" @update:open="handleModalOpenUpdate" :products="selectedTable.products"
         :cashier="loggedInUser" :customer="customer" :orderId="selectedTable.orderId" :cash="selectedTable.cash"
         :balance="balance" :subTotal="subtotal" :totalDiscount="totalDiscount" :total="total"
-        :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"  :service_charge="selectedTable.service_charge"
+        :custom_discount="customDiscCalculated" :delivery_charge="selectedTable.delivery_charge"
+         :service_charge="selectedTable.service_charge"
+         :bank_service_charge="selectedTable.bank_service_charge"
         :selectedTable="selectedTable" :kitchen_note="selectedTable.kitchen_note" :selectedPaymentMethod="selectedPaymentMethod"
         :order_type="selectedTable.order_type" />
     <AlertModel v-model:open="isAlertModalOpen" :message="message" />
@@ -485,6 +513,7 @@ const order_type = ref("");
 const kitchen_note = ref("");
 const delivery_charge = ref("");
 const service_charge = ref("");
+const bank_service_charge = ref("");
 const bankOptions = ref([
     "Alliance Finance Co PLC", "Amana Bank", "American Express Bank Ltd", "Asia Asset Finance PLC",
     "Bank of Ceylon", "Bank of China",
@@ -518,6 +547,7 @@ const savedTables = JSON.parse(localStorage.getItem("tables")) || [
         order_type: "",
         delivery_charge: "",
         service_charge: "",
+        bank_service_charge: "",
     },
 ];
 
@@ -578,6 +608,7 @@ const addTable = () => {
         order_type: "",
         delivery_charge: "",
         service_charge: "",
+        bank_service_charge: "",
         kotStatus: "pending",
     };
 
@@ -630,6 +661,7 @@ const removeSelectedTable = () => {
             order_type: "",
             delivery_charge: "",
             service_charge: "",
+            bank_service_charge: "",
         };
         // Also update the table in the tables array
         tables.value[index] = selectedTable.value;
@@ -672,6 +704,7 @@ const props = defineProps({
     colors: Array,
     sizes: Array,
     delivery: Array,
+    bankCharge: Array,
     serviceCharge: Array,
 });
 
@@ -717,6 +750,7 @@ const refreshData = async () => {
             order_type: "",
             delivery_charge: "",
             service_charge: "",
+            bank_service_charge: "",
         };
 
         // Update the selected table if it's the default one
@@ -749,7 +783,7 @@ const refreshData = async () => {
         try {
             // Reload the page data using Inertia
             await router.reload({
-                only: ['loggedInUser', 'allcategories', 'allemployee', 'colors', 'sizes', 'delivery','serviceCharge'],
+                only: ['loggedInUser', 'allcategories', 'allemployee', 'colors', 'sizes', 'delivery','serviceCharge','bankCharge'],
                 preserveState: false,
                 preserveScroll: false
             });
@@ -863,6 +897,7 @@ const submitOrder = async () => {
             kitchen_note: selectedTable.value.kitchen_note,
             delivery_charge: selectedTable.value.delivery_charge,
             service_charge: selectedTable.value.service_charge,
+            bank_service_charge: selectedTable.value.bank_service_charge,
             order_type: selectedTable.value.order_type,
             total: total.value,
         });
@@ -1165,16 +1200,25 @@ const total = computed(() => {
         customValue = customDiscount;
     }
 
+    // Delivery charge (only for pickup)
     let deliveryChargeValue = 0;
     if (selectedTable.value.order_type === "pickup") {
         deliveryChargeValue = parseFloat(selectedTable.value.delivery_charge) || 0;
     }
 
+    // Service charge
     const serviceChargeValue = parseFloat(selectedTable.value.service_charge) || 0;
 
-    return (
-        subtotalValue - discountValue - customValue + deliveryChargeValue + serviceChargeValue
-    ).toFixed(2);
+    // First total before applying bank charge
+    const preBankTotal =
+        subtotalValue - discountValue - customValue + deliveryChargeValue + serviceChargeValue;
+
+    // Bank Service Charge (percentage)
+    const bankServiceChargeRate = parseFloat(selectedTable.value.bank_service_charge) || 0;
+    const bankServiceChargeAmount = (preBankTotal * bankServiceChargeRate) / 100;
+
+    // Final total with bank service charge included
+    return (preBankTotal + bankServiceChargeAmount).toFixed(2);
 });
 
 

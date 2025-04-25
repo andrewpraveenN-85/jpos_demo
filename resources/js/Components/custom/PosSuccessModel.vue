@@ -138,6 +138,7 @@ const props = defineProps({
   custom_discount_type: String,
   kitchen_note: String,
   delivery_charge : String,
+  bank_service_charge : String,
   service_charge : String,
   order_type : String,
   selectedPaymentMethod : String,
@@ -428,6 +429,15 @@ ${Number(props.subTotal) !== Number(props.total)
         <span>Service Charge</span>
         <span>${(Number(props.service_charge) || 0).toFixed(2)} LKR</span>
       </div>`}
+
+ ${!props.bank_service_charge
+    ? ""
+    : `<div>
+        <span>Bank Service Charge</span>
+        <span>${(Number(props.bank_service_charge) || 0).toFixed(2)} %</span>
+      </div>`}
+
+
 
  ${Number(props.total) === 0
   ? ""
