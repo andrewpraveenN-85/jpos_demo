@@ -209,7 +209,7 @@ class ProductController extends Controller
     }),
 ],
 
-            'size_id' => 'nullable|exists:sizes,id ',
+            'size_id' => 'nullable|exists:sizes,id',
             'branch_id' => 'nullable|exists:branches,id',
             'color_id' => 'nullable|exists:colors,id',
             'cost_price' => 'nullable|numeric|min:0',
