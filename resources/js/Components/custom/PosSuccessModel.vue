@@ -123,27 +123,30 @@ const handlePrintReceipt = () => {
 
     // Generate table rows dynamically using props.products
     const productRows = props.products
-        .map((product) => {
-            // Determine the price based on discount
-            const price = product.discount > 0 && product.apply_discount
-                ? product.discounted_price  // Use discounted price if discount is applied
-                : product.selling_price;    // Use selling price if no discount
+    .map((product) => {
+        const hasDiscount = product.discount > 0 && product.apply_discount;
+        const sellingPrice = parseFloat(product.selling_price) || 0;
+        const discountedPrice = hasDiscount
+            ? (sellingPrice * (100 - product.discount)) / 100
+            : sellingPrice;
+        const quantity = product.quantity || 0;
 
-            return `
+        const amount = (discountedPrice * quantity).toFixed(2); // Calculate amount correctly
+
+        return `
         <tr>
-          <td>${product.name}</td>
-          <td style="text-align: center;">${product.quantity}</td>
-          <td>
-            ${product.discount > 0 && product.apply_discount
-                    ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
-                    : ""
-                }
-            <div>${product.selling_price}</div>
-          </td>
+                <td colspan="4" style="font-weight: bold; text-align:left;">${product.name}</td>
+            </tr>
+            <tr style="border-bottom: 1px dashed #000;">
+          <td>${sellingPrice.toFixed(2)} LKR</td>
+          <td style="text-align: center;">${quantity}</td>
+          <td style="text-align: center;">${hasDiscount ? product.discount + '%' : '0%'}</td>
+          <td style="text-align: right;">${amount} LKR</td>
         </tr>
       `;
-        })
-        .join("");
+    })
+    .join("");
+
 
 
     // Generate the receipt HTML
@@ -291,9 +294,10 @@ const handlePrintReceipt = () => {
               <table>
                   <thead>
                       <tr>
-                          <th>Description</th>
+                          <th>Item</th>
                           <th style="text-align: center;">Qty</th>
-                          <th style="text-align: right;">Price</th>
+                          <th style="text-align: center;">Dis %</th>
+                          <th style="text-align: right;">Amount</th>
                       </tr>
                   </thead>
                   <tbody>
