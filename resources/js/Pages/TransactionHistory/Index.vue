@@ -49,6 +49,7 @@
   margin-bottom: 10px;
 }
 </style> 
+</style>
 
 <template>
     <Head title="Order History" />
@@ -60,7 +61,7 @@
                 <p class="text-3xl italic font-bold text-black">
                 <span class="px-4 py-1 mr-3 text-white bg-black rounded-xl">{{
                     totalhistoryTransactions
-                   
+
                 }}</span>
                 <span class="text-xl">/ Total History Transition</span>
                 </p>
@@ -107,7 +108,7 @@
                             <td class="p-4 font-bold border-gray-200">{{ history.payment_method || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">{{ history.sale_date || "N/A" }}</td>
                             <td class="p-4 font-bold border-gray-200">
-                                <button 
+                                <button
                                     @click="printReceipt(history)"
                                     class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 mr-4"
                                 >
@@ -117,7 +118,7 @@
                                     Delete
                                 </button>
                             </td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
@@ -138,21 +139,20 @@
 
 
 <script setup>
-import { ref } from "vue";
-import { router,useForm } from "@inertiajs/vue3";
+import { ref, onMounted } from "vue";
+import { router, useForm } from "@inertiajs/vue3";
 import { Head, Link } from "@inertiajs/vue3";
 import Header from "@/Components/custom/Header.vue";
 import Footer from "@/Components/custom/Footer.vue";
 import Banner from "@/Components/Banner.vue";
-import { HasRole } from "@/Utils/Permissions";
 
 const props = defineProps({
   allhistoryTransactions: Array,
   totalhistoryTransactions: Number,
   companyInfo: Array
 });
-const form = useForm({});
 
+const form = useForm({});
 
 const deleteReceipt = (orderId) => {
   if (confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
@@ -164,9 +164,8 @@ const deleteReceipt = (orderId) => {
   }
 };
 
-
-
-$(document).ready(function () {
+// Initialize DataTable after page is ready
+onMounted(() => {
   let table = $("#TransitionTable").DataTable({
     dom: "Bfrtip",
     pageLength: 10,
@@ -193,14 +192,14 @@ $(document).ready(function () {
   });
 });
 
+// New Print Receipt Code
 const printReceipt = (history) => {
+  const companyData = props.companyInfo[0] || {};
 
-const companyData = props.companyInfo[0];
-const getSafeValue = (obj, path) => {
+  const getSafeValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => (acc && acc[part] ? acc[part] : ''), obj);
   };
 
-  // Get product details from sale items
   const saleItems = history.sale_items || [];
   const productRows = saleItems.map(item => `
     <tr>
@@ -212,201 +211,134 @@ const getSafeValue = (obj, path) => {
 
   const receiptContent = `
   <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Receipt</title>
-      <style>
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-                -webkit-print-color-adjust: exact;
-            }
-        }
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <style>
+      @media print {
         body {
-            background-color: #ffffff;
-            font-size: 12px;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 10px;
-            color: #000;
+          margin: 0;
+          padding: 0;
+          -webkit-print-color-adjust: exact;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .header h1 {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0;
-        }
-        .header p {
-            font-size: 10px;
-            margin: 4px 0;
-        }
-        .section {
-            margin-bottom: 16px;
-            padding-top: 8px;
-            border-top: 1px solid #000;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-top: 8px;
-        }
-        .info-row p {
-            margin: 0;
-            font-weight: bold;
-        }
-        .info-row small {
-            font-weight: normal;
-        }
-        table {
-            width: 100%;
-            font-size: 12px;
-            border-collapse: collapse;
-            margin-top: 8px;
-        }
-        table th, table td {
-            padding: 6px 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        table th {
-            text-align: left;
-        }
-        table td {
-            text-align: right;
-        }
-        table td:first-child {
-            text-align: left;
-        }
-        .totals {
-            border-top: 1px solid #000;
-            padding-top: 8px;
-            font-size: 12px;
-        }
-        .totals div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .totals div:nth-child(4) {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 16px;
-        }
-        .footer p {
-            margin: 6px 0;
-        }
-        .footer .italic {
-            font-style: italic;
-        }
-        .text-right {
-            text-align: right;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="receipt-container">
-
+      }
+      body {
+        background-color: #ffffff;
+        font-size: 12px;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 10px;
+        color: #000;
+      }
+      .header { text-align: center; margin-bottom: 16px; }
+      .header h1 { font-size: 20px; font-weight: bold; margin: 0; }
+      .header p { font-size: 10px; margin: 4px 0; }
+      .section { margin-bottom: 16px; padding-top: 8px; border-top: 1px solid #000; }
+      .info-row { display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; }
+      .info-row p { margin: 0; font-weight: bold; }
+      .info-row small { font-weight: normal; }
+      table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 8px; }
+      table th, table td { padding: 6px 8px; border-bottom: 1px solid #ddd; }
+      table th { text-align: left; }
+      table td { text-align: right; }
+      table td:first-child { text-align: left; }
+      .totals { border-top: 1px solid #000; padding-top: 8px; font-size: 12px; }
+      .totals div { display: flex; justify-content: space-between; margin-bottom: 8px; }
+      .footer { text-align: center; font-size: 10px; margin-top: 16px; }
+      .footer p { margin: 6px 0; }
+      .footer .italic { font-style: italic; }
+      .text-right { text-align: right; }
+    </style>
+  </head>
+  <body>
+    <div class="receipt-container">
       <div class="header">
-        <h1>${companyData.name}</h1>
-        <p>${companyData.address}</p>
-        <p>${companyData.phone} | ${companyData.phone2} | ${companyData.email}</p>
+        <h1>${companyData.name || ''}</h1>
+        <p>${companyData.address || ''}</p>
+        <p>${companyData.phone || ''} ${companyData.phone2 || ''} ${companyData.email || ''}</p>
       </div>
 
-        <div class="section">
-            <div class="info-row">
-                <div>
-                    <p>Date:</p>
-                    <small>
-                        ${new Date(history.created_at).toLocaleDateString('en-US', {
-                        dateStyle: 'medium', 
-                        })} 
-                        
-                    </small>
-                </div>
-                <div>
-                    <p>Order No:</p>
-                    <small>${history.order_id}</small>
-                </div>
-            </div>
-            <div class="info-row">
-                <div>
-                    <p>Customer:</p>
-                    <small>${history.customer?.name || ' '}</small>
-                </div>
-
-                <div>
-                    <p>Cashier:</p>
-                    <small>${history.user?.name || ' '}</small>
-                </div>
-            </div>
+      <div class="section">
+        <div class="info-row">
+          <div>
+            <p>Date:</p>
+            <small>${new Date(history.created_at).toLocaleDateString('en-US', { dateStyle: 'medium' })}</small>
+          </div>
+          <div>
+            <p>Order No:</p>
+            <small>${history.order_id || ''}</small>
+          </div>
         </div>
-
-        <div class="section">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th class="text-right">Qty</th>
-                        <th class="text-right">Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${productRows}
-                </tbody>
-            </table>
-        </div>
-        
-        
-        <div class="totals">
-            <div>
-                <span>Sub Total</span>
-                <span>${history.total_amount || 0} LKR</span>
-            </div>
-            <div>
-                <span>Discount</span>
-                <span>${history.discount || 0} LKR</span>
-            </div>
-            <div>
-                <span>Custome Discount</span>
-                <span>${history.custom_discount || 0} LKR</span>
-            </div>
-            <div>
-                <span>Total</span>
-                <span>${(history.total_amount - (history.discount || 0) -(history.custom_discount || 0)).toFixed(2)} LKR</span>
-            </div>
-            <div>
-                <span>Cash</span>
-                <span>${history.cash || 0} LKR</span>
-            </div>
-            <div>
-                <span>Balance</span>
-                <span>${(history.cash - (history.total_amount - (history.discount || 0) -(history.custom_discount || 0))).toFixed(2)} LKR</span>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>THANK YOU COME AGAIN</p>
-            <p class="italic">Let the quality define its own standards</p>
-            <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
-            <p>${new Date(history.created_at).toLocaleTimeString('en-US', {
-                        timeStyle: 'long', 
-                        hourCycle: 'h23',   
-                        })}</p>
+        <div class="info-row">
+          <div>
+            <p>Customer:</p>
+            <small>${history.customer?.name || ''}</small>
+          </div>
+          <div>
+            <p>Cashier:</p>
+            <small>${history.user?.name || ''}</small>
+          </div>
         </div>
       </div>
-    </body>
-    </html>
+
+      <div class="section">
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="text-right">Qty</th>
+              <th class="text-right">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${productRows}
+          </tbody>
+        </table>
+      </div>
+
+    <div class="totals">
+  <div>
+    <span>Sub Total</span>
+    <span>${(Number(history.total_amount) || 0).toFixed(2)} LKR</span>
+  </div>
+  <div>
+    <span>Discount</span>
+    <span>${(Number(history.discount) || 0).toFixed(2)} LKR</span>
+  </div>
+  <div>
+    <span>Custom Discount</span>
+    <span>${(Number(history.custom_discount) || 0).toFixed(2)} LKR</span>
+  </div>
+  <div>
+    <span>Total</span>
+    <span>${(Number(history.total_amount) - Number(history.discount) - Number(history.custom_discount)).toFixed(2)} LKR</span>
+  </div>
+  <div>
+    <span>Cash</span>
+    <span>${(Number(history.cash) || 0).toFixed(2)} LKR</span>
+  </div>
+  <div style="font-weight: bold;">
+    <span>Balance</span>
+    <span>${(Number(history.cash) - (Number(history.total_amount) - Number(history.discount) - Number(history.custom_discount))).toFixed(2)} LKR</span>
+  </div>
+</div>
+
+
+      <div class="footer">
+        <p>THANK YOU COME AGAIN</p>
+        <p class="italic">Let the quality define its own standards</p>
+        <p style="font-weight: bold;">Powered by JAAN Network (Pvt) Ltd.</p>
+        <p>${new Date(history.created_at).toLocaleTimeString('en-US', { timeStyle: 'long', hourCycle: 'h23' })}</p>
+      </div>
+    </div>
+  </body>
+  </html>
   `;
+
+
+
   const printWindow = window.open('', '_blank');
   printWindow.document.write(receiptContent);
   printWindow.document.close();
