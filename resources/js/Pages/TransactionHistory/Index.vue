@@ -278,7 +278,7 @@
 
 <div v-if="selectedTransaction.service_charge && selectedTransaction.service_charge != 0">
   <p class="font-medium">Service Charge:</p>
-  <p class="text-sm">{{ selectedTransaction.service_charge }}</p>
+  <p class="text-sm">{{ selectedTransaction.service_charge }} %</p>
 </div>
 
 <div v-if="selectedTransaction.bank_service_charge && selectedTransaction.bank_service_charge != 0">
@@ -421,7 +421,7 @@ const getSafeValue = (obj, path) => {
       <span style="font-size: 8px;font-weight: bold; font-style: italic;"> (${item.unit_price} LKR)</span>
       </td>
       <td class="text-right">${item.quantity || 0}</td>
-      <td class="text-right">${(item.unit_price || 0) * (item.quantity || 0)}</td>
+      <td class="text-right">${(item.unit_price || 0) * (item.quantity || 0)} LKR</td>
     </tr>
   `).join('');
 
@@ -639,29 +639,26 @@ ${
 
 
 
-  ${!history.delivery_charge
-    ? ""
-    : `<div>
-        <span>Delivery Charge</span>
-        <span>(${(Number(history.delivery_charge) || 0).toFixed(2)}) LKR</span>
-      </div>`}
+ ${history.delivery_charge > 0
+  ? `<div>
+      <span>Delivery Charge</span>
+      <span>(${(Number(history.delivery_charge) || 0).toFixed(2)}) %</span>
+    </div>`
+  : ""}
 
-  ${!history.bank_service_charge
-    ? ""
-    : `<div>
-        <span>Bank Service Charge</span>
-        <span>(${(Number(history.bank_service_charge) || 0).toFixed(2)}) %</span>
-      </div>`}
+${history.bank_service_charge > 0
+  ? `<div>
+      <span>Bank Service Charge</span>
+      <span>(${(Number(history.bank_service_charge) || 0).toFixed(2)}) %</span>
+    </div>`
+  : ""}
 
-
-
-
-  ${!history.service_charge
-    ? ""
-    : `<div>
-        <span>Service Charge</span>
-        <span>(${(Number(history.service_charge) || 0).toFixed(2)}) LKR</span>
-      </div>`}
+${history.service_charge > 0
+  ? `<div>
+      <span>Service Charge</span>
+      <span>(${(Number(history.service_charge) || 0).toFixed(2)}) %</span>
+    </div>`
+  : ""}
 
 
 

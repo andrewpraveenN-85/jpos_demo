@@ -169,77 +169,86 @@
                             <p class="text-2xl text-red-500">No Products to show</p>
                         </div>
 
-                        <div v-else class="flex items-center w-full py-4 border-b border-black"
-                            v-for="item in selectedTable.products" :key="item.id">
-                            <div class="flex w-1/6">
-                                <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'
-                                    " alt="Supplier Image" class="object-cover w-16 h-16 border border-gray-500" />
-                            </div>
-                            <div class="flex flex-col justify-start w-4/6">
-                                <p class="text-3xl text-black">
-                                    {{ item.name }}
-                                </p>
-                                <p class="text-lg leading-tight mb-4 font-bold">
-                                    {{ item.selling_price }} LKR
-                                </p>
-                                <div class="flex items-end justify-between w-full">
-                                    <div class="flex space-x-4">
-                                        <p @click="incrementQuantity(item.id)"
-                                            class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
-                                            <i class="ri-add-line"></i>
-                                        </p>
-                                        <p
-                                            class="bg-[#D9D9D9] border-2 border-black h-8 w-8 text-black flex justify-center items-center rounded">
-                                            {{ item.quantity }}
-                                        </p>
-                                        <p @click="decrementQuantity(item.id)"
-                                            class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
-                                            <i class="ri-subtract-line"></i>
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center justify-center">
-                                        <div>
-                                            <p @click="applyDiscount(item.id)" v-if="
-                                                item.discount &&
-                                                item.discount > 0 &&
-                                                item.apply_discount == false &&
-                                                !appliedCoupon
-                                            " class="cursor-pointer py-1 text-center px-4 bg-green-600 rounded-xl font-bold text-white tracking-wider">
-                                                Apply {{ item.discount }}% off
-                                            </p>
+                      
 
-                                            <p v-if="
-                                                item.discount &&
-                                                item.discount > 0 &&
-                                                item.apply_discount == true &&
-                                                !appliedCoupon
-                                            " @click="removeDiscount(item.id)"
-                                                class="cursor-pointer py-1 text-center px-4 bg-red-600 rounded-xl font-bold text-white tracking-wider">
-                                                Remove {{ item.discount }}% Off
-                                            </p>
-                                            <p></p>
-                                            <p class="text-2xl font-bold text-black text-right">
-                                                {{
-                                                    item.apply_discount
-                                                        ? (item.selling_price *
-                                                            item.quantity *
-                                                            (100 - item.discount)) /
-                                                        100
-                                                : item.selling_price * item.quantity
-                                                }}
-                                                LKR
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-end w-1/6">
-                                <p @click="removeProduct(item.id)"
-                                    class="text-3xl text-black border-2 border-black rounded-full cursor-pointer">
-                                    <i class="ri-close-line"></i>
-                                </p>
-                            </div>
-                        </div>
+
+                        <div class="flex flex-col w-full space-y-4 py-4 border-b border-gray-200"
+     v-for="item in selectedTable.products" :key="item.id">
+  <div class="flex items-start space-x-4">
+    <!-- Product Image -->
+    <div class="w-20 h-20 flex-shrink-0">
+      <img :src="item.image ? `/${item.image}` : '/images/placeholder.jpg'"
+           alt="Product Image"
+           class="object-cover w-full h-full rounded-lg border border-gray-300" />
+    </div>
+    
+    <!-- Product Details -->
+    <div class="flex-1 flex flex-col space-y-2">
+      <div class="flex justify-between items-start">
+        <h3 class="text-lg font-semibold text-gray-900">
+          {{ item.name }}
+        </h3>
+        <button @click="removeProduct(item.id)"
+    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 hover:bg-gray-400 transition-colors">
+  <i class="ri-close-line text-xl text-red-600 font-semibold"></i>
+</button>
+      </div>
+      
+      <p class="text-lg font-medium text-gray-700">
+        {{ item.selling_price }} LKR
+      </p>
+      
+      <!-- Quantity Controls -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <button @click="decrementQuantity(item.id)"
+                  class="flex items-center justify-center w-8 h-8 text-white bg-gray-800 hover:bg-gray-900 rounded-full transition-colors">
+            <i class="ri-subtract-line"></i>
+          </button>
+          <span class="text-lg font-medium w-8 text-center">
+            {{ item.quantity }}
+          </span>
+          <button @click="incrementQuantity(item.id)"
+                  class="flex items-center justify-center w-8 h-8 text-white bg-gray-800 hover:bg-gray-900 rounded-full transition-colors">
+            <i class="ri-add-line"></i>
+          </button>
+        </div>
+        
+        <!-- Discount and Total -->
+        <div class="flex flex-col items-end">
+          <div class="mb-1">
+            <button v-if="item.discount && item.discount > 0 && item.apply_discount == false && !appliedCoupon"
+                    @click="applyDiscount(item.id)"
+                    class="text-md py-1 px-3 bg-green-500 hover:bg-green-600 rounded-full font-medium text-white transition-colors">
+              Apply {{ item.discount }}% off
+            </button>
+            <button v-if="item.discount && item.discount > 0 && item.apply_discount == true && !appliedCoupon"
+                    @click="removeDiscount(item.id)"
+                    class="text-md py-1 px-3 bg-red-500 hover:bg-red-600 rounded-full font-medium text-white transition-colors">
+              Remove {{ item.discount }}% Off
+            </button>
+          </div>
+          <p class="text-lg font-bold text-gray-900">
+            {{
+              item.apply_discount
+                ? (item.selling_price * item.quantity * (100 - item.discount)) / 100
+                : item.selling_price * item.quantity
+            }} LKR
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
                         <div class="w-full pt-6 space-y-2">
                             <div class="flex items-center justify-between w-full px-16">
                                 <p class="text-xl">Sub Total</p>
@@ -299,7 +308,7 @@
                             </div>
 
 
-                            <div v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
+                            <!-- <div v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
      class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
     <select v-model="selectedTable.service_charge"
         class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer">
@@ -308,7 +317,27 @@
             {{ charge.service_charge }} LKR
         </option>
     </select>
+</div> -->
+
+
+<div 
+  class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black" 
+  v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
+>
+  <p class="text-xl text-black">
+    Service Charge 
+    <span class="text-pink-800 font-bold">(%)</span>
+  </p>
+  <span class="flex items-center">
+    <CurrencyInput
+      v-model="selectedTable.service_charge"
+      placeholder="Enter value"
+      class="rounded-md px-2 py-1 text-black text-md"
+    />
+  </span>
 </div>
+
+
 
 
 
@@ -355,21 +384,28 @@
                                 </div>
                             </div>
 
-                            <div v-if="selectedPaymentMethod === 'card'" class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
-    <select
-        v-model.number="selectedTable.bank_service_charge"
-        class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer"
-    >
-        <option value="" >Select Bank Service Charge</option>
-        <option
-            v-for="charge1 in bankCharge"
-            :key="charge1.id"
-            :value="parseFloat(charge1.bank_service_charge)"
-        >
-            {{ charge1.bank_service_charge }}%
-        </option>
-    </select>
+                  
+
+<div 
+  class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black" 
+ v-if="selectedPaymentMethod === 'card'"
+>
+  <p class="text-xl text-black">
+    Bank Service  Charge 
+    <span class="text-pink-800 font-bold">(%)</span>
+  </p>
+  <span class="flex items-center">
+    <CurrencyInput
+      v-model="selectedTable.bank_service_charge"
+      placeholder="Enter value"
+      class="rounded-md px-2 py-1 text-black text-md"
+    />
+  </span>
 </div>
+
+
+
+
 
                             <div v-if="selectedPaymentMethod === 'card'" class="w-full px-16 pt-4 pb-4 border-b border-black mt-4">
                                 <div class="flex items-center justify-between w-full mt-4">
@@ -1186,6 +1222,7 @@ const printKOT = (items, table, tableName, kotType, isSuspend = false) => {
 };
 
 
+
 const total = computed(() => {
     const subtotalValue = parseFloat(subtotal.value) || 0;
     const discountValue = parseFloat(totalDiscount.value) || 0;
@@ -1206,10 +1243,11 @@ const total = computed(() => {
         deliveryChargeValue = parseFloat(selectedTable.value.delivery_charge) || 0;
     }
 
-    // Service charge
-    const serviceChargeValue = parseFloat(selectedTable.value.service_charge) || 0;
+    // Service charge (percentage)
+    const serviceChargeRate = parseFloat(selectedTable.value.service_charge) || 0;
+    const serviceChargeValue = (subtotalValue * serviceChargeRate) / 100;
 
-    // First total before applying bank charge
+    // First total before applying bank service charge
     const preBankTotal =
         subtotalValue - discountValue - customValue + deliveryChargeValue + serviceChargeValue;
 

@@ -33,42 +33,46 @@
             <div class="flex flex-col items-center justify-start">
               <div class="w-full flex">
                 <div class="w-full py-12 space-y-16">
-                  <div
-                    class="flex items-center justify-between w-full space-x-4"
-                  >
-                    <!-- Input Section -->
-                    <div class="w-1/6">
-                      <input
-                        v-model="search"
-                        @input="() => fetchProducts()"
-                        type="text"
-                        placeholder="Search ..."
-                        class="w-full custom-input"
-                      />
-                    </div>
+                    <div class="w-full space-y-4">
+  <!-- Input Section -->
+  <div class="w-3/6">
+    <input
+      v-model="search"
+      @input="() => fetchProducts()"
+      type="text"
+      placeholder="Search ..."
+      class="w-full custom-input"
+    />
+  </div>
 
-                    <!-- Top Categories Section -->
-                    <div class="w-5/6 flex items-center justify-end space-x-4">
-                      <p class="text-2xl">Top Categories:</p>
-                      <div
-                        v-for="category in parentCategories"
-                        :key="category.id"
-                        class="cursor-pointer"
-                        @click="selectParentCategory(category)"
-                      >
-                        <p
-                          :class="{
-                            'text-2xl text-blue-600':
-                              selectedParentCategory?.id !== category.id,
-                            'text-2xl text-red-600':
-                              selectedParentCategory?.id === category.id,
-                          }"
-                        >
-                          {{ category.name }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+  <!-- Top Categories Section -->
+  <div class="w-full pt-3">
+  <div class="flex items-center space-x-4">
+    <p class="text-2xl flex-shrink-0">Top Categories:</p>
+
+    <!-- Scrollable category list -->
+    <div class="flex space-x-4 overflow-x-auto whitespace-nowrap max-w-full">
+      <div
+        v-for="category in parentCategories"
+        :key="category.id"
+        class="cursor-pointer flex-shrink-0"
+        @click="selectParentCategory(category)"
+      >
+        <p
+          :class="{
+            'text-2xl text-blue-600': selectedParentCategory?.id !== category.id,
+            'text-2xl text-red-600': selectedParentCategory?.id === category.id,
+          }"
+        >
+          {{ category.name }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
                 </div>
               </div>
 
