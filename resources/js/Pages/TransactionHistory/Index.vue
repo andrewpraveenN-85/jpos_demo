@@ -48,7 +48,6 @@
 .dataTables_wrapper {
   margin-bottom: 10px;
 }
-</style> 
 </style>
 
 <template>
