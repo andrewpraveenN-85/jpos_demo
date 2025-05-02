@@ -64,7 +64,21 @@
         </span>
       </div>
 
-
+      <div class="w-full">
+                  <label class="block text-sm font-medium text-gray-300">Branch Name:</label>
+                  <select
+                    v-model="form.branch_id"
+                    class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  >
+                    <option value="">Select a Branch</option>
+                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">
+                      {{ branch.name }}
+                    </option>
+                  </select>
+                  <span v-if="form.errors.branch_id" class="mt-4 text-red-500">{{
+                    form.errors.branch_id
+                  }}</span>
+                </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-300"
@@ -176,7 +190,7 @@ const playClickSound = () => {
 
   const emit = defineEmits(["update:open"]);
 
-  const { open, employee, selectedEmployee } = defineProps({
+  const { open, employee, selectedEmployee ,branches } = defineProps({
     open: {
       type: Boolean,
       required: true,
@@ -189,6 +203,11 @@ const playClickSound = () => {
       type: Object,
       default: null, // Ensure it defaults to null
     },
+    branches: {
+      type: Array,
+      required: true,
+    },
+
   });
 
   const form = useForm({
@@ -197,6 +216,7 @@ const playClickSound = () => {
     address: "",
     email: "",
     phone: "",
+    branch_id: "",
   });
 
 
@@ -211,6 +231,7 @@ const playClickSound = () => {
         form.address = newValue.address || "";
         form.email = newValue.email || "";
         form.phone = newValue.phone || "";
+        form.branch_id = newValue.branch_id || "";
 
       }
     },

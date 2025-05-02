@@ -206,6 +206,7 @@
 
   <EmployeeUpdateModel
     :employees="allemployee"
+    :branches="branches"
     v-model:open="isEditModalOpen"
     :selected-employee="selectedEmployee"
   />

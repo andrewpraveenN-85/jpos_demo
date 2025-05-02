@@ -35,6 +35,9 @@ class ProductController extends Controller
 
     public function fetchProducts(Request $request)
     {
+        $user = Auth::user();
+
+        // Get all filter parameters from the request
         $query = $request->input('search');
         $sortOrder = $request->input('sort');
         $selectedColor = $request->input('color');
@@ -42,9 +45,8 @@ class ProductController extends Controller
         $stockStatus = $request->input('stockStatus');
         $selectedCategory = $request->input('selectedCategory');
 
-        $user = Auth::user();
-
-        $productsQuery = Product::with('category', 'color', 'size', 'supplier', )
+        // Start building the query with relationships
+        $productsQuery = Product::with(['category', 'color', 'size', 'supplier'])
             ->when($query, function ($queryBuilder) use ($query) {
                 $queryBuilder->where(function ($subQuery) use ($query) {
                     $subQuery->where('name', 'like', "%{$query}%")
@@ -74,14 +76,18 @@ class ProductController extends Controller
             ->when($selectedCategory, function ($queryBuilder) use ($selectedCategory) {
                 $queryBuilder->where('category_id', $selectedCategory);
             });
+
+        // Apply branch filter for non-admin users
         if ($user->role_type !== 'Admin') {
             $productsQuery->where('branch_id', $user->branch_id);
         }
 
+        // Final ordering and pagination
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(8);
 
         return response()->json([
             'products' => $products,
+            'branch_id' => $user->branch_id,
         ]);
     }
 
@@ -253,7 +259,7 @@ class ProductController extends Controller
             if ($stockQuantity > 0) {
                 StockTransaction::create([
                     'product_id' => $product->id,
-                    'branch_id' => Auth::user()->branch_id,
+                    'branch_id' => $request->branch_id,
                     'transaction_type' => 'Added',
                     'quantity' => $stockQuantity,
                     'transaction_date' => now(),
@@ -334,7 +340,7 @@ class ProductController extends Controller
             if ($stockQuantity > 0) {
                 StockTransaction::create([
                     'product_id' => $product->id,
-                    'branch_id' => $validated['branch_id'],
+                    'branch_id' => $request->branch_id,
                     'transaction_type' => 'Added',
                     'quantity' => $stockQuantity,
                     'transaction_date' => now(),
@@ -469,6 +475,7 @@ class ProductController extends Controller
                 'quantity' => abs($stockChange),
                 'transaction_date' => now(),
                 'supplier_id' => $validated['supplier_id'] ?? null,
+                'branch_id' => $request->branch_id,
             ]);
         }
 

@@ -442,6 +442,7 @@ const fetchProducts = async (url = "/api/products") => {
       size: size.value,
     });
     products.value = response.data.products;
+    console.log('User Branch ID:', response.data.branch_id);
   } catch (error) {
     console.error("Error fetching products:", error);
   } finally {

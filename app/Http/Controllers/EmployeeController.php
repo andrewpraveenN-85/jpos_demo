@@ -19,10 +19,11 @@ class EmployeeController extends Controller
             abort(403, 'Unauthorized');
         }
         $allemployee = Employee::with('branch')->orderBy('created_at', 'desc')->get();
-
+        $branches =Branch::orderBy('created_at', 'desc')->get();
         return Inertia::render('Employee/Index', [
             'allemployee' => $allemployee,
-            'totalEmployee' => $allemployee->count()
+            'totalEmployee' => $allemployee->count(),
+            'branches' => $branches,
         ]);
     }
 
@@ -109,6 +110,7 @@ class EmployeeController extends Controller
             'address' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
+            'branch_id' => 'nullable|exists:branches,id',
         ]);
         $employee->update($validated);
 
