@@ -194,7 +194,7 @@ const handlePrintReceipt = () => {
                 ? `<div style="font-weight: bold; font-size: 7px; background-color:black; color:white;text-align:center;">${product.discount}% off</div>`
                 : ""
             }
-            <div>${Price}</div>
+            <div>${Price.toFixed(2)}</div>
           </td>
         </tr>
       `;
@@ -427,7 +427,7 @@ ${Number(props.subTotal) !== Number(props.total)
     ? ""
     : `<div>
         <span>Service Charge</span>
-        <span>${(Number(props.service_charge) || 0).toFixed(2)} LKR</span>
+        <span>${(Number(props.service_charge) || 0).toFixed(2)} %</span>
       </div>`}
 
  ${!props.bank_service_charge
