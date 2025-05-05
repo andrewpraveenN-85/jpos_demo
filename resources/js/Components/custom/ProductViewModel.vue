@@ -256,7 +256,6 @@
 
 
 
-
 <script setup>
 import {
   Dialog,
@@ -343,60 +342,49 @@ function generateAndPrintBarcode() {
 
 <style>
 @media print {
-  /* Ensure proper page settings for printing */
-  @page {
-    size: auto; /* Auto size based on content */
-    margin: 5mm; /* Prevents cutting off content */
-  }
-
-  /* Hide everything except the print container */
-  body {
-    visibility: hidden;
-  }
-  
-  #printContainer, 
-  #printContainer * {
-    visibility: visible;
-  }
-
-  /* Main container - ensures full page width and height */
+  /* Label container */
   #printContainer {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 5mm;
+    height: 100%;
+    margin-top: 0;
   }
 
   /* Print content */
   .print-content {
     text-align: center;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
     width: 100%;
     margin-top: 2mm;
   }
 
-  /* Barcode - centered */
+  /* Barcode centered and full width */
   #barcodePrint {
     width: 100%;
-    max-width: 100mm; /* Ensures barcode fits within A4 page width */
-    text-align: center;
-    margin: 0 auto;
+    margin-left: 12mm;
   }
 
   /* Product details */
   .product-details {
-    display: block; /* Ensure proper display */
-    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
     font-size: 10px;
     font-weight: bold;
     margin-bottom: 5px;
+    margin-left: 12mm;
   }
 
   .product-category,
   .product-price {
     color: #000;
-    margin: 2px 0;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -408,17 +396,8 @@ function generateAndPrintBarcode() {
     font-size: 10px;
     font-weight: bold;
     margin-top: 5px;
-    text-align: center;
-  }
-
-  /* Prevents page breaks inside elements */
-  .print-content, 
-  .product-details, 
-  #barcodePrint, 
-  .product-code {
-    break-inside: avoid;
+ 
   }
 }
-
 </style>
 
