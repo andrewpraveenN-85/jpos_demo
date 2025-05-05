@@ -169,7 +169,7 @@
                             <p class="text-2xl text-red-500">No Products to show</p>
                         </div>
 
-                      
+
 
 
                         <div class="flex flex-col w-full space-y-4 py-4 border-b border-gray-200"
@@ -181,7 +181,7 @@
            alt="Product Image"
            class="object-cover w-full h-full rounded-lg border border-gray-300" />
     </div>
-    
+
     <!-- Product Details -->
     <div class="flex-1 flex flex-col space-y-2">
       <div class="flex justify-between items-start">
@@ -193,11 +193,11 @@
   <i class="ri-close-line text-xl text-red-600 font-semibold"></i>
 </button>
       </div>
-      
+
       <p class="text-lg font-medium text-gray-700">
         {{ item.selling_price }} LKR
       </p>
-      
+
       <!-- Quantity Controls -->
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -213,7 +213,7 @@
             <i class="ri-add-line"></i>
           </button>
         </div>
-        
+
         <!-- Discount and Total -->
         <div class="flex flex-col items-end">
           <div class="mb-1">
@@ -307,25 +307,27 @@
                                 </select>
                             </div>
 
-
-                            <!-- <div v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
+                            <div v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
      class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
-    <select v-model="selectedTable.service_charge"
-        class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer">
-        <option value="">Select Service Charge</option>
-        <option v-for="charge in serviceCharge" :key="charge.id" :value="charge.service_charge">
-            {{ charge.service_charge }} LKR
-        </option>
-    </select>
-</div> -->
+     <select v-model="selectedTable.service_charge"
+    class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer">
+    <option value="">Select Service Charge</option>
+    <option
+        v-for="charge in serviceCharge"
+        :key="charge.id"
+        :value="String(charge.service_charge)">
+        {{ charge.service_charge }} %
+    </option>
+</select>
+</div>
 
 
-<div 
-  class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black" 
+<!-- <div
+  class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black"
   v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
 >
   <p class="text-xl text-black">
-    Service Charge 
+    Service Charge
     <span class="text-pink-800 font-bold">(%)</span>
   </p>
   <span class="flex items-center">
@@ -335,7 +337,7 @@
       class="rounded-md px-2 py-1 text-black text-md"
     />
   </span>
-</div>
+</div> -->
 
 
 
@@ -384,14 +386,14 @@
                                 </div>
                             </div>
 
-                  
 
-<div 
-  class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black" 
+
+<!-- <div
+  class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black"
  v-if="selectedPaymentMethod === 'card'"
 >
   <p class="text-xl text-black">
-    Bank Service  Charge 
+    Bank Service  Charge
     <span class="text-pink-800 font-bold">(%)</span>
   </p>
   <span class="flex items-center">
@@ -401,6 +403,23 @@
       class="rounded-md px-2 py-1 text-black text-md"
     />
   </span>
+</div> -->
+
+
+<div v-if="selectedPaymentMethod === 'card'" class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
+    <select
+        v-model.number="selectedTable.bank_service_charge"
+        class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer"
+    >
+        <option value="" >Select Bank Service Charge</option>
+        <option
+            v-for="charge1 in bankCharge"
+            :key="charge1.id"
+            :value="parseFloat(charge1.bank_service_charge)"
+        >
+            {{ charge1.bank_service_charge }}%
+        </option>
+    </select>
 </div>
 
 

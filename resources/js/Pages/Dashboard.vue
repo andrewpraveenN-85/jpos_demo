@@ -304,7 +304,7 @@
       </Link>
 
 
-<!--
+ 
       <Link href="/service-charge" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#12ddf8]">
           <div class="card-content">
@@ -323,7 +323,7 @@
             </div>
           </div>
         </div>
-      </Link> -->
+      </Link>
 
 
 
@@ -331,7 +331,7 @@
 
 
 
-      <!-- <Link href="/bank-service-charge" v-if="HasRole(['Admin', 'Manager'])">
+      <Link href="/bank-service-charge" v-if="HasRole(['Admin', 'Manager'])">
         <div class="dashboard-card bg-[#2df812]">
           <div class="card-content">
             <div class="icon-container">
@@ -349,7 +349,7 @@
             </div>
           </div>
         </div>
-      </Link> -->
+      </Link>
 
 
 
