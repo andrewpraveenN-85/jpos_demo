@@ -32,7 +32,15 @@ class PosController extends Controller
         });
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
-        $allemployee = Employee::orderBy('created_at', 'desc')->get();
+        $branchId = Auth::user()->branch_id;
+
+        $allemployee = Employee::where('branch_id', $branchId)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+                    
+
+
 
 
         // Render the page for GET requests
@@ -88,7 +96,7 @@ class PosController extends Controller
     }
 
     public function submit(Request $request)
-    { 
+    {
 
         if (!Gate::allows('hasRole', ['Admin', 'Cashier'])) {
             abort(403, 'Unauthorized');
@@ -163,7 +171,7 @@ class PosController extends Controller
                 'sale_date' => now()->toDateString(), // Current date
                 'cash' => $request->input('cash'),
                 'custom_discount' => $request->input('custom_discount'),
-            ]); 
+            ]);
 
             foreach ($products as $product) {
                 // Check stock before saving sale items
