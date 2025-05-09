@@ -302,7 +302,7 @@
 
 
 
-      <Link href="/return-bill" v-if="HasRole(['Admin'])">
+      <!-- <Link href="/return-bill" v-if="HasRole(['Admin'])">
         <div class="dashboard-card bg-[#7d2cff]">
           <div class="card-content">
             <div class="icon-container">
@@ -320,7 +320,7 @@
             </div>
           </div>
         </div>
-      </Link>
+      </Link> -->
 
     </div>
   </div>
