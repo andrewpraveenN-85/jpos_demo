@@ -283,6 +283,7 @@ class ProductController extends Controller
 
     public function productVariantStore(Request $request)
     {
+
         if (!Gate::allows('hasRole', ['Admin'])) {
             abort(403, 'Unauthorized');
         }
@@ -298,7 +299,15 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
+             'code' => [
+        'nullable',
+        'string',
+        'max:50',
+        Rule::unique('products')->where(function ($query) use ($branchId) {
+            return $query->where('branch_id', $branchId)
+                         ->whereNull('deleted_at'); // Include if using soft deletes
+        }),
+    ],
 
             'barcode' => [
                 'nullable',
@@ -350,6 +359,8 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->banner('Product created successfully');
         } catch (\Exception $e) {
+
+
             \Log::error('Error creating product: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the product. Please try again.');
         }
@@ -414,73 +425,73 @@ class ProductController extends Controller
 
 
 
-    public function update(Request $request, Product $product)
-    {
-        if (!Gate::allows('hasRole', ['Admin'])) {
-            abort(403, 'Unauthorized');
+  public function update(Request $request, Product $product)
+{
+    if (!Gate::allows('hasRole', ['Admin'])) {
+        abort(403, 'Unauthorized');
+    }
+
+    $validated = $request->validate([
+        'category_id' => 'nullable|exists:categories,id',
+        'name' => 'string|max:255',
+        // Updated validation rule for code to check for unique combination of code and branch_id
+        'code' => 'nullable|string|max:50|unique:products,code,' . $product->id . ',id,branch_id,' . $request->branch_id . ',deleted_at,NULL',
+        'size_id' => 'nullable|exists:sizes,id',
+        'branch_id' => 'nullable|exists:branches,id',
+        'color_id' => 'nullable|exists:colors,id',
+        'cost_price' => 'numeric|min:0',
+        'selling_price' => 'numeric|min:0',
+        'stock_quantity' => 'required|integer|min:0',
+        'discounted_price' => 'nullable|numeric|min:0',
+        'discount' => 'nullable|numeric|min:0|max:100',
+        'supplier_id' => 'nullable|exists:suppliers,id',
+        'image' => 'nullable|max:2048',
+        'expire_date' => 'nullable|date',
+    ]);
+
+    // Handle empty code (convert empty string to null)
+    if (isset($validated['code']) && $validated['code'] === '') {
+        $validated['code'] = null;
+    }
+
+    // Handle image update
+    if ($request->hasFile('image')) {
+        // Delete the old image if it exists
+        if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
         }
 
-        $validated = $request->validate([
-            'category_id' => 'nullable|exists:categories,id',
-            'name' => 'string|max:255',
-            'code' => 'nullable|string|max:50',
-            // 'code' => 'string|max:50|unique:products,code,' . $product->id . ',id,deleted_at,NULL',
-            'size_id' => 'nullable|exists:sizes,id',
-            'branch_id' => 'nullable|exists:branches,id',
-            'color_id' => 'nullable|exists:colors,id',
-            'cost_price' => 'numeric|min:0',
-            'selling_price' => 'numeric|min:0',
-            'stock_quantity' => 'required|integer|min:0',
-            'discounted_price' => 'nullable|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100',
-            'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|max:2048',
-            'expire_date' => 'nullable|date',
-        ]);
+        // Save the new image
+        $fileExtension = $request->file('image')->getClientOriginalExtension();
+        $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
+        $path = $request->file('image')->storeAs('products', $fileName, 'public');
+        $validated['image'] = 'storage/' . $path;
+    } else {
+        $validated['image'] = $product->image;
+    }
 
-        // Handle image update
-        if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($product->image && Storage::disk('public')->exists(str_replace('storage/', '', $product->image))) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
-            }
+    // Calculate stock change
+    $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
 
-            // Save the new image
-            $fileExtension = $request->file('image')->getClientOriginalExtension();
-            $fileName = 'product_' . date("YmdHis") . '.' . $fileExtension;
-            $path = $request->file('image')->storeAs('products', $fileName, 'public');
-            $validated['image'] = 'storage/' . $path;
-        } else {
-            $validated['image'] = $product->image;
-        }
+    // Update product
+    $product->update($validated);
 
-        // Calculate stock change
-        $stockChange = $validated['stock_quantity'] - $product->stock_quantity;
-
+    if ($stockChange !== 0) {
         // Determine transaction type
         $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
 
-        // Update product
-        $product->update($validated);
-
-
-
-        if ($stockChange !== 0) {
-            // Determine transaction type
-            $transactionType = $stockChange > 0 ? 'Added' : 'Deducted';
-
-            StockTransaction::create([
-                'product_id' => $product->id,
-                'transaction_type' => $transactionType,
-                'quantity' => abs($stockChange),
-                'transaction_date' => now(),
-                'supplier_id' => $validated['supplier_id'] ?? null,
-                'branch_id' => $request->branch_id,
-            ]);
-        }
-
-        return redirect()->route('products.index')->with('banner', 'Product updated successfully');
+        StockTransaction::create([
+            'product_id' => $product->id,
+            'transaction_type' => $transactionType,
+            'quantity' => abs($stockChange),
+            'transaction_date' => now(),
+            'supplier_id' => $validated['supplier_id'] ?? null,
+            'branch_id' => $request->branch_id,
+        ]);
     }
+
+    return redirect()->route('products.index')->with('banner', 'Product updated successfully');
+}
 
 
 
