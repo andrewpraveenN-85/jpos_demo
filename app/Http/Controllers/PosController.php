@@ -37,9 +37,43 @@ class PosController extends Controller
         $colors = Color::orderBy('created_at', 'desc')->get();
         $sizes = Size::orderBy('created_at', 'desc')->get();
         $delivery = Delivery::orderBy('created_at', 'desc')->get();
-        $serviceCharge = ServiceCharge::orderBy('created_at', 'desc')->get();
+        // $serviceCharge = ServiceCharge::orderBy('created_at', 'desc')->get();
         $allemployee = Employee::orderBy('created_at', 'desc')->get();
-        $bankCharge = BankServiceCharge::orderBy('created_at', 'desc')->get();
+        // $bankCharge = BankServiceCharge::orderBy('created_at', 'desc')->get();
+
+     $bankCharge  = BankServiceCharge::orderBy('service_check', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+
+        $defaultCharge = $bankCharge->where('service_check', 'true')->first();
+
+
+        if (! $defaultCharge) {
+            $defaultCharge = $bankCharge->last();
+        }
+
+
+
+
+  $serviceCharge  = ServiceCharge::orderBy('service_check', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+
+        $defaultServiceCharge = $serviceCharge->where('service_check', 'true')->first();
+
+
+        if (! $defaultServiceCharge) {
+            $defaultServiceCharge = $serviceCharge->last();
+        }
+
+
+
+
+
+
+
 
 
         // Render the page for GET requests
@@ -53,6 +87,8 @@ class PosController extends Controller
             'delivery' => $delivery,
             'serviceCharge' => $serviceCharge,
             'bankCharge' => $bankCharge,
+            'defaultCharge' => $defaultCharge,
+            'defaultServiceCharge' => $defaultServiceCharge,
             'sizes' => $sizes,
         ]);
     }

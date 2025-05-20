@@ -21,8 +21,8 @@ class ServiceChargeController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $allServiceCharge = ServiceCharge::orderBy('created_at', 'desc')->get();
-
+        // $allServiceCharge = ServiceCharge::orderBy('created_at', 'desc')->get();
+ $allServiceCharge = ServiceCharge::latest()->get();
 
         return Inertia::render('ServiceCharge/Index', [
             'allServiceCharge' => $allServiceCharge,
@@ -41,25 +41,46 @@ class ServiceChargeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
 
 
-
-        if (!Gate::allows('hasRole', ['Admin'])) {
-            abort(403, 'Unauthorized');
-        }
-
-        $validated = $request->validate([
-            'service_charge' => 'required|numeric|min:0',
-
-        ]);
-
-        ServiceCharge::create($validated);
-
-        return redirect()->route('service-charge.index')->banner('Service Charge  created successfully.');
-
+ public function store(Request $request)
+{
+    if (!Gate::allows('hasRole', ['Admin'])) {
+        abort(403, 'Unauthorized');
     }
+
+    // Include service_check in validation
+    $validated = $request->validate([
+        'service_charge' => 'required|numeric|min:0|max:100',
+        'service_check' => 'nullable|in:true,false', // allow only 'true' or 'false'
+    ]);
+
+    // Default to 'false' if not present in request
+    $serviceCheck = $validated['service_check'] ?? 'false';
+
+    if ($serviceCheck === 'true') {
+        // Ensure only one default is set
+        ServiceCharge::query()->update(['service_check' => 'false']);
+    }
+
+    ServiceCharge::create([
+        'service_charge' => round($validated['service_charge'], 2),
+        'service_check' => $serviceCheck,
+    ]);
+
+   return redirect()->route('service-charge.index')->banner('Service Charge  created successfully.');
+
+}
+
+
+
+
+
+
+
+
+
+
     /**
      * Display the specified resource.
      */
@@ -81,21 +102,44 @@ class ServiceChargeController extends Controller
      */
 
 
+public function update(Request $request, ServiceCharge $ServiceCharge)
+{
+    // Authorization: only Admins can update
+    if (!Gate::allows('hasRole', ['Admin'])) {
+        abort(403, 'Unauthorized');
+    }
 
-    public function update(Request $request, ServiceCharge $ServiceCharge)
-    {
+    // Validate the input including optional service_check
+    $validated = $request->validate([
+        'service_charge' => 'required|numeric|min:0|max:100',
+        'service_check' => 'nullable|in:true,false',
+    ]);
 
-        if (!Gate::allows('hasRole', ['Admin'])) {
-            abort(403, 'Unauthorized');
-        }
-        $validated = $request->validate([
-            'service_charge' => 'required|numeric|min:0',
-        ]);
+    $serviceCheck = $validated['service_check'] ?? 'false';
 
-        $ServiceCharge->update($validated);
+    // If setting this one to true, unset all others
+    if ($serviceCheck === 'true') {
+        ServiceCharge::where('id', '!=', $ServiceCharge->id)
+            ->update(['service_check' => 'false']);
+    }
+
+    // Update current record
+    $ServiceCharge->update([
+        'service_charge' => round($validated['service_charge'], 2),
+        'service_check' => $serviceCheck,
+    ]);
+
 
         return redirect()->route('service-charge.index')->banner('Service Charge    updated successfully.');
-    }
+
+}
+
+
+
+
+
+
+
 
 
 

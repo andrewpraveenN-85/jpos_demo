@@ -100,6 +100,7 @@
                 <tr class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-[16px] text-white border-b border-blue-700 text-left">
                   <th class="p-4 font-semibold tracking-wide uppercase">#</th>
                   <th class="p-4 font-semibold tracking-wide uppercase">Charge</th>
+                     <th class="p-4 font-semibold tracking-wide uppercase">Default</th>
                   <th class="p-4 font-semibold tracking-wide uppercase">Actions</th>
                 </tr>
               </thead>
@@ -111,6 +112,14 @@
                 >
                   <td class="px-6 py-3">{{ index + 1 }}</td>
                   <td class="px-6 py-3">{{ serviceCharge.service_charge }}</td>
+                               <td class="px-6 py-3">
+  <span
+    v-if="serviceCharge.service_check === 'true' || serviceCharge.service_check === true"
+    class="inline-flex items-center px-4 py-1 text-lg font-semibold text-green-800 bg-green-200 rounded-full"
+  >
+    Default
+  </span>
+</td>
                    <td class="px-6 py-3">
                     <!-- Edit Button -->
                     <button

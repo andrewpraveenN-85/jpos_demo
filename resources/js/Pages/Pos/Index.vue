@@ -309,16 +309,23 @@
 
                             <div v-if="selectedTable && selectedTable.id !== 'default' && selectedTable.order_type !== 'pickup'"
      class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
-     <select v-model="selectedTable.service_charge"
-    class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer">
-    <option value="">Select Service Charge</option>
-    <option
-        v-for="charge in serviceCharge"
-        :key="charge.id"
-        :value="String(charge.service_charge)">
-        {{ charge.service_charge }} %
-    </option>
-</select>
+  
+
+
+ <select
+        v-model="selectedTable.serviceCharge"
+        class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer"
+    >
+        <option value="">Select Service Charge</option>
+        <option
+            v-for="charge in serviceCharge"
+            :key="charge.id"
+            :value="parseFloat(charge.service_charge)"
+        >
+            {{ charge.service_charge }}%{{ charge.service_check === true || charge.service_check === 'true' ? ' (Default)' : '' }}
+        </option>
+    </select>
+
 </div>
 
 
@@ -407,17 +414,18 @@
 
 
 <div v-if="selectedPaymentMethod === 'card'" class="flex items-center justify-between w-full px-8 pt-4 pb-4 border-b border-black">
-    <select
-        v-model.number="selectedTable.bank_service_charge"
+
+     <select
+        v-model="selectedTable.bank_service_charge"
         class="w-full py-3 text-xl font-bold tracking-wider text-black bg-white rounded-lg cursor-pointer"
     >
-        <option value="" >Select Bank Service Charge</option>
+        <option value="">Select Bank Service Charge</option>
         <option
-            v-for="charge1 in bankCharge"
-            :key="charge1.id"
-            :value="parseFloat(charge1.bank_service_charge)"
+            v-for="charge in bankCharge"
+            :key="charge.id"
+            :value="parseFloat(charge.bank_service_charge)"
         >
-            {{ charge1.bank_service_charge }}%
+            {{ charge.bank_service_charge }}%{{ charge.service_check === true || charge.service_check === 'true' ? ' (Default)' : '' }}
         </option>
     </select>
 </div>

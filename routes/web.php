@@ -61,14 +61,13 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
     Route::resource('suppliers', SupplierController::class);
     Route::post('suppliers/{supplier}', [SupplierController::class, 'update']);
     Route::post('products/{product}', [ProductController::class, 'update']);
     Route::post('products-variant', [ProductController::class, 'productVariantStore'])->name('productVariant');
-
     // Route::resource('company-info', CompanyInfoController::class)->name('companyInfo.index');
     Route::get('/company-info', [CompanyInfoController::class, 'index'])->name('companyInfo.index');
     Route::post('/company-info/{companyInfo}', [CompanyInfoController::class, 'update'])->name('companyInfo.update');
@@ -91,16 +90,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/transactions/bulk-delete', [TransactionHistoryController::class, 'bulkDelete']) ->name('transactions.bulkDelete');
     Route::resource('delivery', DeliveryController::class);
     Route::resource('service-charge', ServiceChargeController::class);
-
     Route::resource('bank-service-charge', BankServiceChargeController::class);
     // Route::get('/stock-transition', [PosController::class, 'index'])->name('pos.index');
     // Route::post('/stock-transition', [PosController::class, 'getProduct'])->name('pos.getProduct');
 
-
     Route::get('/add_promotion', [ProductController::class, 'addPromotion']);
     Route::post('/submit_promotion', [ProductController::class, 'submitPromotion']);
     Route::get('/products/{id}/promotion-items', [ProductController::class, 'getPromotionItems']);
-
     Route::post('/api/products', [ProductController::class, 'fetchProducts']);
     Route::post('/api/top-categories', [CategoryController::class, 'topCategories']);
     Route::post('/api/check-customer', [CustomerController::class, 'checkCustomer']);

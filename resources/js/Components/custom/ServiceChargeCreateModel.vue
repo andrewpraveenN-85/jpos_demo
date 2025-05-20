@@ -57,6 +57,23 @@
                   </div>
                 </div>
 
+
+                   <!-- Checkbox -->
+              <div class="mb-3 mt-4 form-check text-left">
+                <input
+                  type="checkbox"
+                  v-model="form.service_check"
+                  id="exampleCheck12"
+                  class="form-check-input p-2 me-3 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                />
+                <label
+                  class="form-check-label text-sm font-medium text-gray-300 mt-2"
+                  for="exampleCheck12"
+                >
+                  Default Value Set
+                </label>
+              </div>
+
                 <!-- Modal Buttons -->
                 <div class="mt-6 space-x-4">
                   <button
@@ -81,43 +98,70 @@
     </TransitionRoot>
   </template>
 
-  <script setup>
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-  } from "@headlessui/vue";
-  import { ref } from "vue";
-  import { useForm } from "@inertiajs/vue3";
 
-  const emit = defineEmits(["update:open"]);
 
-  // The `open` prop controls the visibility of the modal
-  defineProps({
-    open: {
-      type: Boolean,
-      required: true,
-    },
-    serviceCharge: {
-      type: Array,
-      required: true,
-    },
-  });
 
-  // Form data for creating a new service_charge charge
-  const form = useForm({
-    service_charge: "",
-  });
 
-  // Form submission
-  const submit = () => {
-    form.post("/service-charge", {
+
+
+<script setup>
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { useForm } from "@inertiajs/vue3";
+import { computed } from "vue";
+const emit = defineEmits(["update:open"]);
+
+const props = defineProps({
+ open: { type: Boolean, required: true },
+  service_charge: { type: Object, default: null },
+  trueCheckedBankCharges: { type: Array, default: () => [] },
+});
+
+
+const isDefaultAlreadySet = computed(() => {
+  // If a true-checked value exists AND (we are not editing OR editing a different record)
+  return (
+    props.trueCheckedBankCharges.length > 0 &&
+    (!props.service_charge || !props.service_charge.service_check)
+  );
+});
+
+
+// Initialize form
+const form = useForm({
+  service_charge: "",
+  service_check: false,
+});
+
+// Populate form when editing
+if (props.service_charge) {
+  form.service_charge = props.service_charge.service_charge;
+  form.service_check = props.service_charge.service_check === 'true'; // convert to boolean
+}
+
+const submit = () => {
+  // Convert checkbox to string before submit
+  form
+    .transform((data) => ({
+      ...data,
+      service_check: data.service_check ? 'true' : 'false',
+    }))
+    .post("/service-charge", {
       onSuccess: () => {
         form.reset();
         emit("update:open", false);
       },
     });
-  };
-  </script>
+};
+
+const closeModal = () => {
+  emit("update:open", false);
+};
+</script>
+
+

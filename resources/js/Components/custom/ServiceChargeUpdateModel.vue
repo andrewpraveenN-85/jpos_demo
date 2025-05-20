@@ -38,7 +38,7 @@
                 <div class="mt-6 space-y-4 text-left">
                   <div>
                     <label class="block text-sm font-medium text-gray-300">
-                      Delivery Charge:
+                      Service charge :
                     </label>
                     <input
                       v-model="form.service_charge"
@@ -53,6 +53,23 @@
                       >{{ form.errors.service_charge }}</span
                     >
                   </div>
+
+
+                   <!-- Checkbox -->
+                <div class="mb-3 mt-4 form-check text-left">
+                  <input
+                    type="checkbox"
+                    v-model="form.service_check"
+                    id="serviceCheck"
+                    class="form-check-input p-2 me-3 text-black rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                  />
+                  <label
+                    class="form-check-label text-sm font-medium text-gray-300 mt-2"
+                    for="serviceCheck"
+                  >
+                    Default Value Set
+                  </label>
+                </div>
                 </div>
 
                 <!-- Modal Buttons -->
@@ -79,53 +96,68 @@
     </TransitionRoot>
   </template>
 
-  <script setup>
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-  } from "@headlessui/vue";
-  import { ref, watch } from "vue";
-  import { useForm } from "@inertiajs/vue3";
 
-  const emit = defineEmits(["update:open"]);
 
-  const { open, selectedServiceCharge } = defineProps({
-    open: {
-      type: Boolean,
-      required: true,
-    },
-    selectedServiceCharge: {
-      type: Object,
-      default: null, // Ensure it defaults to null
-    },
-  });
 
-  // Form setup for editing a delivery charge
-  const form = useForm({
-    service_charge: "",
-  });
+<script setup>
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { useForm } from "@inertiajs/vue3";
+import { watch } from "vue";
 
-  // Watch for changes in selectedDelivery and populate the form
-  watch(
-    () => selectedServiceCharge,
-    (newValue) => {
-      if (newValue) {
-        form.service_charge = newValue.service_charge || "";
-      }
-    },
-    { immediate: true } // Run immediately when the component is mounted
-  );
+const emit = defineEmits(["update:open"]);
 
-  // Submit the form
-  const submit = () => {
-    form.put(`/service-charge/${selectedServiceCharge.id}`, {
+const props = defineProps({
+  open: { type: Boolean, required: true },
+  selectedServiceCharge: {
+    type: Object,
+    default: null,
+  },
+});
+
+const form = useForm({
+  service_charge: "",
+  service_check: false,
+});
+
+// Watch for edit mode and populate values
+watch(
+  () => props.selectedServiceCharge,
+  (newVal) => {
+    if (newVal) {
+      form.service_charge = newVal.service_charge ?? "";
+      form.service_check = newVal.service_check === true || newVal.service_check === 'true';
+    }
+  },
+  { immediate: true }
+);
+
+
+
+
+
+const submit = () => {
+  if (!props.selectedServiceCharge?.id) return;
+
+  form
+    .transform((data) => ({
+      ...data,
+      service_check: data.service_check ? "true" : "false",
+    }))
+    .put(`/service-charge/${props.selectedServiceCharge.id}`, {
       onSuccess: () => {
         form.reset();
-        emit("update:open", false); // Close the modal
+        emit("update:open", false);
+      },
+      onError: (e) => {
+        console.error("Update failed", e);
       },
     });
-  };
-  </script>
+};
+</script>
+
