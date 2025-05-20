@@ -34,13 +34,24 @@
               <tr class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white text-[16px] border-b border-blue-700">
                 <th class="p-4 font-semibold tracking-wide uppercase">#</th>
                 <th class="p-4 font-semibold tracking-wide uppercase">Charge</th>
+                  <th class="p-4 font-semibold tracking-wide uppercase">Default</th>
                 <th class="p-4 font-semibold tracking-wide uppercase">Actions</th>
+
               </tr>
             </thead>
             <tbody>
               <tr v-for="(charge, index) in allBankServiceCharge" :key="charge.id" class="hover:bg-gray-200">
                 <td class="px-6 py-3">{{ index + 1 }}</td>
                 <td class="px-6 py-3">{{ charge.bank_service_charge }} %</td>
+             <td class="px-6 py-3">
+  <span
+    v-if="charge.service_check === 'true' || charge.service_check === true"
+    class="inline-flex items-center px-4 py-1 text-lg font-semibold text-green-800 bg-green-200 rounded-full"
+  >
+    Default
+  </span>
+</td>
+
                 <td class="px-6 py-3">
                   <button
                     @click="openEditModal(charge)"
@@ -59,6 +70,7 @@
                     Delete
                   </button>
                 </td>
+
               </tr>
             </tbody>
           </table>
